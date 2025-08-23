@@ -21,7 +21,7 @@ const colorThemes = [
 export function SettingsBar({ isDarkMode, onToggleDarkMode, selectedTheme, onThemeChange }: SettingsBarProps) {
   return (
     <div className="border-b bg-card">
-      <div className="max-w-7xl mx-auto px-6 py-4">
+      <div className="px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-heading-1 font-bold text-foreground">Design System Builder</h1>
