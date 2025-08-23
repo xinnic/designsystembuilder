@@ -238,8 +238,8 @@
 }
 
 @layer components {
-  /* Typography Styles */
-  .text-eyebrow {
+  /* Small Scale Typography */
+  .scale-small .text-eyebrow {
     font-size: 11px;
     line-height: 14px;
     font-weight: 500;
@@ -247,51 +247,177 @@
     letter-spacing: 0.05em;
   }
 
-  .text-heading-1 {
-    font-size: 32px;
-    line-height: 38px;
+  .scale-small .text-heading-1 {
+    font-size: 24px;
+    line-height: 30px;
     font-weight: 700;
   }
 
-  .text-heading-2 {
-    font-size: 24px;
-    line-height: 30px;
+  .scale-small .text-heading-2 {
+    font-size: 20px;
+    line-height: 26px;
     font-weight: 600;
   }
 
-  .text-subhead {
+  .scale-small .text-subhead {
     font-size: 16px;
-    line-height: 20px;
-    font-weight: 500;
+    line-height: 22px;
+    font-weight: 600;
   }
 
-  .text-body-regular {
+  .scale-small .text-body-regular {
     font-size: 14px;
     line-height: 20px;
     font-weight: 400;
   }
 
-  .text-button {
+  .scale-small .text-button {
     font-size: 16px;
-    line-height: 20px;
+    line-height: 22px;
     font-weight: 600;
+    letter-spacing: 0.02em;
   }
 
-  .text-caption {
+  .scale-small .text-caption {
     font-size: 12px;
     line-height: 16px;
     font-weight: 400;
   }
 
-  .text-display-large {
+  .scale-small .text-display-large {
+    font-size: 36px;
+    line-height: 44px;
+    font-weight: 700;
+  }
+
+  .scale-small .text-display-medium {
+    font-size: 30px;
+    line-height: 36px;
+    font-weight: 700;
+  }
+
+  /* Regular Scale Typography (Default) */
+  .text-eyebrow,
+  .scale-regular .text-eyebrow {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .text-heading-1,
+  .scale-regular .text-heading-1 {
+    font-size: 28px;
+    line-height: 38px;
+    font-weight: 700;
+  }
+
+  .text-heading-2,
+  .scale-regular .text-heading-2 {
+    font-size: 22px;
+    line-height: 30px;
+    font-weight: 600;
+  }
+
+  .text-subhead,
+  .scale-regular .text-subhead {
+    font-size: 18px;
+    line-height: 26px;
+    font-weight: 600;
+  }
+
+  .text-body-regular,
+  .scale-regular .text-body-regular {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+  }
+
+  .text-button,
+  .scale-regular .text-button {
+    font-size: 18px;
+    line-height: 26px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .text-caption,
+  .scale-regular .text-caption {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+  }
+
+  .text-display-large,
+  .scale-regular .text-display-large {
     font-size: 48px;
     line-height: 56px;
     font-weight: 700;
   }
 
-  .text-display-medium {
+  .text-display-medium,
+  .scale-regular .text-display-medium {
     font-size: 36px;
     line-height: 44px;
+    font-weight: 700;
+  }
+
+  /* Large Scale Typography */
+  .scale-large .text-eyebrow {
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .scale-large .text-heading-1 {
+    font-size: 36px;
+    line-height: 44px;
+    font-weight: 700;
+  }
+
+  .scale-large .text-heading-2 {
+    font-size: 24px;
+    line-height: 32px;
     font-weight: 600;
+  }
+
+  .scale-large .text-subhead {
+    font-size: 21px;
+    line-height: 30px;
+    font-weight: 600;
+  }
+
+  .scale-large .text-body-regular {
+    font-size: 18px;
+    line-height: 26px;
+    font-weight: 400;
+  }
+
+  .scale-large .text-button {
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .scale-large .text-caption {
+    font-size: 15px;
+    line-height: 22px;
+    font-weight: 400;
+  }
+
+  .scale-large .text-display-large {
+    font-size: 60px;
+    line-height: 68px;
+    font-weight: 700;
+  }
+
+  .scale-large .text-display-medium {
+    font-size: 48px;
+    line-height: 56px;
+    font-weight: 700;
   }
 }

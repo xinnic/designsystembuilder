@@ -11,11 +11,12 @@ interface FontPreviewColumnProps {
   fontClass: string;
   selectedTheme: string;
   isDarkMode: boolean;
+  selectedScale: string;
 }
 
 const sampleParagraph = "Typography is the art and technique of arranging type to make written language legible, readable, and visually appealing. Good typography enhances the user experience by establishing clear hierarchy, improving readability, and creating emotional connection through careful selection of typefaces, spacing, and layout principles.";
 
-export function FontPreviewColumn({ fontName, fontClass, selectedTheme, isDarkMode }: FontPreviewColumnProps) {
+export function FontPreviewColumn({ fontName, fontClass, selectedTheme, isDarkMode, selectedScale }: FontPreviewColumnProps) {
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -30,7 +31,44 @@ export function FontPreviewColumn({ fontName, fontClass, selectedTheme, isDarkMo
       teal: { light: '#00796B', dark: '#80CBC4' },
     };
 
+    const scales = {
+      small: {
+        displayLarge: { size: '36px', lineHeight: '44px', weight: '700' },
+        displayMed: { size: '30px', lineHeight: '36px', weight: '700' },
+        heading1: { size: '24px', lineHeight: '30px', weight: '700' },
+        heading2: { size: '20px', lineHeight: '26px', weight: '600' },
+        subhead: { size: '16px', lineHeight: '22px', weight: '600' },
+        body: { size: '14px', lineHeight: '20px', weight: '400' },
+        eyebrow: { size: '11px', lineHeight: '14px', weight: '500', letterSpacing: '0.05em' },
+        caption: { size: '12px', lineHeight: '16px', weight: '400' },
+        button: { size: '16px', lineHeight: '22px', weight: '600', letterSpacing: '0.02em' },
+      },
+      regular: {
+        displayLarge: { size: '48px', lineHeight: '56px', weight: '700' },
+        displayMed: { size: '36px', lineHeight: '44px', weight: '700' },
+        heading1: { size: '28px', lineHeight: '38px', weight: '700' },
+        heading2: { size: '22px', lineHeight: '30px', weight: '600' },
+        subhead: { size: '18px', lineHeight: '26px', weight: '600' },
+        body: { size: '16px', lineHeight: '24px', weight: '400' },
+        eyebrow: { size: '12px', lineHeight: '16px', weight: '500', letterSpacing: '0.05em' },
+        caption: { size: '14px', lineHeight: '20px', weight: '400' },
+        button: { size: '18px', lineHeight: '26px', weight: '600', letterSpacing: '0.02em' },
+      },
+      large: {
+        displayLarge: { size: '60px', lineHeight: '68px', weight: '700' },
+        displayMed: { size: '48px', lineHeight: '56px', weight: '700' },
+        heading1: { size: '36px', lineHeight: '44px', weight: '700' },
+        heading2: { size: '24px', lineHeight: '32px', weight: '600' },
+        subhead: { size: '21px', lineHeight: '30px', weight: '600' },
+        body: { size: '18px', lineHeight: '26px', weight: '400' },
+        eyebrow: { size: '13px', lineHeight: '18px', weight: '500', letterSpacing: '0.05em' },
+        caption: { size: '15px', lineHeight: '22px', weight: '400' },
+        button: { size: '20px', lineHeight: '28px', weight: '600', letterSpacing: '0.02em' },
+      },
+    };
+
     const currentColor = themeColors[selectedTheme as keyof typeof themeColors];
+    const currentScale = scales[selectedScale as keyof typeof scales];
     const buttonColor = isDarkMode ? currentColor.dark : currentColor.light;
     const buttonTextColor = isDarkMode ? '#000000' : '#FFFFFF';
     const textPrimary = isDarkMode ? '#E1E1E1' : '#1C1C1E';
@@ -38,19 +76,19 @@ export function FontPreviewColumn({ fontName, fontClass, selectedTheme, isDarkMo
     const backgroundPrimary = isDarkMode ? '#121212' : '#FFFFFF';
     const backgroundSecondary = isDarkMode ? '#1E1E1E' : '#F2F2F7';
 
-    return `Create a design system using ${fontName} font with the following specifications:
+    return `Create a design system using ${fontName} font with ${selectedScale.toUpperCase()} typographic scale:
 
-TYPOGRAPHY SYSTEM:
+TYPOGRAPHY SYSTEM (${selectedScale.toUpperCase()} SCALE):
 - Font Family: ${fontName}
-- Eyebrow Text: 11px, 500 weight, uppercase, 0.05em letter-spacing, 14px line-height
-- Heading 1: 32px, 700 weight, 38px line-height
-- Heading 2: 24px, 600 weight, 30px line-height
-- Subhead: 16px, 500 weight, 20px line-height
-- Body Regular: 14px, 400 weight, 20px line-height
-- Button Text: 16px, 600 weight, 20px line-height
-- Caption: 12px, 400 weight, 16px line-height
-- Display Large: 48px, 700 weight, 56px line-height
-- Display Medium: 36px, 600 weight, 44px line-height
+- Eyebrow Text: ${currentScale.eyebrow.size}, ${currentScale.eyebrow.weight} weight, uppercase, ${currentScale.eyebrow.letterSpacing} letter-spacing, ${currentScale.eyebrow.lineHeight} line-height
+- Heading 1: ${currentScale.heading1.size}, ${currentScale.heading1.weight} weight, ${currentScale.heading1.lineHeight} line-height
+- Heading 2: ${currentScale.heading2.size}, ${currentScale.heading2.weight} weight, ${currentScale.heading2.lineHeight} line-height
+- Subhead: ${currentScale.subhead.size}, ${currentScale.subhead.weight} weight, ${currentScale.subhead.lineHeight} line-height
+- Body Regular: ${currentScale.body.size}, ${currentScale.body.weight} weight, ${currentScale.body.lineHeight} line-height
+- Button Text: ${currentScale.button.size}, ${currentScale.button.weight} weight, ${currentScale.button.lineHeight} line-height, ${currentScale.button.letterSpacing} letter-spacing
+- Caption: ${currentScale.caption.size}, ${currentScale.caption.weight} weight, ${currentScale.caption.lineHeight} line-height
+- Display Large: ${currentScale.displayLarge.size}, ${currentScale.displayLarge.weight} weight, ${currentScale.displayLarge.lineHeight} line-height
+- Display Medium: ${currentScale.displayMed.size}, ${currentScale.displayMed.weight} weight, ${currentScale.displayMed.lineHeight} line-height
 
 COLOR SYSTEM (${isDarkMode ? 'Dark' : 'Light'} Mode):
 - Primary Text: ${textPrimary}
@@ -66,7 +104,7 @@ BUTTON SPECIFICATIONS:
 - Text: ${buttonTextColor}
 - Height: 40px
 - Border Radius: Full rounded
-- Font: 16px, 600 weight
+- Font: ${currentScale.button.size}, ${currentScale.button.weight} weight
 - Padding: 16px horizontal, 8px vertical
 - Hover: Slightly darker shade of button color
 - Active/Pressed: Even darker shade of button color
@@ -131,7 +169,7 @@ Please implement this design system with semantic CSS custom properties and ensu
   };
 
   return (
-    <Card className="p-6">
+    <Card className={`p-6 scale-${selectedScale}`}>
       {/* Font Name Header */}
       <div className="border-b pb-4 mb-6">
         <div className="flex items-center gap-3">

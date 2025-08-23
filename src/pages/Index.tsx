@@ -14,6 +14,7 @@ const fonts = [
 const Index = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState('blue');
+  const [selectedScale, setSelectedScale] = useState('regular');
 
   useEffect(() => {
     const root = document.documentElement;
@@ -40,6 +41,10 @@ const Index = () => {
     setSelectedTheme(theme);
   };
 
+  const handleScaleChange = (scale: string) => {
+    setSelectedScale(scale);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <SettingsBar
@@ -47,6 +52,8 @@ const Index = () => {
         onToggleDarkMode={handleToggleDarkMode}
         selectedTheme={selectedTheme}
         onThemeChange={handleThemeChange}
+        selectedScale={selectedScale}
+        onScaleChange={handleScaleChange}
       />
       
       <main className="px-6 py-8 overflow-x-auto">
@@ -58,6 +65,7 @@ const Index = () => {
               fontClass={font.class}
               selectedTheme={selectedTheme}
               isDarkMode={isDarkMode}
+              selectedScale={selectedScale}
             />
           ))}
         </div>
