@@ -78,6 +78,39 @@ COMPONENT VARIANTS:
 - Secondary: Same as outline variant
 - Destructive: Red background for destructive actions
 
+DESIGN BEST PRACTICES:
+
+Spacing, Grid, & Elevation:
+- Use a soft 8pt grid system for all spacing and padding (8, 16, 24, 32, etc.)
+- This creates rhythm and polish throughout the interface
+
+Buttons:
+- Clear visual distinction between primary, secondary, and tertiary buttons
+- Destructive actions styled with semantic destructive color and careful placement
+- Minimum tap target size of 44x44 points for touch accessibility
+
+Input Fields:
+- Generous spacing with clear, persistent labels above the field
+- Optional helper text below for context
+- Clear visual states for focused, error, and disabled states
+
+Dialogs and Modals:
+- Modals for self-contained tasks, dialogs for critical confirmations
+- Clear, direct language in user vocabulary (not technical jargon)
+- Explain situation, consequences, and provide actionable choices
+
+Corner Radius System (4px base unit):
+- radius-sm (8px): Small interactive elements like tags, input fields
+- radius-md (16px): Default for primary cards, activity cards, media containers
+- radius-lg (24px): Large containers or modals sitting on top of content
+- radius-full (999px): Circular or pill-shaped elements like avatars, toggles
+
+Elevation System:
+- Level 0 (none): Elements flush with background
+- Level 1 (0px 2px 4px rgba(0,0,0,0.05)): Subtle lift for static cards
+- Level 2 (0px 4px 12px rgba(0,0,0,0.1)): Default interactive elements
+- Level 3 (0px 8px 24px rgba(0,0,0,0.15)): Emphasized elements like modals
+
 Please implement this design system with semantic CSS custom properties and ensure proper contrast ratios for accessibility.`;
   };
 
