@@ -134,8 +134,9 @@ Please implement this design system with semantic CSS custom properties and ensu
     <Card className="p-6">
       {/* Font Name Header */}
       <div className="border-b pb-4 mb-6">
-        <div className="space-y-2">
+        <div className="flex items-center gap-3">
           <h2 className={`text-heading-2 font-semibold text-foreground ${fontClass}`}>{fontName}</h2>
+          <div className="w-px h-6 bg-border"></div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button variant="ghost" size="sm" className="h-auto p-1 text-xs text-muted-foreground hover:text-foreground">
