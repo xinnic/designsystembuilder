@@ -14,7 +14,6 @@ export function FontPreviewColumn({ fontName, fontClass }: FontPreviewColumnProp
       {/* Font Name Header */}
       <div className="border-b pb-4 mb-6">
         <h2 className="text-heading-2 font-semibold text-foreground">{fontName}</h2>
-        <p className="text-caption text-secondary">Font preview</p>
       </div>
 
       {/* Typography Styles - Horizontal Layout */}
