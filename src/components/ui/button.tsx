@@ -10,11 +10,11 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-[hsl(var(--button-bg))] text-[hsl(var(--button-text))] hover:bg-[hsl(var(--button-bg-hover))]",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive-hover",
-        outline: "border border-[hsl(var(--button-bg))] text-[hsl(var(--button-bg))] bg-transparent hover:bg-[hsl(var(--button-bg))] hover:text-[hsl(var(--button-text))]",
-        secondary: "border border-[hsl(var(--button-bg))] text-[hsl(var(--button-bg))] bg-transparent hover:bg-[hsl(var(--button-bg))] hover:text-[hsl(var(--button-text))]",
-        ghost: "text-[hsl(var(--button-bg))] bg-transparent hover:bg-[hsl(var(--button-bg))] hover:text-[hsl(var(--button-text))]",
+        default: "bg-[hsl(var(--button-bg))] text-[hsl(var(--button-text))] hover:bg-[hsl(var(--button-bg-hover))] active:bg-[hsl(var(--button-bg-pressed))]",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-pressed",
+        outline: "border border-[hsl(var(--button-bg))] text-[hsl(var(--button-bg))] bg-transparent hover:bg-[hsl(var(--button-bg))] hover:text-[hsl(var(--button-text))] active:bg-[hsl(var(--button-bg-pressed))]",
+        secondary: "border border-[hsl(var(--button-bg))] text-[hsl(var(--button-bg))] bg-transparent hover:bg-[hsl(var(--button-bg))] hover:text-[hsl(var(--button-text))] active:bg-[hsl(var(--button-bg-pressed))]",
+        ghost: "text-[hsl(var(--button-bg))] bg-transparent hover:bg-[hsl(var(--button-bg))] hover:text-[hsl(var(--button-text))] active:bg-[hsl(var(--button-bg-pressed))]",
         link: "text-[hsl(var(--button-bg))] underline-offset-4 hover:underline",
       },
       size: {
