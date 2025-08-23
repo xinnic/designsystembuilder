@@ -18,6 +18,24 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				'jakarta': ['Plus Jakarta Sans', 'sans-serif'],
+				'vietnam': ['Be Vietnam Pro', 'sans-serif'],
+				'wix': ['Wix Madefor Text', 'sans-serif'],
+				'figtree': ['Figtree', 'sans-serif'],
+				'albert': ['Albert Sans', 'sans-serif'],
+			},
+			spacing: {
+				'1': 'var(--spacing-1)',
+				'2': 'var(--spacing-2)',
+				'3': 'var(--spacing-3)',
+				'4': 'var(--spacing-4)',
+				'5': 'var(--spacing-5)',
+				'6': 'var(--spacing-6)',
+				'8': 'var(--spacing-8)',
+				'10': 'var(--spacing-10)',
+				'12': 'var(--spacing-12)',
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -26,15 +44,21 @@ export default {
 				foreground: 'hsl(var(--foreground))',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					foreground: 'hsl(var(--primary-foreground))',
+					hover: 'hsl(var(--primary-hover))',
+					pressed: 'hsl(var(--primary-pressed))'
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
-					foreground: 'hsl(var(--secondary-foreground))'
+					foreground: 'hsl(var(--secondary-foreground))',
+					hover: 'hsl(var(--secondary-hover))',
+					pressed: 'hsl(var(--secondary-pressed))'
 				},
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
-					foreground: 'hsl(var(--destructive-foreground))'
+					foreground: 'hsl(var(--destructive-foreground))',
+					hover: 'hsl(var(--destructive-hover))',
+					pressed: 'hsl(var(--destructive-pressed))'
 				},
 				muted: {
 					DEFAULT: 'hsl(var(--muted))',
