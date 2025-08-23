@@ -18,16 +18,18 @@ const Index = () => {
   useEffect(() => {
     const root = document.documentElement;
     
+    // Remove existing theme classes
+    root.classList.remove('theme-blue', 'theme-purple', 'theme-pink', 'theme-red', 'theme-yellow', 'theme-orange', 'theme-teal');
+    
+    // Apply theme
+    root.classList.add(`theme-${selectedTheme}`);
+    
     // Apply dark mode
     if (isDarkMode) {
       root.classList.add('dark');
     } else {
       root.classList.remove('dark');
     }
-
-    // Apply theme
-    root.className = root.className.replace(/theme-\w+/g, '');
-    root.classList.add(`theme-${selectedTheme}`);
   }, [isDarkMode, selectedTheme]);
 
   const handleToggleDarkMode = () => {
