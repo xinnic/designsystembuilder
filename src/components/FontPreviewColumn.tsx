@@ -22,17 +22,17 @@ export function FontPreviewColumn({ fontName, fontClass }: FontPreviewColumnProp
         
         {/* Headings Cell with Eyebrow */}
         <div className="flex-shrink-0 w-80">
-          <p className="text-caption text-muted-foreground mb-4">Headings</p>
+          <p className="text-eyebrow text-muted-foreground mb-4">Headings</p>
           <div className="space-y-4">
             <h1 className="text-heading-1">Heading 1</h1>
             <h2 className="text-heading-2">Heading 2</h2>
-            <h3 className="text-heading-3">Heading 3</h3>
+            <h3 className="text-subhead">Subhead</h3>
           </div>
         </div>
 
         {/* Body Text Cell */}
         <div className="flex-shrink-0 w-96">
-          <p className="text-caption text-muted-foreground mb-2">Body • 16px • Regular • 24px line height</p>
+          <p className="text-eyebrow text-muted-foreground mb-2">Body • 14pt • Regular • 20pt line height</p>
           <p className="text-body-regular">
             Typography is the art and technique of arranging type to make written language legible, readable, and visually appealing. <strong>Good typography enhances the user experience</strong> by establishing clear hierarchy, improving readability, and creating emotional connection through careful selection of typefaces, spacing, and layout principles.
           </p>
@@ -40,7 +40,7 @@ export function FontPreviewColumn({ fontName, fontClass }: FontPreviewColumnProp
 
         {/* Display Sizes Cell */}
         <div className="flex-shrink-0 w-80">
-          <p className="text-caption text-muted-foreground mb-4">Display Sizes</p>
+          <p className="text-eyebrow text-muted-foreground mb-4">Display Sizes</p>
           <div className="space-y-4">
             <h1 className="text-display-large">Large Display</h1>
             <h2 className="text-display-medium">Medium Display</h2>
@@ -49,13 +49,13 @@ export function FontPreviewColumn({ fontName, fontClass }: FontPreviewColumnProp
 
         {/* Caption */}
         <div className="flex-shrink-0 w-64">
-          <p className="text-caption text-muted-foreground mb-2">Caption • 14px • Regular • 20px line height</p>
+          <p className="text-eyebrow text-muted-foreground mb-2">Caption • 12pt • Regular • 16pt line height</p>
           <p className="text-caption text-secondary-foreground">Tertiary information, helper text, legal copy.</p>
         </div>
 
         {/* Button Text */}
         <div className="flex-shrink-0 w-80">
-          <p className="text-caption text-muted-foreground mb-2">Button • 16px • Semibold</p>
+          <p className="text-eyebrow text-muted-foreground mb-2">Button • 16pt • Semibold</p>
           <div className="flex flex-wrap gap-3">
             <Button variant="default">
               Filled
@@ -74,7 +74,7 @@ export function FontPreviewColumn({ fontName, fontClass }: FontPreviewColumnProp
 
         {/* Button States */}
         <div className="flex-shrink-0 w-96">
-          <p className="text-caption text-muted-foreground mb-3">Button States</p>
+          <p className="text-eyebrow text-muted-foreground mb-3">Button States</p>
           <div className="space-y-3">
             <div className="flex flex-wrap gap-3">
               <Button variant="default">Default</Button>

@@ -40,32 +40,38 @@
     --spacing-10: 80px;
     --spacing-12: 96px;
 
-    /* Typography Scale (px converted to rem: 16px = 1rem) */
-    --text-display-large: 3.75rem; /* 60px */
-    --text-display-medium: 3rem; /* 48px */
-    --text-heading-1: 2.25rem; /* 36px */
-    --text-heading-2: 1.75rem; /* 28px */
-    --text-heading-3: 1.375rem; /* 22px */
-    --text-body: 1rem; /* 16px */
-    --text-caption: 0.875rem; /* 14px */
+    /* Typography Scale (pt converted to rem: 16px = 1rem, 1pt = 1.333px) */
+    --text-display-large: 3rem; /* 36pt = 48px */
+    --text-display-medium: 2.5rem; /* 30pt = 40px */
+    --text-heading-1: 2rem; /* 24pt = 32px */
+    --text-heading-2: 1.667rem; /* 20pt = 26.67px */
+    --text-subhead: 1.333rem; /* 16pt = 21.33px */
+    --text-body: 1.167rem; /* 14pt = 18.67px */
+    --text-eyebrow: 0.917rem; /* 11pt = 14.67px */
+    --text-caption: 1rem; /* 12pt = 16px */
+    --text-button: 1.333rem; /* 16pt = 21.33px */
 
     /* Line Heights */
-    --leading-display-large: 4.5rem; /* 72px */
-    --leading-display-medium: 3.5rem; /* 56px */
-    --leading-heading-1: 2.75rem; /* 44px */
-    --leading-heading-2: 2.25rem; /* 36px */
-    --leading-heading-3: 1.75rem; /* 28px */
-    --leading-body: 1.5rem; /* 24px */
-    --leading-caption: 1.25rem; /* 20px */
+    --leading-display-large: 3.667rem; /* 44pt = 58.67px */
+    --leading-display-medium: 3rem; /* 36pt = 48px */
+    --leading-heading-1: 2.5rem; /* 30pt = 40px */
+    --leading-heading-2: 2.167rem; /* 26pt = 34.67px */
+    --leading-subhead: 1.833rem; /* 22pt = 29.33px */
+    --leading-body: 1.667rem; /* 20pt = 26.67px */
+    --leading-eyebrow: 1.167rem; /* 14pt = 18.67px */
+    --leading-caption: 1.333rem; /* 16pt = 21.33px */
+    --leading-button: 1.833rem; /* 22pt = 29.33px */
 
     /* Letter Spacing */
-    --tracking-display-large: -0.015em; /* -1.5% */
-    --tracking-display-medium: -0.01em; /* -1% */
-    --tracking-heading-1: -0.005em; /* -0.5% */
+    --tracking-display-large: 0em; /* 0% */
+    --tracking-display-medium: 0em; /* 0% */
+    --tracking-heading-1: 0em; /* 0% */
     --tracking-heading-2: 0em; /* 0% */
-    --tracking-heading-3: 0em; /* 0% */
+    --tracking-subhead: 0em; /* 0% */
     --tracking-body: 0em; /* 0% */
-    --tracking-caption: 0.005em; /* +0.5% */
+    --tracking-eyebrow: 0.05em; /* 5% */
+    --tracking-caption: 0em; /* 0% */
+    --tracking-button: 0.02em; /* 2% */
 
     /* Default Theme - Neutral Professional */
     --background: 0 0% 98%;
@@ -230,11 +236,11 @@
     letter-spacing: var(--tracking-heading-2);
   }
 
-  .text-heading-3 {
-    font-size: var(--text-heading-3);
-    line-height: var(--leading-heading-3);
+  .text-subhead {
+    font-size: var(--text-subhead);
+    line-height: var(--leading-subhead);
     font-weight: 600;
-    letter-spacing: var(--tracking-heading-3);
+    letter-spacing: var(--tracking-subhead);
   }
 
   .text-body-regular {
@@ -242,6 +248,14 @@
     line-height: var(--leading-body);
     font-weight: 400;
     letter-spacing: var(--tracking-body);
+  }
+
+  .text-eyebrow {
+    font-size: var(--text-eyebrow);
+    line-height: var(--leading-eyebrow);
+    font-weight: 500;
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
   }
 
   .text-caption {
@@ -252,9 +266,10 @@
   }
 
   .text-button {
-    font-size: var(--text-body);
-    line-height: var(--leading-heading-2);
+    font-size: var(--text-button);
+    line-height: var(--leading-button);
     font-weight: 600;
+    letter-spacing: var(--tracking-button);
   }
 
   /* 8pt Grid Spacing */
