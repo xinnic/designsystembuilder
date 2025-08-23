@@ -40,27 +40,27 @@
     --spacing-10: 80px;
     --spacing-12: 96px;
 
-    /* Typography Scale (pt converted to rem: 16px = 1rem, 1pt = 1.333px) */
-    --text-display-large: 3rem; /* 36pt = 48px */
-    --text-display-medium: 2.5rem; /* 30pt = 40px */
-    --text-heading-1: 2rem; /* 24pt = 32px */
-    --text-heading-2: 1.667rem; /* 20pt = 26.67px */
-    --text-subhead: 1.333rem; /* 16pt = 21.33px */
-    --text-body: 1.167rem; /* 14pt = 18.67px */
-    --text-eyebrow: 0.917rem; /* 11pt = 14.67px */
-    --text-caption: 1rem; /* 12pt = 16px */
-    --text-button: 1.333rem; /* 16pt = 21.33px */
+    /* Typography Scale (pt converted to px: 1pt = 1.333px) */
+    --text-display-large: 48px; /* 36pt */
+    --text-display-medium: 40px; /* 30pt */
+    --text-heading-1: 32px; /* 24pt */
+    --text-heading-2: 26.67px; /* 20pt */
+    --text-subhead: 21.33px; /* 16pt */
+    --text-body: 18.67px; /* 14pt */
+    --text-eyebrow: 14.67px; /* 11pt */
+    --text-caption: 16px; /* 12pt */
+    --text-button: 21.33px; /* 16pt */
 
-    /* Line Heights */
-    --leading-display-large: 3.667rem; /* 44pt = 58.67px */
-    --leading-display-medium: 3rem; /* 36pt = 48px */
-    --leading-heading-1: 2.5rem; /* 30pt = 40px */
-    --leading-heading-2: 2.167rem; /* 26pt = 34.67px */
-    --leading-subhead: 1.833rem; /* 22pt = 29.33px */
-    --leading-body: 1.667rem; /* 20pt = 26.67px */
-    --leading-eyebrow: 1.167rem; /* 14pt = 18.67px */
-    --leading-caption: 1.333rem; /* 16pt = 21.33px */
-    --leading-button: 1.833rem; /* 22pt = 29.33px */
+    /* Line Heights (pt converted to px: 1pt = 1.333px) */
+    --leading-display-large: 58.67px; /* 44pt */
+    --leading-display-medium: 48px; /* 36pt */
+    --leading-heading-1: 40px; /* 30pt */
+    --leading-heading-2: 34.67px; /* 26pt */
+    --leading-subhead: 29.33px; /* 22pt */
+    --leading-body: 26.67px; /* 20pt */
+    --leading-eyebrow: 18.67px; /* 14pt */
+    --leading-caption: 21.33px; /* 16pt */
+    --leading-button: 29.33px; /* 22pt */
 
     /* Letter Spacing */
     --tracking-display-large: 0em; /* 0% */
