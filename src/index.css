@@ -109,6 +109,7 @@
 
   /* Blue Theme */
   .theme-blue {
+    --primary: 210 79% 46%;
     --button-bg: 210 79% 46%;
     --button-text: 0 0% 100%;
     --button-bg-hover: 210 79% 40%;
@@ -116,6 +117,7 @@
   }
 
   .dark.theme-blue {
+    --primary: 207 90% 77%;
     --button-bg: 207 90% 77%;
     --button-text: 0 0% 0%;
     --button-bg-hover: 207 90% 70%;
@@ -124,6 +126,7 @@
 
   /* Purple Theme */
   .theme-purple {
+    --primary: 292 69% 39%;
     --button-bg: 292 69% 39%;
     --button-text: 0 0% 100%;
     --button-bg-hover: 292 69% 33%;
@@ -131,6 +134,7 @@
   }
 
   .dark.theme-purple {
+    --primary: 261 46% 74%;
     --button-bg: 261 46% 74%;
     --button-text: 0 0% 0%;
     --button-bg-hover: 261 46% 67%;
@@ -139,6 +143,7 @@
 
   /* Pink Theme */
   .theme-pink {
+    --primary: 340 69% 43%;
     --button-bg: 340 69% 43%;
     --button-text: 0 0% 100%;
     --button-bg-hover: 340 69% 37%;
@@ -146,6 +151,7 @@
   }
 
   .dark.theme-pink {
+    --primary: 340 82% 76%;
     --button-bg: 340 82% 76%;
     --button-text: 0 0% 0%;
     --button-bg-hover: 340 82% 69%;
@@ -154,6 +160,7 @@
 
   /* Red Theme */
   .theme-red {
+    --primary: 4 70% 50%;
     --button-bg: 4 70% 50%;
     --button-text: 0 0% 100%;
     --button-bg-hover: 4 70% 44%;
@@ -161,6 +168,7 @@
   }
 
   .dark.theme-red {
+    --primary: 0 69% 77%;
     --button-bg: 0 69% 77%;
     --button-text: 0 0% 0%;
     --button-bg-hover: 0 69% 70%;
@@ -169,6 +177,7 @@
 
   /* Yellow Theme */
   .theme-yellow {
+    --primary: 48 88% 58%;
     --button-bg: 48 88% 58%;
     --button-text: 210 11% 11%;
     --button-bg-hover: 48 88% 52%;
@@ -176,6 +185,7 @@
   }
 
   .dark.theme-yellow {
+    --primary: 54 100% 81%;
     --button-bg: 54 100% 81%;
     --button-text: 0 0% 0%;
     --button-bg-hover: 54 100% 74%;
@@ -184,6 +194,7 @@
 
   /* Orange Theme */
   .theme-orange {
+    --primary: 33 100% 48%;
     --button-bg: 33 100% 48%;
     --button-text: 210 11% 11%;
     --button-bg-hover: 33 100% 42%;
@@ -191,6 +202,7 @@
   }
 
   .dark.theme-orange {
+    --primary: 36 100% 75%;
     --button-bg: 36 100% 75%;
     --button-text: 0 0% 0%;
     --button-bg-hover: 36 100% 68%;
@@ -199,6 +211,7 @@
 
   /* Teal Theme */
   .theme-teal {
+    --primary: 174 100% 24%;
     --button-bg: 174 100% 24%;
     --button-text: 0 0% 100%;
     --button-bg-hover: 174 100% 18%;
@@ -206,6 +219,7 @@
   }
 
   .dark.theme-teal {
+    --primary: 174 42% 65%;
     --button-bg: 174 42% 65%;
     --button-text: 0 0% 0%;
     --button-bg-hover: 174 42% 58%;

@@ -54,13 +54,7 @@ export function SettingsBar({ isDarkMode, onToggleDarkMode, selectedTheme, onThe
               <span className="text-subhead font-semibold text-foreground">Mode:</span>
               <button
                 onClick={onToggleDarkMode}
-                className={`
-                  relative w-16 h-8 rounded-full transition-all duration-300 ease-in-out
-                  ${isDarkMode 
-                    ? 'bg-primary' 
-                    : 'bg-primary'
-                  }
-                `}
+                className="relative w-16 h-8 rounded-full transition-all duration-300 ease-in-out bg-primary"
               >
                 <div
                   className={`
@@ -70,9 +64,9 @@ export function SettingsBar({ isDarkMode, onToggleDarkMode, selectedTheme, onThe
                   `}
                 >
                   {isDarkMode ? (
-                    <Moon className="w-3 h-3 text-gray-600" />
+                    <Moon className="w-3 h-3 text-primary" />
                   ) : (
-                    <Sun className="w-3 h-3 text-yellow-600" />
+                    <Sun className="w-3 h-3 text-primary" />
                   )}
                 </div>
               </button>
