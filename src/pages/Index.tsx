@@ -49,8 +49,8 @@ const Index = () => {
         onThemeChange={handleThemeChange}
       />
       
-      <main className="px-6 py-8">
-        <div className="space-y-6 overflow-x-auto">
+      <main className="px-6 py-8 overflow-x-auto">
+        <div className="space-y-6 min-w-max">
           {fonts.map((font) => (
             <FontPreviewColumn
               key={font.name}

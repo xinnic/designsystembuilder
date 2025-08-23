@@ -10,7 +10,7 @@ const sampleParagraph = "Typography is the art and technique of arranging type t
 
 export function FontPreviewColumn({ fontName, fontClass }: FontPreviewColumnProps) {
   return (
-    <Card className="p-6 overflow-x-auto">
+    <Card className="p-6">
       {/* Font Name Header */}
       <div className="border-b pb-4 mb-6">
         <h2 className="text-heading-2 font-semibold text-foreground">{fontName}</h2>
