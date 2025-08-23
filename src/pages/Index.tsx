@@ -8,6 +8,7 @@ const fonts = [
   { name: "Wix Madefor Text", class: "font-wix" },
   { name: "Figtree", class: "font-figtree" },
   { name: "Albert Sans", class: "font-albert" },
+  { name: "Satoshi", class: "font-satoshi" },
 ];
 
 const Index = () => {
