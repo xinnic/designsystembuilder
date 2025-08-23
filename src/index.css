@@ -72,31 +72,39 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 84% 4.9%;
-    --primary-hover: 210 40% 90%;
-    --primary-pressed: 210 40% 85%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --secondary-hover: 217.2 32.6% 25%;
-    --secondary-pressed: 217.2 32.6% 30%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --destructive-hover: 0 62.8% 25%;
-    --destructive-pressed: 0 62.8% 20%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --background: 0 0% 7%;
+    --foreground: 0 0% 88%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 88%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 88%;
+    --primary: 207 90% 77%;
+    --primary-foreground: 0 0% 0%;
+    --primary-hover: 207 90% 70%;
+    --primary-pressed: 207 90% 65%;
+    --secondary: 0 0% 17%;
+    --secondary-foreground: 0 0% 88%;
+    --secondary-hover: 0 0% 22%;
+    --secondary-pressed: 0 0% 27%;
+    --muted: 0 0% 17%;
+    --muted-foreground: 0 0% 66%;
+    --accent: 0 0% 17%;
+    --accent-foreground: 0 0% 88%;
+    --destructive: 0 69% 77%;
+    --destructive-foreground: 0 0% 0%;
+    --destructive-hover: 0 69% 70%;
+    --destructive-pressed: 0 69% 65%;
+    --border: 0 0% 17%;
+    --input: 0 0% 17%;
+    --ring: 207 90% 77%;
+    --text-primary: 0 0% 88%;
+    --text-secondary: 0 0% 66%;
+
+    /* Button tokens - Blue theme dark default */
+    --button-bg: 207 90% 77%;
+    --button-text: 0 0% 0%;
+    --button-bg-hover: 207 90% 70%;
+    --button-bg-pressed: 207 90% 65%;
   }
 
   /* Blue Theme */
@@ -107,12 +115,26 @@
     --button-bg-pressed: 210 79% 35%;
   }
 
+  .dark.theme-blue {
+    --button-bg: 207 90% 77%;
+    --button-text: 0 0% 0%;
+    --button-bg-hover: 207 90% 70%;
+    --button-bg-pressed: 207 90% 65%;
+  }
+
   /* Purple Theme */
   .theme-purple {
     --button-bg: 292 69% 39%;
     --button-text: 0 0% 100%;
     --button-bg-hover: 292 69% 33%;
     --button-bg-pressed: 292 69% 28%;
+  }
+
+  .dark.theme-purple {
+    --button-bg: 261 46% 74%;
+    --button-text: 0 0% 0%;
+    --button-bg-hover: 261 46% 67%;
+    --button-bg-pressed: 261 46% 62%;
   }
 
   /* Pink Theme */
@@ -123,12 +145,26 @@
     --button-bg-pressed: 340 69% 32%;
   }
 
+  .dark.theme-pink {
+    --button-bg: 340 82% 76%;
+    --button-text: 0 0% 0%;
+    --button-bg-hover: 340 82% 69%;
+    --button-bg-pressed: 340 82% 64%;
+  }
+
   /* Red Theme */
   .theme-red {
     --button-bg: 4 70% 50%;
     --button-text: 0 0% 100%;
     --button-bg-hover: 4 70% 44%;
     --button-bg-pressed: 4 70% 39%;
+  }
+
+  .dark.theme-red {
+    --button-bg: 0 69% 77%;
+    --button-text: 0 0% 0%;
+    --button-bg-hover: 0 69% 70%;
+    --button-bg-pressed: 0 69% 65%;
   }
 
   /* Yellow Theme */
@@ -139,6 +175,13 @@
     --button-bg-pressed: 48 88% 47%;
   }
 
+  .dark.theme-yellow {
+    --button-bg: 54 100% 81%;
+    --button-text: 0 0% 0%;
+    --button-bg-hover: 54 100% 74%;
+    --button-bg-pressed: 54 100% 69%;
+  }
+
   /* Orange Theme */
   .theme-orange {
     --button-bg: 33 100% 48%;
@@ -147,12 +190,26 @@
     --button-bg-pressed: 33 100% 37%;
   }
 
+  .dark.theme-orange {
+    --button-bg: 36 100% 75%;
+    --button-text: 0 0% 0%;
+    --button-bg-hover: 36 100% 68%;
+    --button-bg-pressed: 36 100% 63%;
+  }
+
   /* Teal Theme */
   .theme-teal {
     --button-bg: 174 100% 24%;
     --button-text: 0 0% 100%;
     --button-bg-hover: 174 100% 18%;
     --button-bg-pressed: 174 100% 13%;
+  }
+
+  .dark.theme-teal {
+    --button-bg: 174 42% 65%;
+    --button-text: 0 0% 0%;
+    --button-bg-hover: 174 42% 58%;
+    --button-bg-pressed: 174 42% 53%;
   }
 }
 
