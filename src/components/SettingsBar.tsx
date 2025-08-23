@@ -22,8 +22,8 @@ export function SettingsBar({ isDarkMode, onToggleDarkMode, selectedTheme, onThe
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-heading-1 font-bold">Font Harmony Palette</h1>
-            <p className="text-subhead-regular text-muted-foreground">Professional typography preview tool</p>
+            <h1 className="text-heading-1 font-bold">Design System Builder</h1>
+            <p className="text-subhead-regular text-muted-foreground">Build and preview styles for scale</p>
           </div>
           
           <div className="flex items-center gap-6">
