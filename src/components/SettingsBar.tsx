@@ -64,7 +64,7 @@ export function SettingsBar({ isDarkMode, onToggleDarkMode, selectedTheme, onThe
                   `}
                 >
                   {isDarkMode ? (
-                    <Moon className="w-3 h-3 text-primary" />
+                    <Moon className="w-3 h-3 fill-orange-400 text-orange-400" />
                   ) : (
                     <Sun className="w-3 h-3 text-primary" />
                   )}
