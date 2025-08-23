@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { SettingsBar } from "@/components/SettingsBar";
 import { FontPreviewColumn } from "@/components/FontPreviewColumn";
 
