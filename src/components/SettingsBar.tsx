@@ -52,24 +52,30 @@ export function SettingsBar({ isDarkMode, onToggleDarkMode, selectedTheme, onThe
             {/* Dark Mode Toggle */}
             <div className="flex items-center gap-3">
               <span className="text-subhead font-semibold text-foreground">Mode:</span>
-              <Button
-                variant="outline"
-                size="sm"
+              <button
                 onClick={onToggleDarkMode}
-                className="w-20 justify-center"
+                className={`
+                  relative w-16 h-8 rounded-full transition-all duration-300 ease-in-out
+                  ${isDarkMode 
+                    ? 'bg-primary' 
+                    : 'bg-primary'
+                  }
+                `}
               >
-                {isDarkMode ? (
-                  <>
-                    <Moon className="w-4 h-4 mr-2" />
-                    Dark
-                  </>
-                ) : (
-                  <>
-                    <Sun className="w-4 h-4 mr-2" />
-                    Light
-                  </>
-                )}
-              </Button>
+                <div
+                  className={`
+                    absolute top-1 w-6 h-6 bg-white rounded-full shadow-md transition-all duration-300 ease-in-out
+                    flex items-center justify-center
+                    ${isDarkMode ? 'left-1' : 'left-9'}
+                  `}
+                >
+                  {isDarkMode ? (
+                    <Moon className="w-3 h-3 text-gray-600" />
+                  ) : (
+                    <Sun className="w-3 h-3 text-yellow-600" />
+                  )}
+                </div>
+              </button>
             </div>
           </div>
         </div>
