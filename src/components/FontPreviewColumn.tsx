@@ -20,6 +20,30 @@ export function FontPreviewColumn({ fontName, fontClass }: FontPreviewColumnProp
       {/* Typography Styles - Horizontal Layout */}
       <div className={`flex gap-8 min-w-max ${fontClass}`}>
         
+        {/* Headings Cell */}
+        <div className="flex-shrink-0 w-80">
+          <p className="text-footnote text-muted-foreground mb-4">Headings & Subhead</p>
+          <div className="space-y-4">
+            <h1 className="text-heading-1">Main Heading</h1>
+            <h2 className="text-heading-2">Section Heading</h2>
+            <p className="text-subhead-regular">Supporting subhead text</p>
+          </div>
+        </div>
+
+        {/* Body Text Cell */}
+        <div className="flex-shrink-0 w-96">
+          <p className="text-footnote text-muted-foreground mb-2">Body-Regular • 17pt • Regular • 24pt line height</p>
+          <p className="text-body-regular">
+            Typography is the art and technique of arranging type to make written language legible, readable, and visually appealing. <strong>Good typography enhances the user experience</strong> by establishing clear hierarchy, improving readability, and creating emotional connection through careful selection of typefaces, spacing, and layout principles.
+          </p>
+        </div>
+
+        {/* Eyebrow */}
+        <div className="flex-shrink-0 w-48">
+          <p className="text-footnote text-muted-foreground mb-2">Eyebrow • 8pt • Regular • 5% spacing</p>
+          <p className="text-eyebrow">Eyebrow Label</p>
+        </div>
+
         {/* Display Large */}
         <div className="flex-shrink-0 w-80">
           <p className="text-footnote text-muted-foreground mb-2">Display-Large • 34pt • Bold • 40pt line height</p>
@@ -32,46 +56,10 @@ export function FontPreviewColumn({ fontName, fontClass }: FontPreviewColumnProp
           <h2 className="text-display-medium">Section Title</h2>
         </div>
 
-        {/* Heading 1 */}
-        <div className="flex-shrink-0 w-64">
-          <p className="text-footnote text-muted-foreground mb-2">Heading-1 • 22pt • Bold • 28pt line height</p>
-          <h3 className="text-heading-1">Modal or Card Title</h3>
-        </div>
-
-        {/* Heading 2 */}
-        <div className="flex-shrink-0 w-64">
-          <p className="text-footnote text-muted-foreground mb-2">Heading-2 • 17pt • Semibold • 22pt line height</p>
-          <h4 className="text-heading-2">Content Block Subheading</h4>
-        </div>
-
-        {/* Body Regular */}
-        <div className="flex-shrink-0 w-96">
-          <p className="text-footnote text-muted-foreground mb-2">Body-Regular • 17pt • Regular • 24pt line height</p>
-          <p className="text-body-regular">{sampleParagraph}</p>
-        </div>
-
-        {/* Body Bold */}
-        <div className="flex-shrink-0 w-80">
-          <p className="text-footnote text-muted-foreground mb-2">Body-Bold • 17pt • Bold • 24pt line height</p>
-          <p className="text-body-bold">This is emphasized text within a paragraph for important information.</p>
-        </div>
-
-        {/* Subhead Regular */}
-        <div className="flex-shrink-0 w-64">
-          <p className="text-footnote text-muted-foreground mb-2">Subhead-Regular • 15pt • Regular • 20pt line height</p>
-          <p className="text-subhead-regular">Secondary information and image captions go here.</p>
-        </div>
-
-        {/* Subhead Bold */}
-        <div className="flex-shrink-0 w-48">
-          <p className="text-footnote text-muted-foreground mb-2">Subhead-Bold • 15pt • Semibold • 20pt line height</p>
-          <p className="text-subhead-bold">Form Field Label</p>
-        </div>
-
         {/* Footnote */}
         <div className="flex-shrink-0 w-64">
           <p className="text-footnote text-muted-foreground mb-2">Footnote • 13pt • Regular • 18pt line height</p>
-          <p className="text-footnote">Tertiary information, helper text, and legal copy.</p>
+          <p className="text-footnote">Tertiary information, helper text, legal copy.</p>
         </div>
 
         {/* Button Text */}

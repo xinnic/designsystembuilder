@@ -25,6 +25,7 @@
     --text-body: 1.42rem; /* 17pt */
     --text-subhead: 1.25rem; /* 15pt */
     --text-footnote: 1.08rem; /* 13pt */
+    --text-eyebrow: 0.67rem; /* 8pt */
 
     /* Line Heights */
     --leading-display-large: 2.67rem; /* 40pt */
@@ -34,6 +35,7 @@
     --leading-body: 1.5rem; /* 24pt */
     --leading-subhead: 1.25rem; /* 20pt */
     --leading-footnote: 1.125rem; /* 18pt */
+    --leading-eyebrow: 1rem; /* 12pt */
 
     /* Default Theme - Neutral Professional */
     --background: 0 0% 98%;
@@ -200,28 +202,24 @@
     font-weight: 400;
   }
 
-  .text-body-bold {
-    font-size: var(--text-body);
-    line-height: var(--leading-body);
-    font-weight: 700;
-  }
-
   .text-subhead-regular {
     font-size: var(--text-subhead);
     line-height: var(--leading-subhead);
     font-weight: 400;
   }
 
-  .text-subhead-bold {
-    font-size: var(--text-subhead);
-    line-height: var(--leading-subhead);
-    font-weight: 600;
-  }
-
   .text-footnote {
     font-size: var(--text-footnote);
     line-height: var(--leading-footnote);
     font-weight: 400;
+  }
+
+  .text-eyebrow {
+    font-size: var(--text-eyebrow);
+    line-height: var(--leading-eyebrow);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .text-button {
