@@ -135,7 +135,7 @@ Please implement this design system with semantic CSS custom properties and ensu
       {/* Font Name Header */}
       <div className="border-b pb-4 mb-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-heading-2 font-semibold text-foreground">{fontName}</h2>
+          <h2 className={`text-heading-2 font-semibold text-foreground ${fontClass}`}>{fontName}</h2>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button variant="outline" size="sm">
