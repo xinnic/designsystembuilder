@@ -32,7 +32,7 @@ export function FontPreviewColumn({ fontName, fontClass }: FontPreviewColumnProp
 
         {/* Body Text Cell */}
         <div className="flex-shrink-0 w-96">
-          <p className="text-eyebrow text-muted-foreground mb-2">Body • 14pt • Regular • 20pt line height</p>
+          <p className="text-eyebrow text-muted-foreground mb-2">Body • 14px • Regular • 20px line height</p>
           <p className="text-body-regular">
             Typography is the art and technique of arranging type to make written language legible, readable, and visually appealing. <strong>Good typography enhances the user experience</strong> by establishing clear hierarchy, improving readability, and creating emotional connection through careful selection of typefaces, spacing, and layout principles.
           </p>
@@ -49,13 +49,13 @@ export function FontPreviewColumn({ fontName, fontClass }: FontPreviewColumnProp
 
         {/* Caption */}
         <div className="flex-shrink-0 w-64">
-          <p className="text-eyebrow text-muted-foreground mb-2">Caption • 12pt • Regular • 16pt line height</p>
+          <p className="text-eyebrow text-muted-foreground mb-2">Caption • 12px • Regular • 16px line height</p>
           <p className="text-caption text-secondary-foreground">Tertiary information, helper text, legal copy.</p>
         </div>
 
         {/* Button Text */}
         <div className="flex-shrink-0 w-80">
-          <p className="text-eyebrow text-muted-foreground mb-2">Button • 16pt • Semibold</p>
+          <p className="text-eyebrow text-muted-foreground mb-2">Button • 16px • Semibold</p>
           <div className="flex flex-wrap gap-3">
             <Button variant="default">
               Filled

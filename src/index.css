@@ -40,27 +40,27 @@
     --spacing-10: 80px;
     --spacing-12: 96px;
 
-    /* Typography Scale (pt converted to px: 1pt = 1.333px) */
-    --text-display-large: 48px; /* 36pt */
-    --text-display-medium: 40px; /* 30pt */
-    --text-heading-1: 32px; /* 24pt */
-    --text-heading-2: 26.67px; /* 20pt */
-    --text-subhead: 21.33px; /* 16pt */
-    --text-body: 18.67px; /* 14pt */
-    --text-eyebrow: 14.67px; /* 11pt */
-    --text-caption: 16px; /* 12pt */
-    --text-button: 21.33px; /* 16pt */
+    /* Typography Scale (px values) */
+    --text-display-large: 36px;
+    --text-display-medium: 30px;
+    --text-heading-1: 24px;
+    --text-heading-2: 20px;
+    --text-subhead: 16px;
+    --text-body: 14px;
+    --text-eyebrow: 11px;
+    --text-caption: 12px;
+    --text-button: 16px;
 
-    /* Line Heights (pt converted to px: 1pt = 1.333px) */
-    --leading-display-large: 58.67px; /* 44pt */
-    --leading-display-medium: 48px; /* 36pt */
-    --leading-heading-1: 40px; /* 30pt */
-    --leading-heading-2: 34.67px; /* 26pt */
-    --leading-subhead: 29.33px; /* 22pt */
-    --leading-body: 26.67px; /* 20pt */
-    --leading-eyebrow: 18.67px; /* 14pt */
-    --leading-caption: 21.33px; /* 16pt */
-    --leading-button: 29.33px; /* 22pt */
+    /* Line Heights (px values) */
+    --leading-display-large: 44px;
+    --leading-display-medium: 36px;
+    --leading-heading-1: 30px;
+    --leading-heading-2: 26px;
+    --leading-subhead: 22px;
+    --leading-body: 20px;
+    --leading-eyebrow: 14px;
+    --leading-caption: 16px;
+    --leading-button: 22px;
 
     /* Letter Spacing */
     --tracking-display-large: 0em; /* 0% */
