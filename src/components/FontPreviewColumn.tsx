@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { Copy } from "lucide-react";
+import { Copy, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 
@@ -134,12 +134,13 @@ Please implement this design system with semantic CSS custom properties and ensu
     <Card className="p-6">
       {/* Font Name Header */}
       <div className="border-b pb-4 mb-6">
-        <div className="flex items-center justify-between">
+        <div className="space-y-2">
           <h2 className={`text-heading-2 font-semibold text-foreground ${fontClass}`}>{fontName}</h2>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
-                COPY PROMPT
+              <Button variant="ghost" size="sm" className="h-auto p-1 text-xs text-muted-foreground hover:text-foreground">
+                <Sparkles className="w-3 h-3 mr-1" />
+                Copy Prompt
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[80vh]">
