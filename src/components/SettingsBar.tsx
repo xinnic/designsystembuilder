@@ -1,11 +1,19 @@
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
 
 interface SettingsBarProps {
   isDarkMode: boolean;
   onToggleDarkMode: () => void;
   selectedTheme: string;
   onThemeChange: (theme: string) => void;
+  selectedScale: string;
+  onScaleChange: (scale: string) => void;
 }
 
 const colorThemes = [
@@ -18,7 +26,13 @@ const colorThemes = [
   { name: 'teal', color: '#00796B', label: 'Teal' },
 ];
 
-export function SettingsBar({ isDarkMode, onToggleDarkMode, selectedTheme, onThemeChange }: SettingsBarProps) {
+const typographicScales = [
+  { value: 'small', label: 'Small' },
+  { value: 'regular', label: 'Regular' },
+  { value: 'large', label: 'Large' },
+];
+
+export function SettingsBar({ isDarkMode, onToggleDarkMode, selectedTheme, onThemeChange, selectedScale, onScaleChange }: SettingsBarProps) {
   return (
     <div className="border-b bg-card">
       <div className="px-6 py-4">
@@ -29,6 +43,30 @@ export function SettingsBar({ isDarkMode, onToggleDarkMode, selectedTheme, onThe
           </div>
           
           <div className="flex items-center gap-6">
+            {/* Typography Scale Dropdown */}
+            <div className="flex items-center gap-3">
+              <span className="text-subhead font-semibold text-foreground">Scale:</span>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="h-8 px-3 text-xs">
+                    {typographicScales.find(scale => scale.value === selectedScale)?.label || 'Regular'}
+                    <ChevronDown className="w-3 h-3 ml-2" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-32">
+                  {typographicScales.map((scale) => (
+                    <DropdownMenuItem
+                      key={scale.value}
+                      onClick={() => onScaleChange(scale.value)}
+                      className={selectedScale === scale.value ? "bg-accent" : ""}
+                    >
+                      {scale.label}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
             {/* Color Palette Switcher */}
             <div className="flex items-center gap-3">
               <span className="text-subhead font-semibold text-foreground">Colors:</span>
