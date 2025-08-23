@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Satoshi Font Face Declarations */
+@font-face {
+  font-family: 'Satoshi';
+  src: url('./lib/Satoshi-Variable.woff2') format('woff2'),
+       url('./lib/Satoshi-Variable.woff') format('woff'),
+       url('./lib/Satoshi-Variable.ttf') format('truetype'),
+       url('./lib/Satoshi-Variable.eot') format('embedded-opentype');
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('./lib/Satoshi-VariableItalic.woff2') format('woff2'),
+       url('./lib/Satoshi-VariableItalic.woff') format('woff'),
+       url('./lib/Satoshi-VariableItalic.ttf') format('truetype'),
+       url('./lib/Satoshi-VariableItalic.eot') format('embedded-opentype');
+  font-weight: 300 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 /* Font Harmony Palette Design System - Typography-focused design with 8pt grid system */
 
 @layer base {

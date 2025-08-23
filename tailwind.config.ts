@@ -24,6 +24,7 @@ export default {
 				'wix': ['Wix Madefor Text', 'sans-serif'],
 				'figtree': ['Figtree', 'sans-serif'],
 				'albert': ['Albert Sans', 'sans-serif'],
+				'satoshi': ['Satoshi', 'sans-serif'],
 			},
 			spacing: {
 				'1': 'var(--spacing-1)',
