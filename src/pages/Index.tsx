@@ -56,6 +56,8 @@ const Index = () => {
               key={font.name}
               fontName={font.name}
               fontClass={font.class}
+              selectedTheme={selectedTheme}
+              isDarkMode={isDarkMode}
             />
           ))}
         </div>
