@@ -24,6 +24,7 @@ export function FontPreviewColumn({ fontName, fontClass }: FontPreviewColumnProp
         <div className="flex-shrink-0 w-80">
           <p className="text-eyebrow text-secondary mb-4">Headings</p>
           <div className="space-y-4">
+            <p className="text-eyebrow text-secondary">Eyebrow Text</p>
             <h1 className="text-heading-1 text-foreground">Heading 1</h1>
             <h2 className="text-heading-2 text-foreground">Heading 2</h2>
             <h3 className="text-subhead text-secondary">Subhead</h3>
