@@ -9,11 +9,13 @@ interface SettingsBarProps {
 }
 
 const colorThemes = [
-  { name: 'blue', color: 'hsl(221, 83%, 53%)', label: 'Blue' },
-  { name: 'purple', color: 'hsl(262, 83%, 58%)', label: 'Purple' },
-  { name: 'green', color: 'hsl(142, 71%, 45%)', label: 'Green' },
-  { name: 'orange', color: 'hsl(25, 95%, 53%)', label: 'Orange' },
-  { name: 'pink', color: 'hsl(330, 81%, 60%)', label: 'Pink' },
+  { name: 'blue', color: '#1976D2', label: 'Blue' },
+  { name: 'purple', color: '#7B1FA2', label: 'Purple' },
+  { name: 'pink', color: '#C2185B', label: 'Pink' },
+  { name: 'red', color: '#D32F2F', label: 'Red' },
+  { name: 'yellow', color: '#FBC02D', label: 'Yellow' },
+  { name: 'orange', color: '#F57C00', label: 'Orange' },
+  { name: 'teal', color: '#00796B', label: 'Teal' },
 ];
 
 export function SettingsBar({ isDarkMode, onToggleDarkMode, selectedTheme, onThemeChange }: SettingsBarProps) {
@@ -22,14 +24,14 @@ export function SettingsBar({ isDarkMode, onToggleDarkMode, selectedTheme, onThe
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-heading-1 font-bold">Design System Builder</h1>
-            <p className="text-subhead-regular text-muted-foreground">Build styles at scale.</p>
+            <h1 className="text-heading-1 font-bold text-foreground">Design System Builder</h1>
+            <p className="text-subhead text-secondary">Build styles at scale.</p>
           </div>
           
           <div className="flex items-center gap-6">
             {/* Color Palette Switcher */}
             <div className="flex items-center gap-3">
-              <span className="text-subhead-bold text-foreground">Colors:</span>
+              <span className="text-subhead font-semibold text-foreground">Colors:</span>
               <div className="flex gap-2">
                 {colorThemes.map((theme) => (
                   <button
@@ -49,7 +51,7 @@ export function SettingsBar({ isDarkMode, onToggleDarkMode, selectedTheme, onThe
 
             {/* Dark Mode Toggle */}
             <div className="flex items-center gap-3">
-              <span className="text-subhead-bold text-foreground">Mode:</span>
+              <span className="text-subhead font-semibold text-foreground">Mode:</span>
               <Button
                 variant="outline"
                 size="sm"
