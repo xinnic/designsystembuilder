@@ -24,6 +24,16 @@
 @tailwind utilities;
 
 @layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: 'Satoshi', system-ui, -apple-system, sans-serif;
+  }
+  
   :root {
     --spacing-1: 4px;
     --spacing-2: 8px;
