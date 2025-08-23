@@ -79,9 +79,9 @@ export function FontPreviewColumn({ fontName, fontClass }: FontPreviewColumnProp
           <div className="space-y-3">
             <div className="flex flex-wrap gap-3">
               <Button variant="default">Default</Button>
-              <Button variant="default" className="hover:bg-primary-hover">Hover</Button>
+              <Button variant="default" className="hover:bg-[hsl(var(--button-bg-hover))]">Hover</Button>
               <Button variant="default" className="focus:ring-2 focus:ring-ring">Focused</Button>
-              <Button variant="default" className="bg-primary-pressed">Pressed</Button>
+              <Button variant="default" className="bg-[hsl(var(--button-bg-pressed))]">Pressed</Button>
               <Button variant="default" disabled>Disabled</Button>
             </div>
           </div>
