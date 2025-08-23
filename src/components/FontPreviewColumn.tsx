@@ -21,7 +21,6 @@ export function FontPreviewColumn({ fontName, fontClass }: FontPreviewColumnProp
         
         {/* Headings Cell with Eyebrow */}
         <div className="flex-shrink-0 w-80">
-          <p className="text-eyebrow text-secondary mb-4 lowercase">headings</p>
           <div className="space-y-4">
             <p className="text-eyebrow text-secondary">Eyebrow Text</p>
             <h1 className="text-heading-1 text-foreground">Heading 1</h1>
