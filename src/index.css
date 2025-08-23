@@ -73,41 +73,51 @@
     --tracking-caption: 0em; /* 0% */
     --tracking-button: 0.02em; /* 2% */
 
-    /* Default Theme - Neutral Professional */
-    --background: 0 0% 98%;
-    --foreground: 220 13% 13%;
+    /* Color System - Base Colors */
+    --text-primary: 240 6% 11%; /* #1c1c1e */
+    --text-secondary: 240 2% 39%; /* #636366 */
+    --background-primary: 0 0% 100%; /* #ffffff */
+    --background-secondary: 240 14% 97%; /* #f2f2f7 */
+    --border-color: 240 2% 78%; /* #c6c6c8 */
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 13% 13%;
+    /* Default Theme Colors */
+    --background: var(--background-primary);
+    --foreground: var(--text-primary);
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 13% 13%;
+    --card: var(--background-primary);
+    --card-foreground: var(--text-primary);
 
-    /* Brand Colors - Blue Theme */
-    --primary: 221 83% 53%;
-    --primary-foreground: 0 0% 100%;
-    --primary-hover: 221 83% 48%;
-    --primary-pressed: 221 83% 43%;
+    --popover: var(--background-primary);
+    --popover-foreground: var(--text-primary);
 
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 221 83% 53%;
-    --secondary-hover: 221 83% 95%;
-    --secondary-pressed: 221 83% 90%;
+    /* Brand Colors - Default Blue Theme */
+    --brand: 210 79% 46%; /* #1976D2 */
+    --brand-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --muted: 220 13% 95%;
-    --muted-foreground: 220 13% 40%;
+    --primary: var(--brand);
+    --primary-foreground: var(--brand-foreground);
+    --primary-hover: 210 79% 41%;
+    --primary-pressed: 210 79% 36%;
 
-    --accent: 220 13% 95%;
-    --accent-foreground: 220 13% 13%;
+    --secondary: var(--text-secondary);
+    --secondary-foreground: var(--text-primary);
+    --secondary-hover: 240 2% 44%;
+    --secondary-pressed: 240 2% 49%;
+
+    --muted: var(--background-secondary);
+    --muted-foreground: var(--text-secondary);
+
+    --accent: var(--background-secondary);
+    --accent-foreground: var(--text-primary);
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --destructive-hover: 0 84% 55%;
     --destructive-pressed: 0 84% 50%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 221 83% 53%;
+    --border: var(--border-color);
+    --input: var(--border-color);
+    --ring: var(--brand);
 
     --radius: 0.5rem;
 
@@ -130,33 +140,66 @@
 
   /* Color Palette Variants */
   .theme-blue {
-    --primary: 221 83% 53%;
-    --primary-hover: 221 83% 48%;
-    --primary-pressed: 221 83% 43%;
+    --brand: 210 79% 46%; /* #1976D2 */
+    --brand-foreground: 0 0% 100%; /* #FFFFFF */
+    --primary: var(--brand);
+    --primary-foreground: var(--brand-foreground);
+    --primary-hover: 210 79% 41%;
+    --primary-pressed: 210 79% 36%;
   }
 
   .theme-purple {
-    --primary: 262 83% 58%;
-    --primary-hover: 262 83% 53%;
-    --primary-pressed: 262 83% 48%;
-  }
-
-  .theme-green {
-    --primary: 142 71% 45%;
-    --primary-hover: 142 71% 40%;
-    --primary-pressed: 142 71% 35%;
-  }
-
-  .theme-orange {
-    --primary: 25 95% 53%;
-    --primary-hover: 25 95% 48%;
-    --primary-pressed: 25 95% 43%;
+    --brand: 287 69% 38%; /* #7B1FA2 */
+    --brand-foreground: 0 0% 100%; /* #FFFFFF */
+    --primary: var(--brand);
+    --primary-foreground: var(--brand-foreground);
+    --primary-hover: 287 69% 33%;
+    --primary-pressed: 287 69% 28%;
   }
 
   .theme-pink {
-    --primary: 330 81% 60%;
-    --primary-hover: 330 81% 55%;
-    --primary-pressed: 330 81% 50%;
+    --brand: 336 75% 44%; /* #C2185B */
+    --brand-foreground: 0 0% 100%; /* #FFFFFF */
+    --primary: var(--brand);
+    --primary-foreground: var(--brand-foreground);
+    --primary-hover: 336 75% 39%;
+    --primary-pressed: 336 75% 34%;
+  }
+
+  .theme-red {
+    --brand: 0 63% 51%; /* #D32F2F */
+    --brand-foreground: 0 0% 100%; /* #FFFFFF */
+    --primary: var(--brand);
+    --primary-foreground: var(--brand-foreground);
+    --primary-hover: 0 63% 46%;
+    --primary-pressed: 0 63% 41%;
+  }
+
+  .theme-yellow {
+    --brand: 48 96% 58%; /* #FBC02D */
+    --brand-foreground: 240 6% 11%; /* #1c1c1e */
+    --primary: var(--brand);
+    --primary-foreground: var(--brand-foreground);
+    --primary-hover: 48 96% 53%;
+    --primary-pressed: 48 96% 48%;
+  }
+
+  .theme-orange {
+    --brand: 30 100% 48%; /* #F57C00 */
+    --brand-foreground: 240 6% 11%; /* #1c1c1e */
+    --primary: var(--brand);
+    --primary-foreground: var(--brand-foreground);
+    --primary-hover: 30 100% 43%;
+    --primary-pressed: 30 100% 38%;
+  }
+
+  .theme-teal {
+    --brand: 172 100% 24%; /* #00796B */
+    --brand-foreground: 0 0% 100%; /* #FFFFFF */
+    --primary: var(--brand);
+    --primary-foreground: var(--brand-foreground);
+    --primary-hover: 172 100% 19%;
+    --primary-pressed: 172 100% 14%;
   }
 
   .dark {
@@ -204,7 +247,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-jakarta;
+    @apply bg-background text-foreground font-satoshi;
   }
 
   /* Typography Classes */

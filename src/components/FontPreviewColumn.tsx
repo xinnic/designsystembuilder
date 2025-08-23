@@ -13,8 +13,8 @@ export function FontPreviewColumn({ fontName, fontClass }: FontPreviewColumnProp
     <Card className="p-6">
       {/* Font Name Header */}
       <div className="border-b pb-4 mb-6">
-        <h2 className="text-heading-2 font-bold text-primary">{fontName}</h2>
-        <p className="text-caption text-muted-foreground">Font preview</p>
+        <h2 className="text-heading-2 font-semibold text-foreground">{fontName}</h2>
+        <p className="text-caption text-secondary">Font preview</p>
       </div>
 
       {/* Typography Styles - Horizontal Layout */}
@@ -22,40 +22,40 @@ export function FontPreviewColumn({ fontName, fontClass }: FontPreviewColumnProp
         
         {/* Headings Cell with Eyebrow */}
         <div className="flex-shrink-0 w-80">
-          <p className="text-eyebrow text-muted-foreground mb-4">Headings</p>
+          <p className="text-eyebrow text-secondary mb-4">Headings</p>
           <div className="space-y-4">
-            <h1 className="text-heading-1">Heading 1</h1>
-            <h2 className="text-heading-2">Heading 2</h2>
-            <h3 className="text-subhead">Subhead</h3>
+            <h1 className="text-heading-1 text-foreground">Heading 1</h1>
+            <h2 className="text-heading-2 text-foreground">Heading 2</h2>
+            <h3 className="text-subhead text-secondary">Subhead</h3>
           </div>
         </div>
 
         {/* Body Text Cell */}
         <div className="flex-shrink-0 w-96">
-          <p className="text-eyebrow text-muted-foreground mb-2">Body • 14px • Regular • 20px line height</p>
-          <p className="text-body-regular">
+          <p className="text-eyebrow text-secondary mb-2">Body • 14px • Regular • 20px line height</p>
+          <p className="text-body-regular text-foreground">
             Typography is the art and technique of arranging type to make written language legible, readable, and visually appealing. <strong>Good typography enhances the user experience</strong> by establishing clear hierarchy, improving readability, and creating emotional connection through careful selection of typefaces, spacing, and layout principles.
           </p>
         </div>
 
         {/* Display Sizes Cell */}
         <div className="flex-shrink-0 w-80">
-          <p className="text-eyebrow text-muted-foreground mb-4">Display Sizes</p>
+          <p className="text-eyebrow text-secondary mb-4">Display Sizes</p>
           <div className="space-y-4">
-            <h1 className="text-display-large">Large Display</h1>
-            <h2 className="text-display-medium">Medium Display</h2>
+            <h1 className="text-display-large text-foreground">Large Display</h1>
+            <h2 className="text-display-medium text-foreground">Medium Display</h2>
           </div>
         </div>
 
         {/* Caption */}
         <div className="flex-shrink-0 w-64">
-          <p className="text-eyebrow text-muted-foreground mb-2">Caption • 12px • Regular • 16px line height</p>
-          <p className="text-caption text-secondary-foreground">Tertiary information, helper text, legal copy.</p>
+          <p className="text-eyebrow text-secondary mb-2">Caption • 12px • Regular • 16px line height</p>
+          <p className="text-caption text-secondary">Tertiary information, helper text, legal copy.</p>
         </div>
 
         {/* Button Text */}
         <div className="flex-shrink-0 w-80">
-          <p className="text-eyebrow text-muted-foreground mb-2">Button • 16px • Semibold</p>
+          <p className="text-eyebrow text-secondary mb-2">Button • 16px • Semibold</p>
           <div className="flex flex-wrap gap-3">
             <Button variant="default">
               Filled
@@ -74,7 +74,7 @@ export function FontPreviewColumn({ fontName, fontClass }: FontPreviewColumnProp
 
         {/* Button States */}
         <div className="flex-shrink-0 w-96">
-          <p className="text-eyebrow text-muted-foreground mb-3">Button States</p>
+          <p className="text-eyebrow text-secondary mb-3">Button States</p>
           <div className="space-y-3">
             <div className="flex flex-wrap gap-3">
               <Button variant="default">Default</Button>

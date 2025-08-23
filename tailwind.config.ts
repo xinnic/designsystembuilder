@@ -88,6 +88,10 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				}
 			},
+			textColor: {
+				primary: 'hsl(var(--text-primary))',
+				secondary: 'hsl(var(--text-secondary))',
+			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
