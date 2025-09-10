@@ -1,0 +1,244 @@
+import React from 'react';
+import { ChevronDown, Settings, Palette, Type, Grid, CornerDownLeft, Layers } from 'lucide-react';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+
+interface SidebarProps {
+  selectedFont: string;
+  onFontChange: (font: string) => void;
+  selectedScale: string;
+  onScaleChange: (scale: string) => void;
+  selectedTheme: string;
+  onThemeChange: (theme: string) => void;
+  isDarkMode: boolean;
+  onToggleDarkMode: () => void;
+}
+
+const fonts = [
+  { name: 'Plus Jakarta Sans', class: 'font-jakarta' },
+  { name: 'Be Vietnam Pro', class: 'font-vietnam' },
+  { name: 'Wix Madefor Text', class: 'font-wix' },
+  { name: 'Figtree', class: 'font-figtree' },
+  { name: 'Albert Sans', class: 'font-albert' },
+  { name: 'Satoshi', class: 'font-satoshi' },
+];
+
+const scales = [
+  { value: 'small', label: 'Small' },
+  { value: 'regular', label: 'Regular' },
+  { value: 'large', label: 'Large' },
+];
+
+const colorThemes = [
+  { name: 'blue', color: '#1976D2', label: 'Blue' },
+  { name: 'purple', color: '#7C3AED', label: 'Purple' },
+  { name: 'pink', color: '#E91E63', label: 'Pink' },
+  { name: 'red', color: '#DC2626', label: 'Red' },
+  { name: 'yellow', color: '#F59E0B', label: 'Yellow' },
+  { name: 'orange', color: '#EA580C', label: 'Orange' },
+  { name: 'teal', color: '#0D9488', label: 'Teal' },
+];
+
+export function Sidebar({
+  selectedFont,
+  onFontChange,
+  selectedScale,
+  onScaleChange,
+  selectedTheme,
+  onThemeChange,
+  isDarkMode,
+  onToggleDarkMode,
+}: SidebarProps) {
+  const [typographyOpen, setTypographyOpen] = React.useState(true);
+  const [colorsOpen, setColorsOpen] = React.useState(true);
+  const [spacingOpen, setSpacingOpen] = React.useState(false);
+  const [borderRadiusOpen, setBorderRadiusOpen] = React.useState(false);
+  const [shadowsOpen, setShadowsOpen] = React.useState(false);
+
+  return (
+    <div className="w-80 bg-background border-r border-border h-screen overflow-y-auto p-6">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold mb-2">Design System Builder</h1>
+        <p className="text-sm text-muted-foreground">
+          Customize your design system and generate AI-ready prompts
+        </p>
+      </div>
+
+      <div className="space-y-4">
+        {/* Typography Section */}
+        <Collapsible open={typographyOpen} onOpenChange={setTypographyOpen}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted">
+            <div className="flex items-center gap-3">
+              <Type className="h-5 w-5" />
+              <span className="font-medium">Typography</span>
+            </div>
+            <ChevronDown className={`h-4 w-4 transition-transform ${typographyOpen ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-4 p-3">
+            <div>
+              <label className="text-sm font-medium mb-2 block">Font Family</label>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="w-full justify-between">
+                    {fonts.find(f => f.class === selectedFont)?.name || 'Select Font'}
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-full">
+                  {fonts.map((font) => (
+                    <DropdownMenuItem key={font.class} onClick={() => onFontChange(font.class)}>
+                      {font.name}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium mb-2 block">Type Scale</label>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="w-full justify-between">
+                    {scales.find(s => s.value === selectedScale)?.label || 'Select Scale'}
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-full">
+                  {scales.map((scale) => (
+                    <DropdownMenuItem key={scale.value} onClick={() => onScaleChange(scale.value)}>
+                      {scale.label}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Colors Section */}
+        <Collapsible open={colorsOpen} onOpenChange={setColorsOpen}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted">
+            <div className="flex items-center gap-3">
+              <Palette className="h-5 w-5" />
+              <span className="font-medium">Colors</span>
+            </div>
+            <ChevronDown className={`h-4 w-4 transition-transform ${colorsOpen ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-4 p-3">
+            <div>
+              <label className="text-sm font-medium mb-2 block">Primary Color</label>
+              <div className="grid grid-cols-4 gap-2">
+                {colorThemes.map((theme) => (
+                  <button
+                    key={theme.name}
+                    className={`w-10 h-10 rounded-lg border-2 ${
+                      selectedTheme === theme.name ? 'border-foreground' : 'border-border'
+                    }`}
+                    style={{ backgroundColor: theme.color }}
+                    onClick={() => onThemeChange(theme.name)}
+                    title={theme.label}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Dark Mode</label>
+              <Switch checked={isDarkMode} onCheckedChange={onToggleDarkMode} />
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Spacing & Sizing Section */}
+        <Collapsible open={spacingOpen} onOpenChange={setSpacingOpen}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted">
+            <div className="flex items-center gap-3">
+              <Grid className="h-5 w-5" />
+              <span className="font-medium">Spacing & Sizing</span>
+            </div>
+            <ChevronDown className={`h-4 w-4 transition-transform ${spacingOpen ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-4 p-3">
+            <div>
+              <label className="text-sm font-medium mb-2 block">Base Unit</label>
+              <p className="text-sm text-muted-foreground">8pt grid system</p>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Border Radius Section */}
+        <Collapsible open={borderRadiusOpen} onOpenChange={setBorderRadiusOpen}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted">
+            <div className="flex items-center gap-3">
+              <CornerDownLeft className="h-5 w-5" />
+              <span className="font-medium">Border Radius</span>
+            </div>
+            <ChevronDown className={`h-4 w-4 transition-transform ${borderRadiusOpen ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-4 p-3">
+            <div className="grid grid-cols-3 gap-2">
+              <div className="text-center">
+                <div className="w-8 h-8 bg-muted rounded border mx-auto mb-1"></div>
+                <span className="text-xs">Small</span>
+              </div>
+              <div className="text-center">
+                <div className="w-8 h-8 bg-muted rounded-lg border mx-auto mb-1"></div>
+                <span className="text-xs">Medium</span>
+              </div>
+              <div className="text-center">
+                <div className="w-8 h-8 bg-muted rounded-2xl border mx-auto mb-1"></div>
+                <span className="text-xs">Large</span>
+              </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Shadows Section */}
+        <Collapsible open={shadowsOpen} onOpenChange={setShadowsOpen}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted">
+            <div className="flex items-center gap-3">
+              <Layers className="h-5 w-5" />
+              <span className="font-medium">Shadows</span>
+            </div>
+            <ChevronDown className={`h-4 w-4 transition-transform ${shadowsOpen ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-4 p-3">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Elevation 1</span>
+                <div className="w-8 h-8 bg-background rounded shadow-sm border"></div>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Elevation 2</span>
+                <div className="w-8 h-8 bg-background rounded shadow-md border"></div>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Elevation 3</span>
+                <div className="w-8 h-8 bg-background rounded shadow-lg border"></div>
+              </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+      </div>
+
+      {/* Settings Button */}
+      <div className="mt-auto pt-8 border-t border-border">
+        <Button variant="ghost" className="w-full justify-start">
+          <Settings className="h-4 w-4 mr-2" />
+          Settings
+        </Button>
+      </div>
+    </div>
+  );
+}
