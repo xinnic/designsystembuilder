@@ -5,6 +5,15 @@ import { MobileAppPreview } from '@/components/MobileAppPreview';
 import { DesignSystemOverview } from '@/components/DesignSystemOverview';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
 
 const fonts = [
   { name: 'Plus Jakarta Sans', class: 'font-jakarta' },
@@ -20,6 +29,7 @@ const Index = () => {
   const [selectedTheme, setSelectedTheme] = useState('blue');
   const [selectedScale, setSelectedScale] = useState('regular');
   const [selectedFont, setSelectedFont] = useState('font-jakarta');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
   // Apply theme and dark mode classes to the document root
@@ -207,6 +217,7 @@ Please provide the complete CSS with the token definitions and component styles.
         title: "Prompt copied!",
         description: "The design system prompt has been copied to your clipboard.",
       });
+      setIsDialogOpen(false);
     } catch (err) {
       toast({
         title: "Failed to copy",
@@ -214,6 +225,10 @@ Please provide the complete CSS with the token definitions and component styles.
         variant: "destructive",
       });
     }
+  };
+
+  const handleCopyPromptClick = () => {
+    setIsDialogOpen(true);
   };
 
   return (
@@ -234,10 +249,38 @@ Please provide the complete CSS with the token definitions and component styles.
       <div className="flex-1 flex flex-col">
         {/* Header with Copy Prompt Button */}
         <header className="border-b border-border p-4 flex justify-end">
-          <Button onClick={copyToClipboard} className="gap-2">
-            <Copy className="h-4 w-4" />
-            Copy Prompt
-          </Button>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button 
+                onClick={handleCopyPromptClick} 
+                className="gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0"
+              >
+                <Copy className="h-4 w-4" />
+                Copy Prompt
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl max-h-[80vh]">
+              <DialogHeader>
+                <DialogTitle>Design System Prompt</DialogTitle>
+                <DialogDescription>
+                  Copy this comprehensive prompt to generate your design system with AI
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4">
+                <Textarea
+                  className="min-h-[400px] font-mono text-sm resize-none"
+                  value={generatePrompt()}
+                  readOnly
+                />
+                <div className="flex justify-end">
+                  <Button onClick={copyToClipboard} className="gap-2">
+                    <Copy className="h-4 w-4" />
+                    Copy to Clipboard
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </header>
 
         {/* Preview Panels */}
