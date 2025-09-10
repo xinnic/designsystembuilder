@@ -77,7 +77,9 @@ const Index = () => {
         fontSubhead: '600 16px/22px',
         fontBody: '400 14px/20px',
         fontButton: '600 16px/22px',
-        fontCaption: '400 12px/16px'
+        fontCaption: '400 12px/16px',
+        fontDisplayLarge: '700 36px/44px',
+        fontDisplayMedium: '700 30px/36px'
       },
       regular: {
         fontEyebrow: '500 12px/16px',
@@ -86,7 +88,9 @@ const Index = () => {
         fontSubhead: '600 18px/26px',
         fontBody: '400 16px/24px',
         fontButton: '600 18px/26px',
-        fontCaption: '400 14px/20px'
+        fontCaption: '400 14px/20px',
+        fontDisplayLarge: '700 48px/56px',
+        fontDisplayMedium: '700 36px/44px'
       },
       large: {
         fontEyebrow: '500 13px/18px',
@@ -95,7 +99,9 @@ const Index = () => {
         fontSubhead: '600 21px/30px',
         fontBody: '400 18px/26px',
         fontButton: '600 20px/28px',
-        fontCaption: '400 15px/22px'
+        fontCaption: '400 15px/22px',
+        fontDisplayLarge: '700 60px/68px',
+        fontDisplayMedium: '700 48px/56px'
       }
     };
 
@@ -114,12 +120,14 @@ Generate CSS custom properties for the entire system. All subsequent components 
 1.1. Typography System (Font: ${fontName}, Scale: ${selectedScale.charAt(0).toUpperCase() + selectedScale.slice(1)})
 
 --font-family-primary: '${fontName}', sans-serif
---font-eyebrow: ${currentScale.fontEyebrow} var(--font-family-primary)
+--font-display-large: ${currentScale.fontDisplayLarge} var(--font-family-primary)
+--font-display-medium: ${currentScale.fontDisplayMedium} var(--font-family-primary)
 --font-h1: ${currentScale.fontH1} var(--font-family-primary)
 --font-h2: ${currentScale.fontH2} var(--font-family-primary)
 --font-subhead: ${currentScale.fontSubhead} var(--font-family-primary)
 --font-body: ${currentScale.fontBody} var(--font-family-primary)
---font-button: ${currentScale.fontButton} var(--font-family-primary)
+--font-eyebrow: ${currentScale.fontEyebrow} var(--font-family-primary) /* letter-spacing: 0.05em, text-transform: uppercase */
+--font-button: ${currentScale.fontButton} var(--font-family-primary) /* letter-spacing: 0.02em */
 --font-caption: ${currentScale.fontCaption} var(--font-family-primary)
 
 1.2. Color System (Supports Light & Dark Themes)
@@ -205,6 +213,36 @@ Wrap all transitions and animations in a @media (prefers-reduced-motion: no-pref
 
 Density:
 Create .density-compact and .density-comfortable utility classes that adjust spacing and line-height tokens for components.
+
+4. Design & UX Best Practices
+
+Apply the following principles when using the design tokens to build components and layouts.
+
+**Buttons:**
+- Ensure a minimum tap target size of 44x44 points for all buttons to meet touch accessibility standards.
+- Maintain a clear visual hierarchy between primary, secondary, and ghost buttons.
+- Place destructive action buttons carefully to prevent accidental clicks.
+- For hover and active states, generate slightly darker and even darker shades of the base button color, respectively.
+
+**Input Fields:**
+- Always use clear, persistent labels positioned above input fields.
+- Provide optional helper text below the field for additional context or instructions.
+- Ensure the visual states for \`focused\`, \`error\`, and \`disabled\` are distinct and unambiguous.
+
+**Dialogs and Modals:**
+- Use modals for self-contained tasks and dialogs for critical user confirmations.
+- Write content using clear, direct language. Explain the situation, its consequences, and provide scannable, actionable choices.
+
+**Semantic Token Application:**
+- **Corner Radius:**
+  - \`--radius-sm\`: Use for small, dense interactive elements like tags and input fields.
+  - \`--radius-md\`: Use as the default for primary containers like cards and media.
+  - \`--radius-lg\`: Use for large containers that sit on top of other content, like modals.
+  - \`--radius-full\`: Use for pill-shaped or circular elements like avatars or toggles.
+- **Elevation (Shadows):**
+  - \`--shadow-1\`: Apply to static, non-interactive elements like cards to give a subtle lift.
+  - \`--shadow-2\`: Use as the default for interactive or elevated elements.
+  - \`--shadow-3\`: Reserve for elements that need to appear prominently above other content, like open dialogs.
 
 Please provide the complete CSS with the token definitions and component styles.`;
   };
