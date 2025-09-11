@@ -108,143 +108,208 @@ const Index = () => {
     const currentScale = scaleSpecs[selectedScale as keyof typeof scaleSpecs];
     const primaryColor = colorThemes[selectedTheme as keyof typeof colorThemes];
 
-    return `Objective: Implement a comprehensive, token-based design system for a modern application.
+    return `**Objective**  
+Generate a token-first, framework-agnostic design system. All visuals must come from CSS custom properties (design tokens).  
+**No hard-coded values** for colors, fonts, spacing, radii, shadows, or motion anywhere.
 
-Core Philosophy: Token-First & Framework-Agnostic
-You MUST implement all specified styles using design tokens. The primary output should be a set of CSS custom properties (variables) that can be used across any web framework. Do not use hard-coded values for colors, fonts, spacing, shadows, radii, or motion at any point.
+---
 
-1. Foundational Design Tokens
+## 0) Output format (deliverables)
+Produce the following files (in this order):
 
-Generate CSS custom properties for the entire system. All subsequent components must reference these tokens.
+1. \`design-tokens.css\` – all tokens (light) + \`[data-theme="dark"]\` overrides.  
+2. \`components.css\` – base components that reference tokens only.  
+3. (Optional) \`tokens.json\` – DTCG-flavored mirror of the tokens.
 
-1.1. Typography System (Font: ${fontName}, Scale: ${selectedScale.charAt(0).toUpperCase() + selectedScale.slice(1)})
+---
 
---font-family-primary: '${fontName}', sans-serif
---font-display-large: ${currentScale.fontDisplayLarge} var(--font-family-primary)
---font-display-medium: ${currentScale.fontDisplayMedium} var(--font-family-primary)
---font-h1: ${currentScale.fontH1} var(--font-family-primary)
---font-h2: ${currentScale.fontH2} var(--font-family-primary)
---font-subhead: ${currentScale.fontSubhead} var(--font-family-primary)
---font-body: ${currentScale.fontBody} var(--font-family-primary)
---font-eyebrow: ${currentScale.fontEyebrow} var(--font-family-primary) /* letter-spacing: 0.05em, text-transform: uppercase */
---font-button: ${currentScale.fontButton} var(--font-family-primary) /* letter-spacing: 0.02em */
---font-caption: ${currentScale.fontCaption} var(--font-family-primary)
+## 1) Design tokens (authoritative source)
 
-1.2. Color System (Supports Light & Dark Themes)
+### 1.1 Typography (Font: **${fontName}**, Scale: **${selectedScale.charAt(0).toUpperCase() + selectedScale.slice(1)}**)
+Atomic tokens (no composite font shorthands):
 
-Light Mode (default):
---color-text-primary: #1C1C1E
---color-text-secondary: #636366
---color-background-primary: #FFFFFF
---color-background-secondary: #F2F2F7
---color-brand-primary: ${primaryColor}
---color-brand-secondary: #E3F2FD
---color-destructive-primary: #D32F2F
---color-border-primary: #C6C6C8
---color-interactive-focus-ring: #4dabf5
+\`\`\`css
+:root {
+  --font-family-sans: "${fontName}", ui-sans-serif, system-ui;
 
-Dark Mode (scoped under .dark-theme):
---color-text-primary: #FFFFFF
---color-text-secondary: #AEAEB2
---color-background-primary: #121212
---color-background-secondary: #1C1C1E
---color-brand-primary: #64B5F6
---color-brand-secondary: #1E2A38
---color-destructive-primary: #EF5350
---color-border-primary: #38383A
---color-interactive-focus-ring: #64B5F6
+  /* sizes */
+  --font-size-display-lg: ${currentScale.fontDisplayLarge.split(' ')[1]};
+  --font-size-display-md: ${currentScale.fontDisplayMedium.split(' ')[1]};
+  --font-size-h1: ${currentScale.fontH1.split(' ')[1]};
+  --font-size-h2: ${currentScale.fontH2.split(' ')[1]};
+  --font-size-subhead: ${currentScale.fontSubhead.split(' ')[1]};
+  --font-size-body: ${currentScale.fontBody.split(' ')[1]};
+  --font-size-caption: ${currentScale.fontCaption.split(' ')[1]};
+  --font-size-button: ${currentScale.fontButton.split(' ')[1]};
+  --font-size-eyebrow: ${currentScale.fontEyebrow.split(' ')[1]};
 
-1.3. Spacing & Sizing System (8pt Grid)
---space-1: 8px
---space-2: 16px
---space-3: 24px
---space-4: 32px
---space-5: 40px
---space-6: 48px
+  /* line heights */
+  --line-display-lg: ${currentScale.fontDisplayLarge.split('/')[1]};
+  --line-display-md: ${currentScale.fontDisplayMedium.split('/')[1]};
+  --line-h1: ${currentScale.fontH1.split('/')[1]};
+  --line-h2: ${currentScale.fontH2.split('/')[1]};
+  --line-subhead: ${currentScale.fontSubhead.split('/')[1]};
+  --line-body: ${currentScale.fontBody.split('/')[1]};
+  --line-caption: ${currentScale.fontCaption.split('/')[1]};
+  --line-button: ${currentScale.fontButton.split('/')[1]};
+  --line-eyebrow: ${currentScale.fontEyebrow.split('/')[1]};
 
-1.4. Corner Radius System
---radius-sm: 8px
---radius-md: 16px
---radius-lg: 24px
---radius-full: 999px
+  /* weights & tracking */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --track-button: 0.02em;
+  --track-eyebrow: 0.05em;
+}
+\`\`\`
 
-1.5. Elevation (Shadow) System
---shadow-1: 0px 2px 4px rgba(0,0,0,0.05)
---shadow-2: 0px 4px 12px rgba(0,0,0,0.1)
---shadow-3: 0px 8px 24px rgba(0,0,0,0.15)
+### 1.2 Color (RGB for opacity support; light theme defaults)
 
-1.6. Motion System
---motion-duration-fast: 150ms
---motion-duration-moderate: 300ms
---motion-easing-standard: cubic-bezier(0.4, 0, 0.2, 1)
+\`\`\`css
+:root {
+  /* text & surfaces */
+  --color-text-primary: 28 28 30;
+  --color-text-secondary: 99 99 102;
+  --color-bg-primary: 255 255 255;
+  --color-bg-secondary: 242 242 247;
+  --color-border: 198 198 200;
 
-2. Base Component Implementation
+  /* brand & semantic */
+  --color-brand: ${primaryColor.replace('#', '').match(/.{2}/g).map(hex => parseInt(hex, 16)).join(' ')};
+  --color-brand-weak: 227 242 253;
+  --color-danger: 211 47 47;
 
-Create styles for the following base components. All properties must use the tokens defined above.
+  /* focus */
+  --color-focus: 77 171 245;
+}
+\`\`\`
 
-Button:
-Variants: primary (filled brand color), secondary (brand color border), ghost (brand color text), destructive (filled destructive color).
-States: default, hover, focus, pressed, disabled. All states must be visually distinct and derive colors from tokens.
-Padding: var(--space-1) var(--space-2)
-Border Radius: var(--radius-full)
+### Dark mode overrides
 
-Input:
-States: default, hover, focus, disabled, invalid.
-Use tokens for background, text color, border color, and focus ring.
+\`\`\`css
+[data-theme="dark"] {
+  --color-text-primary: 255 255 255;
+  --color-text-secondary: 174 174 178;
+  --color-bg-primary: 18 18 18;
+  --color-bg-secondary: 28 28 30;
+  --color-border: 56 56 58;
 
-Card:
-Default background: var(--color-background-secondary)
-Border Radius: var(--radius-md)
-Shadow: var(--shadow-1)
+  --color-brand: 100 181 246;
+  --color-brand-weak: 30 42 56;
+  --color-danger: 239 83 80;
+  --color-focus: 100 181 246;
+}
+\`\`\`
 
-Other Components: Also provide token-based styles for Select, Checkbox, Radio, Dialog/Modal, Tabs, Tooltip, Toast.
+### 1.3 Spacing (8pt)
 
-3. Accessibility & Theming Mandates
+\`\`\`css
+:root {
+  --space-1: 8px; --space-2: 16px; --space-3: 24px;
+  --space-4: 32px; --space-5: 40px; --space-6: 48px;
+}
+\`\`\`
 
-Accessibility:
-Focus states MUST use a visible focus ring (e.g., outline: 2px solid var(--color-interactive-focus-ring)).
-Ensure all color combinations for text on backgrounds pass WCAG AA contrast ratios.
+### 1.4 Shape, Elevation, Motion
 
-Theming:
-Implement dark mode by adding a .dark-theme class to a parent container, which swaps the token values. Do not write duplicate component styles for themes.
+\`\`\`css
+:root {
+  --radius-sm: 8px; --radius-md: 16px; --radius-lg: 24px; --radius-full: 999px;
 
-Motion:
-Wrap all transitions and animations in a @media (prefers-reduced-motion: no-preference) media query.
+  --shadow-1: 0 2px 4px rgba(0,0,0,.05);
+  --shadow-2: 0 4px 12px rgba(0,0,0,.10);
+  --shadow-3: 0 8px 24px rgba(0,0,0,.15);
 
-Density:
-Create .density-compact and .density-comfortable utility classes that adjust spacing and line-height tokens for components.
+  --dur-fast: 150ms; --dur-base: 300ms;
+  --ease-standard: cubic-bezier(.4,0,.2,1);
+}
+\`\`\`
 
-4. Design & UX Best Practices
+### Reduced motion
 
-Apply the following principles when using the design tokens to build components and layouts.
+\`\`\`css
+@media (prefers-reduced-motion: reduce){
+  * { animation-duration:.001ms!important; transition-duration:.001ms!important }
+}
+\`\`\`
 
-**Buttons:**
-- Ensure a minimum tap target size of 44x44 points for all buttons to meet touch accessibility standards.
-- Maintain a clear visual hierarchy between primary, secondary, and ghost buttons.
-- Place destructive action buttons carefully to prevent accidental clicks.
-- For hover and active states, generate slightly darker and even darker shades of the base button color, respectively.
+---
 
-**Input Fields:**
-- Always use clear, persistent labels positioned above input fields.
-- Provide optional helper text below the field for additional context or instructions.
-- Ensure the visual states for \`focused\`, \`error\`, and \`disabled\` are distinct and unambiguous.
+## 2) Component recipes (token-only)
 
-**Dialogs and Modals:**
-- Use modals for self-contained tasks and dialogs for critical user confirmations.
-- Write content using clear, direct language. Explain the situation, its consequences, and provide scannable, actionable choices.
+### Button
+- **Variants**: primary (filled brand), secondary (outline), ghost (text), destructive (filled danger).
+- **States**: default, hover, focus, pressed, disabled.
+- **Sizing**: padding var(--space-1) var(--space-2), radius var(--radius-full).
+- **Typography**: size var(--font-size-button), line var(--line-button), weight var(--weight-semibold), track var(--track-button).
 
-**Semantic Token Application:**
-- **Corner Radius:**
-  - \`--radius-sm\`: Use for small, dense interactive elements like tags and input fields.
-  - \`--radius-md\`: Use as the default for primary containers like cards and media.
-  - \`--radius-lg\`: Use for large containers that sit on top of other content, like modals.
-  - \`--radius-full\`: Use for pill-shaped or circular elements like avatars or toggles.
-- **Elevation (Shadows):**
-  - \`--shadow-1\`: Apply to static, non-interactive elements like cards to give a subtle lift.
-  - \`--shadow-2\`: Use as the default for interactive or elevated elements.
-  - \`--shadow-3\`: Reserve for elements that need to appear prominently above other content, like open dialogs.
+### State algorithm
+- **Hover**: rgb(var(--color-brand) / 0.9)
+- **Pressed**: rgb(var(--color-brand) / 0.8)
+- **Disabled**: opacity 0.4 + cursor: not-allowed.
 
-Please provide the complete CSS with the token definitions and component styles.`;
+### Input
+- **Background**: rgb(var(--color-bg-secondary)); text: rgb(var(--color-text-primary)); border: 1px solid rgb(var(--color-border)).
+- **States**:
+  - Hover: border opacity 0.9
+  - Focus: add ring 0 0 0 2px rgb(var(--color-bg-primary)), 0 0 0 4px rgb(var(--color-focus))
+  - Invalid: border rgb(var(--color-danger))
+  - Disabled: opacity 0.4; pointer-events none
+
+### Card
+- **Background**: rgb(var(--color-bg-secondary)); radius: var(--radius-md); shadow: var(--shadow-1);
+- **Padding**: var(--space-3).
+
+### Other components
+- Select, Checkbox, Radio, Dialog/Modal, Tabs, Tooltip, Toast.
+- All states reference tokens only.
+
+---
+
+## 3) Theming, Density, Accessibility
+
+### Theming
+- Toggle dark mode with [data-theme="dark"] only.
+- Do not duplicate component CSS.
+
+### Density
+\`\`\`css
+.density-compact { --space-1: 6px; --space-2: 12px; --space-3: 18px; --space-4: 24px; }
+.density-comfortable { /* defaults */ }
+\`\`\`
+
+### Accessibility acceptance
+- Focus ring ≥ 2px, high-contrast.
+- Body text ≥ 14px (prefer 16px).
+- WCAG AA for all text/background pairs.
+- Minimum interactive size: 44×44 px.
+
+---
+
+## 4) Assertions (must pass)
+- No hex or px literals outside design-tokens.css.
+- All states use rgb(var(--token)/α).
+- Dark theme via token overrides only.
+- Focus ring visible ≥ 2px.
+- Min tap target size 44×44 enforced.
+- Reduced motion respected.
+
+---
+
+## 5) STICKY-GUIDELINES (commit to memory)
+
+These rules must always be remembered by the coding tool for future work:
+
+- **Token-only styling**: All styles reference tokens. No literals.
+- **Accessibility**: WCAG AA, focus ring ≥ 2px with offset, body ≥14px, tap target ≥44×44.
+- **Motion**: Respect prefers-reduced-motion.
+- **Themability**: Light/dark via tokens only.
+- **Density**: Controlled via token overrides.
+- **States**: Hover/active/focus/disabled must derive from tokens.
+- **Output hygiene**: No framework lock-in unless explicitly requested.
+
+Please output the complete files as specified in the deliverables section.`;
   };
 
   const copyToClipboard = async () => {
