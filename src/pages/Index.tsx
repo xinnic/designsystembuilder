@@ -337,16 +337,18 @@ Please output the complete files as specified in the deliverables section.`;
   return (
     <div className="min-h-screen bg-background flex">
       {/* Left Sidebar */}
-      <Sidebar
-        selectedFont={selectedFont}
-        onFontChange={setSelectedFont}
-        selectedScale={selectedScale}
-        onScaleChange={setSelectedScale}
-        selectedTheme={selectedTheme}
-        onThemeChange={setSelectedTheme}
-        isDarkMode={isDarkMode}
-        onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
-      />
+      <div className="min-w-[280px] flex-shrink-0">
+        <Sidebar
+          selectedFont={selectedFont}
+          onFontChange={setSelectedFont}
+          selectedScale={selectedScale}
+          onScaleChange={setSelectedScale}
+          selectedTheme={selectedTheme}
+          onThemeChange={setSelectedTheme}
+          isDarkMode={isDarkMode}
+          onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
+        />
+      </div>
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
@@ -387,9 +389,9 @@ Please output the complete files as specified in the deliverables section.`;
         </header>
 
         {/* Preview Panels */}
-        <div className="flex-1 flex">
+        <div className="flex-1 flex min-w-0">
           {/* Mobile App Preview */}
-          <div className="flex-1 border-r border-border">
+          <div className="flex-1 min-w-[400px] border-r border-border">
             <MobileAppPreview
               fontClass={selectedFont}
               selectedScale={selectedScale}
@@ -399,7 +401,7 @@ Please output the complete files as specified in the deliverables section.`;
           </div>
 
           {/* Design System Overview */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-[300px]">
             <DesignSystemOverview
               fontClass={selectedFont}
               selectedScale={selectedScale}
