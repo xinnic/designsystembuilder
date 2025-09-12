@@ -23,6 +23,8 @@ interface SidebarProps {
   onThemeChange: (theme: string) => void;
   isDarkMode: boolean;
   onToggleDarkMode: () => void;
+  selectedBaseLib: string;
+  onBaseLibChange: (lib: string) => void;
 }
 
 const fonts = [
@@ -50,6 +52,17 @@ const colorThemes = [
   { name: 'teal', color: '#0D9488', label: 'Teal' },
 ];
 
+const baseLibraries = [
+  { value: 'none', label: 'None (Raw CSS/JSON)', logo: '🎨' },
+  { value: 'tailwind', label: 'Tailwind CSS', logo: '💨' },
+  { value: 'shadcn', label: 'shadcn/ui', logo: '🎯' },
+  { value: 'daisyui', label: 'DaisyUI', logo: '🌼' },
+  { value: 'flowbite', label: 'Flowbite', logo: '🌊' },
+  { value: 'radix', label: 'Radix UI', logo: '⚡' },
+  { value: 'chakra', label: 'Chakra UI', logo: '⚡' },
+  { value: 'mui', label: 'Material UI (MUI)', logo: '📱' },
+];
+
 export function Sidebar({
   selectedFont,
   onFontChange,
@@ -59,7 +72,10 @@ export function Sidebar({
   onThemeChange,
   isDarkMode,
   onToggleDarkMode,
+  selectedBaseLib,
+  onBaseLibChange,
 }: SidebarProps) {
+  const [baseLibOpen, setBaseLibOpen] = React.useState(true);
   const [typographyOpen, setTypographyOpen] = React.useState(true);
   const [colorsOpen, setColorsOpen] = React.useState(true);
 
@@ -73,6 +89,40 @@ export function Sidebar({
       </div>
 
       <div className="space-y-4">
+        {/* Base Library Section */}
+        <Collapsible open={baseLibOpen} onOpenChange={setBaseLibOpen}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted">
+            <div className="flex items-center gap-3">
+              <Grid className="h-5 w-5" />
+              <span className="font-medium">Base Library</span>
+            </div>
+            <ChevronDown className={`h-4 w-4 transition-transform ${baseLibOpen ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-3 p-3">
+            <div>
+              <label className="text-sm font-medium mb-2 block">Component Framework</label>
+              <div className="space-y-2">
+                {baseLibraries.map((lib) => (
+                  <button
+                    key={lib.value}
+                    className={`w-full p-3 text-left rounded-lg border transition-colors ${
+                      selectedBaseLib === lib.value 
+                        ? 'border-primary bg-primary/5' 
+                        : 'border-border hover:bg-muted'
+                    }`}
+                    onClick={() => onBaseLibChange(lib.value)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-lg">{lib.logo}</span>
+                      <span className="text-sm font-medium">{lib.label}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
         {/* Typography Section */}
         <Collapsible open={typographyOpen} onOpenChange={setTypographyOpen}>
           <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted">
