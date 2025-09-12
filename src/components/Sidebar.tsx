@@ -14,6 +14,16 @@ import {
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 
+// Import logos
+import tailwindLogo from '@/assets/logos/tailwind.png';
+import daisyuiLogo from '@/assets/logos/daisyui.png';
+import noneLogo from '@/assets/logos/none.png';
+import shadcnLogo from '@/assets/logos/shadcn.ico';
+import flowbiteLogo from '@/assets/logos/flowbite.svg';
+import radixLogo from '@/assets/logos/radix.png';
+import chakraLogo from '@/assets/logos/chakra.png';
+import muiLogo from '@/assets/logos/mui.svg';
+
 interface SidebarProps {
   selectedFont: string;
   onFontChange: (font: string) => void;
@@ -53,14 +63,14 @@ const colorThemes = [
 ];
 
 const baseLibraries = [
-  { value: 'none', label: 'None (Raw CSS/JSON)', logo: '🎨' },
-  { value: 'tailwind', label: 'Tailwind CSS', logo: '💨' },
-  { value: 'shadcn', label: 'shadcn/ui', logo: '🎯' },
-  { value: 'daisyui', label: 'DaisyUI', logo: '🌼' },
-  { value: 'flowbite', label: 'Flowbite', logo: '🌊' },
-  { value: 'radix', label: 'Radix UI', logo: '⚡' },
-  { value: 'chakra', label: 'Chakra UI', logo: '⚡' },
-  { value: 'mui', label: 'Material UI (MUI)', logo: '📱' },
+  { value: 'none', label: 'None (Raw CSS/JSON)', logo: noneLogo },
+  { value: 'tailwind', label: 'Tailwind CSS', logo: tailwindLogo },
+  { value: 'shadcn', label: 'shadcn/ui', logo: shadcnLogo },
+  { value: 'daisyui', label: 'DaisyUI', logo: daisyuiLogo },
+  { value: 'flowbite', label: 'Flowbite', logo: flowbiteLogo },
+  { value: 'radix', label: 'Radix UI', logo: radixLogo },
+  { value: 'chakra', label: 'Chakra UI', logo: chakraLogo },
+  { value: 'mui', label: 'Material UI (MUI)', logo: muiLogo },
 ];
 
 export function Sidebar({
@@ -100,21 +110,25 @@ export function Sidebar({
           </CollapsibleTrigger>
           <CollapsibleContent className="space-y-3 p-3">
             <div>
-              <label className="text-sm font-medium mb-2 block">Component Framework</label>
-              <div className="space-y-2">
+              <label className="text-sm font-medium mb-3 block">Component Framework</label>
+              <div className="grid grid-cols-3 gap-2">
                 {baseLibraries.map((lib) => (
                   <button
                     key={lib.value}
-                    className={`w-full p-3 text-left rounded-lg border transition-colors ${
+                    className={`p-3 text-center rounded-lg border transition-colors ${
                       selectedBaseLib === lib.value 
                         ? 'border-primary bg-primary/5' 
                         : 'border-border hover:bg-muted'
                     }`}
                     onClick={() => onBaseLibChange(lib.value)}
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg">{lib.logo}</span>
-                      <span className="text-sm font-medium">{lib.label}</span>
+                    <div className="flex flex-col items-center gap-2">
+                      <img 
+                        src={lib.logo} 
+                        alt={`${lib.label} logo`}
+                        className="w-6 h-6 object-contain"
+                      />
+                      <span className="text-xs font-medium leading-tight">{lib.label}</span>
                     </div>
                   </button>
                 ))}
