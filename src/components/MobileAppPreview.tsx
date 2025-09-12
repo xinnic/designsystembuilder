@@ -427,7 +427,7 @@ export const MobileAppPreview = ({ fontClass, selectedScale, isDarkMode, selecte
   const CurrentTabComponent = tabs[activeTab].component;
 
   return (
-    <div className="h-full flex items-center justify-center p-8 bg-muted/20">
+    <div className="h-full flex items-start justify-center p-8 bg-muted/20 min-h-[600px]">
       {/* Phone Frame */}
       <div className="w-80 h-[640px] bg-background border-8 border-muted rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col">
         {/* Status Bar */}
