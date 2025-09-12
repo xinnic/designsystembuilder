@@ -62,9 +62,6 @@ export function Sidebar({
 }: SidebarProps) {
   const [typographyOpen, setTypographyOpen] = React.useState(true);
   const [colorsOpen, setColorsOpen] = React.useState(true);
-  const [spacingOpen, setSpacingOpen] = React.useState(false);
-  const [borderRadiusOpen, setBorderRadiusOpen] = React.useState(false);
-  const [shadowsOpen, setShadowsOpen] = React.useState(false);
 
   return (
     <div className="w-80 bg-background border-r border-border h-screen overflow-y-auto p-6">
@@ -160,76 +157,6 @@ export function Sidebar({
           </CollapsibleContent>
         </Collapsible>
 
-        {/* Spacing & Sizing Section */}
-        <Collapsible open={spacingOpen} onOpenChange={setSpacingOpen}>
-          <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted">
-            <div className="flex items-center gap-3">
-              <Grid className="h-5 w-5" />
-              <span className="font-medium">Spacing & Sizing</span>
-            </div>
-            <ChevronDown className={`h-4 w-4 transition-transform ${spacingOpen ? 'rotate-180' : ''}`} />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="space-y-4 p-3">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Base Unit</label>
-              <p className="text-sm text-muted-foreground">8pt grid system</p>
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
-
-        {/* Border Radius Section */}
-        <Collapsible open={borderRadiusOpen} onOpenChange={setBorderRadiusOpen}>
-          <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted">
-            <div className="flex items-center gap-3">
-              <CornerDownLeft className="h-5 w-5" />
-              <span className="font-medium">Border Radius</span>
-            </div>
-            <ChevronDown className={`h-4 w-4 transition-transform ${borderRadiusOpen ? 'rotate-180' : ''}`} />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="space-y-4 p-3">
-            <div className="grid grid-cols-3 gap-2">
-              <div className="text-center">
-                <div className="w-8 h-8 bg-muted rounded border mx-auto mb-1"></div>
-                <span className="text-xs">Small</span>
-              </div>
-              <div className="text-center">
-                <div className="w-8 h-8 bg-muted rounded-lg border mx-auto mb-1"></div>
-                <span className="text-xs">Medium</span>
-              </div>
-              <div className="text-center">
-                <div className="w-8 h-8 bg-muted rounded-2xl border mx-auto mb-1"></div>
-                <span className="text-xs">Large</span>
-              </div>
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
-
-        {/* Shadows Section */}
-        <Collapsible open={shadowsOpen} onOpenChange={setShadowsOpen}>
-          <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted">
-            <div className="flex items-center gap-3">
-              <Layers className="h-5 w-5" />
-              <span className="font-medium">Shadows</span>
-            </div>
-            <ChevronDown className={`h-4 w-4 transition-transform ${shadowsOpen ? 'rotate-180' : ''}`} />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="space-y-4 p-3">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Elevation 1</span>
-                <div className="w-8 h-8 bg-background rounded shadow-sm border"></div>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Elevation 2</span>
-                <div className="w-8 h-8 bg-background rounded shadow-md border"></div>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Elevation 3</span>
-                <div className="w-8 h-8 bg-background rounded shadow-lg border"></div>
-              </div>
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
       </div>
 
       {/* Settings Button */}
