@@ -429,7 +429,7 @@ export const MobileAppPreview = ({ fontClass, selectedScale, isDarkMode, selecte
   return (
     <div className="h-full flex items-start justify-center p-8 bg-muted/20 min-h-[600px]">
       {/* Phone Frame */}
-      <div className="w-80 h-[640px] bg-background border-8 border-muted rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col">
+      <div className={`w-80 h-[640px] bg-background border-8 border-muted rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col ${fontClass}`}>
         {/* Status Bar */}
         <div className="h-6 bg-background flex items-center justify-center">
           <div className="flex items-center gap-1">
