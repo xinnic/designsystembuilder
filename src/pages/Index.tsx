@@ -57,6 +57,33 @@ const Index = () => {
     }
   }, [selectedTheme, isDarkMode, selectedScale]);
 
+  const parseTypographyValue = (value: string) => {
+    // Parse strings like "700 28px/38px" into { weight: 700, size: "28px", line: "38px" }
+    const match = value.match(/(\d+)\s+(\d+px)\/(\d+px)/);
+    if (match) {
+      return {
+        weight: parseInt(match[1]),
+        size: match[2],
+        line: match[3]
+      };
+    }
+    return { weight: 400, size: "16px", line: "24px" };
+  };
+
+  const getAdapterDirections = (baseLib: string) => {
+    const directions = {
+      none: 'Define tokens as CSS custom properties or JSON. Implement components by referencing token names. Do not hard-code values.',
+      tailwind: 'Extend Tailwind theme values with tokens (colors, spacing, radius, shadows, motion). Compose utilities; do not fork or redefine components.',
+      shadcn: 'Keep existing shadcn/Radix components. Replace literals with tokens. Preserve accessibility & keyboard behavior.',
+      daisyui: 'Map token roles to DaisyUI theme variables. Do not redefine components.',
+      flowbite: 'Apply tokens via theming/overrides. Do not redefine components.',
+      radix: 'Style primitives exclusively with tokens. Do not add new logic.',
+      chakra: 'Build a theme override from tokens (colors, typography, radii, shadows, spacing, motion). Do not fork components.',
+      mui: 'Create a theme (palette, typography, shape, spacing, transitions) from tokens. Do not restyle with literals.'
+    };
+    return directions[baseLib as keyof typeof directions] || directions.none;
+  };
+
   const generatePrompt = () => {
     const fontName = fonts.find(f => f.class === selectedFont)?.name || 'Plus Jakarta Sans';
     
@@ -121,57 +148,51 @@ const Index = () => {
     const primaryColor = colorThemes[selectedTheme as keyof typeof colorThemes];
     const baseLibName = baseLibMap[selectedBaseLib as keyof typeof baseLibMap];
 
-    // Helper function to get adapter directions based on selected base library
-    const getAdapterDirections = () => {
-      const directions = {
-        none: "Define platform tokens (CSS custom properties or platform equivalents). Implement components by referencing token names; never hard-code values. Provide simple instructions for importing the token source of truth (JSON + CSS variables).",
-        tailwind: "Extend theme values to reference tokens (colors, spacing, radius, shadows, motion). Compose utilities to build components; do not create a parallel component library unless asked.",
-        shadcn: "Keep existing shadcn/Radix components. Replace any literal hex/px with token references. Preserve accessibility and keyboard behavior.",
-        daisyui: "Map token roles to DaisyUI theme variables; do not redefine components.",
-        flowbite: "Apply tokens by theming/overrides; do not redefine components.",
-        radix: "Style primitives exclusively via tokens; do not add new interaction logic.",
-        chakra: "Build a theme override (colors/typography/radii/shadows/space/motion) from tokens; do not fork Chakra components.",
-        mui: "Create a theme (palette/typography/shape/spacing/transition) from tokens; do not restyle components with hard-coded values."
-      };
-      return directions[selectedBaseLib as keyof typeof directions];
+    // Parse typography values
+    const typographyStyles = {
+      display: parseTypographyValue(currentScale.fontDisplayLarge),
+      h1: parseTypographyValue(currentScale.fontH1),
+      h2: parseTypographyValue(currentScale.fontH2),
+      subhead: parseTypographyValue(currentScale.fontSubhead),
+      body: parseTypographyValue(currentScale.fontBody),
+      caption: parseTypographyValue(currentScale.fontCaption),
+      button: parseTypographyValue(currentScale.fontButton),
+      eyebrow: parseTypographyValue(currentScale.fontEyebrow)
     };
 
-    return `**Objective**
+    return `Objective
 
 Generate a token-first, framework-agnostic design system. All visuals must come from design tokens.
 No hard-coded values for colors, typography, spacing, radii, shadows, or motion.
 
-**How to Use This Prompt**
+How to Use This Prompt
 
 Read the Base Library chosen below and follow the matching Adapter Directions.
-
 Implement components and styles only by referencing tokens listed in Foundations.
-
 Confirm all Assertions at the end before returning your work.
 
-**Base Library (choose one)**
+Base Library
 
-Selected: **${baseLibName}**
+Selected: ${baseLibName}
 
-**Adapter Directions**
+Adapter Directions
 
-${getAdapterDirections()}
+${getAdapterDirections(selectedBaseLib)}
 
-**Foundations (Design Tokens)**
+Foundations (Design Tokens)
 
-**Typography** (${fontName}, ${selectedScale.charAt(0).toUpperCase() + selectedScale.slice(1)})
+Typography (${fontName}, ${selectedScale.charAt(0).toUpperCase() + selectedScale.slice(1)} Scale)
 
-• Display Large: ${currentScale.fontDisplayLarge.split(' ')[1]}, line ${currentScale.fontDisplayLarge.split('/')[1]}, weight ${currentScale.fontDisplayLarge.split(' ')[0]}
-• Display Medium: ${currentScale.fontDisplayMedium.split(' ')[1]}, line ${currentScale.fontDisplayMedium.split('/')[1]}, weight ${currentScale.fontDisplayMedium.split(' ')[0]}
-• H1: ${currentScale.fontH1.split(' ')[1]}, line ${currentScale.fontH1.split('/')[1]}, weight ${currentScale.fontH1.split(' ')[0]}
-• H2: ${currentScale.fontH2.split(' ')[1]}, line ${currentScale.fontH2.split('/')[1]}, weight ${currentScale.fontH2.split(' ')[0]}
-• Subhead: ${currentScale.fontSubhead.split(' ')[1]}, line ${currentScale.fontSubhead.split('/')[1]}, weight ${currentScale.fontSubhead.split(' ')[0]}
-• Body: ${currentScale.fontBody.split(' ')[1]}, line ${currentScale.fontBody.split('/')[1]}, weight ${currentScale.fontBody.split(' ')[0]}
-• Caption: ${currentScale.fontCaption.split(' ')[1]}, line ${currentScale.fontCaption.split('/')[1]}, weight ${currentScale.fontCaption.split(' ')[0]}
-• Button: ${currentScale.fontButton.split(' ')[1]}, line ${currentScale.fontButton.split('/')[1]}, weight ${currentScale.fontButton.split(' ')[0]}, tracking 0.02em
-• Eyebrow: ${currentScale.fontEyebrow.split(' ')[1]}, line ${currentScale.fontEyebrow.split('/')[1]}, weight ${currentScale.fontEyebrow.split(' ')[0]}, tracking 0.05em
+• Display: weight ${typographyStyles.display.weight}, size ${typographyStyles.display.size}, line ${typographyStyles.display.line}
+• H1: weight ${typographyStyles.h1.weight}, size ${typographyStyles.h1.size}, line ${typographyStyles.h1.line}
+• H2: weight ${typographyStyles.h2.weight}, size ${typographyStyles.h2.size}, line ${typographyStyles.h2.line}
+• Subhead: weight ${typographyStyles.subhead.weight}, size ${typographyStyles.subhead.size}, line ${typographyStyles.subhead.line}
+• Body: weight ${typographyStyles.body.weight}, size ${typographyStyles.body.size}, line ${typographyStyles.body.line}
+• Caption: weight ${typographyStyles.caption.weight}, size ${typographyStyles.caption.size}, line ${typographyStyles.caption.line}
+• Button: weight ${typographyStyles.button.weight}, size ${typographyStyles.button.size}, line ${typographyStyles.button.line}
+• Eyebrow: weight ${typographyStyles.eyebrow.weight}, size ${typographyStyles.eyebrow.size}, line ${typographyStyles.eyebrow.line}, uppercase, 0.5px tracking
 
-**Color Roles** (Light / Dark)
+Color Roles (${isDarkMode ? 'Dark' : 'Light'} Mode)
 
 Text: primary, secondary
 Surfaces: background-primary, background-secondary, border
@@ -179,87 +200,120 @@ Brand: brand (${primaryColor}), brand-weak (supporting surfaces)
 Semantic: danger
 Focus: focus ring
 
-**Spacing Scale**
+Spacing Scale
 
-8-pt rhythm: space-1 (8px), space-2 (16px), space-3 (24px), space-4 (32px), space-5 (40px), space-6 (48px)
+• space-1: 4px
+• space-2: 8px
+• space-3: 12px
+• space-4: 16px
+• space-5: 20px
+• space-6: 24px
+• space-8: 32px
+• space-10: 40px
+• space-12: 48px
+• space-16: 64px
 
-**Corner Radius**
+(8-pt rhythm; use for padding, gaps, layout grids)
 
-sm (8px), md (16px), lg (24px), full (999px) for controls, cards, and overlays
+Corner Radius
 
-**Elevation (Shadows)**
+• sm: 4px
+• md: 8px
+• lg: 12px
+• full: 9999px
 
-level-1 (subtle), level-2 (medium), level-3 (strong)
+(for controls, cards, and overlays)
 
-**Motion**
+Elevation (Shadows)
 
-Durations: fast (150ms), base (300ms). Easing: standard cubic-bezier(0.4,0,0.2,1). Respect reduced-motion preferences.
+• level-1: subtle (cards, inputs)
+• level-2: medium (dropdowns, popovers)
+• level-3: strong (modals, drawers)
 
-**Theme Modes / Density**
+Motion
 
-Modes: light/dark; Density: compact/comfortable via token overrides only.
+• duration-fast: 150ms
+• duration-medium: 300ms
+• duration-slow: 500ms
+• easing-ease-out: cubic-bezier(0, 0, 0.2, 1)
+• easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1)
 
-**Component Recipes** (token-only, no literals)
+(Respect reduced-motion preferences)
 
-**Buttons**
-Variants: Primary (filled brand), Secondary (outline), Ghost (text), Destructive (filled danger).
-States: default, hover, focus, pressed, disabled — derive visual changes from tokens.
-Size: use spacing tokens for horizontal/vertical padding; radius from radii.
-Label: uses Button typography tokens.
-State ramp: hover ≈ brand @ 90% strength; pressed ≈ 80% strength; disabled uses tokenized opacity and maintains contrast.
+Theme Modes / Density
 
-**Inputs & Forms**
-Text field (default, hover, focus, error, disabled) using surface, text, border, and focus tokens.
-Select/Dropdown with 3 options; helper text and error text use semantic tokens.
-Checkbox, Radio, Switch — hit area ≥ 44×44; focus ring visible.
+Modes: ${isDarkMode ? 'Dark' : 'Light'}
+Density: comfortable (compact via token overrides only)
 
-**Cards**
-Default card: neutral surface, md radius, level-1 shadow, internal spacing from scale.
-Featured card: includes image area + title/subtitle + primary CTA; uses brand tokens.
+Component Recipes (token-only, no literals)
 
-**Dialogs / Modals**
-Overlay scrim, elevated surface (level-3), tokenized spacing; header, body, actions with primary + secondary buttons.
+Buttons
 
-**Navigation**
-Bottom tab bar (Home, Explore, Activities, Profile, Settings) with icons + labels; active tab uses brand tokens.
-Optional sidebar preview (if desktop layout is shown).
+Variants: Primary (filled brand), Secondary (outline), Ghost (text), Destructive (filled danger)
+States: default, hover, focus, pressed, disabled — derive visual changes from tokens
+Size: use spacing tokens for horizontal/vertical padding; radius from radii.*
+Label: uses Button typography tokens
+State ramp: hover ≈ brand @ 90% strength; pressed ≈ 80% strength; disabled uses tokenized opacity and maintains contrast
 
-**Feedback**
-Toast (success/error/info) using semantic color roles; auto-dismiss timing from motion tokens.
-Tooltip: subtle elevation and clear contrast.
+Inputs & Forms
 
-**Theming & Density**
+Text field (default, hover, focus, error, disabled) using surface, text, border, and focus tokens
+Select/Dropdown with 3 options; helper text and error text use semantic tokens
+Checkbox, Radio, Switch — hit area ≥ 44×44; focus ring visible
 
-Light/Dark: Apply the selected theme by swapping token values; do not duplicate component styles per theme.
-Density: Provide "compact" and "comfortable" by overriding spacing/line-height tokens; do not introduce ad-hoc sizes.
+Cards
 
-**Accessibility & Quality** (remember these)
+Default card: neutral surface, md radius, level-1 shadow, internal spacing from scale
+Featured card: includes image area + title/subtitle + primary CTA; uses brand tokens
 
-WCAG AA contrast for all text/surfaces.
-Focus ring clearly visible (≥ 2px) with an offset; uses focus token.
-Minimum interactive target ≥ 44×44.
-Body text ≥ 14px (prefer 16px for content-heavy screens).
-Respect reduced-motion preferences.
+Dialogs / Modals
 
-**Assertions** (confirm before returning work)
+Overlay scrim, elevated surface (level-3), tokenized spacing; header, body, actions with primary + secondary buttons
 
-No hard-coded hex or px anywhere; everything references tokens.
-Theme switching works by token swap only.
-All component states come from token ramps (not ad-hoc values).
-Focus ring present and accessible on all interactive elements.
-Density changes adjust spacing/line-height via tokens.
+Navigation
 
-**STICKY-GUIDELINES** (commit to memory)
+Bottom tab bar (Home, Explore, Activities, Profile, Settings) with icons + labels; active tab uses brand tokens
+Optional sidebar preview (if desktop layout is shown)
+
+Feedback
+
+Toast (success/error/info) using semantic color roles; auto-dismiss timing from motion tokens
+Tooltip: subtle elevation and clear contrast
+
+(All components must reference token names—no hard-coded colors, px, or shadows)
+
+Theming & Density
+
+${isDarkMode ? 'Dark' : 'Light'} Theme: Apply the selected theme by swapping token values; do not duplicate component styles per theme
+Density: Provide "compact" and "comfortable" by overriding spacing/line-height tokens; do not introduce ad-hoc sizes
+
+Accessibility & Quality (remember these)
+
+• WCAG AA contrast for all text/surfaces
+• Focus ring clearly visible (≥ 2px) with an offset; uses focus token
+• Minimum interactive target ≥ 44×44
+• Body text ≥ 14px (prefer 16px for content-heavy screens)
+• Respect reduced-motion preferences
+
+Assertions (confirm before returning work)
+
+• No hard-coded hex or px anywhere; everything references tokens
+• Theme switching works by token swap only
+• All component states come from token ramps (not ad-hoc values)
+• Focus ring present and accessible on all interactive elements
+• Density changes adjust spacing/line-height via tokens
+
+STICKY-GUIDELINES (commit to memory)
 
 Commit the following rules to your long-term context and apply them in all future tasks unless explicitly overridden.
 
-Token-only styling; no literals.
-WCAG AA, visible focus ring ≥ 2px, min target 44×44, body ≥ 14px.
-Reduced-motion respected; provide non-animated affordances.
-Light/Dark via token swap only.
-Density via token overrides only.
-States (hover/pressed/focus/disabled) must derive from tokens.
-Do not rebuild components that the selected Base Library already provides—adapt them.`;
+• Token-only styling; no literals
+• WCAG AA, visible focus ring ≥ 2px, min target 44×44, body ≥ 14px
+• Reduced-motion respected; provide non-animated affordances
+• Light/Dark via token swap only
+• Density via token overrides only
+• States (hover/pressed/focus/disabled) must derive from tokens
+• Do not rebuild components that the selected Base Library already provides—adapt them`;
   };
 
   const copyToClipboard = async () => {
