@@ -270,7 +270,7 @@ const FoundationsSummary = ({ selectedScale, fontClass }: any) => {
                       fontSize: style.size,
                       lineHeight: style.line,
                       fontWeight: style.weight,
-                      letterSpacing: style.tracking || 'normal',
+                      letterSpacing: (name === 'button' ? '0.02em' : name === 'eyebrow' ? '0.05em' : 'normal'),
                       textTransform: name === 'eyebrow' ? 'uppercase' : 'none'
                     }}
                   >
