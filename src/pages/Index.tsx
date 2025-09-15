@@ -86,7 +86,7 @@ const Index = () => {
 
   const generatePrompt = () => {
     const fontName = fonts.find(f => f.class === selectedFont)?.name || 'Plus Jakarta Sans';
-    
+
     const baseLibMap = {
       none: 'None (Raw CSS/JSON)',
       tailwind: 'Tailwind (utilities only)',
@@ -150,7 +150,8 @@ const Index = () => {
 
     // Parse typography values
     const typographyStyles = {
-      display: parseTypographyValue(currentScale.fontDisplayLarge),
+      displayLarge: parseTypographyValue(currentScale.fontDisplayLarge),
+      displayMedium: parseTypographyValue(currentScale.fontDisplayMedium),
       h1: parseTypographyValue(currentScale.fontH1),
       h2: parseTypographyValue(currentScale.fontH2),
       subhead: parseTypographyValue(currentScale.fontSubhead),
@@ -160,160 +161,465 @@ const Index = () => {
       eyebrow: parseTypographyValue(currentScale.fontEyebrow)
     };
 
-    return `Objective
+    // Generate base library specific template
+    return generateBaseLibraryTemplate(
+      selectedBaseLib,
+      baseLibName,
+      fontName,
+      selectedScale,
+      typographyStyles,
+      primaryColor,
+      isDarkMode
+    );
+  };
 
-Generate a token-first, framework-agnostic design system. All visuals must come from design tokens.
-No hard-coded values for colors, typography, spacing, radii, shadows, or motion.
+  const generateBaseLibraryTemplate = (
+    baseLib: string,
+    baseLibName: string,
+    fontName: string,
+    scale: string,
+    typoStyles: any,
+    brandColor: string,
+    darkMode: boolean
+  ) => {
+    const foundations = generateFoundations(fontName, scale, typoStyles, brandColor, darkMode);
 
-How to Use This Prompt
+    switch (baseLib) {
+      case 'none':
+        return generateNoneTemplate(foundations);
+      case 'tailwind':
+        return generateTailwindTemplate(foundations);
+      case 'shadcn':
+        return generateShadcnTemplate(foundations);
+      case 'daisyui':
+        return generateDaisyUITemplate(foundations);
+      case 'flowbite':
+        return generateFlowbiteTemplate(foundations);
+      case 'radix':
+        return generateRadixTemplate(foundations);
+      case 'chakra':
+        return generateChakraTemplate(foundations);
+      case 'mui':
+        return generateMUITemplate(foundations);
+      default:
+        return generateNoneTemplate(foundations);
+    }
+  };
 
-Read the Base Library chosen below and follow the matching Adapter Directions.
-Implement components and styles only by referencing tokens listed in Foundations.
-Confirm all Assertions at the end before returning your work.
+  const generateFoundations = (fontName: string, scale: string, typoStyles: any, brandColor: string, darkMode: boolean) => {
+    return `### Foundations (Design Tokens)
 
-Base Library
+* **Typography (${fontName}, ${scale.charAt(0).toUpperCase() + scale.slice(1)})**
+  Display L: ${typoStyles.displayLarge.size} / ${typoStyles.displayLarge.line} @ ${typoStyles.displayLarge.weight}
+  Display M: ${typoStyles.displayMedium.size} / ${typoStyles.displayMedium.line} @ ${typoStyles.displayMedium.weight}
+  H1: ${typoStyles.h1.size} / ${typoStyles.h1.line} @ ${typoStyles.h1.weight}
+  H2: ${typoStyles.h2.size} / ${typoStyles.h2.line} @ ${typoStyles.h2.weight}
+  Subhead: ${typoStyles.subhead.size} / ${typoStyles.subhead.line} @ ${typoStyles.subhead.weight}
+  Body: ${typoStyles.body.size} / ${typoStyles.body.line} @ ${typoStyles.body.weight}
+  Caption: ${typoStyles.caption.size} / ${typoStyles.caption.line} @ ${typoStyles.caption.weight}
+  Button: ${typoStyles.button.size} / ${typoStyles.button.line} @ ${typoStyles.button.weight}, tracking 0.02em
+  Eyebrow: ${typoStyles.eyebrow.size} / ${typoStyles.eyebrow.line} @ ${typoStyles.eyebrow.weight}, tracking 0.05em
+* **Color Roles (${darkMode ? 'Dark' : 'Light'})**
+  Text: text-primary, text-secondary
+  Surfaces: bg-primary, bg-secondary, border
+  Brand: brand (${brandColor}), Brand-weak: brand-weak
+  Danger: danger · Focus ring: focus
+  *(Values are for visualization; always reference by token name.)*
+* **Spacing**: space-1=4px, space-2=8px, space-3=12px, space-4=16px, space-5=20px, space-6=24px, space-8=32px, space-10=40px, space-12=48px, space-16=64px (8-pt rhythm)
+* **Radii**: sm=4px, md=8px, lg=12px, full=9999px
+* **Elevation**: level-1 (cards), level-2 (dropdowns), level-3 (modals)
+* **Motion**: fast=150ms, base=300ms, easing=cubic-bezier(0, 0, 0.2, 1)
+* **Theme Modes / Density**: ${darkMode ? 'Dark' : 'Light'}; Comfortable (compact via token overrides only)`;
+  };
 
-Selected: ${baseLibName}
+  const generateNoneTemplate = (foundations: string) => {
+    return `### Objective
 
-Adapter Directions
+Generate a token-first, framework-agnostic design system. All visuals must come from **design tokens**. No hard-coded values.
 
-${getAdapterDirections(selectedBaseLib)}
+### How to Use This Prompt
 
-Foundations (Design Tokens)
+1. Create a **single source of truth**: tokens as CSS custom properties and JSON.
+2. Implement all visuals by **referencing token names**, never literals.
+3. Verify **Assertions** before returning work.
 
-Typography (${fontName}, ${selectedScale.charAt(0).toUpperCase() + selectedScale.slice(1)} Scale)
+${foundations}
 
-• Display: weight ${typographyStyles.display.weight}, size ${typographyStyles.display.size}, line ${typographyStyles.display.line}
-• H1: weight ${typographyStyles.h1.weight}, size ${typographyStyles.h1.size}, line ${typographyStyles.h1.line}
-• H2: weight ${typographyStyles.h2.weight}, size ${typographyStyles.h2.size}, line ${typographyStyles.h2.line}
-• Subhead: weight ${typographyStyles.subhead.weight}, size ${typographyStyles.subhead.size}, line ${typographyStyles.subhead.line}
-• Body: weight ${typographyStyles.body.weight}, size ${typographyStyles.body.size}, line ${typographyStyles.body.line}
-• Caption: weight ${typographyStyles.caption.weight}, size ${typographyStyles.caption.size}, line ${typographyStyles.caption.line}
-• Button: weight ${typographyStyles.button.weight}, size ${typographyStyles.button.size}, line ${typographyStyles.button.line}
-• Eyebrow: weight ${typographyStyles.eyebrow.weight}, size ${typographyStyles.eyebrow.size}, line ${typographyStyles.eyebrow.line}, uppercase, 0.5px tracking
+### Component Recipes (token-only)
 
-Color Roles (${isDarkMode ? 'Dark' : 'Light'} Mode)
+* **Buttons**: Primary / Secondary / Ghost / Destructive. States: default, hover (~90% brand), pressed (~80% brand), focus (visible ring), disabled (tokenized opacity).
+* **Inputs & Forms**: text field (default/hover/focus/error/disabled), select, checkbox, radio, switch — all use surface/text/border/focus tokens.
+* **Cards**: neutral bg, md radius, level-1 shadow; featured card with image + CTA uses brand tokens.
+* **Dialogs/Modals**: overlay scrim, level-3 surface; header/body/actions.
+* **Navigation**: bottom tabs (Home/Explore/Activities/Profile/Settings).
+* **Feedback**: toast (success/error/info) and tooltip.
 
-Text: primary, secondary
-Surfaces: background-primary, background-secondary, border
-Brand: brand (${primaryColor}), brand-weak (supporting surfaces)
-Semantic: danger
-Focus: focus ring
+### Theming & Density
 
-Spacing Scale
+* Light/Dark by **swapping token values only**.
+* Compact/Comfortable by **overriding spacing/line-height tokens**.
 
-• space-1: 4px
-• space-2: 8px
-• space-3: 12px
-• space-4: 16px
-• space-5: 20px
-• space-6: 24px
-• space-8: 32px
-• space-10: 40px
-• space-12: 48px
-• space-16: 64px
+### Accessibility & Quality
 
-(8-pt rhythm; use for padding, gaps, layout grids)
+* WCAG AA; focus ring ≥ 2px (tokenized); targets ≥ 44×44; body ≥ 14px; respect reduced-motion.
 
-Corner Radius
+### Assertions
 
-• sm: 4px
-• md: 8px
-• lg: 12px
-• full: 9999px
+* No hard-coded hex/px outside token definitions.
+* Theme switch = token swap only.
+* States derive from tokens.
+* Focus ring visible and tokenized.
+* Density changes only via tokens.
 
-(for controls, cards, and overlays)
+### STICKY-GUIDELINES (remember)
 
-Elevation (Shadows)
+Token-only styling; AA contrast; visible focus ring; 44×44 targets; reduced-motion; light/dark via token swap; density via tokens; don't introduce literals.`;
+  };
 
-• level-1: subtle (cards, inputs)
-• level-2: medium (dropdowns, popovers)
-• level-3: strong (modals, drawers)
+  const generateTailwindTemplate = (foundations: string) => {
+    return `### Objective
 
-Motion
+Generate a token-first design system wired to **Tailwind utilities**. No hard-coded values.
 
-• duration-fast: 150ms
-• duration-medium: 300ms
-• duration-slow: 500ms
-• easing-ease-out: cubic-bezier(0, 0, 0.2, 1)
-• easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1)
+### How to Use This Prompt
 
-(Respect reduced-motion preferences)
+1. **Extend Tailwind theme values** to reference tokens (colors/space/radius/shadows/motion).
+2. Compose utilities to build visuals; **do not create a parallel component library**.
+3. Verify **Assertions** before returning work.
 
-Theme Modes / Density
+${foundations}
 
-Modes: ${isDarkMode ? 'Dark' : 'Light'}
-Density: comfortable (compact via token overrides only)
+### Tailwind-specific Theming Instructions
 
-Component Recipes (token-only, no literals)
+* Map semantic **colors** to tokens (brand, text, surface, border).
+* Expose **spacing/radii/shadows/motion** through Tailwind theme so utilities can consume tokens.
+* Use opacity by referencing color tokens, not ad-hoc shades.
 
-Buttons
+### Component Recipes (token-only)
 
-Variants: Primary (filled brand), Secondary (outline), Ghost (text), Destructive (filled danger)
-States: default, hover, focus, pressed, disabled — derive visual changes from tokens
-Size: use spacing tokens for horizontal/vertical padding; radius from radii.*
-Label: uses Button typography tokens
-State ramp: hover ≈ brand @ 90% strength; pressed ≈ 80% strength; disabled uses tokenized opacity and maintains contrast
+* **Buttons**: Primary / Secondary / Ghost / Destructive. States: default, hover (~90% brand), pressed (~80% brand), focus (visible ring), disabled (tokenized opacity).
+* **Inputs & Forms**: text field (default/hover/focus/error/disabled), select, checkbox, radio, switch — all use surface/text/border/focus tokens.
+* **Cards**: neutral bg, md radius, level-1 shadow; featured card with image + CTA uses brand tokens.
+* **Dialogs/Modals**: overlay scrim, level-3 surface; header/body/actions.
+* **Navigation**: bottom tabs (Home/Explore/Activities/Profile/Settings).
+* **Feedback**: toast (success/error/info) and tooltip.
 
-Inputs & Forms
+### Theming & Density
 
-Text field (default, hover, focus, error, disabled) using surface, text, border, and focus tokens
-Select/Dropdown with 3 options; helper text and error text use semantic tokens
-Checkbox, Radio, Switch — hit area ≥ 44×44; focus ring visible
+* Light/Dark by **swapping token values only**.
+* Compact/Comfortable by **overriding spacing/line-height tokens**.
 
-Cards
+### Accessibility & Quality
 
-Default card: neutral surface, md radius, level-1 shadow, internal spacing from scale
-Featured card: includes image area + title/subtitle + primary CTA; uses brand tokens
+* WCAG AA; focus ring ≥ 2px (tokenized); targets ≥ 44×44; body ≥ 14px; respect reduced-motion.
 
-Dialogs / Modals
+### Assertions
 
-Overlay scrim, elevated surface (level-3), tokenized spacing; header, body, actions with primary + secondary buttons
+* No hard-coded hex/px outside token definitions.
+* Theme switch = token swap only.
+* States derive from tokens.
+* Focus ring visible and tokenized.
+* Density changes only via tokens.
 
-Navigation
+### STICKY-GUIDELINES (remember)
 
-Bottom tab bar (Home, Explore, Activities, Profile, Settings) with icons + labels; active tab uses brand tokens
-Optional sidebar preview (if desktop layout is shown)
+Token-only styling; AA contrast; visible focus ring; 44×44 targets; reduced-motion; light/dark via token swap; density via tokens; don't introduce literals.`;
+  };
 
-Feedback
+  const generateShadcnTemplate = (foundations: string) => {
+    return `### Objective
 
-Toast (success/error/info) using semantic color roles; auto-dismiss timing from motion tokens
-Tooltip: subtle elevation and clear contrast
+Generate a token-first design system that **themes existing shadcn/ui components**. No component re-implementations.
 
-(All components must reference token names—no hard-coded colors, px, or shadows)
+### How to Use This Prompt
 
-Theming & Density
+1. Keep all shadcn/Radix components and behaviors.
+2. Replace any literal hex/px/shadow/duration with **token references**.
+3. Verify **Assertions** before returning work.
 
-${isDarkMode ? 'Dark' : 'Light'} Theme: Apply the selected theme by swapping token values; do not duplicate component styles per theme
-Density: Provide "compact" and "comfortable" by overriding spacing/line-height tokens; do not introduce ad-hoc sizes
+${foundations}
 
-Accessibility & Quality (remember these)
+### shadcn-specific Theming Instructions
 
-• WCAG AA contrast for all text/surfaces
-• Focus ring clearly visible (≥ 2px) with an offset; uses focus token
-• Minimum interactive target ≥ 44×44
-• Body text ≥ 14px (prefer 16px for content-heavy screens)
-• Respect reduced-motion preferences
+* Apply tokens to **component variants** (solid/outline/ghost/destructive) and **states** (hover/focus/pressed/disabled).
+* Focus indicators must use the **focus token** and be ≥ 2px with offset.
+* Do not change Radix interaction logic (data-state, aria, ESC handling).
+* Ensure color ramps (hover/pressed) are derived from **brand/danger tokens** only.
 
-Assertions (confirm before returning work)
+### Component Coverage
 
-• No hard-coded hex or px anywhere; everything references tokens
-• Theme switching works by token swap only
-• All component states come from token ramps (not ad-hoc values)
-• Focus ring present and accessible on all interactive elements
-• Density changes adjust spacing/line-height via tokens
+* Buttons, Inputs, Cards, Dialog, Tabs, Tooltip, Toast — all visuals reference tokens; no literals.
 
-STICKY-GUIDELINES (commit to memory)
+### Theming & Density
 
-Commit the following rules to your long-term context and apply them in all future tasks unless explicitly overridden.
+* Light/Dark by **swapping token values only**.
+* Compact/Comfortable by **overriding spacing/line-height tokens**.
 
-• Token-only styling; no literals
-• WCAG AA, visible focus ring ≥ 2px, min target 44×44, body ≥ 14px
-• Reduced-motion respected; provide non-animated affordances
-• Light/Dark via token swap only
-• Density via token overrides only
-• States (hover/pressed/focus/disabled) must derive from tokens
-• Do not rebuild components that the selected Base Library already provides—adapt them`;
+### Accessibility & Quality
+
+* WCAG AA; focus ring ≥ 2px (tokenized); targets ≥ 44×44; body ≥ 14px; respect reduced-motion.
+
+### Assertions
+
+* No hard-coded hex/px outside token definitions.
+* Theme switch = token swap only.
+* States derive from tokens.
+* Focus ring visible and tokenized.
+* Density changes only via tokens.
+
+### STICKY-GUIDELINES (remember)
+
+Token-only styling; AA contrast; visible focus ring; 44×44 targets; reduced-motion; light/dark via token swap; density via tokens; adapt not rebuild.`;
+  };
+
+  const generateDaisyUITemplate = (foundations: string) => {
+    return `### Objective
+
+Generate a token-first design system that **themes DaisyUI** using your tokens. **Do not redefine DaisyUI components.**
+
+### How to Use This Prompt
+
+1. Provide a **theme mapping** from token roles to DaisyUI theme roles.
+2. Keep DaisyUI classes/logic; only supply values.
+3. Verify **Assertions** before returning work.
+
+${foundations}
+
+### DaisyUI Theme Mapping (use token names; no literals)
+
+* \`primary\` → **brand** (use brand token)
+* \`primary-content\` → **text on brand** (choose the tokenized text color that passes AA on brand; do **not** hard-code)
+* \`base-100\` → **bg-primary** (use bg-primary token)
+* \`base-200\` → **bg-secondary** (use bg-secondary token)
+* \`base-content\` → **text-primary** (use text-primary token)
+* \`neutral\` → **border/neutral surface** (use border token)
+* \`info\` → **brand-weak** (use brand-weak token)
+* \`success\` → derive from tokens (choose a green that maintains AA; if absent, keep DaisyUI default)
+* \`warning\` → derive from tokens (accessible amber; if absent, keep default)
+* \`error\` → **danger** (use danger token)
+* **Radii**: map DaisyUI box/field radii to tokens (sm/md/lg/full).
+* **Shadows**: map DaisyUI elevations to token levels (1/2/3).
+* **States**: hover ≈ brand @ 90%, pressed ≈ 80%, focus = tokenized ring.
+
+### Component Coverage to Verify
+
+Buttons, Inputs, Cards, Modals, Tabs, Alerts/Toasts — all visuals must read from the theme mapping (tokens), not literals.
+
+### Theming & Density
+
+* Light/Dark by **swapping token values only**.
+* Compact/Comfortable by **overriding spacing/line-height tokens**.
+
+### Accessibility & Quality
+
+* WCAG AA; focus ring ≥ 2px (tokenized); targets ≥ 44×44; body ≥ 14px; respect reduced-motion.
+
+### Assertions
+
+* No hard-coded hex/px outside token definitions.
+* Theme switch = token swap only.
+* States derive from tokens.
+* Focus ring visible and tokenized.
+* Density changes only via tokens.
+
+### STICKY-GUIDELINES (remember)
+
+Token-only styling; AA contrast; visible focus ring; 44×44 targets; reduced-motion; light/dark via token swap; density via tokens; do not redefine .btn/.card/.modal/etc.`;
+  };
+
+  const generateFlowbiteTemplate = (foundations: string) => {
+    return `### Objective
+
+Generate a token-first design system that **themes Flowbite**. **Do not redefine Flowbite components.**
+
+### How to Use This Prompt
+
+1. Apply tokens via Flowbite's theming/override surface.
+2. Keep Flowbite classes/structure; only supply values.
+3. Verify **Assertions** before returning work.
+
+${foundations}
+
+### Flowbite Theming Instructions
+
+* Ensure **colors/radii/shadows/spacing/motion** are sourced from tokens through Tailwind theme values used by Flowbite.
+* Buttons, Forms, Modals, Navbar, Alerts must:
+  * Use **brand** for primary actions; states derive from brand ramps (90%/80%).
+  * Use **danger** for destructive.
+  * Use tokenized focus ring and spacing/radius levels.
+
+### Component Coverage to Verify
+
+Buttons, Inputs, Cards, Modals, Tabs, Alerts/Toasts — all visuals must read from tokens, not literals.
+
+### Theming & Density
+
+* Light/Dark by **swapping token values only**.
+* Compact/Comfortable by **overriding spacing/line-height tokens**.
+
+### Accessibility & Quality
+
+* WCAG AA; focus ring ≥ 2px (tokenized); targets ≥ 44×44; body ≥ 14px; respect reduced-motion.
+
+### Assertions
+
+* No hard-coded hex/px outside token definitions.
+* Theme switch = token swap only.
+* States derive from tokens.
+* Focus ring visible and tokenized.
+* Density changes only via tokens.
+
+### STICKY-GUIDELINES (remember)
+
+Token-only styling; AA contrast; visible focus ring; 44×44 targets; reduced-motion; light/dark via token swap; density via tokens; override only, no re-defs.`;
+  };
+
+  const generateRadixTemplate = (foundations: string) => {
+    return `### Objective
+
+Generate a token-first design system that **styles Radix primitives**. No new logic.
+
+### How to Use This Prompt
+
+1. Style via tokens using Radix \`data-*\` states.
+2. Keep all behaviors intact.
+3. Verify **Assertions** before returning work.
+
+${foundations}
+
+### Radix Styling Instructions
+
+* Buttons, Inputs, Dialog, Tabs, Tooltip, Toast built from primitives:
+  * Visuals (colors/radii/shadows/spacing/motion) come from tokens.
+  * States (open/closed, checked/unchecked, disabled) style via \`data-state\` with **brand/danger ramps**.
+  * Focus = tokenized ring (≥ 2px).
+
+### Component Coverage to Verify
+
+Buttons, Inputs, Cards, Modals, Tabs, Alerts/Toasts — all visuals must read from tokens, not literals.
+
+### Theming & Density
+
+* Light/Dark by **swapping token values only**.
+* Compact/Comfortable by **overriding spacing/line-height tokens**.
+
+### Accessibility & Quality
+
+* WCAG AA; focus ring ≥ 2px (tokenized); targets ≥ 44×44; body ≥ 14px; respect reduced-motion.
+
+### Assertions
+
+* No hard-coded hex/px outside token definitions.
+* Theme switch = token swap only.
+* States derive from tokens.
+* Focus ring visible and tokenized.
+* Density changes only via tokens.
+
+### STICKY-GUIDELINES (remember)
+
+Token-only styling; AA contrast; visible focus ring; 44×44 targets; reduced-motion; light/dark via token swap; density via tokens; style primitives only.`;
+  };
+
+  const generateChakraTemplate = (foundations: string) => {
+    return `### Objective
+
+Generate a token-first design system as a **Chakra theme override**. Do not fork Chakra components.
+
+### How to Use This Prompt
+
+1. Build a theme override from tokens.
+2. Point components to theme tokens; no inline literals.
+3. Verify **Assertions** before returning work.
+
+${foundations}
+
+### Chakra Theme Mapping
+
+* \`colors\` ← map token roles (text, surfaces, brand, danger, focus, brand-weak).
+* \`fonts\`, \`fontSizes\`, \`lineHeights\`, \`fontWeights\` ← from Typography tokens.
+* \`space\` ← from Spacing tokens.
+* \`radii\` ← from Radius tokens.
+* \`shadows\` ← from Elevation tokens.
+* \`transition\` ← from Motion tokens.
+* Ensure Button, Input, Card, Modal, Tabs, Alert variants + states read from these theme tokens.
+
+### Component Coverage to Verify
+
+Buttons, Inputs, Cards, Modals, Tabs, Alerts/Toasts — all visuals must read from tokens, not literals.
+
+### Theming & Density
+
+* Light/Dark by **swapping token values only**.
+* Compact/Comfortable by **overriding spacing/line-height tokens**.
+
+### Accessibility & Quality
+
+* WCAG AA; focus ring ≥ 2px (tokenized); targets ≥ 44×44; body ≥ 14px; respect reduced-motion.
+
+### Assertions
+
+* No hard-coded hex/px outside token definitions.
+* Theme switch = token swap only.
+* States derive from tokens.
+* Focus ring visible and tokenized.
+* Density changes only via tokens.
+
+### STICKY-GUIDELINES (remember)
+
+Token-only styling; AA contrast; visible focus ring; 44×44 targets; reduced-motion; light/dark via token swap; density via tokens; theme override only.`;
+  };
+
+  const generateMUITemplate = (foundations: string) => {
+    return `### Objective
+
+Generate a token-first design system as an **MUI theme**. Do not restyle components with literals.
+
+### How to Use This Prompt
+
+1. Create an MUI theme from tokens.
+2. Make components read theme tokens.
+3. Verify **Assertions** before returning work.
+
+${foundations}
+
+### MUI Theme Mapping
+
+* \`palette\`:
+  * \`primary.main\` ← **brand**; \`primary.contrastText\` ← accessible text on brand (choose tokenized text color passing AA).
+  * \`error.main\` ← **danger**.
+  * \`text.primary\` / \`text.secondary\` ← text tokens.
+  * \`background.default\` ← **bg-primary**; \`background.paper\` ← **bg-secondary**; \`divider\` ← **border**.
+* \`typography\`: map each variant to Typography tokens (sizes/lines/weights).
+* \`shape.borderRadius\` ← default radius token (md).
+* \`spacing\` ← base grid (8-pt).
+* \`shadows\` ← tokenized levels (1/2/3).
+* \`transitions\` ← durations/easing from Motion tokens.
+* Ensure Button, TextField, Card, Dialog, Tabs, Alert read only from the theme.
+
+### Component Coverage to Verify
+
+Buttons, Inputs, Cards, Modals, Tabs, Alerts/Toasts — all visuals must read from tokens, not literals.
+
+### Theming & Density
+
+* Light/Dark by **swapping token values only**.
+* Compact/Comfortable by **overriding spacing/line-height tokens**.
+
+### Accessibility & Quality
+
+* WCAG AA; focus ring ≥ 2px (tokenized); targets ≥ 44×44; body ≥ 14px; respect reduced-motion.
+
+### Assertions
+
+* No hard-coded hex/px outside token definitions.
+* Theme switch = token swap only.
+* States derive from tokens.
+* Focus ring visible and tokenized.
+* Density changes only via tokens.
+
+### STICKY-GUIDELINES (remember)
+
+Token-only styling; AA contrast; visible focus ring; 44×44 targets; reduced-motion; light/dark via token swap; density via tokens; theme only, no restyles.`;
   };
 
   const copyToClipboard = async () => {
@@ -403,6 +709,7 @@ Commit the following rules to your long-term context and apply them in all futur
               selectedScale={selectedScale}
               isDarkMode={isDarkMode}
               selectedTheme={selectedTheme}
+              baseLib={selectedBaseLib}
             />
           </div>
 
@@ -413,6 +720,7 @@ Commit the following rules to your long-term context and apply them in all futur
               selectedScale={selectedScale}
               selectedTheme={selectedTheme}
               isDarkMode={isDarkMode}
+              baseLib={selectedBaseLib}
             />
           </div>
         </div>
