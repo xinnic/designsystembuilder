@@ -291,24 +291,6 @@ export const MobileAppPreview = ({
         {/* Scrollable Content with new layout system */}
         <div className="flex-1 overflow-y-auto">
           <PhoneScaffold>
-            {/* Mood Section */}
-            <Section title="How are you feeling today?">
-              <div className="flex gap-3">
-                {moods.map((mood, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedMood(index)}
-                    className={`w-12 h-12 rounded-full border-2 flex items-center justify-center text-xl transition-all hover:scale-105 ${
-                      selectedMood === index
-                        ? 'border-primary bg-primary/10'
-                        : 'border-border hover:border-primary/50'
-                    }`}
-                  >
-                    {mood}
-                  </button>
-                ))}
-              </div>
-            </Section>
 
             {/* Filter Chips */}
             <Section gap="var(--tile-gap)">
@@ -329,34 +311,6 @@ export const MobileAppPreview = ({
               </div>
             </Section>
 
-            {/* Metric Cards */}
-            <Section gap="var(--tile-gap)">
-              <div className="grid grid-cols-2 gap-[var(--tile-gap)]">
-                <CardTile>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Clock size={20} className="text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Focus Time</p>
-                      <p className="font-semibold text-foreground">2h 15m</p>
-                    </div>
-                  </div>
-                </CardTile>
-
-                <CardTile>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Smile size={20} className="text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Mood Level</p>
-                      <p className="font-semibold text-foreground">7/10 avg</p>
-                    </div>
-                  </div>
-                </CardTile>
-              </div>
-            </Section>
 
             {/* Post Card */}
             <Section>
