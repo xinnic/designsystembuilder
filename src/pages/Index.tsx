@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Copy } from 'lucide-react';
 import { Sidebar } from '@/components/Sidebar';
 import { MobileAppPreview } from '@/components/MobileAppPreview';
-import { DesignSystemOverview } from '@/components/DesignSystemOverview';
+import DesignSystemOverview from '@/components/DesignSystemOverview';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import {
