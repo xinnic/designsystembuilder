@@ -1,0 +1,33 @@
+/* Uses your existing tokens: --space-1..6, --radius-*, --shadow-*, --color-* */
+:root {
+  --phone-inset-x: clamp(16px, 4vw, 24px);
+  --phone-inset-y: clamp(8px, 2vh, 16px);
+  --stack-gap: var(--space-3);           /* default vertical rhythm */
+  --tile-gap: var(--space-2);            /* internal grid gaps */
+}
+
+/* Hide scrollbars in preview while keeping accessibility */
+.preview-scroll {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+.preview-scroll::-webkit-scrollbar { 
+  display: none; /* WebKit */
+}
+
+/* Generic rounded surfaces */
+.rounded-surface {
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-1);
+  background: hsl(var(--background));
+  overflow: hidden; /* ensures images clip to radius */
+}
+
+/* Headings in preview have no default margins; spacing comes from Section gaps */
+.preview h1, .preview h2, .preview h3, .preview p { margin: 0; }
+
+/* Focus ring tokenized */
+.token-focus {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}

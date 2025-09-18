@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Copy } from 'lucide-react';
 import { Sidebar } from '@/components/Sidebar';
 import { PreviewPhone } from '@/components/PreviewPhone';
-import { DesignSystemOverview } from '@/components/DesignSystemOverview';
+import DesignSystemOverview from '@/components/DesignSystemOverview';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -385,7 +385,6 @@ ${stickyGuidelines}`
 
   const generatePrompt = () => {
     const fontName = fonts.find(f => f.class === selectedFont)?.name || 'Plus Jakarta Sans';
-    
     const colorThemes = {
       blue: '#1976D2',
       purple: '#7C3AED',
@@ -582,6 +581,7 @@ ${stickyGuidelines}`
               selectedScale={selectedScale}
               selectedTheme={selectedTheme}
               isDarkMode={isDarkMode}
+              baseLib={selectedBaseLib}
             />
           </div>
         </div>
