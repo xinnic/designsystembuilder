@@ -26,10 +26,13 @@ const fonts = [
 
 const Index = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [selectedTheme, setSelectedTheme] = useState('blue');
+  const [selectedTheme, setSelectedTheme] = useState('turquoise');
+  const [customPrimaryColor, setCustomPrimaryColor] = useState<string>('#3498db');
+  const [selectedAccentColor, setSelectedAccentColor] = useState('turquoise');
+  const [customAccentColor, setCustomAccentColor] = useState<string>('#1abc9c');
   const [selectedScale, setSelectedScale] = useState('regular');
   const [selectedFont, setSelectedFont] = useState('font-jakarta');
-  const [selectedBaseLib, setSelectedBaseLib] = useState('shadcn');
+  const [selectedBaseLib, setSelectedBaseLib] = useState('tailwind');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
@@ -77,21 +80,21 @@ const Index = () => {
     const foundationsContent = `### Foundations (Design Tokens)
 
 • **Typography (${fontName}, ${selectedScale.charAt(0).toUpperCase() + selectedScale.slice(1)} Scale)**
-  Display Large: ${typographyStyles.displayLarge.size} / ${typographyStyles.displayLarge.line} @ ${typographyStyles.displayLarge.weight}
-  Display Medium: ${typographyStyles.displayMedium.size} / ${typographyStyles.displayMedium.line} @ ${typographyStyles.displayMedium.weight}
+  Display: ${typographyStyles.display.size} / ${typographyStyles.display.line} @ ${typographyStyles.display.weight}
   H1: ${typographyStyles.h1.size} / ${typographyStyles.h1.line} @ ${typographyStyles.h1.weight}
   H2: ${typographyStyles.h2.size} / ${typographyStyles.h2.line} @ ${typographyStyles.h2.weight}
   Subhead: ${typographyStyles.subhead.size} / ${typographyStyles.subhead.line} @ ${typographyStyles.subhead.weight}
   Body: ${typographyStyles.body.size} / ${typographyStyles.body.line} @ ${typographyStyles.body.weight}
   Caption: ${typographyStyles.caption.size} / ${typographyStyles.caption.line} @ ${typographyStyles.caption.weight}
-  Button: ${typographyStyles.button.size} / ${typographyStyles.button.line} @ ${typographyStyles.button.weight}, tracking 0.02em
-  Eyebrow: ${typographyStyles.eyebrow.size} / ${typographyStyles.eyebrow.line} @ ${typographyStyles.eyebrow.weight}, tracking 0.05em
+  Button Text: ${typographyStyles.buttonText.size} / ${typographyStyles.buttonText.line} @ ${typographyStyles.buttonText.weight}, tracking 0.02em
+  Badge: ${typographyStyles.badge.size} / ${typographyStyles.badge.line} @ ${typographyStyles.badge.weight}, tracking 0.05em, uppercase
 
 • **Color Roles (Light / Dark)**
-  Text: ${colorRoles['text-primary']}, ${colorRoles['text-secondary']}
-  Surfaces: ${colorRoles['bg-primary']}, ${colorRoles['bg-secondary']}, ${colorRoles.border}
-  Brand: ${colorRoles.brand}, Brand-weak: ${colorRoles['brand-weak']}
-  Danger: ${colorRoles.danger} · Focus ring: ${colorRoles.focus}
+  Text: text-primary (${colorRoles['text-primary']}), text-secondary (${colorRoles['text-secondary']}), text-disabled (${colorRoles['text-disabled']})
+  Surfaces: bg-primary (${colorRoles['bg-primary']}), bg-secondary (${colorRoles['bg-secondary']}), border (${colorRoles.border})
+  Brand: brand-primary (${colorRoles['brand-primary']}), brand-secondary (${colorRoles['brand-secondary']}), brand-accent (${colorRoles['brand-accent']})
+  Semantic: success (${colorRoles.success}), warning (${colorRoles.warning}), info (${colorRoles.info}), danger (${colorRoles.danger})
+  Focus ring: focus (${colorRoles.focus})
   *(Values are for visualization; always reference by token name.)*
 
 • **Spacing**: ${spacingScale} (8-pt rhythm)
@@ -102,9 +105,17 @@ const Index = () => {
 
     const componentRecipes = `### Component Recipes (token-only)
 
-• **Buttons**: Primary / Secondary / Ghost / Destructive. States: default, hover (~90% brand), pressed (~80% brand), focus (visible ring), disabled (tokenized opacity).
-• **Inputs & Forms**: text field (default/hover/focus/error/disabled), select, checkbox, radio, switch — all use surface/text/border/focus tokens.
-• **Cards**: neutral bg, md radius, level-1 shadow; featured card with image + CTA uses brand tokens.
+• **Button Hierarchy (5 types required)**:
+  - Primary: filled brand-primary background, white text, md radius
+  - Secondary: outlined brand-primary border, brand-primary text, transparent background
+  - Tertiary: text-only brand-primary, no background, underline on hover
+  - Destructive: filled danger background, white text, md radius
+  - Disabled: text-disabled color, bg-disabled background, no interactions
+
+• **Button States**: default, hover (~90% opacity), pressed (~80% opacity), focus (visible ring with focus token)
+
+• **Inputs & Forms**: text field (default/hover/focus/error/disabled), select, checkbox, radio, switch — all use bg-secondary/text-primary/border/focus tokens.
+• **Cards**: neutral bg-secondary, md radius, level-1 shadow; featured card with image + CTA uses brand-primary tokens.
 • **Dialogs/Modals**: overlay scrim, level-3 surface; header/body/actions.
 • **Navigation**: bottom tabs (Home/Explore/Activities/Profile/Settings).
 • **Feedback**: toast (success/error/info) and tooltip.`;
@@ -181,36 +192,6 @@ ${assertions}
 
 ${stickyGuidelines}`,
 
-      shadcn: `### Objective
-
-Generate a token-first design system that **themes existing shadcn/ui components**. No component re-implementations.
-
-### How to Use This Prompt
-
-1. Keep all shadcn/Radix components and behaviors.
-2. Replace any literal hex/px/shadow/duration with **token references**.
-3. Verify **Assertions** before returning work.
-
-${foundationsContent}
-
-### shadcn-specific Theming Instructions
-
-• Apply tokens to **component variants** (solid/outline/ghost/destructive) and **states** (hover/focus/pressed/disabled).
-• Focus indicators must use the **focus token** and be ≥ 2px with offset.
-• Do not change Radix interaction logic (data-state, aria, ESC handling).
-• Ensure color ramps (hover/pressed) are derived from **brand/danger tokens** only.
-
-### Component Coverage
-
-• Buttons, Inputs, Cards, Dialog, Tabs, Tooltip, Toast — all visuals reference tokens; no literals.
-
-${themingDensity}
-
-${accessibility}
-
-${assertions}
-
-${stickyGuidelines}`,
 
       daisyui: `### Objective
 
@@ -252,36 +233,6 @@ ${assertions}
 
 ${stickyGuidelines}`,
 
-      flowbite: `### Objective
-
-Generate a token-first design system that **themes Flowbite**. **Do not redefine Flowbite components.**
-
-### How to Use This Prompt
-
-1. Apply tokens via Flowbite's theming/override surface.
-2. Keep Flowbite classes/structure; only supply values.
-3. Verify **Assertions** before returning work.
-
-${foundationsContent}
-
-### Flowbite Theming Instructions
-
-• Ensure **colors/radii/shadows/spacing/motion** are sourced from tokens through Tailwind theme values used by Flowbite.
-• Buttons, Forms, Modals, Navbar, Alerts must:
-  • Use **brand** for primary actions; states derive from brand ramps (90%/80%).
-  • Use **danger** for destructive.
-  • Use tokenized focus ring and spacing/radius levels.
-
-${componentRecipes}
-
-${themingDensity}
-
-${accessibility}
-
-${assertions}
-
-${stickyGuidelines}`,
-
       radix: `### Objective
 
 Generate a token-first design system that **styles Radix primitives**. No new logic.
@@ -300,38 +251,6 @@ ${foundationsContent}
   • Visuals (colors/radii/shadows/spacing/motion) come from tokens.
   • States (open/closed, checked/unchecked, disabled) style via \`data-state\` with **brand/danger ramps**.
   • Focus = tokenized ring (≥ 2px).
-
-${componentRecipes}
-
-${themingDensity}
-
-${accessibility}
-
-${assertions}
-
-${stickyGuidelines}`,
-
-      chakra: `### Objective
-
-Generate a token-first design system as a **Chakra theme override**. Do not fork Chakra components.
-
-### How to Use This Prompt
-
-1. Build a theme override from tokens.
-2. Point components to theme tokens; no inline literals.
-3. Verify **Assertions** before returning work.
-
-${foundationsContent}
-
-### Chakra Theme Mapping
-
-• \`colors\` ← map token roles (text, surfaces, brand, danger, focus, brand-weak).
-• \`fonts\`, \`fontSizes\`, \`lineHeights\`, \`fontWeights\` ← from Typography tokens.
-• \`space\` ← from Spacing tokens.
-• \`radii\` ← from Radius tokens.
-• \`shadows\` ← from Elevation tokens.
-• \`transition\` ← from Motion tokens.
-• Ensure Button, Input, Card, Modal, Tabs, Alert variants + states read from these theme tokens.
 
 ${componentRecipes}
 
@@ -386,48 +305,56 @@ ${stickyGuidelines}`
   const generatePrompt = () => {
     const fontName = fonts.find(f => f.class === selectedFont)?.name || 'Plus Jakarta Sans';
     const colorThemes = {
-      blue: '#1976D2',
-      purple: '#7C3AED',
-      pink: '#E91E63',
-      red: '#DC2626',
-      yellow: '#F59E0B',
-      orange: '#EA580C',
-      teal: '#0D9488'
+      custom: customPrimaryColor,
+      turquoise: '#1abc9c',
+      emerald: '#2ecc71',
+      'peter-river': '#3498db',
+      amethyst: '#9b59b6',
+      'wet-asphalt': '#34495e',
+      'sun-flower': '#f1c40f',
+      carrot: '#e67e22',
+      alizarin: '#e74c3c',
+      concrete: '#95a5a6',
+      orange: '#f39c12',
+      pumpkin: '#d35400',
+      pomegranate: '#c0392b',
+      nephritis: '#27ae60',
+      'belize-hole': '#2980b9',
+      wisteria: '#8e44ad',
+      'midnight-blue': '#2c3e50',
+      asbestos: '#7f8c8d'
     };
 
     const scaleSpecs = {
       small: {
-        fontEyebrow: '500 11px/14px',
+        fontDisplay: '700 48px/56px',
         fontH1: '700 24px/30px',
         fontH2: '600 20px/26px',
         fontSubhead: '600 16px/22px',
         fontBody: '400 14px/20px',
-        fontButton: '600 16px/22px',
         fontCaption: '400 12px/16px',
-        fontDisplayLarge: '700 36px/44px',
-        fontDisplayMedium: '700 30px/36px'
+        fontButtonText: '600 18px/26px',
+        fontBadge: '500 11px/14px'
       },
       regular: {
-        fontEyebrow: '500 12px/16px',
+        fontDisplay: '700 48px/56px',
         fontH1: '700 28px/38px',
         fontH2: '600 22px/30px',
         fontSubhead: '600 18px/26px',
         fontBody: '400 16px/24px',
-        fontButton: '600 18px/26px',
         fontCaption: '400 14px/20px',
-        fontDisplayLarge: '700 48px/56px',
-        fontDisplayMedium: '700 36px/44px'
+        fontButtonText: '600 18px/26px',
+        fontBadge: '500 12px/16px'
       },
       large: {
-        fontEyebrow: '500 13px/18px',
+        fontDisplay: '700 48px/56px',
         fontH1: '700 36px/44px',
         fontH2: '600 24px/32px',
         fontSubhead: '600 21px/30px',
         fontBody: '400 18px/26px',
-        fontButton: '600 20px/28px',
         fontCaption: '400 15px/22px',
-        fontDisplayLarge: '700 60px/68px',
-        fontDisplayMedium: '700 48px/56px'
+        fontButtonText: '600 18px/26px',
+        fontBadge: '500 13px/18px'
       }
     };
 
@@ -436,27 +363,58 @@ ${stickyGuidelines}`
 
     // Parse typography values
     const typographyStyles = {
-      displayLarge: parseTypographyValue(currentScale.fontDisplayLarge),
-      displayMedium: parseTypographyValue(currentScale.fontDisplayMedium),
+      display: parseTypographyValue(currentScale.fontDisplay),
       h1: parseTypographyValue(currentScale.fontH1),
       h2: parseTypographyValue(currentScale.fontH2),
       subhead: parseTypographyValue(currentScale.fontSubhead),
       body: parseTypographyValue(currentScale.fontBody),
       caption: parseTypographyValue(currentScale.fontCaption),
-      button: parseTypographyValue(currentScale.fontButton),
-      eyebrow: parseTypographyValue(currentScale.fontEyebrow)
+      buttonText: parseTypographyValue(currentScale.fontButtonText),
+      badge: parseTypographyValue(currentScale.fontBadge)
     };
 
-    // Define color roles based on theme
+    // Get accent color based on selected accent color
+    const getAccentColor = () => {
+      const accentMap = {
+        custom: customAccentColor,
+        turquoise: '#1abc9c',
+        emerald: '#2ecc71',
+        'peter-river': '#3498db',
+        amethyst: '#9b59b6',
+        'wet-asphalt': '#34495e',
+        'sun-flower': '#f1c40f',
+        carrot: '#e67e22',
+        alizarin: '#e74c3c',
+        concrete: '#95a5a6',
+        orange: '#f39c12',
+        pumpkin: '#d35400',
+        pomegranate: '#c0392b',
+        nephritis: '#27ae60',
+        'belize-hole': '#2980b9',
+        wisteria: '#8e44ad',
+        'midnight-blue': '#2c3e50',
+        asbestos: '#7f8c8d'
+      };
+      return accentMap[selectedAccentColor as keyof typeof accentMap] || '#1abc9c';
+    };
+
+    const accentColor = getAccentColor();
+
+    // Define color roles based on theme and new token system
     const colorRoles = {
-      'text-primary': isDarkMode ? '#E1E1E1' : '#1C1C1E',
-      'text-secondary': isDarkMode ? '#A8A8A8' : '#636366',
-      'bg-primary': isDarkMode ? '#121212' : '#FFFFFF',
-      'bg-secondary': isDarkMode ? '#1E1E1E' : '#F2F2F7',
-      'border': isDarkMode ? '#2C2C2C' : '#C6C6C8',
-      'brand': primaryColor,
-      'brand-weak': isDarkMode ? `${primaryColor}40` : `${primaryColor}20`,
-      'danger': '#DC2626',
+      'text-primary': isDarkMode ? '#E1E1E1' : '#1A1A1A',
+      'text-secondary': isDarkMode ? '#A8A8A8' : '#6C7588',
+      'text-disabled': isDarkMode ? '#666666' : '#A1A1A1',
+      'bg-primary': isDarkMode ? '#121212' : '#F8F9FA',
+      'bg-secondary': isDarkMode ? '#1E1E1E' : '#FFFFFF',
+      'border': isDarkMode ? '#2C2C2C' : '#E5E7EB',
+      'brand-primary': primaryColor,
+      'brand-secondary': '#E8EBFF',
+      'brand-accent': accentColor,
+      'success': '#22c55e',
+      'warning': '#f59e0b',
+      'info': '#3b82f6',
+      'danger': '#f44444',
       'focus': '#0066CC'
     };
 
@@ -516,6 +474,12 @@ ${stickyGuidelines}`
           onScaleChange={setSelectedScale}
           selectedTheme={selectedTheme}
           onThemeChange={setSelectedTheme}
+          customPrimaryColor={customPrimaryColor}
+          onCustomPrimaryColorChange={setCustomPrimaryColor}
+          selectedAccentColor={selectedAccentColor}
+          onAccentColorChange={setSelectedAccentColor}
+          customAccentColor={customAccentColor}
+          onCustomAccentColorChange={setCustomAccentColor}
           isDarkMode={isDarkMode}
           onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
           selectedBaseLib={selectedBaseLib}
@@ -580,6 +544,9 @@ ${stickyGuidelines}`
               fontClass={selectedFont}
               selectedScale={selectedScale}
               selectedTheme={selectedTheme}
+              selectedAccentColor={selectedAccentColor}
+              customPrimaryColor={customPrimaryColor}
+              customAccentColor={customAccentColor}
               isDarkMode={isDarkMode}
               baseLib={selectedBaseLib}
             />

@@ -2,7 +2,17 @@
   "permissions": {
     "allow": [
       "Bash(npm run build:*)",
-      "Bash(git config:*)"
+      "Bash(git config:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(npm run dev:*)",
+      "Bash(pkill:*)",
+      "Bash(lsof:*)",
+      "Bash(curl:*)",
+      "Bash(kill:*)",
+      "WebFetch(domain:flatuicolors.com)",
+      "WebSearch",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

@@ -6,19 +6,6 @@ interface HeaderGreetingProps {
 }
 
 export const HeaderGreeting = ({ baseLib }: HeaderGreetingProps) => {
-  if (baseLib === 'shadcn') {
-    return (
-      <div className="flex items-center justify-between p-4 border-b border-[rgb(var(--color-border))]">
-        <div className="w-8 h-8 bg-[rgb(var(--color-brand))] rounded-[var(--radius-md)] flex items-center justify-center">
-          <span className="text-white font-bold text-sm">A</span>
-        </div>
-        <h1 className="text-lg font-semibold text-[rgb(var(--color-text-primary))]">Good morning, Emma</h1>
-        <button className="w-8 h-8 rounded-full bg-[rgb(var(--color-bg-secondary))] flex items-center justify-center hover:bg-[rgb(var(--color-bg-secondary))]/80 transition-colors">
-          <Bell size={16} className="text-[rgb(var(--color-text-secondary))]" />
-        </button>
-      </div>
-    );
-  }
 
   if (baseLib === 'daisyui') {
     return (
