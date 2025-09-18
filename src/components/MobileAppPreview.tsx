@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useDesignSystem, useTokenCSS } from '../state/designSystem';
+import { playHaptic } from '../platform/haptics';
 import {
   Bell,
   Home,
@@ -61,11 +63,22 @@ const useComponentLibrary = (baseLib: string) => {
   const components = {
     // Button component factory
     Button: (props: any) => {
-      const { children, variant = 'default', size = 'default', className = '', ...rest } = props;
+      const { children, variant = 'default', size = 'default', className = '', onClick, ...rest } = props;
+
+      const handleClick = (e: any) => {
+        if (variant === 'destructive') {
+          playHaptic('error');
+        } else if (variant === 'default') {
+          playHaptic('medium');
+        } else {
+          playHaptic('light');
+        }
+        onClick?.(e);
+      };
 
       switch (currentLib) {
         case 'shadcn':
-          return <Button variant={variant} size={size} className={className} {...rest}>{children}</Button>;
+          return <Button variant={variant} size={size} className={className} onClick={handleClick} {...rest}>{children}</Button>;
 
         case 'daisyui':
           const daisyClass = variant === 'destructive' ? 'btn-error' :
@@ -74,6 +87,7 @@ const useComponentLibrary = (baseLib: string) => {
           return (
             <button
               className={`btn ${daisyClass} rounded-[var(--radius-full)] ${className}`}
+              onClick={handleClick}
               {...rest}
             >
               {children}
@@ -97,6 +111,7 @@ const useComponentLibrary = (baseLib: string) => {
           return (
             <button
               className={`${baseClasses} ${variantClasses[variant as keyof typeof variantClasses] || variantClasses.default} ${sizeClasses[size as keyof typeof sizeClasses] || sizeClasses.default} rounded-[var(--radius-md)] ${className}`}
+              onClick={handleClick}
               {...rest}
             >
               {children}
@@ -205,6 +220,7 @@ const IMAGES = {
 };
 
 const BottomTabBar = () => {
+  const { opts } = useDesignSystem();
   const [activeTab, setActiveTab] = useState(0);
   const tabs = [
     { icon: Home, label: 'Home' },
@@ -214,6 +230,26 @@ const BottomTabBar = () => {
     { icon: Settings, label: 'Settings' },
   ];
 
+  if (opts.menuLayout === 'hamburger') {
+    return (
+      <div className="absolute top-0 left-0 right-0 z-10">
+        <div className="flex items-center justify-between p-4 bg-background/95 backdrop-blur-sm border-b border-border">
+          <button className="p-2 hover:bg-secondary rounded-md transition-colors">
+            <div className="space-y-1">
+              <div className="w-6 h-0.5 bg-foreground"></div>
+              <div className="w-6 h-0.5 bg-foreground"></div>
+              <div className="w-6 h-0.5 bg-foreground"></div>
+            </div>
+          </button>
+          <h1 className="text-lg font-semibold text-foreground">Good morning, Emma</h1>
+          <button className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors">
+            <Bell size={16} className="text-foreground" />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="absolute bottom-0 left-0 right-0 border-t border-border bg-background/95 backdrop-blur-sm">
       <div className="flex justify-around py-2">
@@ -222,7 +258,10 @@ const BottomTabBar = () => {
           return (
             <button
               key={index}
-              onClick={() => setActiveTab(index)}
+              onClick={() => {
+                playHaptic('light');
+                setActiveTab(index);
+              }}
               className={`flex flex-col items-center justify-center p-2 text-xs transition-colors min-w-[44px] min-h-[44px] rounded-md ${
                 activeTab === index
                   ? 'text-primary'
@@ -246,6 +285,10 @@ export const MobileAppPreview = ({
   selectedTheme,
   baseLib = 'tailwind'
 }: MobileAppPreviewProps) => {
+  // Initialize token CSS binding
+  useTokenCSS();
+  const { opts } = useDesignSystem();
+
   const components = useComponentLibrary(baseLib);
   const [selectedMood, setSelectedMood] = useState(0);
   const [activeFilter, setActiveFilter] = useState(0);
@@ -277,19 +320,21 @@ export const MobileAppPreview = ({
           </div>
         </div>
 
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-border">
-          <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-sm">A</span>
+        {/* Header - only show for bottomBar layout */}
+        {opts.menuLayout === 'bottomBar' && (
+          <div className="flex items-center justify-between p-4 border-b border-border">
+            <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-sm">A</span>
+            </div>
+            <h1 className="text-lg font-semibold text-foreground">Good morning, Emma</h1>
+            <button className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors">
+              <Bell size={16} className="text-foreground" />
+            </button>
           </div>
-          <h1 className="text-lg font-semibold text-foreground">Good morning, Emma</h1>
-          <button className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors">
-            <Bell size={16} className="text-foreground" />
-          </button>
-        </div>
+        )}
 
         {/* Scrollable Content with new layout system */}
-        <div className="flex-1 overflow-y-auto">
+        <div className={`flex-1 overflow-y-auto ${opts.menuLayout === 'hamburger' ? 'pt-16' : ''}`}>
           <PhoneScaffold>
 
             {/* Filter Chips */}
@@ -298,7 +343,10 @@ export const MobileAppPreview = ({
                 {filters.map((filter, index) => (
                   <button
                     key={filter}
-                    onClick={() => setActiveFilter(index)}
+                    onClick={() => {
+                      playHaptic('light');
+                      setActiveFilter(index);
+                    }}
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
                       activeFilter === index
                         ? 'bg-primary text-primary-foreground'
@@ -314,7 +362,7 @@ export const MobileAppPreview = ({
 
             {/* Post Card */}
             <Section>
-              <CardTile>
+              <CardTile onClick={() => console.log('Clicked post card')}>
                 <div className="rounded-[var(--radius-md)] overflow-hidden mb-3">
                   <img
                     src={IMAGES.postHero}
@@ -397,6 +445,7 @@ export const MobileAppPreview = ({
                     title={<><span className="font-medium">{item.name}</span> {item.action}</>}
                     subtitle={`${item.time} ago`}
                     trailing={<ChevronRight size={16} className="text-muted-foreground" />}
+                    onClick={() => console.log(`Clicked ${item.name}`)}
                   />
                 ))}
               </div>

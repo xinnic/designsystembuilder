@@ -540,16 +540,7 @@ ${stickyGuidelines}`
 
           {/* Design System Overview */}
           <div className="flex-1 min-w-[300px]">
-            <DesignSystemOverview
-              fontClass={selectedFont}
-              selectedScale={selectedScale}
-              selectedTheme={selectedTheme}
-              selectedAccentColor={selectedAccentColor}
-              customPrimaryColor={customPrimaryColor}
-              customAccentColor={customAccentColor}
-              isDarkMode={isDarkMode}
-              baseLib={selectedBaseLib}
-            />
+            <DesignSystemOverview />
           </div>
         </div>
       </div>

@@ -1,0 +1,45 @@
+.type-scale-table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.type-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: rgb(var(--color-bg-secondary));
+  border-radius: var(--radius-md);
+  border: 1px solid rgb(var(--color-border) / 0.1);
+}
+
+.type-sample {
+  color: rgb(var(--color-text-primary));
+  flex: 1;
+}
+
+.type-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  align-items: flex-end;
+  text-align: right;
+}
+
+.type-name {
+  font-family: var(--font-family);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line);
+  font-weight: 600;
+  color: rgb(var(--color-text-primary));
+}
+
+.type-specs {
+  font-family: ui-monospace, "SF Mono", "Monaco", "Cascadia Code", "Roboto Mono", monospace;
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 400;
+  color: rgb(var(--color-text-secondary));
+}
