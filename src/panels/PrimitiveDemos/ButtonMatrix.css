@@ -1,0 +1,107 @@
+.btn-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.btn-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.col-title {
+  color: rgb(var(--color-text-secondary));
+  text-transform: capitalize;
+  font-family: var(--font-family);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line);
+  font-weight: 600;
+}
+
+.btn {
+  font-family: var(--font-family);
+  font-size: var(--font-button-size);
+  line-height: var(--font-button-line);
+  font-weight: var(--font-button-weight);
+  letter-spacing: var(--font-button-track);
+  border-radius: var(--radius-full);
+  padding: var(--space-2) var(--space-3);
+  transition: background-color var(--motion-base) var(--ease-standard),
+              color var(--motion-base) var(--ease-standard);
+  outline-offset: 2px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+/* Primary */
+.btn.primary {
+  color: #fff;
+  background: rgb(var(--color-brand));
+}
+
+.btn.primary.hover {
+  background: rgb(var(--color-brand) / 0.9);
+}
+
+.btn.primary.pressed {
+  background: rgb(var(--color-brand) / 0.8);
+}
+
+.btn.primary.focus {
+  outline: 2px solid rgb(var(--color-focus));
+}
+
+.btn.primary.disabled {
+  background: rgb(var(--color-brand) / 0.35);
+  color: rgb(var(--color-text-primary) / .6);
+  cursor: not-allowed;
+}
+
+/* Secondary (outline) */
+.btn.secondary {
+  color: rgb(var(--color-brand));
+  background: transparent;
+  border: 1px solid rgb(var(--color-brand));
+}
+
+.btn.secondary.hover {
+  background: rgb(var(--color-brand) / .08);
+}
+
+.btn.secondary.pressed {
+  background: rgb(var(--color-brand) / .14);
+}
+
+.btn.secondary.focus {
+  outline: 2px solid rgb(var(--color-focus));
+}
+
+.btn.secondary.disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+/* Destructive */
+.btn.destructive {
+  color: #fff;
+  background: rgb(var(--color-danger));
+}
+
+.btn.destructive.hover {
+  background: rgb(var(--color-danger) / .9);
+}
+
+.btn.destructive.pressed {
+  background: rgb(var(--color-danger) / .8);
+}
+
+.btn.destructive.focus {
+  outline: 2px solid rgb(var(--color-focus));
+}
+
+.btn.destructive.disabled {
+  background: rgb(var(--color-danger) / .35);
+  color: rgb(var(--color-text-primary) / .6);
+  cursor: not-allowed;
+}

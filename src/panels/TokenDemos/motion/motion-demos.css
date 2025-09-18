@@ -1,0 +1,74 @@
+/* Shared styles for motion demo components */
+
+.motion-demo-card {
+  background: rgb(var(--color-bg-secondary));
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  border: 1px solid rgb(var(--color-border) / 0.1);
+  box-shadow: var(--shadow-1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.motion-demo-title {
+  font-family: var(--font-family);
+  font-size: var(--font-subhead-size);
+  line-height: var(--font-subhead-line);
+  font-weight: var(--font-subhead-weight);
+  color: rgb(var(--color-text-primary));
+  margin: 0;
+}
+
+.motion-demo-subtitle {
+  font-family: var(--font-family);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line);
+  color: rgb(var(--color-text-secondary));
+  margin: 0;
+}
+
+.motion-demo-subtitle code {
+  background: rgb(var(--color-border) / 0.1);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: ui-monospace, "SF Mono", "Monaco", "Cascadia Code", "Roboto Mono", monospace;
+  font-size: 11px;
+  color: rgb(var(--color-text-primary));
+}
+
+.motion-token-row {
+  display: flex;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+  margin-top: var(--space-1);
+}
+
+.motion-token-row code {
+  background: rgb(var(--color-border) / 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: ui-monospace, "SF Mono", "Monaco", "Cascadia Code", "Roboto Mono", monospace;
+  font-size: 11px;
+  color: rgb(var(--color-text-secondary));
+}
+
+.easing-svg {
+  border-radius: var(--radius-md);
+  margin: var(--space-2) 0;
+}
+
+/* Motion grid layout */
+.motion-demos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-3);
+}
+
+/* Global reduced motion settings */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

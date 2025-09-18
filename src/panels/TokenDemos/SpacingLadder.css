@@ -1,0 +1,28 @@
+.spacing-ladder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.spacing-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.spacing-block {
+  height: 24px;
+  background: rgb(var(--color-brand) / 0.7);
+  border-radius: var(--radius-sm);
+  min-width: 8px;
+}
+
+.spacing-label {
+  font-family: var(--font-family);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line);
+  font-weight: var(--font-caption-weight);
+  color: rgb(var(--color-text-secondary));
+  min-width: 36px;
+}

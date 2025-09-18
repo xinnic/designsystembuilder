@@ -12,7 +12,8 @@
       "Bash(kill:*)",
       "WebFetch(domain:flatuicolors.com)",
       "WebSearch",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []

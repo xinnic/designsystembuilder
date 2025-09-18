@@ -1,0 +1,42 @@
+.elevation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.elevation-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.elevation-tile {
+  width: 64px;
+  height: 48px;
+  background: rgb(var(--color-bg-secondary));
+  border-radius: var(--radius-md);
+}
+
+.elevation-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.elevation-name {
+  font-family: var(--font-family);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line);
+  font-weight: var(--font-caption-weight);
+  color: rgb(var(--color-text-primary));
+}
+
+.elevation-usage {
+  font-family: var(--font-family);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: rgb(var(--color-text-secondary));
+}
