@@ -346,46 +346,6 @@ export default function StylingControls() {
           </div>
         </div>
 
-        {/* Haptics */}
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <Vibrate className="h-4 w-4" />
-            <label className="text-sm font-medium">Haptics</label>
-          </div>
-
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-muted-foreground">Enable</span>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={haptics.enabled}
-                  onChange={(e) => setHaptics({ enabled: e.target.checked })}
-                  className="w-3 h-3 accent-color: rgb(var(--color-brand))"
-                />
-              </label>
-            </div>
-
-            <div>
-              <label className="text-xs text-muted-foreground mb-1 block">Platform</label>
-              <select
-                value={haptics.stack}
-                onChange={(e) => setHaptics({ stack: e.target.value as TechStack })}
-                className="w-full p-1 text-xs rounded border border-border bg-background text-foreground"
-              >
-                {stackOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="text-xs text-muted-foreground">
-              Light = menu taps; Medium = primary actions. Uses platform-native APIs.
-            </div>
-          </div>
-        </div>
 
       </CollapsibleContent>
     </Collapsible>
