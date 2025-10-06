@@ -22,12 +22,19 @@ import {
   AlignLeft,
   Underline,
   Edit3,
-  Vibrate
+  Vibrate,
+  Upload,
+  Sparkles
 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 export default function StylingControls() {
   const { opts, setOpts, haptics, setHaptics } = useDesignSystem();
   const [open, setOpen] = React.useState(true);
+  const [logoDescription, setLogoDescription] = React.useState('');
+  const [isGenerating, setIsGenerating] = React.useState(false);
+  const { toast } = useToast();
 
   const stackOptions: { value: TechStack; label: string }[] = [
     { value: 'web-react', label: 'Web/React' },
@@ -36,6 +43,69 @@ export default function StylingControls() {
     { value: 'android-compose', label: 'Android Compose' },
     { value: 'flutter', label: 'Flutter' }
   ];
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Invalid file type",
+        description: "Please upload an image file",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      setOpts({ logo: result });
+      toast({
+        title: "Logo uploaded",
+        description: "Your logo has been set successfully"
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleGenerateLogo = async () => {
+    if (!logoDescription.trim()) {
+      toast({
+        title: "Description required",
+        description: "Please describe your app to generate a logo",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-logo', {
+        body: { description: logoDescription }
+      });
+
+      if (error) throw error;
+
+      if (data?.imageUrl) {
+        setOpts({ logo: data.imageUrl });
+        toast({
+          title: "Logo generated",
+          description: "Your AI-generated logo is ready!"
+        });
+        setLogoDescription('');
+      }
+    } catch (error) {
+      console.error('Error generating logo:', error);
+      toast({
+        title: "Generation failed",
+        description: error instanceof Error ? error.message : "Failed to generate logo",
+        variant: "destructive"
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
@@ -227,6 +297,52 @@ export default function StylingControls() {
             >
               With Margins
             </button>
+          </div>
+        </div>
+
+        {/* Logo */}
+        <div>
+          <label className="text-sm font-medium mb-2 block">Logo</label>
+          
+          {opts.logo && (
+            <div className="mb-3 flex justify-center">
+              <img 
+                src={opts.logo} 
+                alt="App logo" 
+                className="w-20 h-20 object-contain rounded-lg border border-border"
+              />
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <label className="flex items-center justify-center gap-2 p-3 rounded border border-border hover:bg-muted cursor-pointer text-sm">
+              <Upload className="h-4 w-4" />
+              <span>Upload Logo</span>
+              <input 
+                type="file" 
+                accept="image/*" 
+                onChange={handleLogoUpload}
+                className="hidden"
+              />
+            </label>
+
+            <div className="space-y-2">
+              <input
+                type="text"
+                placeholder="Describe your app..."
+                value={logoDescription}
+                onChange={(e) => setLogoDescription(e.target.value)}
+                className="w-full p-2 text-sm rounded border border-border bg-background text-foreground placeholder:text-muted-foreground"
+              />
+              <button
+                onClick={handleGenerateLogo}
+                disabled={isGenerating}
+                className="w-full flex items-center justify-center gap-2 p-2 text-sm rounded border border-primary bg-primary/5 text-primary hover:bg-primary/10 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Sparkles className="h-4 w-4" />
+                <span>{isGenerating ? 'Generating...' : 'Generate Logo'}</span>
+              </button>
+            </div>
           </div>
         </div>
 

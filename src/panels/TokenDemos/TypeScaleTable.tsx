@@ -27,7 +27,7 @@ export default function TypeScaleTable() {
               fontSize: style.token.size,
               lineHeight: style.token.line,
               fontWeight: style.token.weight,
-              letterSpacing: 'track' in style.token ? style.token.track : 'normal',
+              letterSpacing: ('track' in style.token ? style.token.track : 'normal') as string,
               textTransform: 'uppercase' in style.token && style.token.uppercase ? 'uppercase' : 'none'
             }}
           >
