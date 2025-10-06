@@ -65,6 +65,7 @@ export interface StylingOptions {
   inputBorderTone: BorderTone;
   inputStyle: InputStyle;
   cardWidth: CardWidth;
+  logo?: string;
 }
 
 export interface DesignSystemState {
