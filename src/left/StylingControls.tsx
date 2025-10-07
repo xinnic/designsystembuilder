@@ -303,16 +303,6 @@ export default function StylingControls() {
         {/* Logo */}
         <div>
           <label className="text-sm font-medium mb-2 block">Logo</label>
-          
-          {opts.logo && (
-            <div className="mb-3 flex justify-center">
-              <img 
-                src={opts.logo} 
-                alt="App logo" 
-                className="w-20 h-20 object-contain rounded-lg border border-border"
-              />
-            </div>
-          )}
 
           <div className="space-y-2">
             <label className="flex items-center justify-center gap-2 p-3 rounded border border-border hover:bg-muted cursor-pointer text-sm">
@@ -343,6 +333,18 @@ export default function StylingControls() {
                 <span>{isGenerating ? 'Generating...' : 'Generate Logo'}</span>
               </button>
             </div>
+
+            {opts.logo && (
+              <div className="mt-3 flex justify-center p-4 border border-border rounded-lg bg-muted/30">
+                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center overflow-hidden shadow-sm">
+                  <img 
+                    src={opts.logo} 
+                    alt="App logo" 
+                    className="w-16 h-16 object-contain"
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
