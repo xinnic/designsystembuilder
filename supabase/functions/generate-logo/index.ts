@@ -11,7 +11,7 @@ serve(async (req) => {
   }
 
   try {
-    const { description } = await req.json();
+    const { description, primaryColor } = await req.json();
     
     if (!description) {
       return new Response(
@@ -28,9 +28,13 @@ serve(async (req) => {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    console.log("Generating logo with description:", description);
+    console.log("Generating logo with description:", description, "and color:", primaryColor);
 
-    const prompt = `Create a professional, modern logo icon for: ${description}. The logo should be a simple graphic symbol or icon with NO TEXT OR WORDS. Use a white background. Make it clean, minimalist, and visually appealing as a brand mark.`;
+    const colorInstruction = primaryColor 
+      ? `Use ${primaryColor} as the primary color.` 
+      : 'Use vibrant, professional colors.';
+    
+    const prompt = `Create a professional, modern logo icon for: ${description}. ${colorInstruction} The logo should be a simple graphic symbol or icon with NO TEXT OR WORDS. Use a white background. Make the logo graphic fill the canvas completely with minimal whitespace - the icon should extend close to the edges. Make it clean, minimalist, and visually appealing as a brand mark.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

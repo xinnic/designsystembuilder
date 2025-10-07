@@ -30,7 +30,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 export default function StylingControls() {
-  const { opts, setOpts, haptics, setHaptics } = useDesignSystem();
+  const { opts, setOpts, haptics, setHaptics, tokens } = useDesignSystem();
   const [open, setOpen] = React.useState(true);
   const [logoDescription, setLogoDescription] = React.useState('');
   const [isGenerating, setIsGenerating] = React.useState(false);
@@ -81,8 +81,19 @@ export default function StylingControls() {
 
     setIsGenerating(true);
     try {
+      // Convert RGB string to hex for the AI prompt
+      const rgbToHex = (rgb: string) => {
+        const [r, g, b] = rgb.split(' ').map(n => parseInt(n));
+        return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+      };
+      
+      const primaryColor = rgbToHex(tokens.brand);
+      
       const { data, error } = await supabase.functions.invoke('generate-logo', {
-        body: { description: logoDescription }
+        body: { 
+          description: logoDescription,
+          primaryColor 
+        }
       });
 
       if (error) throw error;
