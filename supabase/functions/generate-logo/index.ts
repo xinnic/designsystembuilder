@@ -30,7 +30,7 @@ serve(async (req) => {
 
     console.log("Generating logo with description:", description);
 
-    const prompt = `Create a professional, modern logo for: ${description}. The logo should be clean, simple, and suitable for use as an app icon or brand mark. Use a transparent background. Make it visually appealing and memorable.`;
+    const prompt = `Create a professional, modern logo icon for: ${description}. The logo should be a simple graphic symbol or icon with NO TEXT OR WORDS. Use a white background. Make it clean, minimalist, and visually appealing as a brand mark.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

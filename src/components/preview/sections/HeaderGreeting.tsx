@@ -14,10 +14,12 @@ export const HeaderGreeting = ({ baseLib }: HeaderGreetingProps) => {
       <div className="navbar bg-base-100 border-b border-base-300">
         <div className="navbar-start">
           {opts.logo ? (
-            <img src={opts.logo} alt="Logo" className="w-8 h-8 rounded-lg object-cover" />
+            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden shadow-sm">
+              <img src={opts.logo} alt="Logo" className="w-8 h-8 object-contain" />
+            </div>
           ) : (
             <div className="avatar placeholder">
-              <div className="bg-primary text-primary-content rounded-lg w-8 h-8">
+              <div className="bg-primary text-primary-content rounded-full w-10 h-10">
                 <span className="text-sm font-bold">A</span>
               </div>
             </div>
@@ -39,9 +41,11 @@ export const HeaderGreeting = ({ baseLib }: HeaderGreetingProps) => {
     return (
       <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
         {opts.logo ? (
-          <img src={opts.logo} alt="Logo" className="w-8 h-8 rounded-lg object-cover" />
+          <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden shadow-sm">
+            <img src={opts.logo} alt="Logo" className="w-8 h-8 object-contain" />
+          </div>
         ) : (
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+          <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
             <span className="text-white font-bold text-sm">A</span>
           </div>
         )}
@@ -57,9 +61,11 @@ export const HeaderGreeting = ({ baseLib }: HeaderGreetingProps) => {
     return (
       <div className="flex items-center justify-between p-4 border-b border-[rgb(var(--color-border))]">
         {opts.logo ? (
-          <img src={opts.logo} alt="Logo" className="w-8 h-8 rounded-[var(--radius-md)] object-cover" />
+          <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden shadow-sm">
+            <img src={opts.logo} alt="Logo" className="w-8 h-8 object-contain" />
+          </div>
         ) : (
-          <div className="w-8 h-8 bg-[rgb(var(--color-brand))] rounded-[var(--radius-md)] flex items-center justify-center">
+          <div className="w-10 h-10 bg-[rgb(var(--color-brand))] rounded-full flex items-center justify-center">
             <span className="text-white font-bold text-sm">A</span>
           </div>
         )}
@@ -75,9 +81,11 @@ export const HeaderGreeting = ({ baseLib }: HeaderGreetingProps) => {
     return (
       <div className="flex items-center justify-between p-4 border-b border-[rgb(var(--color-border))]">
         {opts.logo ? (
-          <img src={opts.logo} alt="Logo" className="w-8 h-8 rounded-[var(--radius-md)] object-cover" />
+          <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden shadow-sm">
+            <img src={opts.logo} alt="Logo" className="w-8 h-8 object-contain" />
+          </div>
         ) : (
-          <div className="w-8 h-8 bg-[rgb(var(--color-brand))] rounded-[var(--radius-md)] flex items-center justify-center">
+          <div className="w-10 h-10 bg-[rgb(var(--color-brand))] rounded-full flex items-center justify-center">
             <span className="text-white font-bold text-sm">A</span>
           </div>
         )}
@@ -93,9 +101,11 @@ export const HeaderGreeting = ({ baseLib }: HeaderGreetingProps) => {
     return (
       <div className="flex items-center justify-between p-4 border-b border-[rgb(var(--color-border))]">
         {opts.logo ? (
-          <img src={opts.logo} alt="Logo" className="w-8 h-8 rounded-[var(--radius-md)] object-cover" />
+          <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden shadow-sm">
+            <img src={opts.logo} alt="Logo" className="w-8 h-8 object-contain" />
+          </div>
         ) : (
-          <div className="w-8 h-8 bg-[rgb(var(--color-brand))] rounded-[var(--radius-md)] flex items-center justify-center">
+          <div className="w-10 h-10 bg-[rgb(var(--color-brand))] rounded-full flex items-center justify-center">
             <span className="text-white font-bold text-sm">A</span>
           </div>
         )}
@@ -111,9 +121,11 @@ export const HeaderGreeting = ({ baseLib }: HeaderGreetingProps) => {
   return (
     <div className="flex items-center justify-between p-4 border-b border-[rgb(var(--color-border))]">
       {opts.logo ? (
-        <img src={opts.logo} alt="Logo" className="w-8 h-8 rounded-[var(--radius-md)] object-cover" />
+        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden shadow-sm">
+          <img src={opts.logo} alt="Logo" className="w-8 h-8 object-contain" />
+        </div>
       ) : (
-        <div className="w-8 h-8 bg-[rgb(var(--color-brand))] rounded-[var(--radius-md)] flex items-center justify-center">
+        <div className="w-10 h-10 bg-[rgb(var(--color-brand))] rounded-full flex items-center justify-center">
           <span className="text-white font-bold text-sm">A</span>
         </div>
       )}
