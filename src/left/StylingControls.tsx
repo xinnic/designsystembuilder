@@ -118,15 +118,18 @@ export default function StylingControls() {
     }
   };
 
+  const [logoOpen, setLogoOpen] = React.useState(true);
+
   return (
-    <Collapsible open={open} onOpenChange={setOpen}>
-      <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted">
-        <div className="flex items-center gap-3">
-          <Paintbrush className="h-5 w-5" />
-          <span className="font-medium">Component Styling</span>
-        </div>
-        <ChevronDown className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`} />
-      </CollapsibleTrigger>
+    <>
+      <Collapsible open={open} onOpenChange={setOpen}>
+        <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted">
+          <div className="flex items-center gap-3">
+            <Paintbrush className="h-5 w-5" />
+            <span className="font-medium">Component Styling</span>
+          </div>
+          <ChevronDown className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`} />
+        </CollapsibleTrigger>
       <CollapsibleContent className="space-y-4 p-3">
 
         {/* Menu Layout */}
@@ -158,209 +161,60 @@ export default function StylingControls() {
           </div>
         </div>
 
-        {/* Card Borders */}
-        <div>
-          <label className="text-sm font-medium mb-2 block">Card Borders</label>
-          <div className="space-y-2">
-            <div>
-              <label className="text-xs text-muted-foreground mb-1 block">Weight</label>
-              <div className="grid grid-cols-3 gap-1">
-                <button
-                  className={`p-2 text-xs rounded border flex flex-col items-center gap-1 ${
-                    opts.cardBorderWeight === 'none'
-                      ? 'border-primary bg-primary/5 text-primary'
-                      : 'border-border hover:bg-muted'
-                  }`}
-                  onClick={() => setOpts({ cardBorderWeight: 'none' })}
-                >
-                  <Square size={12} fill="currentColor" stroke="none" />
-                  <span>none</span>
-                </button>
-                <button
-                  className={`p-2 text-xs rounded border flex flex-col items-center gap-1 ${
-                    opts.cardBorderWeight === 'thin'
-                      ? 'border-primary bg-primary/5 text-primary'
-                      : 'border-border hover:bg-muted'
-                  }`}
-                  onClick={() => setOpts({ cardBorderWeight: 'thin' })}
-                >
-                  <Square size={12} strokeWidth={1} fill="none" />
-                  <span>thin</span>
-                </button>
-                <button
-                  className={`p-2 text-xs rounded border flex flex-col items-center gap-1 ${
-                    opts.cardBorderWeight === 'thick'
-                      ? 'border-primary bg-primary/5 text-primary'
-                      : 'border-border hover:bg-muted'
-                  }`}
-                  onClick={() => setOpts({ cardBorderWeight: 'thick' })}
-                >
-                  <Square size={12} strokeWidth={2} fill="none" />
-                  <span>thick</span>
-                </button>
-              </div>
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground mb-1 block">Tone</label>
-              <div className="grid grid-cols-2 gap-1">
-                {(['light', 'ultraLight'] as BorderTone[]).map((tone) => (
-                  <button
-                    key={tone}
-                    className={`p-1 text-xs rounded border ${
-                      opts.cardBorderTone === tone
-                        ? 'border-primary bg-primary/5 text-primary'
-                        : 'border-border hover:bg-muted'
-                    }`}
-                    onClick={() => setOpts({ cardBorderTone: tone })}
-                  >
-                    {tone}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Input Borders */}
-        <div>
-          <label className="text-sm font-medium mb-2 block">Input Borders</label>
-          <div className="space-y-2">
-            <div>
-              <label className="text-xs text-muted-foreground mb-1 block">Weight</label>
-              <div className="grid grid-cols-3 gap-1">
-                {(['none', 'thin', 'thick'] as BorderWeight[]).map((weight) => (
-                  <button
-                    key={weight}
-                    className={`p-1 text-xs rounded border ${
-                      opts.inputBorderWeight === weight
-                        ? 'border-primary bg-primary/5 text-primary'
-                        : 'border-border hover:bg-muted'
-                    }`}
-                    onClick={() => setOpts({ inputBorderWeight: weight })}
-                  >
-                    {weight}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground mb-1 block">Tone</label>
-              <div className="grid grid-cols-2 gap-1">
-                {(['light', 'ultraLight'] as BorderTone[]).map((tone) => (
-                  <button
-                    key={tone}
-                    className={`p-1 text-xs rounded border ${
-                      opts.inputBorderTone === tone
-                        ? 'border-primary bg-primary/5 text-primary'
-                        : 'border-border hover:bg-muted'
-                    }`}
-                    onClick={() => setOpts({ inputBorderTone: tone })}
-                  >
-                    {tone}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Input Style */}
-        <div>
-          <label className="text-sm font-medium mb-2 block">Input Style</label>
-          <div className="grid grid-cols-2 gap-1">
-            {(['filled', 'outlined', 'underline', 'none'] as InputStyle[]).map((style) => (
-              <button
-                key={style}
-                className={`p-2 text-xs rounded border ${
-                  opts.inputStyle === style
-                    ? 'border-primary bg-primary/5 text-primary'
-                    : 'border-border hover:bg-muted'
-                }`}
-                onClick={() => setOpts({ inputStyle: style })}
-              >
-                {style}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Card Width */}
-        <div>
-          <label className="text-sm font-medium mb-2 block">Card Width</label>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              className={`p-2 text-sm rounded border ${
-                opts.cardWidth === 'full'
-                  ? 'border-primary bg-primary/5 text-primary'
-                  : 'border-border hover:bg-muted'
-              }`}
-              onClick={() => setOpts({ cardWidth: 'full' })}
-            >
-              Full
-            </button>
-            <button
-              className={`p-2 text-sm rounded border ${
-                opts.cardWidth === 'withMargins'
-                  ? 'border-primary bg-primary/5 text-primary'
-                  : 'border-border hover:bg-muted'
-              }`}
-              onClick={() => setOpts({ cardWidth: 'withMargins' })}
-            >
-              With Margins
-            </button>
-          </div>
-        </div>
-
-        {/* Logo */}
-        <div>
-          <label className="text-sm font-medium mb-2 block">Logo</label>
-
-          <div className="space-y-2">
-            <label className="flex items-center justify-center gap-2 p-3 rounded border border-border hover:bg-muted cursor-pointer text-sm">
-              <Upload className="h-4 w-4" />
-              <span>Upload Logo</span>
-              <input 
-                type="file" 
-                accept="image/*" 
-                onChange={handleLogoUpload}
-                className="hidden"
-              />
-            </label>
-
-            <div className="space-y-2">
-              <input
-                type="text"
-                placeholder="Describe your app..."
-                value={logoDescription}
-                onChange={(e) => setLogoDescription(e.target.value)}
-                className="w-full p-2 text-sm rounded border border-border bg-background text-foreground placeholder:text-muted-foreground"
-              />
-              <button
-                onClick={handleGenerateLogo}
-                disabled={isGenerating}
-                className="w-full flex items-center justify-center gap-2 p-2 text-sm rounded border border-primary bg-primary/5 text-primary hover:bg-primary/10 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <Sparkles className="h-4 w-4" />
-                <span>{isGenerating ? 'Generating...' : 'Generate Logo'}</span>
-              </button>
-            </div>
-
-            {opts.logo && (
-              <div className="mt-3 flex justify-center p-4 border border-border rounded-lg bg-muted/30">
-                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center overflow-hidden shadow-sm">
-                  <img 
-                    src={opts.logo} 
-                    alt="App logo" 
-                    className="w-16 h-16 object-contain"
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-
       </CollapsibleContent>
-    </Collapsible>
+      </Collapsible>
+
+      <Collapsible open={logoOpen} onOpenChange={setLogoOpen} className="mt-2">
+        <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted">
+          <div className="flex items-center gap-3">
+            <Sparkles className="h-5 w-5" />
+            <span className="font-medium">Logo</span>
+          </div>
+          <ChevronDown className={`h-4 w-4 transition-transform ${logoOpen ? 'rotate-180' : ''}`} />
+        </CollapsibleTrigger>
+        <CollapsibleContent className="space-y-2 p-3">
+          <label className="flex items-center justify-center gap-2 p-3 rounded border border-border hover:bg-muted cursor-pointer text-sm">
+            <Upload className="h-4 w-4" />
+            <span>Upload Logo</span>
+            <input 
+              type="file" 
+              accept="image/*" 
+              onChange={handleLogoUpload}
+              className="hidden"
+            />
+          </label>
+
+          <div className="space-y-2">
+            <input
+              type="text"
+              placeholder="Describe your app..."
+              value={logoDescription}
+              onChange={(e) => setLogoDescription(e.target.value)}
+              className="w-full p-2 text-sm rounded border border-border bg-background text-foreground placeholder:text-muted-foreground"
+            />
+            <button
+              onClick={handleGenerateLogo}
+              disabled={isGenerating}
+              className="w-full flex items-center justify-center gap-2 p-2 text-sm rounded border border-primary bg-primary/5 text-primary hover:bg-primary/10 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Sparkles className="h-4 w-4" />
+              <span>{isGenerating ? 'Generating...' : 'Generate Logo'}</span>
+            </button>
+          </div>
+
+          {opts.logo && (
+            <div className="flex justify-center p-4 border border-border rounded-lg bg-muted/30">
+              <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center overflow-hidden shadow-sm">
+                <img 
+                  src={opts.logo} 
+                  alt="App logo" 
+                  className="w-16 h-16 object-contain"
+                />
+              </div>
+            </div>
+          )}
+        </CollapsibleContent>
+      </Collapsible>
+    </>
   );
 }
