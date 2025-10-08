@@ -32,7 +32,6 @@ const Index = () => {
   const [customAccentColor, setCustomAccentColor] = useState<string>('#1abc9c');
   const [selectedScale, setSelectedScale] = useState('regular');
   const [selectedFont, setSelectedFont] = useState('font-jakarta');
-  const [selectedBaseLib, setSelectedBaseLib] = useState('tailwind');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
@@ -52,16 +51,13 @@ const Index = () => {
     // Add the selected scale class
     root.classList.add(`scale-${selectedScale}`);
     
-    // Set base library data attribute for PreviewPhone
-    root.setAttribute('data-base-lib', selectedBaseLib);
-    
     // Toggle dark mode
     if (isDarkMode) {
       root.classList.add('dark');
     } else {
       root.classList.remove('dark');
     }
-  }, [selectedTheme, isDarkMode, selectedScale, selectedBaseLib]);
+  }, [selectedTheme, isDarkMode, selectedScale]);
 
   const parseTypographyValue = (value: string) => {
     // Parse strings like "700 28px/38px" into { weight: 700, size: "28px", line: "38px" }
@@ -427,7 +423,7 @@ ${stickyGuidelines}`
     const densityModes = 'Comfortable, Compact';
 
     return getBaseLibraryContent(
-      selectedBaseLib,
+      'tailwind', // Only Tailwind is supported
       fontName,
       selectedScale,
       typographyStyles,
@@ -482,8 +478,6 @@ ${stickyGuidelines}`
           onCustomAccentColorChange={setCustomAccentColor}
           isDarkMode={isDarkMode}
           onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
-          selectedBaseLib={selectedBaseLib}
-          onBaseLibChange={setSelectedBaseLib}
         />
       </div>
 
@@ -530,7 +524,7 @@ ${stickyGuidelines}`
           {/* Mobile App Preview */}
           <div className="flex-1 min-w-[400px] border-r border-border">
             <PreviewPhone
-              baseLib={selectedBaseLib as any}
+              baseLib="tailwind"
               fontClass={selectedFont}
               selectedScale={selectedScale}
               isDarkMode={isDarkMode}
