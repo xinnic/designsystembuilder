@@ -9,29 +9,16 @@ import { SettingsGroup } from './preview/sections/SettingsGroup';
 import { BottomBarStatic } from './preview/sections/BottomBarStatic';
 
 interface PreviewPhoneProps {
-  baseLib?: "none" | "tailwind" | "daisyui" | "radix" | "mui";
+  baseLib?: "tailwind"; // Only Tailwind is supported
   fontClass?: string;
   selectedScale?: string;
   isDarkMode?: boolean;
   selectedTheme?: string;
 }
 
-const FilterChips = ({ baseLib }: { baseLib: string }) => {
+const FilterChips = () => {
   const filters = ['Activity', 'Mood', 'Food', 'Sleep'];
-  
-  if (baseLib === 'daisyui') {
-    return (
-      <div className="flex gap-2 overflow-x-auto pb-2">
-        {filters.map((filter, index) => (
-          <div key={filter} className={`tabs tabs-boxed ${index === 0 ? 'tab-active' : ''}`}>
-            <span className="tab tab-sm">{filter}</span>
-          </div>
-        ))}
-      </div>
-    );
-  }
 
-  // Default/Tailwind implementation
   return (
     <div className="flex gap-2 overflow-x-auto pb-2">
       {filters.map((filter, index) => (
@@ -50,8 +37,7 @@ const FilterChips = ({ baseLib }: { baseLib: string }) => {
   );
 };
 
-const PhoneContent = ({ baseLib, fontClass, selectedScale }: { 
-  baseLib: string; 
+const PhoneContent = ({ fontClass, selectedScale }: { 
   fontClass?: string; 
   selectedScale?: string; 
 }) => (
@@ -59,58 +45,52 @@ const PhoneContent = ({ baseLib, fontClass, selectedScale }: {
     {/* Main content sections */}
     <div className="p-4 space-y-6">
       {/* Filter chips */}
-      <FilterChips baseLib={baseLib} />
+      <FilterChips />
 
       {/* Post card */}
-      <PostCard baseLib={baseLib} />
+      <PostCard baseLib="tailwind" />
 
       {/* Trending carousel */}
-      <TrendingCarousel baseLib={baseLib} />
+      <TrendingCarousel baseLib="tailwind" />
 
       {/* Notifications list */}
-      <NotifList baseLib={baseLib} />
+      <NotifList baseLib="tailwind" />
 
       {/* Banner CTA */}
-      <BannerCTA baseLib={baseLib} />
+      <BannerCTA baseLib="tailwind" />
 
       {/* Account form */}
-      <AccountForm baseLib={baseLib} />
+      <AccountForm baseLib="tailwind" />
 
       {/* Settings group */}
-      <SettingsGroup baseLib={baseLib} />
+      <SettingsGroup baseLib="tailwind" />
     </div>
   </div>
 );
 
 export const PreviewPhone = ({ 
-  baseLib, 
+  baseLib = 'tailwind', 
   fontClass, 
   selectedScale, 
   isDarkMode, 
   selectedTheme 
 }: PreviewPhoneProps) => {
-  // Get baseLib from props or DOM attribute
-  const effectiveBaseLib = baseLib || 
-    (typeof document !== 'undefined' ? document.documentElement.getAttribute('data-base-lib') : null) || 
-    'tailwind';
-
   const PhoneFrame = () => (
     <div className="h-full flex items-start justify-center p-8 bg-[rgb(var(--color-bg-secondary))]/20 min-h-[600px]">
       {/* Phone Frame */}
       <div className={`w-80 h-[640px] bg-[rgb(var(--color-bg-primary))] border-8 border-[rgb(var(--color-border))] rounded-[2.5rem] shadow-[var(--shadow-level-3)] overflow-hidden flex flex-col ${fontClass}`}>
 
         {/* Header */}
-        <HeaderGreeting baseLib={effectiveBaseLib} />
+        <HeaderGreeting baseLib="tailwind" />
 
         {/* Content */}
         <PhoneContent 
-          baseLib={effectiveBaseLib} 
           fontClass={fontClass} 
           selectedScale={selectedScale} 
         />
 
         {/* Bottom navigation */}
-        <BottomBarStatic baseLib={effectiveBaseLib} />
+        <BottomBarStatic baseLib="tailwind" />
       </div>
     </div>
   );
