@@ -88,11 +88,13 @@ export default function StylingControls() {
       };
       
       const primaryColor = rgbToHex(tokens.brand);
+      const accentColor = rgbToHex(tokens.info);
       
       const { data, error } = await supabase.functions.invoke('generate-logo', {
         body: { 
           description: logoDescription,
-          primaryColor 
+          primaryColor,
+          accentColor
         }
       });
 

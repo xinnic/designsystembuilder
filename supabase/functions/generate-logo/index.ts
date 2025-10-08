@@ -11,7 +11,7 @@ serve(async (req) => {
   }
 
   try {
-    const { description, primaryColor } = await req.json();
+    const { description, primaryColor, accentColor } = await req.json();
     
     if (!description) {
       return new Response(
@@ -28,13 +28,27 @@ serve(async (req) => {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    console.log("Generating logo with description:", description, "and color:", primaryColor);
+    console.log("Generating logo with description:", description, "primary color:", primaryColor, "accent color:", accentColor);
 
-    const colorInstruction = primaryColor 
-      ? `Use ${primaryColor} as the primary color.` 
+    const colorInstruction = primaryColor && accentColor
+      ? `Use ${primaryColor} as the primary color and ${accentColor} as an accent color.` 
+      : primaryColor 
+      ? `Use ${primaryColor} as the primary color.`
       : 'Use vibrant, professional colors.';
     
-    const prompt = `Create a professional, modern logo icon for: ${description}. ${colorInstruction} The logo should be a simple graphic symbol or icon with NO TEXT OR WORDS. Use a white background. Make the logo graphic fill the canvas completely with minimal whitespace - the icon should extend close to the edges. Make it clean, minimalist, and visually appealing as a brand mark.`;
+    const prompt = `Create a professional, modern logo icon for: ${description}. ${colorInstruction} 
+
+Style requirements:
+- Bold, thick outlines with clean geometric shapes
+- Simple, minimalist design with solid color fills
+- No gradients, no textures - only solid colors
+- Line-fill illustration style with clear silhouettes
+- Clean, professional look similar to modern brand marks
+- The logo should be a simple graphic symbol with NO TEXT OR WORDS
+- Use a white background
+- Make the logo graphic fill the canvas completely with minimal whitespace - the icon should extend close to the edges
+
+The result should be a distinctive, memorable icon that works as a brand mark.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
