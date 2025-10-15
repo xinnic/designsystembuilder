@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Copy } from 'lucide-react';
+import { Copy, Layers3, Palette } from 'lucide-react';
 import { Sidebar } from '@/components/Sidebar';
 import { PreviewPhone } from '@/components/PreviewPhone';
 import DesignSystemOverview from '@/components/DesignSystemOverview';
+import TailwindShowcase from '@/panels/TailwindShowcase';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -14,6 +15,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
+import { getPresetById } from '@/lib/stylePresets';
 
 const fonts = [
   { name: 'Plus Jakarta Sans', class: 'font-jakarta' },
@@ -32,25 +34,27 @@ const Index = () => {
   const [customAccentColor, setCustomAccentColor] = useState<string>('#1abc9c');
   const [selectedScale, setSelectedScale] = useState('regular');
   const [selectedFont, setSelectedFont] = useState('font-jakarta');
+  const [selectedBaseLib, setSelectedBaseLib] = useState('shadcn');
+  const [selectedStylePreset, setSelectedStylePreset] = useState('modern-flat');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
   // Apply theme and dark mode classes to the document root
   useEffect(() => {
     const root = document.documentElement;
-    
+
     // Remove all existing theme classes
     root.classList.remove('theme-blue', 'theme-purple', 'theme-pink', 'theme-red', 'theme-yellow', 'theme-orange', 'theme-teal');
-    
+
     // Remove all existing scale classes
     root.classList.remove('scale-small', 'scale-regular', 'scale-large');
-    
+
     // Add the selected theme class
     root.classList.add(`theme-${selectedTheme}`);
-    
+
     // Add the selected scale class
     root.classList.add(`scale-${selectedScale}`);
-    
+
     // Toggle dark mode
     if (isDarkMode) {
       root.classList.add('dark');
@@ -58,6 +62,44 @@ const Index = () => {
       root.classList.remove('dark');
     }
   }, [selectedTheme, isDarkMode, selectedScale]);
+
+  // Apply style preset tokens to CSS variables
+  useEffect(() => {
+    const preset = getPresetById(selectedStylePreset);
+    if (!preset) return;
+
+    const root = document.documentElement;
+
+    // Apply shadow tokens
+    root.style.setProperty('--shadow-sm', preset.tokens.shadows.sm);
+    root.style.setProperty('--shadow-md', preset.tokens.shadows.md);
+    root.style.setProperty('--shadow-lg', preset.tokens.shadows.lg);
+    root.style.setProperty('--shadow-xl', preset.tokens.shadows.xl);
+    root.style.setProperty('--shadow-1', preset.tokens.shadows.sm);
+    root.style.setProperty('--shadow-2', preset.tokens.shadows.md);
+    root.style.setProperty('--shadow-3', preset.tokens.shadows.lg);
+
+    // Apply radius tokens
+    root.style.setProperty('--radius-sm', preset.tokens.radii.sm);
+    root.style.setProperty('--radius-md', preset.tokens.radii.md);
+    root.style.setProperty('--radius-lg', preset.tokens.radii.lg);
+    root.style.setProperty('--radius-xl', preset.tokens.radii.xl);
+    root.style.setProperty('--radius-full', preset.tokens.radii.full);
+
+    // Apply border tokens
+    root.style.setProperty('--border-width', preset.tokens.borders.width);
+    root.style.setProperty('--border-style', preset.tokens.borders.style);
+    if (preset.tokens.borders.color) {
+      root.style.setProperty('--border-color', preset.tokens.borders.color);
+    }
+
+    // Apply effect tokens if they exist
+    if (preset.tokens.effects) {
+      root.style.setProperty('--effect-blur', preset.tokens.effects.blur || '0px');
+      root.style.setProperty('--effect-backdrop-blur', preset.tokens.effects.backdropBlur || '0px');
+      root.style.setProperty('--effect-opacity', preset.tokens.effects.opacity || '1');
+    }
+  }, [selectedStylePreset]);
 
   const parseTypographyValue = (value: string) => {
     // Parse strings like "700 28px/38px" into { weight: 700, size: "28px", line: "38px" }
@@ -459,6 +501,8 @@ ${stickyGuidelines}`
     setIsDialogOpen(true);
   };
 
+  const [rightPanelView, setRightPanelView] = useState<'tailwind' | 'tokens'>('tailwind');
+
   return (
     <div className="min-h-screen bg-background flex">
       {/* Left Sidebar */}
@@ -478,6 +522,10 @@ ${stickyGuidelines}`
           onCustomAccentColorChange={setCustomAccentColor}
           isDarkMode={isDarkMode}
           onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
+          selectedBaseLib={selectedBaseLib}
+          onBaseLibChange={setSelectedBaseLib}
+          selectedStylePreset={selectedStylePreset}
+          onStylePresetChange={setSelectedStylePreset}
         />
       </div>
 
@@ -532,9 +580,42 @@ ${stickyGuidelines}`
             />
           </div>
 
-          {/* Design System Overview */}
-          <div className="flex-1 min-w-[300px]">
-            <DesignSystemOverview />
+          {/* Right Panel - Tailwind Components or Design Tokens */}
+          <div className="flex-1 min-w-[300px] flex flex-col">
+            {/* Toggle Buttons */}
+            <div className="border-b border-border p-4 flex gap-2">
+              <button
+                onClick={() => setRightPanelView('tailwind')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
+                  rightPanelView === 'tailwind'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                }`}
+              >
+                <Palette size={16} />
+                Tailwind Components
+              </button>
+              <button
+                onClick={() => setRightPanelView('tokens')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
+                  rightPanelView === 'tokens'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                }`}
+              >
+                <Layers3 size={16} />
+                Design Tokens
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 overflow-hidden">
+              {rightPanelView === 'tailwind' ? (
+                <TailwindShowcase />
+              ) : (
+                <DesignSystemOverview />
+              )}
+            </div>
           </div>
         </div>
       </div>
