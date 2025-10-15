@@ -100,6 +100,52 @@
     --button-text: 0 0% 100%;
     --button-bg-hover: 210 79% 40%;
     --button-bg-pressed: 210 79% 35%;
+
+    /* Style Preset Tokens - Default to Modern Flat */
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+    --shadow-lg: 0 10px 20px rgba(0,0,0,0.1);
+    --shadow-xl: 0 20px 40px rgba(0,0,0,0.15);
+    --shadow-1: var(--shadow-sm);
+    --shadow-2: var(--shadow-md);
+    --shadow-3: var(--shadow-lg);
+
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-full: 999px;
+
+    --border-width: 0px;
+    --border-style: none;
+    --border-color: rgba(0,0,0,0.1);
+
+    --effect-blur: 0px;
+    --effect-backdrop-blur: 0px;
+    --effect-opacity: 1;
+
+    /* Spacing tokens */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+
+    /* Brand color */
+    --color-brand: hsl(var(--primary));
+    --color-brand-weak: hsl(var(--primary) / 0.1);
+    --color-danger: hsl(var(--destructive));
+    --color-focus: hsl(var(--ring));
+    --color-bg-primary: hsl(var(--background));
+    --color-bg-secondary: hsl(var(--card));
+    --color-text-primary: hsl(var(--foreground));
+    --color-text-secondary: hsl(var(--muted-foreground));
+    --color-border: hsl(var(--border));
   }
 
   .dark {
@@ -136,6 +182,17 @@
     --button-text: 0 0% 0%;
     --button-bg-hover: 207 90% 70%;
     --button-bg-pressed: 207 90% 65%;
+
+    /* Keep the same style preset tokens in dark mode - they'll adjust as needed */
+    --color-brand: hsl(var(--primary));
+    --color-brand-weak: hsl(var(--primary) / 0.1);
+    --color-danger: hsl(var(--destructive));
+    --color-focus: hsl(var(--ring));
+    --color-bg-primary: hsl(var(--background));
+    --color-bg-secondary: hsl(var(--card));
+    --color-text-primary: hsl(var(--foreground));
+    --color-text-secondary: hsl(var(--muted-foreground));
+    --color-border: hsl(var(--border));
   }
 
   /* Blue Theme */

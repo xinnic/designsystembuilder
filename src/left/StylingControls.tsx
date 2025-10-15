@@ -24,7 +24,12 @@ import {
   Edit3,
   Vibrate,
   Upload,
-  Sparkles
+  Sparkles,
+  Layers,
+  Cloud,
+  Gamepad2,
+  Flower2,
+  Zap
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -34,6 +39,7 @@ export default function StylingControls() {
   const [open, setOpen] = React.useState(true);
   const [logoDescription, setLogoDescription] = React.useState('');
   const [isGenerating, setIsGenerating] = React.useState(false);
+  const [selectedStylePreset, setSelectedStylePreset] = React.useState('modern');
   const { toast } = useToast();
 
   const stackOptions: { value: TechStack; label: string }[] = [
@@ -122,6 +128,98 @@ export default function StylingControls() {
 
   const [logoOpen, setLogoOpen] = React.useState(true);
 
+  const stylePresets = [
+    {
+      id: 'modern',
+      name: 'Modern Flat',
+      icon: Square,
+      description: 'Clean, minimal shadows',
+      styles: {
+        shadows: { sm: '0 1px 3px rgba(0,0,0,0.05)', md: '0 4px 6px rgba(0,0,0,0.07)', lg: '0 10px 20px rgba(0,0,0,0.1)' },
+        radii: { sm: '4px', md: '8px', lg: '12px' },
+        borders: { width: '0px' }
+      }
+    },
+    {
+      id: 'glass',
+      name: 'Glassmorphism',
+      icon: Layers,
+      description: 'Frosted glass effects',
+      styles: {
+        shadows: { sm: '0 4px 6px rgba(0,0,0,0.1)', md: '0 8px 16px rgba(0,0,0,0.15)', lg: '0 20px 40px rgba(0,0,0,0.2)' },
+        radii: { sm: '8px', md: '12px', lg: '20px' },
+        borders: { width: '1px' },
+        effects: { backdropBlur: '8px', opacity: '0.9' }
+      }
+    },
+    {
+      id: 'playful',
+      name: 'Playful',
+      icon: Gamepad2,
+      description: 'Bold, colorful shadows',
+      styles: {
+        shadows: { sm: '2px 2px 0 #000', md: '4px 4px 0 #000', lg: '8px 8px 0 #000' },
+        radii: { sm: '12px', md: '20px', lg: '32px' },
+        borders: { width: '3px' }
+      }
+    },
+    {
+      id: 'dreamy',
+      name: 'Soft & Dreamy',
+      icon: Cloud,
+      description: 'Gentle, diffused look',
+      styles: {
+        shadows: { sm: '0 4px 12px rgba(0,0,0,0.08)', md: '0 8px 24px rgba(0,0,0,0.12)', lg: '0 16px 48px rgba(0,0,0,0.16)' },
+        radii: { sm: '16px', md: '24px', lg: '32px' },
+        borders: { width: '0px' }
+      }
+    },
+    {
+      id: 'minimalist',
+      name: 'Minimalist',
+      icon: Minus,
+      description: 'No shadows, thin borders',
+      styles: {
+        shadows: { sm: 'none', md: 'none', lg: 'none' },
+        radii: { sm: '0px', md: '0px', lg: '0px' },
+        borders: { width: '1px' }
+      }
+    }
+  ];
+
+  const handleStylePresetChange = (presetId: string) => {
+    setSelectedStylePreset(presetId);
+    const preset = stylePresets.find(p => p.id === presetId);
+    if (preset) {
+      // Apply the preset styles
+      const root = document.documentElement;
+
+      // Apply shadow tokens
+      root.style.setProperty('--shadow-sm', preset.styles.shadows.sm);
+      root.style.setProperty('--shadow-md', preset.styles.shadows.md);
+      root.style.setProperty('--shadow-lg', preset.styles.shadows.lg);
+
+      // Apply radius tokens
+      root.style.setProperty('--radius-sm', preset.styles.radii.sm);
+      root.style.setProperty('--radius-md', preset.styles.radii.md);
+      root.style.setProperty('--radius-lg', preset.styles.radii.lg);
+
+      // Apply border tokens
+      root.style.setProperty('--border-width', preset.styles.borders.width);
+
+      // Apply effects if they exist
+      if (preset.styles.effects) {
+        root.style.setProperty('--effect-backdrop-blur', preset.styles.effects.backdropBlur || '0px');
+        root.style.setProperty('--effect-opacity', preset.styles.effects.opacity || '1');
+      }
+
+      toast({
+        title: `Applied ${preset.name}`,
+        description: preset.description,
+      });
+    }
+  };
+
   return (
     <>
       <Collapsible open={open} onOpenChange={setOpen}>
@@ -133,6 +231,31 @@ export default function StylingControls() {
           <ChevronDown className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`} />
         </CollapsibleTrigger>
       <CollapsibleContent className="space-y-4 p-3">
+
+        {/* Style Presets */}
+        <div>
+          <label className="text-sm font-medium mb-2 block">Style Preset</label>
+          <div className="grid grid-cols-3 gap-2">
+            {stylePresets.map((preset) => {
+              const Icon = preset.icon;
+              return (
+                <button
+                  key={preset.id}
+                  className={`p-3 text-sm rounded border flex flex-col items-center gap-2 transition-all ${
+                    selectedStylePreset === preset.id
+                      ? 'border-primary bg-primary/5 text-primary'
+                      : 'border-border hover:bg-muted'
+                  }`}
+                  onClick={() => handleStylePresetChange(preset.id)}
+                  title={preset.description}
+                >
+                  <Icon size={20} />
+                  <span className="text-xs text-center leading-tight">{preset.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
         {/* Menu Layout */}
         <div>
