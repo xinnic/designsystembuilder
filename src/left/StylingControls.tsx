@@ -35,11 +35,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 export default function StylingControls() {
-  const { opts, setOpts, haptics, setHaptics, tokens } = useDesignSystem();
+  const { opts, setOpts, haptics, setHaptics, tokens, setTokens, stylePresetId, setStylePreset, spacingMode, setSpacingMode } = useDesignSystem();
   const [open, setOpen] = React.useState(true);
   const [logoDescription, setLogoDescription] = React.useState('');
   const [isGenerating, setIsGenerating] = React.useState(false);
-  const [selectedStylePreset, setSelectedStylePreset] = React.useState('modern');
   const { toast } = useToast();
 
   const stackOptions: { value: TechStack; label: string }[] = [
@@ -188,29 +187,32 @@ export default function StylingControls() {
   ];
 
   const handleStylePresetChange = (presetId: string) => {
-    setSelectedStylePreset(presetId);
+    setStylePreset(presetId);
     const preset = stylePresets.find(p => p.id === presetId);
     if (preset) {
-      // Apply the preset styles
-      const root = document.documentElement;
+      // Update tokens through the store
+      setTokens({
+        shadow: {
+          '1': preset.styles.shadows.sm,
+          '2': preset.styles.shadows.md,
+          '3': preset.styles.shadows.lg
+        },
+        radius: {
+          sm: preset.styles.radii.sm,
+          md: preset.styles.radii.md,
+          lg: preset.styles.radii.lg,
+          full: '9999px'
+        }
+      });
 
-      // Apply shadow tokens
-      root.style.setProperty('--shadow-sm', preset.styles.shadows.sm);
-      root.style.setProperty('--shadow-md', preset.styles.shadows.md);
-      root.style.setProperty('--shadow-lg', preset.styles.shadows.lg);
-
-      // Apply radius tokens
-      root.style.setProperty('--radius-sm', preset.styles.radii.sm);
-      root.style.setProperty('--radius-md', preset.styles.radii.md);
-      root.style.setProperty('--radius-lg', preset.styles.radii.lg);
-
-      // Apply border tokens
-      root.style.setProperty('--border-width', preset.styles.borders.width);
-
-      // Apply effects if they exist
-      if (preset.styles.effects) {
-        root.style.setProperty('--effect-backdrop-blur', preset.styles.effects.backdropBlur || '0px');
-        root.style.setProperty('--effect-opacity', preset.styles.effects.opacity || '1');
+      // Update border weight if specified
+      if (preset.styles.borders?.width) {
+        const borderWeight = preset.styles.borders.width === '0px' ? 'none' :
+                            preset.styles.borders.width === '1px' ? 'thin' : 'thick';
+        setOpts({
+          cardBorderWeight: borderWeight,
+          inputBorderWeight: borderWeight
+        });
       }
 
       toast({
@@ -282,6 +284,49 @@ export default function StylingControls() {
             >
               <Menu size={16} />
               <span>Hamburger</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Spacing Scale */}
+        <div>
+          <label className="text-sm font-medium mb-2 block">Spacing Scale</label>
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              className={`p-3 text-sm rounded border flex flex-col items-center gap-2 ${
+                spacingMode === 'compact'
+                  ? 'border-primary bg-primary/5 text-primary'
+                  : 'border-border hover:bg-muted'
+              }`}
+              onClick={() => setSpacingMode('compact')}
+              title="Compact spacing (4, 8, 12, 16...)"
+            >
+              <Maximize size={16} className="rotate-45" />
+              <span>Compact</span>
+            </button>
+            <button
+              className={`p-3 text-sm rounded border flex flex-col items-center gap-2 ${
+                spacingMode === 'normal'
+                  ? 'border-primary bg-primary/5 text-primary'
+                  : 'border-border hover:bg-muted'
+              }`}
+              onClick={() => setSpacingMode('normal')}
+              title="Normal spacing (8, 16, 24, 32...)"
+            >
+              <RectangleHorizontal size={16} />
+              <span>Normal</span>
+            </button>
+            <button
+              className={`p-3 text-sm rounded border flex flex-col items-center gap-2 ${
+                spacingMode === 'comfortable'
+                  ? 'border-primary bg-primary/5 text-primary'
+                  : 'border-border hover:bg-muted'
+              }`}
+              onClick={() => setSpacingMode('comfortable')}
+              title="Comfortable spacing (12, 24, 36, 48...)"
+            >
+              <Maximize size={16} />
+              <span>Comfortable</span>
             </button>
           </div>
         </div>

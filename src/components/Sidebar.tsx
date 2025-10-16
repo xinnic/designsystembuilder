@@ -19,22 +19,7 @@ import { Switch } from '@/components/ui/switch';
 // Import logos - Tailwind only
 import tailwindLogo from '@/assets/logos/tailwind.png';
 
-interface SidebarProps {
-  selectedFont: string;
-  onFontChange: (font: string) => void;
-  selectedScale: string;
-  onScaleChange: (scale: string) => void;
-  selectedTheme: string;
-  onThemeChange: (theme: string) => void;
-  customPrimaryColor?: string;
-  onCustomPrimaryColorChange?: (color: string) => void;
-  selectedAccentColor: string;
-  onAccentColorChange: (accent: string) => void;
-  customAccentColor?: string;
-  onCustomAccentColorChange?: (color: string) => void;
-  isDarkMode: boolean;
-  onToggleDarkMode: () => void;
-}
+interface SidebarProps {}
 
 const fonts = [
   { name: 'Plus Jakarta Sans', class: 'font-jakarta' },
@@ -95,136 +80,25 @@ const accentColors = [
 
 // Tailwind is the only supported library
 
-// Helper function to convert hex to RGB triplet
-const hexToRgb = (hex: string): string => {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  if (!result) return '26 188 156'; // fallback to turquoise
-  return [
-    parseInt(result[1], 16),
-    parseInt(result[2], 16),
-    parseInt(result[3], 16)
-  ].join(' ');
-};
-
-export function Sidebar({
-  selectedFont,
-  onFontChange,
-  selectedScale,
-  onScaleChange,
-  selectedTheme,
-  onThemeChange,
-  customPrimaryColor,
-  onCustomPrimaryColorChange,
-  selectedAccentColor,
-  onAccentColorChange,
-  customAccentColor,
-  onCustomAccentColorChange,
-  isDarkMode,
-  onToggleDarkMode,
-}: SidebarProps) {
-  const { setTokens } = useDesignSystem();
+export function Sidebar({}: SidebarProps) {
+  const {
+    selectedFont,
+    setFont,
+    selectedScale,
+    setScale,
+    selectedTheme,
+    setTheme,
+    customPrimaryColor,
+    setCustomPrimaryColor,
+    selectedAccentColor,
+    setAccentColor,
+    customAccentColor,
+    setCustomAccentColor,
+    isDarkMode,
+    setDarkMode
+  } = useDesignSystem();
   const [typographyOpen, setTypographyOpen] = React.useState(true);
   const [colorsOpen, setColorsOpen] = React.useState(true);
-
-  // Update tokens when colors change
-  React.useEffect(() => {
-    const colorMap = {
-      turquoise: '#1abc9c',
-      emerald: '#2ecc71',
-      'peter-river': '#3498db',
-      amethyst: '#9b59b6',
-      'wet-asphalt': '#34495e',
-      'sun-flower': '#f1c40f',
-      carrot: '#e67e22',
-      alizarin: '#e74c3c',
-      concrete: '#95a5a6',
-      orange: '#f39c12',
-      pumpkin: '#d35400',
-      pomegranate: '#c0392b',
-      nephritis: '#27ae60',
-      'belize-hole': '#2980b9',
-      wisteria: '#8e44ad',
-      'midnight-blue': '#2c3e50',
-      asbestos: '#7f8c8d'
-    };
-
-    const primaryColor = selectedTheme === 'custom' && customPrimaryColor
-      ? customPrimaryColor
-      : colorMap[selectedTheme as keyof typeof colorMap] || '#1abc9c';
-
-    const accentColor = selectedAccentColor === 'custom' && customAccentColor
-      ? customAccentColor
-      : colorMap[selectedAccentColor as keyof typeof colorMap] || '#1abc9c';
-
-    // Update token colors
-    setTokens({
-      brand: hexToRgb(primaryColor),
-      // Use accent color for brandWeak
-      brandWeak: hexToRgb(accentColor),
-      // Update text/bg colors for dark mode
-      textPrimary: isDarkMode ? '225 225 225' : '26 26 26',
-      textSecondary: isDarkMode ? '168 168 168' : '108 117 136',
-      textDisabled: isDarkMode ? '102 102 102' : '161 161 161',
-      bgPrimary: isDarkMode ? '18 18 18' : '248 249 250',
-      bgSecondary: isDarkMode ? '30 30 30' : '255 255 255',
-      border: isDarkMode ? '44 44 44' : '229 231 235'
-    });
-  }, [selectedTheme, customPrimaryColor, selectedAccentColor, customAccentColor, isDarkMode, setTokens]);
-
-  // Update font family token when font changes
-  React.useEffect(() => {
-    const fontMap = {
-      'font-jakarta': 'Plus Jakarta Sans, ui-sans-serif, system-ui',
-      'font-vietnam': 'Be Vietnam Pro, ui-sans-serif, system-ui',
-      'font-wix': 'Wix Madefor Text, ui-sans-serif, system-ui',
-      'font-figtree': 'Figtree, ui-sans-serif, system-ui',
-      'font-albert': 'Albert Sans, ui-sans-serif, system-ui',
-      'font-satoshi': 'Satoshi, ui-sans-serif, system-ui'
-    };
-
-    setTokens({
-      fontFamily: fontMap[selectedFont as keyof typeof fontMap] || fontMap['font-jakarta']
-    });
-  }, [selectedFont, setTokens]);
-
-  // Update typography scale tokens when scale changes
-  React.useEffect(() => {
-    const scaleSpecs = {
-      small: {
-        displayLg: { size: '48px', line: '56px', weight: 700 },
-        h1: { size: '24px', line: '30px', weight: 700 },
-        h2: { size: '20px', line: '26px', weight: 600 },
-        subhead: { size: '16px', line: '22px', weight: 600 },
-        body: { size: '14px', line: '20px', weight: 400 },
-        caption: { size: '12px', line: '16px', weight: 400 },
-        button: { size: '18px', line: '26px', weight: 600, track: '0.02em' },
-        eyebrow: { size: '11px', line: '14px', weight: 500, track: '0.05em', uppercase: true }
-      },
-      regular: {
-        displayLg: { size: '48px', line: '56px', weight: 700 },
-        h1: { size: '28px', line: '38px', weight: 700 },
-        h2: { size: '22px', line: '30px', weight: 600 },
-        subhead: { size: '18px', line: '26px', weight: 600 },
-        body: { size: '16px', line: '24px', weight: 400 },
-        caption: { size: '14px', line: '20px', weight: 400 },
-        button: { size: '18px', line: '26px', weight: 600, track: '0.02em' },
-        eyebrow: { size: '12px', line: '16px', weight: 500, track: '0.05em', uppercase: true }
-      },
-      large: {
-        displayLg: { size: '48px', line: '56px', weight: 700 },
-        h1: { size: '36px', line: '44px', weight: 700 },
-        h2: { size: '24px', line: '32px', weight: 600 },
-        subhead: { size: '21px', line: '30px', weight: 600 },
-        body: { size: '18px', line: '26px', weight: 400 },
-        caption: { size: '15px', line: '22px', weight: 400 },
-        button: { size: '18px', line: '26px', weight: 600, track: '0.02em' },
-        eyebrow: { size: '13px', line: '18px', weight: 500, track: '0.05em', uppercase: true }
-      }
-    };
-
-    const currentScale = scaleSpecs[selectedScale as keyof typeof scaleSpecs] || scaleSpecs.regular;
-    setTokens(currentScale);
-  }, [selectedScale, setTokens]);
 
   return (
     <div className="w-80 bg-background border-r border-border h-screen overflow-y-auto p-6">
@@ -259,7 +133,7 @@ export function Sidebar({
                   {fonts.map((font) => (
                     <DropdownMenuItem
                       key={font.class}
-                      onClick={() => onFontChange(font.class)}
+                      onClick={() => setFont(font.class)}
                       className={`${font.class} text-base`}
                     >
                       {font.name}
@@ -278,7 +152,7 @@ export function Sidebar({
                       ? 'border-primary bg-primary/5'
                       : 'border-border hover:bg-muted'
                   }`}
-                  onClick={() => onScaleChange('small')}
+                  onClick={() => setScale('small')}
                   title="Small Scale"
                 >
                   <span className="text-sm font-bold text-foreground">Aa</span>
@@ -289,7 +163,7 @@ export function Sidebar({
                       ? 'border-primary bg-primary/5'
                       : 'border-border hover:bg-muted'
                   }`}
-                  onClick={() => onScaleChange('regular')}
+                  onClick={() => setScale('regular')}
                   title="Regular Scale"
                 >
                   <span className="text-base font-bold text-foreground">Aa</span>
@@ -300,7 +174,7 @@ export function Sidebar({
                       ? 'border-primary bg-primary/5'
                       : 'border-border hover:bg-muted'
                   }`}
-                  onClick={() => onScaleChange('large')}
+                  onClick={() => setScale('large')}
                   title="Large Scale"
                 >
                   <span className="text-lg font-bold text-foreground">Aa</span>
@@ -331,8 +205,8 @@ export function Sidebar({
                           type="color"
                           value={customPrimaryColor || '#3498db'}
                           onChange={(e) => {
-                            onThemeChange('custom');
-                            onCustomPrimaryColorChange?.(e.target.value);
+                            setTheme('custom');
+                            setCustomPrimaryColor(e.target.value);
                           }}
                           className="w-7 h-7 rounded-full border cursor-pointer opacity-0 absolute inset-0"
                           title={theme.label}
@@ -345,9 +219,9 @@ export function Sidebar({
                             background: 'conic-gradient(from 0deg, #e74c3c 0deg, #f39c12 45deg, #f1c40f 90deg, #2ecc71 135deg, #1abc9c 180deg, #3498db 225deg, #9b59b6 270deg, #e91e63 315deg, #e74c3c 360deg)'
                           }}
                           onClick={() => {
-                            onThemeChange('custom');
+                            setTheme('custom');
                             if (!customPrimaryColor) {
-                              onCustomPrimaryColorChange?.('#3498db');
+                              setCustomPrimaryColor('#3498db');
                             }
                           }}
                           title={theme.label}
@@ -359,7 +233,7 @@ export function Sidebar({
                           selectedTheme === theme.name ? 'border-foreground border-2' : 'border-border'
                         }`}
                         style={{ backgroundColor: theme.color }}
-                        onClick={() => onThemeChange(theme.name)}
+                        onClick={() => setTheme(theme.name)}
                         title={theme.label}
                       />
                     )}
@@ -379,8 +253,8 @@ export function Sidebar({
                           type="color"
                           value={customAccentColor || '#1abc9c'}
                           onChange={(e) => {
-                            onAccentColorChange('custom');
-                            onCustomAccentColorChange?.(e.target.value);
+                            setAccentColor('custom');
+                            setCustomAccentColor(e.target.value);
                           }}
                           className="w-7 h-7 rounded-full border cursor-pointer opacity-0 absolute inset-0"
                           title={accent.label}
@@ -393,9 +267,9 @@ export function Sidebar({
                             background: 'conic-gradient(from 0deg, #e74c3c 0deg, #f39c12 45deg, #f1c40f 90deg, #2ecc71 135deg, #1abc9c 180deg, #3498db 225deg, #9b59b6 270deg, #e91e63 315deg, #e74c3c 360deg)'
                           }}
                           onClick={() => {
-                            onAccentColorChange('custom');
+                            setAccentColor('custom');
                             if (!customAccentColor) {
-                              onCustomAccentColorChange?.('#1abc9c');
+                              setCustomAccentColor('#1abc9c');
                             }
                           }}
                           title={accent.label}
@@ -407,7 +281,7 @@ export function Sidebar({
                           selectedAccentColor === accent.name ? 'border-foreground border-2' : 'border-border'
                         }`}
                         style={{ backgroundColor: accent.color }}
-                        onClick={() => onAccentColorChange(accent.name)}
+                        onClick={() => setAccentColor(accent.name)}
                         title={accent.label}
                       />
                     )}
@@ -418,7 +292,7 @@ export function Sidebar({
 
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium">Dark Mode</label>
-              <Switch checked={isDarkMode} onCheckedChange={onToggleDarkMode} />
+              <Switch checked={isDarkMode} onCheckedChange={setDarkMode} />
             </div>
           </CollapsibleContent>
         </Collapsible>

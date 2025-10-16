@@ -72,9 +72,31 @@ export interface DesignSystemState {
   tokens: Tokens;
   opts: StylingOptions;
   haptics: HapticsConfig;
+
+  // UI Settings
+  isDarkMode: boolean;
+  selectedTheme: string;
+  customPrimaryColor: string;
+  selectedAccentColor: string;
+  customAccentColor: string;
+  selectedScale: 'small' | 'regular' | 'large';
+  selectedFont: string;
+  stylePresetId: string;
+  spacingMode: 'compact' | 'normal' | 'comfortable';
+
+  // Setters
   setTokens(partial: Partial<Tokens>): void;
   setOpts(partial: Partial<StylingOptions>): void;
   setHaptics(partial: Partial<HapticsConfig>): void;
+  setDarkMode(enabled: boolean): void;
+  setTheme(theme: string): void;
+  setCustomPrimaryColor(color: string): void;
+  setAccentColor(accent: string): void;
+  setCustomAccentColor(color: string): void;
+  setScale(scale: 'small' | 'regular' | 'large'): void;
+  setFont(font: string): void;
+  setStylePreset(presetId: string): void;
+  setSpacingMode(mode: 'compact' | 'normal' | 'comfortable'): void;
 }
 
 // Default values
@@ -146,6 +168,17 @@ export const useDesignSystem = create<DesignSystemState>((set) => ({
   opts: defaultStylingOptions,
   haptics: defaultHapticsConfig,
 
+  // UI Settings defaults
+  isDarkMode: false,
+  selectedTheme: 'turquoise',
+  customPrimaryColor: '#3498db',
+  selectedAccentColor: 'turquoise',
+  customAccentColor: '#1abc9c',
+  selectedScale: 'regular',
+  selectedFont: 'font-jakarta',
+  stylePresetId: 'modern',
+  spacingMode: 'normal',
+
   setTokens: (partial: Partial<Tokens>) =>
     set((state: DesignSystemState) => ({ tokens: { ...state.tokens, ...partial } })),
 
@@ -153,15 +186,172 @@ export const useDesignSystem = create<DesignSystemState>((set) => ({
     set((state: DesignSystemState) => ({ opts: { ...state.opts, ...partial } })),
 
   setHaptics: (partial: Partial<HapticsConfig>) =>
-    set((state: DesignSystemState) => ({ haptics: { ...state.haptics, ...partial } }))
+    set((state: DesignSystemState) => ({ haptics: { ...state.haptics, ...partial } })),
+
+  setDarkMode: (enabled: boolean) => set({ isDarkMode: enabled }),
+  setTheme: (theme: string) => set({ selectedTheme: theme }),
+  setCustomPrimaryColor: (color: string) => set({ customPrimaryColor: color }),
+  setAccentColor: (accent: string) => set({ selectedAccentColor: accent }),
+  setCustomAccentColor: (color: string) => set({ customAccentColor: color }),
+  setScale: (scale: 'small' | 'regular' | 'large') => set({ selectedScale: scale }),
+  setFont: (font: string) => set({ selectedFont: font }),
+  setStylePreset: (presetId: string) => set({ stylePresetId: presetId }),
+  setSpacingMode: (mode: 'compact' | 'normal' | 'comfortable') => set({ spacingMode: mode })
 }));
+
+// Helper function to convert hex to RGB triplet
+const hexToRgb = (hex: string): string => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (!result) return '26 188 156'; // fallback to turquoise
+  return [
+    parseInt(result[1], 16),
+    parseInt(result[2], 16),
+    parseInt(result[3], 16)
+  ].join(' ');
+};
+
+// Typography scale definitions
+const typographyScales = {
+  small: {
+    displayLg: { size: '48px', line: '56px', weight: 700 },
+    h1: { size: '24px', line: '30px', weight: 700 },
+    h2: { size: '20px', line: '26px', weight: 600 },
+    subhead: { size: '16px', line: '22px', weight: 600 },
+    body: { size: '14px', line: '20px', weight: 400 },
+    caption: { size: '12px', line: '16px', weight: 400 },
+    button: { size: '18px', line: '26px', weight: 600, track: '0.02em' },
+    eyebrow: { size: '11px', line: '14px', weight: 500, track: '0.05em', uppercase: true }
+  },
+  regular: {
+    displayLg: { size: '48px', line: '56px', weight: 700 },
+    h1: { size: '28px', line: '38px', weight: 700 },
+    h2: { size: '22px', line: '30px', weight: 600 },
+    subhead: { size: '18px', line: '26px', weight: 600 },
+    body: { size: '16px', line: '24px', weight: 400 },
+    caption: { size: '14px', line: '20px', weight: 400 },
+    button: { size: '18px', line: '26px', weight: 600, track: '0.02em' },
+    eyebrow: { size: '12px', line: '16px', weight: 500, track: '0.05em', uppercase: true }
+  },
+  large: {
+    displayLg: { size: '48px', line: '56px', weight: 700 },
+    h1: { size: '36px', line: '44px', weight: 700 },
+    h2: { size: '24px', line: '32px', weight: 600 },
+    subhead: { size: '21px', line: '30px', weight: 600 },
+    body: { size: '18px', line: '26px', weight: 400 },
+    caption: { size: '15px', line: '22px', weight: 400 },
+    button: { size: '18px', line: '26px', weight: 600, track: '0.02em' },
+    eyebrow: { size: '13px', line: '18px', weight: 500, track: '0.05em', uppercase: true }
+  }
+};
+
+// Font family map
+const fontFamilyMap: Record<string, string> = {
+  'font-jakarta': 'Plus Jakarta Sans, ui-sans-serif, system-ui',
+  'font-vietnam': 'Be Vietnam Pro, ui-sans-serif, system-ui',
+  'font-wix': 'Wix Madefor Text, ui-sans-serif, system-ui',
+  'font-figtree': 'Figtree, ui-sans-serif, system-ui',
+  'font-albert': 'Albert Sans, ui-sans-serif, system-ui',
+  'font-satoshi': 'Satoshi, ui-sans-serif, system-ui'
+};
+
+// Spacing scale definitions
+const spacingScales = {
+  compact: [4, 8, 12, 16, 20, 24, 32, 40],
+  normal: [8, 16, 24, 32, 40, 48, 64, 80],
+  comfortable: [12, 24, 36, 48, 60, 72, 96, 120]
+};
+
+// Subscribe to changes and auto-update tokens
+useDesignSystem.subscribe((state) => {
+  const colorMap: Record<string, string> = {
+    turquoise: '#1abc9c',
+    emerald: '#2ecc71',
+    'peter-river': '#3498db',
+    amethyst: '#9b59b6',
+    'wet-asphalt': '#34495e',
+    'sun-flower': '#f1c40f',
+    carrot: '#e67e22',
+    alizarin: '#e74c3c',
+    concrete: '#95a5a6',
+    orange: '#f39c12',
+    pumpkin: '#d35400',
+    pomegranate: '#c0392b',
+    nephritis: '#27ae60',
+    'belize-hole': '#2980b9',
+    wisteria: '#8e44ad',
+    'midnight-blue': '#2c3e50',
+    asbestos: '#7f8c8d'
+  };
+
+  const primaryColor = state.selectedTheme === 'custom' && state.customPrimaryColor
+    ? state.customPrimaryColor
+    : colorMap[state.selectedTheme] || '#1abc9c';
+
+  const accentColor = state.selectedAccentColor === 'custom' && state.customAccentColor
+    ? state.customAccentColor
+    : colorMap[state.selectedAccentColor] || '#1abc9c';
+
+  // Get current typography scale
+  const currentScale = typographyScales[state.selectedScale] || typographyScales.regular;
+
+  // Get current font family
+  const fontFamily = fontFamilyMap[state.selectedFont] || fontFamilyMap['font-jakarta'];
+
+  // Get current spacing scale
+  const currentSpacing = spacingScales[state.spacingMode] || spacingScales.normal;
+
+  // Update tokens
+  state.setTokens({
+    // Colors
+    brand: hexToRgb(primaryColor),
+    brandWeak: hexToRgb(accentColor),
+    textPrimary: state.isDarkMode ? '225 225 225' : '26 26 26',
+    textSecondary: state.isDarkMode ? '168 168 168' : '108 117 136',
+    textDisabled: state.isDarkMode ? '102 102 102' : '161 161 161',
+    bgPrimary: state.isDarkMode ? '18 18 18' : '248 249 250',
+    bgSecondary: state.isDarkMode ? '30 30 30' : '255 255 255',
+    border: state.isDarkMode ? '44 44 44' : '229 231 235',
+    // Typography
+    fontFamily,
+    ...currentScale,
+    // Spacing
+    space: currentSpacing
+  });
+});
 
 // Hook to bind tokens to CSS variables
 export const useTokenCSS = () => {
-  const { tokens, opts } = useDesignSystem();
+  const { tokens, opts, isDarkMode, selectedFont, selectedScale, selectedTheme, stylePresetId } = useDesignSystem();
 
   useEffect(() => {
     const root = document.documentElement;
+
+    // Handle dark mode
+    if (isDarkMode) {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+
+    // Handle font class
+    const fontClasses = ['font-jakarta', 'font-vietnam', 'font-wix', 'font-figtree', 'font-albert', 'font-satoshi'];
+    fontClasses.forEach(fc => root.classList.remove(fc));
+    root.classList.add(selectedFont);
+
+    // Handle scale class
+    root.classList.remove('scale-small', 'scale-regular', 'scale-large');
+    root.classList.add(`scale-${selectedScale}`);
+
+    // Handle theme class
+    const themeClasses = ['theme-blue', 'theme-purple', 'theme-pink', 'theme-red', 'theme-yellow',
+                         'theme-orange', 'theme-teal', 'theme-turquoise', 'theme-emerald',
+                         'theme-peter-river', 'theme-amethyst', 'theme-wet-asphalt',
+                         'theme-sun-flower', 'theme-carrot', 'theme-alizarin',
+                         'theme-concrete', 'theme-pumpkin', 'theme-pomegranate',
+                         'theme-nephritis', 'theme-belize-hole', 'theme-wisteria',
+                         'theme-midnight-blue', 'theme-asbestos', 'theme-custom'];
+    themeClasses.forEach(tc => root.classList.remove(tc));
+    root.classList.add(`theme-${selectedTheme}`);
 
     // Bind all tokens to CSS variables
     root.style.setProperty('--color-brand', tokens.brand);
@@ -250,5 +440,5 @@ export const useTokenCSS = () => {
 
     root.style.setProperty('--cardBorderAlpha', opts.cardBorderTone === 'light' ? '.18' : '.10');
 
-  }, [tokens, opts]);
+  }, [tokens, opts, isDarkMode, selectedFont, selectedScale, selectedTheme, stylePresetId]);
 };

@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { getPresetById } from '@/lib/stylePresets';
+import { useDesignSystem } from '@/state/designSystem';
 
 const fonts = [
   { name: 'Plus Jakarta Sans', class: 'font-jakarta' },
@@ -27,79 +28,30 @@ const fonts = [
 ];
 
 const Index = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [selectedTheme, setSelectedTheme] = useState('turquoise');
-  const [customPrimaryColor, setCustomPrimaryColor] = useState<string>('#3498db');
-  const [selectedAccentColor, setSelectedAccentColor] = useState('turquoise');
-  const [customAccentColor, setCustomAccentColor] = useState<string>('#1abc9c');
-  const [selectedScale, setSelectedScale] = useState('regular');
-  const [selectedFont, setSelectedFont] = useState('font-jakarta');
+  const {
+    isDarkMode,
+    setDarkMode,
+    selectedTheme,
+    setTheme,
+    customPrimaryColor,
+    setCustomPrimaryColor,
+    selectedAccentColor,
+    setAccentColor,
+    customAccentColor,
+    setCustomAccentColor,
+    selectedScale,
+    setScale,
+    selectedFont,
+    setFont,
+    stylePresetId: selectedStylePreset,
+    setStylePreset
+  } = useDesignSystem();
+
   const [selectedBaseLib, setSelectedBaseLib] = useState('shadcn');
-  const [selectedStylePreset, setSelectedStylePreset] = useState('modern-flat');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
-  // Apply theme and dark mode classes to the document root
-  useEffect(() => {
-    const root = document.documentElement;
-
-    // Remove all existing theme classes
-    root.classList.remove('theme-blue', 'theme-purple', 'theme-pink', 'theme-red', 'theme-yellow', 'theme-orange', 'theme-teal');
-
-    // Remove all existing scale classes
-    root.classList.remove('scale-small', 'scale-regular', 'scale-large');
-
-    // Add the selected theme class
-    root.classList.add(`theme-${selectedTheme}`);
-
-    // Add the selected scale class
-    root.classList.add(`scale-${selectedScale}`);
-
-    // Toggle dark mode
-    if (isDarkMode) {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-  }, [selectedTheme, isDarkMode, selectedScale]);
-
-  // Apply style preset tokens to CSS variables
-  useEffect(() => {
-    const preset = getPresetById(selectedStylePreset);
-    if (!preset) return;
-
-    const root = document.documentElement;
-
-    // Apply shadow tokens
-    root.style.setProperty('--shadow-sm', preset.tokens.shadows.sm);
-    root.style.setProperty('--shadow-md', preset.tokens.shadows.md);
-    root.style.setProperty('--shadow-lg', preset.tokens.shadows.lg);
-    root.style.setProperty('--shadow-xl', preset.tokens.shadows.xl);
-    root.style.setProperty('--shadow-1', preset.tokens.shadows.sm);
-    root.style.setProperty('--shadow-2', preset.tokens.shadows.md);
-    root.style.setProperty('--shadow-3', preset.tokens.shadows.lg);
-
-    // Apply radius tokens
-    root.style.setProperty('--radius-sm', preset.tokens.radii.sm);
-    root.style.setProperty('--radius-md', preset.tokens.radii.md);
-    root.style.setProperty('--radius-lg', preset.tokens.radii.lg);
-    root.style.setProperty('--radius-xl', preset.tokens.radii.xl);
-    root.style.setProperty('--radius-full', preset.tokens.radii.full);
-
-    // Apply border tokens
-    root.style.setProperty('--border-width', preset.tokens.borders.width);
-    root.style.setProperty('--border-style', preset.tokens.borders.style);
-    if (preset.tokens.borders.color) {
-      root.style.setProperty('--border-color', preset.tokens.borders.color);
-    }
-
-    // Apply effect tokens if they exist
-    if (preset.tokens.effects) {
-      root.style.setProperty('--effect-blur', preset.tokens.effects.blur || '0px');
-      root.style.setProperty('--effect-backdrop-blur', preset.tokens.effects.backdropBlur || '0px');
-      root.style.setProperty('--effect-opacity', preset.tokens.effects.opacity || '1');
-    }
-  }, [selectedStylePreset]);
+  // Theme and style classes are now handled by useTokenCSS in the store
 
   const parseTypographyValue = (value: string) => {
     // Parse strings like "700 28px/38px" into { weight: 700, size: "28px", line: "38px" }
@@ -507,26 +459,7 @@ ${stickyGuidelines}`
     <div className="min-h-screen bg-background flex">
       {/* Left Sidebar */}
       <div className="min-w-[280px] flex-shrink-0">
-        <Sidebar
-          selectedFont={selectedFont}
-          onFontChange={setSelectedFont}
-          selectedScale={selectedScale}
-          onScaleChange={setSelectedScale}
-          selectedTheme={selectedTheme}
-          onThemeChange={setSelectedTheme}
-          customPrimaryColor={customPrimaryColor}
-          onCustomPrimaryColorChange={setCustomPrimaryColor}
-          selectedAccentColor={selectedAccentColor}
-          onAccentColorChange={setSelectedAccentColor}
-          customAccentColor={customAccentColor}
-          onCustomAccentColorChange={setCustomAccentColor}
-          isDarkMode={isDarkMode}
-          onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
-          selectedBaseLib={selectedBaseLib}
-          onBaseLibChange={setSelectedBaseLib}
-          selectedStylePreset={selectedStylePreset}
-          onStylePresetChange={setSelectedStylePreset}
-        />
+        <Sidebar />
       </div>
 
       {/* Main Content Area */}
@@ -571,13 +504,7 @@ ${stickyGuidelines}`
         <div className="flex-1 flex min-w-0">
           {/* Mobile App Preview */}
           <div className="flex-1 min-w-[400px] border-r border-border">
-            <PreviewPhone
-              baseLib="tailwind"
-              fontClass={selectedFont}
-              selectedScale={selectedScale}
-              isDarkMode={isDarkMode}
-              selectedTheme={selectedTheme}
-            />
+            <PreviewPhone />
           </div>
 
           {/* Right Panel - Tailwind Components or Design Tokens */}
