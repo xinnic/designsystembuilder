@@ -15,27 +15,21 @@ import {
   Bookmark,
   MessageCircle,
   Share2,
-  Star
+  Star,
+  Menu
 } from 'lucide-react';
+import { useDesignSystem, useTokenCSS } from '../state/designSystem';
 
-interface PreviewPhoneProps {
-  baseLib?: "tailwind"; // Only Tailwind is supported
-  fontClass?: string;
-  selectedScale?: string;
-  isDarkMode?: boolean;
-  selectedTheme?: string;
-}
+export const PreviewPhone = () => {
+  // Initialize token CSS binding to ensure theme updates
+  useTokenCSS();
 
-export const PreviewPhone = ({
-  fontClass,
-  selectedScale,
-  isDarkMode,
-  selectedTheme
-}: PreviewPhoneProps) => {
+  // Get everything from store
+  const { opts, selectedFont } = useDesignSystem();
   return (
     <div className="h-full flex items-start justify-center p-8 bg-[rgb(var(--color-bg-secondary))]/20 min-h-[600px]">
       {/* Phone Frame */}
-      <div className={`w-80 h-[640px] bg-[rgb(var(--color-bg-primary))] border-8 border-[rgb(var(--color-border))] rounded-[2.5rem] shadow-[var(--shadow-level-3)] overflow-hidden flex flex-col ${fontClass}`}>
+      <div className={`w-80 h-[640px] bg-[rgb(var(--color-bg-primary))] border-8 border-[rgb(var(--color-border))] rounded-[2.5rem] shadow-[var(--shadow-level-3)] overflow-hidden flex flex-col ${selectedFont}`}>
 
         {/* Status Bar */}
         <div className="bg-[rgb(var(--color-bg-primary))] px-4 py-1 flex justify-between items-center text-xs">
@@ -50,9 +44,29 @@ export const PreviewPhone = ({
         {/* App Header */}
         <header className="bg-[rgb(var(--color-bg-secondary))] px-4 py-3 border-b border-[rgb(var(--color-border))]">
           <div className="flex items-center justify-between mb-3">
-            <h1 className="text-xl font-bold" style={{ color: 'rgb(var(--color-brand))' }}>
-              Discover
-            </h1>
+            <div className="flex items-center gap-3">
+              {opts.menuLayout === 'hamburger' && (
+                <button className="p-2 rounded-full hover:bg-[rgb(var(--color-bg-primary))] transition-colors">
+                  <Menu size={20} className="text-[rgb(var(--color-text-secondary))]" />
+                </button>
+              )}
+              {opts.logo ? (
+                <div className="flex items-center gap-2">
+                  <img
+                    src={opts.logo}
+                    alt="App logo"
+                    className="w-8 h-8 object-contain rounded"
+                  />
+                  <h1 className="text-xl font-bold" style={{ color: 'rgb(var(--color-brand))' }}>
+                    Discover
+                  </h1>
+                </div>
+              ) : (
+                <h1 className="text-xl font-bold" style={{ color: 'rgb(var(--color-brand))' }}>
+                  Discover
+                </h1>
+              )}
+            </div>
             <div className="flex gap-2">
               <button className="p-2 rounded-full hover:bg-[rgb(var(--color-bg-primary))] transition-colors">
                 <Search size={20} className="text-[rgb(var(--color-text-secondary))]" />
@@ -284,35 +298,37 @@ export const PreviewPhone = ({
           </div>
         </div>
 
-        {/* Bottom Navigation */}
-        <nav
-          className="border-t flex justify-around py-2"
-          style={{
-            backgroundColor: 'rgb(var(--color-bg-secondary))',
-            borderColor: 'rgb(var(--color-border))'
-          }}
-        >
-          {[
-            { icon: <Home size={22} />, label: 'Home', active: true },
-            { icon: <Search size={22} />, label: 'Search' },
-            { icon: <PlusCircle size={22} />, label: 'Create' },
-            { icon: <Heart size={22} />, label: 'Activity' },
-            { icon: <User size={22} />, label: 'Profile' }
-          ].map((item) => (
-            <button
-              key={item.label}
-              className="flex flex-col items-center gap-1 p-2"
-              style={{
-                color: item.active
-                  ? 'rgb(var(--color-brand))'
-                  : 'rgb(var(--color-text-secondary))'
-              }}
-            >
-              {item.icon}
-              <span className="text-[10px]">{item.label}</span>
-            </button>
-          ))}
-        </nav>
+        {/* Bottom Navigation - Only show when menuLayout is 'bottomBar' */}
+        {opts.menuLayout === 'bottomBar' && (
+          <nav
+            className="border-t flex justify-around py-2"
+            style={{
+              backgroundColor: 'rgb(var(--color-bg-secondary))',
+              borderColor: 'rgb(var(--color-border))'
+            }}
+          >
+            {[
+              { icon: <Home size={22} />, label: 'Home', active: true },
+              { icon: <Search size={22} />, label: 'Search' },
+              { icon: <PlusCircle size={22} />, label: 'Create' },
+              { icon: <Heart size={22} />, label: 'Activity' },
+              { icon: <User size={22} />, label: 'Profile' }
+            ].map((item) => (
+              <button
+                key={item.label}
+                className="flex flex-col items-center gap-1 p-2"
+                style={{
+                  color: item.active
+                    ? 'rgb(var(--color-brand))'
+                    : 'rgb(var(--color-text-secondary))'
+                }}
+              >
+                {item.icon}
+                <span className="text-[10px]">{item.label}</span>
+              </button>
+            ))}
+          </nav>
+        )}
       </div>
     </div>
   );
