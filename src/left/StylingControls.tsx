@@ -244,7 +244,7 @@ export default function StylingControls() {
                 <button
                   key={preset.id}
                   className={`p-3 text-sm rounded border flex flex-col items-center gap-2 transition-all ${
-                    selectedStylePreset === preset.id
+                    stylePresetId === preset.id
                       ? 'border-primary bg-primary/5 text-primary'
                       : 'border-border hover:bg-muted'
                   }`}
