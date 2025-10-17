@@ -126,7 +126,7 @@ const defaultTokens: Tokens = {
   button: { size: "18px", line: "26px", weight: 600, track: "0.02em" },
   eyebrow: { size: "12px", line: "16px", weight: 500, track: "0.05em", uppercase: true },
 
-  space: [8, 16, 24, 32, 40, 48],
+  space: [8, 16, 24, 32, 40, 48, 64, 80],
 
   radius: { sm: "4px", md: "8px", lg: "12px", full: "9999px" },
 
@@ -261,8 +261,45 @@ const spacingScales = {
   comfortable: [12, 24, 36, 48, 60, 72, 96, 120]
 };
 
+// Track the last update to prevent infinite loops
+let lastUpdate = {
+  theme: 'turquoise',
+  accent: 'turquoise',
+  customPrimary: '#3498db',
+  customAccent: '#1abc9c',
+  isDarkMode: false,
+  scale: 'regular',
+  font: 'font-jakarta',
+  spacingMode: 'normal'
+};
+
 // Subscribe to changes and auto-update tokens
 useDesignSystem.subscribe((state) => {
+  // Check if relevant properties have actually changed
+  const hasChanged =
+    state.selectedTheme !== lastUpdate.theme ||
+    state.selectedAccentColor !== lastUpdate.accent ||
+    state.customPrimaryColor !== lastUpdate.customPrimary ||
+    state.customAccentColor !== lastUpdate.customAccent ||
+    state.isDarkMode !== lastUpdate.isDarkMode ||
+    state.selectedScale !== lastUpdate.scale ||
+    state.selectedFont !== lastUpdate.font ||
+    state.spacingMode !== lastUpdate.spacingMode;
+
+  if (!hasChanged) return;
+
+  // Update last values
+  lastUpdate = {
+    theme: state.selectedTheme,
+    accent: state.selectedAccentColor,
+    customPrimary: state.customPrimaryColor,
+    customAccent: state.customAccentColor,
+    isDarkMode: state.isDarkMode,
+    scale: state.selectedScale,
+    font: state.selectedFont,
+    spacingMode: state.spacingMode
+  };
+
   const colorMap: Record<string, string> = {
     turquoise: '#1abc9c',
     emerald: '#2ecc71',
