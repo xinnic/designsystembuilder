@@ -6,7 +6,8 @@ test.describe('Accessibility - WCAG Compliance', () => {
     await page.goto('/');
     // Wait for app to fully load
     await expect(page.getByText('Design System Builder')).toBeVisible({ timeout: 10000 });
-    await page.waitForLoadState('networkidle');
+    // Remove networkidle as it's too strict for our app
+    await page.waitForLoadState('domcontentloaded');
   });
 
   test('homepage should not have automatically detectable accessibility issues', async ({ page }) => {
