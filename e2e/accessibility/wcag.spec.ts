@@ -153,10 +153,8 @@ test.describe('Accessibility - WCAG Compliance', () => {
     // This test checks the structure for alt text support
     // Real alt text would be tested when logo is uploaded
 
-    // Open logo section
-    await page.getByText('Logo').click();
-
-    // Wait for section to expand
+    // Logo section is open by default
+    // Wait for Upload Logo button to be visible
     await page.getByText('Upload Logo').waitFor({ timeout: 2000 });
 
     // Check that the upload button exists

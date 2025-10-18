@@ -28,7 +28,7 @@ test.describe('Design System Customization Workflow', () => {
     await expect(discoverHeading).toBeVisible({ timeout: 2000 });
 
     // 3. Adjust spacing (Comfortable)
-    await page.getByText('Component Styling').click(); // Open collapsible
+    // Component Styling section is open by default, no need to click
     await page.getByText('Comfortable').click();
 
     // 4. Apply style preset (Glassmorphism)
@@ -68,10 +68,8 @@ test.describe('Design System Customization Workflow', () => {
   });
 
   test('spacing mode affects all components', async ({ page }) => {
-    // Open Component Styling section
-    await page.getByText('Component Styling').click();
-
-    // Wait for section to expand
+    // Component Styling section is open by default
+    // Wait for Spacing Scale to be visible
     await page.getByText('Spacing Scale').waitFor({ timeout: 2000 });
 
     // Select Compact spacing
@@ -153,10 +151,8 @@ test.describe('Design System Customization Workflow', () => {
   });
 
   test('menu layout toggle updates preview', async ({ page }) => {
-    // Open Component Styling
-    await page.getByText('Component Styling').click();
-
-    // Wait for section to expand
+    // Component Styling section is open by default
+    // Wait for Menu Layout to be visible
     await page.getByText('Menu Layout').waitFor({ timeout: 2000 });
 
     // Initially should be bottom bar (default)
@@ -188,10 +184,8 @@ test.describe('Design System Customization Workflow', () => {
   });
 
   test('style presets apply multiple token changes', async ({ page }) => {
-    // Open Component Styling
-    await page.getByText('Component Styling').click();
-
-    // Wait for section to expand
+    // Component Styling section is open by default
+    // Wait for Style Preset to be visible
     await page.getByText('Style Preset').waitFor({ timeout: 2000 });
 
     // Apply Modern Flat preset (default)
