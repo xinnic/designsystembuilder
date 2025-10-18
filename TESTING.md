@@ -395,6 +395,93 @@ All files           |   85.3  |   78.9   |   82.1  |   86.2  |
 
 ---
 
+## 🔴 Current Test Failures (To Be Fixed)
+
+### E2E Test Failures - WebKit Browser
+**Status**: All E2E tests failing on WebKit (Safari)
+**Affected Tests**: 20 tests in `e2e/workflows/customization.spec.ts` and `e2e/accessibility/wcag.spec.ts`
+**Impact**: High - Safari users cannot be tested
+**Priority**: P1
+
+#### Workflow Tests Failing (WebKit):
+1. `complete customization flow - colors, typography, spacing` - workflows/customization.spec.ts:10
+2. `theme color changes propagate everywhere` - workflows/customization.spec.ts:53
+3. `spacing mode affects all components` - workflows/customization.spec.ts:71
+4. `typography scale affects all text` - workflows/customization.spec.ts:90
+5. `font family changes update all text` - workflows/customization.spec.ts:108
+6. `dark mode toggles all components` - workflows/customization.spec.ts:125
+7. `menu layout toggle updates preview` - workflows/customization.spec.ts:150
+8. `style presets apply multiple token changes` - workflows/customization.spec.ts:172
+9. `accent color changes independently from primary` - workflows/customization.spec.ts:196
+10. `collapsible sections maintain state` - workflows/customization.spec.ts:211
+
+#### Accessibility Tests Failing (WebKit):
+1. `homepage should not have automatically detectable accessibility issues` - accessibility/wcag.spec.ts:5
+2. `sidebar controls should be keyboard accessible` - accessibility/wcag.spec.ts:14
+3. `color selections should have accessible labels` - accessibility/wcag.spec.ts:27
+4. `dark mode should maintain accessibility standards` - accessibility/wcag.spec.ts:38
+5. `form controls should have proper ARIA labels` - accessibility/wcag.spec.ts:52
+6. `interactive elements should be keyboard navigable` - accessibility/wcag.spec.ts:60
+7. `color contrast should meet WCAG AA standards` - accessibility/wcag.spec.ts:75
+8. `focus indicators should be visible` - accessibility/wcag.spec.ts:86
+9. `screen reader landmarks should be present` - accessibility/wcag.spec.ts:101
+10. `alt text should be present for images` - accessibility/wcag.spec.ts:113
+
+**Root Cause**: Likely WebKit browser compatibility issues or timing problems specific to Safari's rendering engine
+**Next Steps**:
+- [ ] Investigate WebKit-specific selectors and timing
+- [ ] Add WebKit-specific wait conditions
+- [ ] Test with actual Safari browser
+- [ ] Consider skipping WebKit tests temporarily if not critical
+
+### E2E Test Timeouts - Chromium & Firefox
+**Status**: Some tests timing out after 30+ seconds
+**Affected Tests**: Intermittent timeouts in workflow tests
+**Impact**: Medium - Tests are slow but may pass inconsistently
+**Priority**: P2
+
+#### Tests with Timeout Issues:
+1. `complete customization flow` - 32.3s (Chromium), 30.5s (Firefox)
+2. `spacing mode affects all components` - 32.3s (Chromium), 31.1s (Firefox)
+3. `menu layout toggle updates preview` - 32.3s (Chromium), 30.1s (Firefox)
+4. `style presets apply multiple token changes` - 32.3s (Chromium), 30.1s (Firefox)
+
+**Root Cause**: Tests waiting for animations/transitions or inefficient selectors
+**Next Steps**:
+- [ ] Reduce waitForTimeout durations
+- [ ] Use more efficient selectors (data-testid attributes)
+- [ ] Wait for specific state changes instead of arbitrary timeouts
+- [ ] Optimize test setup/teardown
+
+### Accessibility Test Failures - Firefox
+**Status**: Some accessibility tests failing on Firefox
+**Affected Tests**: 5 tests in `e2e/accessibility/wcag.spec.ts`
+**Impact**: Medium - Firefox-specific accessibility issues
+**Priority**: P2
+
+#### Firefox Accessibility Failures:
+1. `homepage should not have automatically detectable accessibility issues` - accessibility/wcag.spec.ts:5 (40.5s)
+2. `dark mode should maintain accessibility standards` - accessibility/wcag.spec.ts:38 (47.0s)
+3. `color contrast should meet WCAG AA standards` - accessibility/wcag.spec.ts:75 (32.1s)
+4. `screen reader landmarks should be present` - accessibility/wcag.spec.ts:101 (17.7s)
+5. `alt text should be present for images` - accessibility/wcag.spec.ts:113 (14.8s)
+
+**Root Cause**: Firefox may handle axe-core analysis differently or have genuine accessibility violations
+**Next Steps**:
+- [ ] Run axe-core DevTools in Firefox manually to verify violations
+- [ ] Check if violations are browser-specific or actual issues
+- [ ] Update components to fix any real accessibility violations
+- [ ] Adjust test assertions for Firefox-specific behavior if needed
+
+### Summary
+- **Total Failing Tests**: 38 (20 WebKit, 13 Chromium timing, 5 Firefox a11y)
+- **Passing Tests**: 174 unit/component/integration tests (100%)
+- **Critical Path**: All unit, component, and integration tests passing ✅
+- **Blocking Issues**: WebKit compatibility (P1)
+- **Recommended Action**: Focus on WebKit compatibility fixes first, then optimize test timing
+
+---
+
 ## 📝 Test Documentation
 
 ### Test Case Template
