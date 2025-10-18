@@ -87,7 +87,7 @@
                 - button "Asbestos" [ref=e127] [cursor=pointer]
             - generic [ref=e128]:
               - generic [ref=e129]: Dark Mode
-              - switch [ref=e130] [cursor=pointer]
+              - switch [checked] [active] [ref=e130] [cursor=pointer]
         - generic [ref=e131]:
           - button "Component Styling" [expanded] [ref=e132] [cursor=pointer]:
             - generic [ref=e133]:

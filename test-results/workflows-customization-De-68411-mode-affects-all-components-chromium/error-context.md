@@ -88,305 +88,346 @@
             - generic [ref=e126]:
               - generic [ref=e127]: Dark Mode
               - switch [ref=e128] [cursor=pointer]
-        - button "Component Styling" [active] [ref=e130] [cursor=pointer]:
-          - generic [ref=e131]:
-            - img [ref=e132]
-            - generic [ref=e136]: Component Styling
-          - img [ref=e137]
-        - generic [ref=e139]:
-          - button "Logo" [expanded] [ref=e140] [cursor=pointer]:
-            - generic [ref=e141]:
-              - img [ref=e142]
-              - generic [ref=e144]: Logo
-            - img [ref=e145]
-          - generic [ref=e147]:
-            - generic [ref=e148] [cursor=pointer]:
-              - img [ref=e149]
-              - generic [ref=e152]: Upload Logo
-            - generic [ref=e153]:
-              - textbox "Describe your app..." [ref=e154]
-              - button "Generate Logo" [ref=e155] [cursor=pointer]:
-                - img [ref=e156]
-                - generic [ref=e158]: Generate Logo
-      - button "Settings" [ref=e160] [cursor=pointer]:
+        - generic [ref=e129]:
+          - button "Component Styling" [expanded] [ref=e130] [cursor=pointer]:
+            - generic [ref=e131]:
+              - img [ref=e132]
+              - generic [ref=e136]: Component Styling
+            - img [ref=e137]
+          - generic [ref=e139]:
+            - generic [ref=e140]:
+              - generic [ref=e141]: Style Preset
+              - generic [ref=e142]:
+                - button "Modern Flat" [ref=e143] [cursor=pointer]:
+                  - img [ref=e144]
+                  - generic [ref=e146]: Modern Flat
+                - button "Glassmorphism" [ref=e147] [cursor=pointer]:
+                  - img [ref=e148]
+                  - generic [ref=e152]: Glassmorphism
+                - button "Playful" [ref=e153] [cursor=pointer]:
+                  - img [ref=e154]
+                  - generic [ref=e156]: Playful
+                - button "Soft & Dreamy" [ref=e157] [cursor=pointer]:
+                  - img [ref=e158]
+                  - generic [ref=e160]: Soft & Dreamy
+                - button "Minimalist" [ref=e161] [cursor=pointer]:
+                  - img [ref=e162]
+                  - generic [ref=e163]: Minimalist
+            - generic [ref=e164]:
+              - generic [ref=e165]: Menu Layout
+              - generic [ref=e166]:
+                - button "Bottom Bar" [ref=e167] [cursor=pointer]:
+                  - img [ref=e168]
+                  - generic [ref=e170]: Bottom Bar
+                - button "Hamburger" [ref=e171] [cursor=pointer]:
+                  - img [ref=e172]
+                  - generic [ref=e173]: Hamburger
+            - generic [ref=e174]:
+              - generic [ref=e175]: Spacing Scale
+              - generic [ref=e176]:
+                - button "Compact" [ref=e177] [cursor=pointer]:
+                  - img [ref=e178]
+                  - generic [ref=e183]: Compact
+                - button "Normal" [ref=e184] [cursor=pointer]:
+                  - img [ref=e185]
+                  - generic [ref=e187]: Normal
+                - button "Comfortable" [active] [ref=e188] [cursor=pointer]:
+                  - img [ref=e189]
+                  - generic [ref=e194]: Comfortable
+        - generic [ref=e195]:
+          - button "Logo" [expanded] [ref=e196] [cursor=pointer]:
+            - generic [ref=e197]:
+              - img [ref=e198]
+              - generic [ref=e200]: Logo
+            - img [ref=e201]
+          - generic [ref=e203]:
+            - generic [ref=e204] [cursor=pointer]:
+              - img [ref=e205]
+              - generic [ref=e208]: Upload Logo
+            - generic [ref=e209]:
+              - textbox "Describe your app..." [ref=e210]
+              - button "Generate Logo" [ref=e211] [cursor=pointer]:
+                - img [ref=e212]
+                - generic [ref=e214]: Generate Logo
+      - button "Settings" [ref=e216] [cursor=pointer]:
         - img
         - text: Settings
-    - generic [ref=e161]:
-      - banner [ref=e162]:
-        - button "Copy Prompt" [ref=e163] [cursor=pointer]:
+    - generic [ref=e217]:
+      - banner [ref=e218]:
+        - button "Copy Prompt" [ref=e219] [cursor=pointer]:
           - img
           - text: Copy Prompt
-      - generic [ref=e164]:
-        - generic [ref=e167]:
-          - generic [ref=e169]: 9:41
-          - banner [ref=e173]:
-            - generic [ref=e174]:
-              - heading "Discover" [level=1] [ref=e176]
-              - generic [ref=e177]:
-                - button [ref=e178] [cursor=pointer]:
-                  - img [ref=e179]
-                - button [ref=e182] [cursor=pointer]:
-                  - img [ref=e183]
-            - generic [ref=e186]:
-              - button "For You" [ref=e187] [cursor=pointer]
-              - button "Trending" [ref=e188] [cursor=pointer]
-              - button "News" [ref=e189] [cursor=pointer]
-              - button "Sports" [ref=e190] [cursor=pointer]
-              - button "Tech" [ref=e191] [cursor=pointer]
-          - generic [ref=e193]:
-            - generic [ref=e196]:
-              - heading "Featured Today" [level=3] [ref=e197]
-              - paragraph [ref=e198]: Discover what's trending in your community
-              - button "Explore Now" [ref=e199] [cursor=pointer]
-            - generic [ref=e200]:
-              - generic [ref=e201]:
-                - img [ref=e203]
-                - generic [ref=e206]: "124"
-                - generic [ref=e207]: Posts
-              - generic [ref=e208]:
-                - img [ref=e210]
-                - generic [ref=e212]: 2.3k
-                - generic [ref=e213]: Likes
-              - generic [ref=e214]:
-                - img [ref=e216]
-                - generic [ref=e219]: 3.5h
-                - generic [ref=e220]: Time
-            - generic [ref=e221]:
-              - generic [ref=e222]:
-                - img [ref=e224]
-                - generic [ref=e227]:
-                  - generic [ref=e228]: Location Services
-                  - generic [ref=e229]: While using app
-                - img [ref=e230]
-              - generic [ref=e232]:
-                - img [ref=e234]
-                - generic [ref=e237]:
-                  - generic [ref=e238]: Notifications
-                  - generic [ref=e239]: Push, Email
-                - img [ref=e240]
-              - generic [ref=e242]:
-                - img [ref=e244]
-                - generic [ref=e247]:
-                  - generic [ref=e248]: Preferences
-                  - generic [ref=e249]: Customize your experience
-                - img [ref=e250]
+      - generic [ref=e220]:
+        - generic [ref=e223]:
+          - generic [ref=e225]: 9:41
+          - banner [ref=e229]:
+            - generic [ref=e230]:
+              - heading "Discover" [level=1] [ref=e232]
+              - generic [ref=e233]:
+                - button [ref=e234] [cursor=pointer]:
+                  - img [ref=e235]
+                - button [ref=e238] [cursor=pointer]:
+                  - img [ref=e239]
+            - generic [ref=e242]:
+              - button "For You" [ref=e243] [cursor=pointer]
+              - button "Trending" [ref=e244] [cursor=pointer]
+              - button "News" [ref=e245] [cursor=pointer]
+              - button "Sports" [ref=e246] [cursor=pointer]
+              - button "Tech" [ref=e247] [cursor=pointer]
+          - generic [ref=e249]:
             - generic [ref=e252]:
-              - generic [ref=e253]:
-                - generic [ref=e254]: S
-                - generic [ref=e255]:
-                  - generic [ref=e256]: Sarah J.
-                  - generic [ref=e257]: Active now
-                - button "Follow" [ref=e258] [cursor=pointer]
-              - generic [ref=e259]:
-                - generic [ref=e260]: M
-                - generic [ref=e261]:
-                  - generic [ref=e262]: Mike D.
-                  - generic [ref=e263]: Active now
-                - button "Follow" [ref=e264] [cursor=pointer]
-            - generic [ref=e265]:
-              - button "Get Started" [ref=e266] [cursor=pointer]
-              - button "Learn More" [ref=e267] [cursor=pointer]
-            - generic [ref=e268]:
-              - generic [ref=e269]:
-                - generic [ref=e270]:
-                  - heading "Great Experience" [level=4] [ref=e271]
-                  - generic [ref=e272]:
-                    - img [ref=e273]
-                    - img [ref=e275]
-                    - img [ref=e277]
-                    - img [ref=e279]
-                    - img [ref=e281]
-                - generic [ref=e283]: 2h ago
-              - paragraph [ref=e284]: "\"Amazing app with beautiful design and smooth performance. Highly recommended!\""
-              - generic [ref=e285]:
-                - button "24" [ref=e286] [cursor=pointer]:
-                  - img [ref=e287]
-                  - generic [ref=e289]: "24"
-                - button "5" [ref=e290] [cursor=pointer]:
-                  - img [ref=e291]
-                  - generic [ref=e293]: "5"
-                - button [ref=e294] [cursor=pointer]:
-                  - img [ref=e295]
-          - navigation [ref=e301]:
-            - button "Home" [ref=e302] [cursor=pointer]:
-              - img [ref=e303]
-              - generic [ref=e306]: Home
-            - button "Search" [ref=e307] [cursor=pointer]:
-              - img [ref=e308]
-              - generic [ref=e311]: Search
-            - button "Create" [ref=e312] [cursor=pointer]:
-              - img [ref=e313]
-              - generic [ref=e315]: Create
-            - button "Activity" [ref=e316] [cursor=pointer]:
-              - img [ref=e317]
-              - generic [ref=e319]: Activity
-            - button "Profile" [ref=e320] [cursor=pointer]:
-              - img [ref=e321]
-              - generic [ref=e324]: Profile
-        - generic [ref=e325]:
-          - generic [ref=e326]:
-            - button "Tailwind Components" [ref=e327] [cursor=pointer]:
-              - img [ref=e328]
+              - heading "Featured Today" [level=3] [ref=e253]
+              - paragraph [ref=e254]: Discover what's trending in your community
+              - button "Explore Now" [ref=e255] [cursor=pointer]
+            - generic [ref=e256]:
+              - generic [ref=e257]:
+                - img [ref=e259]
+                - generic [ref=e262]: "124"
+                - generic [ref=e263]: Posts
+              - generic [ref=e264]:
+                - img [ref=e266]
+                - generic [ref=e268]: 2.3k
+                - generic [ref=e269]: Likes
+              - generic [ref=e270]:
+                - img [ref=e272]
+                - generic [ref=e275]: 3.5h
+                - generic [ref=e276]: Time
+            - generic [ref=e277]:
+              - generic [ref=e278]:
+                - img [ref=e280]
+                - generic [ref=e283]:
+                  - generic [ref=e284]: Location Services
+                  - generic [ref=e285]: While using app
+                - img [ref=e286]
+              - generic [ref=e288]:
+                - img [ref=e290]
+                - generic [ref=e293]:
+                  - generic [ref=e294]: Notifications
+                  - generic [ref=e295]: Push, Email
+                - img [ref=e296]
+              - generic [ref=e298]:
+                - img [ref=e300]
+                - generic [ref=e303]:
+                  - generic [ref=e304]: Preferences
+                  - generic [ref=e305]: Customize your experience
+                - img [ref=e306]
+            - generic [ref=e308]:
+              - generic [ref=e309]:
+                - generic [ref=e310]: S
+                - generic [ref=e311]:
+                  - generic [ref=e312]: Sarah J.
+                  - generic [ref=e313]: Active now
+                - button "Follow" [ref=e314] [cursor=pointer]
+              - generic [ref=e315]:
+                - generic [ref=e316]: M
+                - generic [ref=e317]:
+                  - generic [ref=e318]: Mike D.
+                  - generic [ref=e319]: Active now
+                - button "Follow" [ref=e320] [cursor=pointer]
+            - generic [ref=e321]:
+              - button "Get Started" [ref=e322] [cursor=pointer]
+              - button "Learn More" [ref=e323] [cursor=pointer]
+            - generic [ref=e324]:
+              - generic [ref=e325]:
+                - generic [ref=e326]:
+                  - heading "Great Experience" [level=4] [ref=e327]
+                  - generic [ref=e328]:
+                    - img [ref=e329]
+                    - img [ref=e331]
+                    - img [ref=e333]
+                    - img [ref=e335]
+                    - img [ref=e337]
+                - generic [ref=e339]: 2h ago
+              - paragraph [ref=e340]: "\"Amazing app with beautiful design and smooth performance. Highly recommended!\""
+              - generic [ref=e341]:
+                - button "24" [ref=e342] [cursor=pointer]:
+                  - img [ref=e343]
+                  - generic [ref=e345]: "24"
+                - button "5" [ref=e346] [cursor=pointer]:
+                  - img [ref=e347]
+                  - generic [ref=e349]: "5"
+                - button [ref=e350] [cursor=pointer]:
+                  - img [ref=e351]
+          - navigation [ref=e357]:
+            - button "Home" [ref=e358] [cursor=pointer]:
+              - img [ref=e359]
+              - generic [ref=e362]: Home
+            - button "Search" [ref=e363] [cursor=pointer]:
+              - img [ref=e364]
+              - generic [ref=e367]: Search
+            - button "Create" [ref=e368] [cursor=pointer]:
+              - img [ref=e369]
+              - generic [ref=e371]: Create
+            - button "Activity" [ref=e372] [cursor=pointer]:
+              - img [ref=e373]
+              - generic [ref=e375]: Activity
+            - button "Profile" [ref=e376] [cursor=pointer]:
+              - img [ref=e377]
+              - generic [ref=e380]: Profile
+        - generic [ref=e381]:
+          - generic [ref=e382]:
+            - button "Tailwind Components" [ref=e383] [cursor=pointer]:
+              - img [ref=e384]
               - text: Tailwind Components
-            - button "Design Tokens" [ref=e334] [cursor=pointer]:
-              - img [ref=e335]
+            - button "Design Tokens" [ref=e390] [cursor=pointer]:
+              - img [ref=e391]
               - text: Design Tokens
-          - generic [ref=e341]:
-            - generic [ref=e342]:
-              - heading "Component Showcase" [level=2] [ref=e343]
-              - paragraph [ref=e344]: Browse Tailwind components and common app patterns
-            - generic [ref=e345]:
-              - button "Tailwind Components" [ref=e346] [cursor=pointer]
-              - button "Complex Patterns" [ref=e347] [cursor=pointer]
-            - generic [ref=e348]:
-              - generic [ref=e349]:
-                - heading "Data Table" [level=3] [ref=e350]
-                - table [ref=e352]:
-                  - rowgroup [ref=e353]:
-                    - row "Product Status Price Actions" [ref=e354]:
-                      - cell "Product" [ref=e355]:
-                        - generic [ref=e356]:
+          - generic [ref=e397]:
+            - generic [ref=e398]:
+              - heading "Component Showcase" [level=2] [ref=e399]
+              - paragraph [ref=e400]: Browse Tailwind components and common app patterns
+            - generic [ref=e401]:
+              - button "Tailwind Components" [ref=e402] [cursor=pointer]
+              - button "Complex Patterns" [ref=e403] [cursor=pointer]
+            - generic [ref=e404]:
+              - generic [ref=e405]:
+                - heading "Data Table" [level=3] [ref=e406]
+                - table [ref=e408]:
+                  - rowgroup [ref=e409]:
+                    - row "Product Status Price Actions" [ref=e410]:
+                      - cell "Product" [ref=e411]:
+                        - generic [ref=e412]:
                           - text: Product
-                          - img [ref=e357]
-                      - cell "Status" [ref=e360]
-                      - cell "Price" [ref=e361]
-                      - cell "Actions" [ref=e362]
-                  - rowgroup [ref=e363]:
-                    - row "Premium Plan Active $99/mo" [ref=e364]:
-                      - cell "Premium Plan" [ref=e365]
-                      - cell "Active" [ref=e366]
-                      - cell "$99/mo" [ref=e367]
-                      - cell [ref=e368]:
-                        - button [ref=e369] [cursor=pointer]:
-                          - img [ref=e370]
-                    - row "Starter Plan Active $29/mo" [ref=e374]:
-                      - cell "Starter Plan" [ref=e375]
-                      - cell "Active" [ref=e376]
-                      - cell "$29/mo" [ref=e377]
-                      - cell [ref=e378]:
-                        - button [ref=e379] [cursor=pointer]:
-                          - img [ref=e380]
-                    - row "Enterprise Pending $299/mo" [ref=e384]:
-                      - cell "Enterprise" [ref=e385]
-                      - cell "Pending" [ref=e386]
-                      - cell "$299/mo" [ref=e387]
-                      - cell [ref=e388]:
-                        - button [ref=e389] [cursor=pointer]:
-                          - img [ref=e390]
-                    - row "Free Trial Expired $0/mo" [ref=e394]:
-                      - cell "Free Trial" [ref=e395]
-                      - cell "Expired" [ref=e396]
-                      - cell "$0/mo" [ref=e397]
-                      - cell [ref=e398]:
-                        - button [ref=e399] [cursor=pointer]:
-                          - img [ref=e400]
-              - generic [ref=e404]:
-                - heading "Pagination" [level=3] [ref=e405]
-                - generic [ref=e406]:
-                  - paragraph [ref=e407]: Showing 1-10 of 97 results
-                  - generic [ref=e408]:
-                    - button [ref=e409] [cursor=pointer]:
-                      - img [ref=e410]
-                    - button "1" [ref=e412] [cursor=pointer]
-                    - button "2" [ref=e413] [cursor=pointer]
-                    - button "3" [ref=e414] [cursor=pointer]
-                    - button "..." [ref=e415] [cursor=pointer]
-                    - button "10" [ref=e416] [cursor=pointer]
-                    - button [ref=e417] [cursor=pointer]:
-                      - img [ref=e418]
-              - generic [ref=e420]:
-                - heading "Progress Indicators" [level=3] [ref=e421]
-                - generic [ref=e422]:
-                  - generic [ref=e424]:
-                    - generic [ref=e425]: Upload Progress
-                    - generic [ref=e426]: 75%
-                  - generic [ref=e429]:
-                    - paragraph [ref=e430]: Account Setup
-                    - generic [ref=e431]:
-                      - generic [ref=e432]:
-                        - img [ref=e434]
-                        - generic [ref=e436]: Profile
-                      - generic [ref=e438]:
-                        - img [ref=e440]
-                        - generic [ref=e442]: Verify
-                      - generic [ref=e444]:
-                        - generic [ref=e445]: "3"
-                        - generic [ref=e446]: Payment
-                      - generic [ref=e448]:
-                        - generic [ref=e449]: "4"
-                        - generic [ref=e450]: Complete
-                  - generic [ref=e451]:
-                    - generic [ref=e452]:
-                      - generic [ref=e453]:
-                        - img [ref=e454]
-                        - generic [ref=e457]: 65%
-                      - generic [ref=e458]: Storage
-                    - generic [ref=e459]:
-                      - generic [ref=e460]:
-                        - img [ref=e461]
-                        - generic [ref=e464]: 82%
-                      - generic [ref=e465]: Memory
-                    - generic [ref=e466]:
-                      - generic [ref=e467]:
-                        - img [ref=e468]
-                        - generic [ref=e471]: 45%
-                      - generic [ref=e472]: CPU
-              - heading "Skeleton Loaders" [level=3] [ref=e474]
-              - generic [ref=e498]:
-                - heading "Tooltips" [level=3] [ref=e499]
-                - generic [ref=e500]:
-                  - generic [ref=e501]:
-                    - button "Top" [ref=e502] [cursor=pointer]
-                    - generic: Tooltip on top
-                  - generic [ref=e503]:
-                    - button "Right" [ref=e504] [cursor=pointer]
-                    - generic: Tooltip on right
-                  - generic [ref=e505]:
-                    - button "Bottom" [ref=e506] [cursor=pointer]
-                    - generic: Tooltip on bottom
+                          - img [ref=e413]
+                      - cell "Status" [ref=e416]
+                      - cell "Price" [ref=e417]
+                      - cell "Actions" [ref=e418]
+                  - rowgroup [ref=e419]:
+                    - row "Premium Plan Active $99/mo" [ref=e420]:
+                      - cell "Premium Plan" [ref=e421]
+                      - cell "Active" [ref=e422]
+                      - cell "$99/mo" [ref=e423]
+                      - cell [ref=e424]:
+                        - button [ref=e425] [cursor=pointer]:
+                          - img [ref=e426]
+                    - row "Starter Plan Active $29/mo" [ref=e430]:
+                      - cell "Starter Plan" [ref=e431]
+                      - cell "Active" [ref=e432]
+                      - cell "$29/mo" [ref=e433]
+                      - cell [ref=e434]:
+                        - button [ref=e435] [cursor=pointer]:
+                          - img [ref=e436]
+                    - row "Enterprise Pending $299/mo" [ref=e440]:
+                      - cell "Enterprise" [ref=e441]
+                      - cell "Pending" [ref=e442]
+                      - cell "$299/mo" [ref=e443]
+                      - cell [ref=e444]:
+                        - button [ref=e445] [cursor=pointer]:
+                          - img [ref=e446]
+                    - row "Free Trial Expired $0/mo" [ref=e450]:
+                      - cell "Free Trial" [ref=e451]
+                      - cell "Expired" [ref=e452]
+                      - cell "$0/mo" [ref=e453]
+                      - cell [ref=e454]:
+                        - button [ref=e455] [cursor=pointer]:
+                          - img [ref=e456]
+              - generic [ref=e460]:
+                - heading "Pagination" [level=3] [ref=e461]
+                - generic [ref=e462]:
+                  - paragraph [ref=e463]: Showing 1-10 of 97 results
+                  - generic [ref=e464]:
+                    - button [ref=e465] [cursor=pointer]:
+                      - img [ref=e466]
+                    - button "1" [ref=e468] [cursor=pointer]
+                    - button "2" [ref=e469] [cursor=pointer]
+                    - button "3" [ref=e470] [cursor=pointer]
+                    - button "..." [ref=e471] [cursor=pointer]
+                    - button "10" [ref=e472] [cursor=pointer]
+                    - button [ref=e473] [cursor=pointer]:
+                      - img [ref=e474]
+              - generic [ref=e476]:
+                - heading "Progress Indicators" [level=3] [ref=e477]
+                - generic [ref=e478]:
+                  - generic [ref=e480]:
+                    - generic [ref=e481]: Upload Progress
+                    - generic [ref=e482]: 75%
+                  - generic [ref=e485]:
+                    - paragraph [ref=e486]: Account Setup
+                    - generic [ref=e487]:
+                      - generic [ref=e488]:
+                        - img [ref=e490]
+                        - generic [ref=e492]: Profile
+                      - generic [ref=e494]:
+                        - img [ref=e496]
+                        - generic [ref=e498]: Verify
+                      - generic [ref=e500]:
+                        - generic [ref=e501]: "3"
+                        - generic [ref=e502]: Payment
+                      - generic [ref=e504]:
+                        - generic [ref=e505]: "4"
+                        - generic [ref=e506]: Complete
                   - generic [ref=e507]:
-                    - button "Left" [ref=e508] [cursor=pointer]
+                    - generic [ref=e508]:
+                      - generic [ref=e509]:
+                        - img [ref=e510]
+                        - generic [ref=e513]: 65%
+                      - generic [ref=e514]: Storage
+                    - generic [ref=e515]:
+                      - generic [ref=e516]:
+                        - img [ref=e517]
+                        - generic [ref=e520]: 82%
+                      - generic [ref=e521]: Memory
+                    - generic [ref=e522]:
+                      - generic [ref=e523]:
+                        - img [ref=e524]
+                        - generic [ref=e527]: 45%
+                      - generic [ref=e528]: CPU
+              - heading "Skeleton Loaders" [level=3] [ref=e530]
+              - generic [ref=e554]:
+                - heading "Tooltips" [level=3] [ref=e555]
+                - generic [ref=e556]:
+                  - generic [ref=e557]:
+                    - button "Top" [ref=e558] [cursor=pointer]
+                    - generic: Tooltip on top
+                  - generic [ref=e559]:
+                    - button "Right" [ref=e560] [cursor=pointer]
+                    - generic: Tooltip on right
+                  - generic [ref=e561]:
+                    - button "Bottom" [ref=e562] [cursor=pointer]
+                    - generic: Tooltip on bottom
+                  - generic [ref=e563]:
+                    - button "Left" [ref=e564] [cursor=pointer]
                     - generic: Tooltip on left
-              - generic [ref=e509]:
-                - heading "Accordion" [level=3] [ref=e510]
-                - generic [ref=e511]:
-                  - generic [ref=e512]:
-                    - button "What is your return policy?" [ref=e513] [cursor=pointer]:
-                      - generic [ref=e514]: What is your return policy?
-                      - img [ref=e515]
-                    - paragraph [ref=e518]: We offer a 30-day money-back guarantee on all purchases. If you're not satisfied, contact our support team for a full refund.
-                  - button "How do I track my order?" [ref=e520] [cursor=pointer]:
-                    - generic [ref=e521]: How do I track my order?
-                    - img [ref=e522]
-                  - button "Do you ship internationally?" [ref=e525] [cursor=pointer]:
-                    - generic [ref=e526]: Do you ship internationally?
-                    - img [ref=e527]
-              - generic [ref=e529]:
-                - heading "Alert Messages" [level=3] [ref=e530]
-                - generic [ref=e531]:
-                  - generic [ref=e532]:
-                    - img [ref=e533]
-                    - generic [ref=e535]:
-                      - paragraph [ref=e536]: Success!
-                      - paragraph [ref=e537]: Your changes have been saved
-                  - generic [ref=e538]:
-                    - img [ref=e539]
-                    - generic [ref=e541]:
-                      - paragraph [ref=e542]: Warning
-                      - paragraph [ref=e543]: Please review your settings
-                  - generic [ref=e544]:
-                    - img [ref=e545]
-                    - generic [ref=e547]:
-                      - paragraph [ref=e548]: Information
-                      - paragraph [ref=e549]: New features are available
-              - generic [ref=e550]:
-                - heading "Form Components" [level=3] [ref=e551]
-                - generic [ref=e552]:
-                  - generic [ref=e553]:
-                    - img [ref=e554]
-                    - textbox "Search for anything..." [ref=e557]
-                  - generic [ref=e558]:
-                    - button "Daily" [ref=e559] [cursor=pointer]
-                    - button "Weekly" [ref=e560] [cursor=pointer]
-                    - button "Monthly" [ref=e561] [cursor=pointer]
+              - generic [ref=e565]:
+                - heading "Accordion" [level=3] [ref=e566]
+                - generic [ref=e567]:
+                  - generic [ref=e568]:
+                    - button "What is your return policy?" [ref=e569] [cursor=pointer]:
+                      - generic [ref=e570]: What is your return policy?
+                      - img [ref=e571]
+                    - paragraph [ref=e574]: We offer a 30-day money-back guarantee on all purchases. If you're not satisfied, contact our support team for a full refund.
+                  - button "How do I track my order?" [ref=e576] [cursor=pointer]:
+                    - generic [ref=e577]: How do I track my order?
+                    - img [ref=e578]
+                  - button "Do you ship internationally?" [ref=e581] [cursor=pointer]:
+                    - generic [ref=e582]: Do you ship internationally?
+                    - img [ref=e583]
+              - generic [ref=e585]:
+                - heading "Alert Messages" [level=3] [ref=e586]
+                - generic [ref=e587]:
+                  - generic [ref=e588]:
+                    - img [ref=e589]
+                    - generic [ref=e591]:
+                      - paragraph [ref=e592]: Success!
+                      - paragraph [ref=e593]: Your changes have been saved
+                  - generic [ref=e594]:
+                    - img [ref=e595]
+                    - generic [ref=e597]:
+                      - paragraph [ref=e598]: Warning
+                      - paragraph [ref=e599]: Please review your settings
+                  - generic [ref=e600]:
+                    - img [ref=e601]
+                    - generic [ref=e603]:
+                      - paragraph [ref=e604]: Information
+                      - paragraph [ref=e605]: New features are available
+              - generic [ref=e606]:
+                - heading "Form Components" [level=3] [ref=e607]
+                - generic [ref=e608]:
+                  - generic [ref=e609]:
+                    - img [ref=e610]
+                    - textbox "Search for anything..." [ref=e613]
+                  - generic [ref=e614]:
+                    - button "Daily" [ref=e615] [cursor=pointer]
+                    - button "Weekly" [ref=e616] [cursor=pointer]
+                    - button "Monthly" [ref=e617] [cursor=pointer]
 ```
