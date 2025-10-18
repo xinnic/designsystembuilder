@@ -1,0 +1,392 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e3]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - heading "Design System Builder" [level=1] [ref=e7]
+        - paragraph [ref=e8]: Customize your design system and generate AI-ready prompts
+      - generic [ref=e9]:
+        - generic [ref=e10]:
+          - button "Typography" [expanded] [ref=e11] [cursor=pointer]:
+            - generic [ref=e12]:
+              - img [ref=e13]
+              - generic [ref=e17]: Typography
+            - img [ref=e18]
+          - generic [ref=e20]:
+            - generic [ref=e21]:
+              - generic [ref=e22]: Font Family
+              - button "Plus Jakarta Sans" [ref=e23] [cursor=pointer]:
+                - text: Plus Jakarta Sans
+                - img
+            - generic [ref=e24]:
+              - generic [ref=e25]: Type Scale
+              - generic [ref=e26]:
+                - button "Aa" [ref=e27] [cursor=pointer]:
+                  - generic [ref=e28]: Aa
+                - button "Aa" [ref=e29] [cursor=pointer]:
+                  - generic [ref=e30]: Aa
+                - button "Aa" [ref=e31] [cursor=pointer]:
+                  - generic [ref=e32]: Aa
+        - generic [ref=e33]:
+          - button "Colors" [expanded] [ref=e34] [cursor=pointer]:
+            - generic [ref=e35]:
+              - img [ref=e36]
+              - generic [ref=e42]: Colors
+            - img [ref=e43]
+          - generic [ref=e45]:
+            - generic [ref=e46]:
+              - generic [ref=e47]: Primary Color
+              - generic [ref=e48]:
+                - generic [ref=e50]:
+                  - textbox "Custom" [ref=e51] [cursor=pointer]: "#3498db"
+                  - generic "Custom" [ref=e52] [cursor=pointer]
+                - button "Turquoise" [ref=e54] [cursor=pointer]
+                - button "Emerald" [ref=e56] [cursor=pointer]
+                - button "Nephritis" [ref=e58] [cursor=pointer]
+                - button "Peter River" [ref=e60] [cursor=pointer]
+                - button "Belize Hole" [ref=e62] [cursor=pointer]
+                - button "Amethyst" [ref=e64] [cursor=pointer]
+                - button "Wisteria" [ref=e66] [cursor=pointer]
+                - button "Wet Asphalt" [ref=e68] [cursor=pointer]
+                - button "Midnight Blue" [ref=e70] [cursor=pointer]
+                - button "Sun Flower" [ref=e72] [cursor=pointer]
+                - button "Orange" [ref=e74] [cursor=pointer]
+                - button "Carrot" [ref=e76] [cursor=pointer]
+                - button "Pumpkin" [ref=e78] [cursor=pointer]
+                - button "Alizarin" [ref=e80] [cursor=pointer]
+                - button "Pomegranate" [ref=e82] [cursor=pointer]
+                - button "Concrete" [ref=e84] [cursor=pointer]
+                - button "Asbestos" [ref=e86] [cursor=pointer]
+            - generic [ref=e87]:
+              - generic [ref=e88]: Accent Color
+              - generic [ref=e89]:
+                - generic [ref=e91]:
+                  - textbox "Custom" [ref=e92] [cursor=pointer]: "#1abc9c"
+                  - generic "Custom" [ref=e93] [cursor=pointer]
+                - button "Turquoise" [ref=e95] [cursor=pointer]
+                - button "Emerald" [ref=e97] [cursor=pointer]
+                - button "Nephritis" [ref=e99] [cursor=pointer]
+                - button "Peter River" [ref=e101] [cursor=pointer]
+                - button "Belize Hole" [ref=e103] [cursor=pointer]
+                - button "Amethyst" [ref=e105] [cursor=pointer]
+                - button "Wisteria" [ref=e107] [cursor=pointer]
+                - button "Wet Asphalt" [ref=e109] [cursor=pointer]
+                - button "Midnight Blue" [ref=e111] [cursor=pointer]
+                - button "Sun Flower" [ref=e113] [cursor=pointer]
+                - button "Orange" [ref=e115] [cursor=pointer]
+                - button "Carrot" [ref=e117] [cursor=pointer]
+                - button "Pumpkin" [ref=e119] [cursor=pointer]
+                - button "Alizarin" [ref=e121] [cursor=pointer]
+                - button "Pomegranate" [ref=e123] [cursor=pointer]
+                - button "Concrete" [ref=e125] [cursor=pointer]
+                - button "Asbestos" [ref=e127] [cursor=pointer]
+            - generic [ref=e128]:
+              - generic [ref=e129]: Dark Mode
+              - switch [ref=e130] [cursor=pointer]
+        - button "Component Styling" [active] [ref=e132] [cursor=pointer]:
+          - generic [ref=e133]:
+            - img [ref=e134]
+            - generic [ref=e138]: Component Styling
+          - img [ref=e139]
+        - generic [ref=e141]:
+          - button "Logo" [expanded] [ref=e142] [cursor=pointer]:
+            - generic [ref=e143]:
+              - img [ref=e144]
+              - generic [ref=e150]: Logo
+            - img [ref=e151]
+          - generic [ref=e153]:
+            - generic [ref=e154] [cursor=pointer]:
+              - img [ref=e155]
+              - generic [ref=e159]: Upload Logo
+            - generic [ref=e160]:
+              - textbox "Describe your app..." [ref=e161]
+              - button "Generate Logo" [ref=e162] [cursor=pointer]:
+                - img [ref=e163]
+                - generic [ref=e169]: Generate Logo
+      - button "Settings" [ref=e171] [cursor=pointer]:
+        - img
+        - text: Settings
+    - generic [ref=e172]:
+      - banner [ref=e173]:
+        - button "Copy Prompt" [ref=e174] [cursor=pointer]:
+          - img
+          - text: Copy Prompt
+      - generic [ref=e175]:
+        - generic [ref=e178]:
+          - generic [ref=e180]: 9:41
+          - banner [ref=e184]:
+            - generic [ref=e185]:
+              - heading "Discover" [level=1] [ref=e187]
+              - generic [ref=e188]:
+                - button [ref=e189] [cursor=pointer]:
+                  - img [ref=e190]
+                - button [ref=e193] [cursor=pointer]:
+                  - img [ref=e194]
+            - generic [ref=e197]:
+              - button "For You" [ref=e198] [cursor=pointer]
+              - button "Trending" [ref=e199] [cursor=pointer]
+              - button "News" [ref=e200] [cursor=pointer]
+              - button "Sports" [ref=e201] [cursor=pointer]
+              - button "Tech" [ref=e202] [cursor=pointer]
+          - generic [ref=e204]:
+            - generic [ref=e207]:
+              - heading "Featured Today" [level=3] [ref=e208]
+              - paragraph [ref=e209]: Discover what's trending in your community
+              - button "Explore Now" [ref=e210] [cursor=pointer]
+            - generic [ref=e211]:
+              - generic [ref=e212]:
+                - img [ref=e214]
+                - generic [ref=e217]: "124"
+                - generic [ref=e218]: Posts
+              - generic [ref=e219]:
+                - img [ref=e221]
+                - generic [ref=e223]: 2.3k
+                - generic [ref=e224]: Likes
+              - generic [ref=e225]:
+                - img [ref=e227]
+                - generic [ref=e230]: 3.5h
+                - generic [ref=e231]: Time
+            - generic [ref=e232]:
+              - generic [ref=e233]:
+                - img [ref=e235]
+                - generic [ref=e238]:
+                  - generic [ref=e239]: Location Services
+                  - generic [ref=e240]: While using app
+                - img [ref=e241]
+              - generic [ref=e243]:
+                - img [ref=e245]
+                - generic [ref=e248]:
+                  - generic [ref=e249]: Notifications
+                  - generic [ref=e250]: Push, Email
+                - img [ref=e251]
+              - generic [ref=e253]:
+                - img [ref=e255]
+                - generic [ref=e258]:
+                  - generic [ref=e259]: Preferences
+                  - generic [ref=e260]: Customize your experience
+                - img [ref=e261]
+            - generic [ref=e263]:
+              - generic [ref=e264]:
+                - generic [ref=e265]: S
+                - generic [ref=e266]:
+                  - generic [ref=e267]: Sarah J.
+                  - generic [ref=e268]: Active now
+                - button "Follow" [ref=e269] [cursor=pointer]
+              - generic [ref=e270]:
+                - generic [ref=e271]: M
+                - generic [ref=e272]:
+                  - generic [ref=e273]: Mike D.
+                  - generic [ref=e274]: Active now
+                - button "Follow" [ref=e275] [cursor=pointer]
+            - generic [ref=e276]:
+              - button "Get Started" [ref=e277] [cursor=pointer]
+              - button "Learn More" [ref=e278] [cursor=pointer]
+            - generic [ref=e279]:
+              - generic [ref=e280]:
+                - generic [ref=e281]:
+                  - heading "Great Experience" [level=4] [ref=e282]
+                  - generic [ref=e283]:
+                    - img [ref=e284]
+                    - img [ref=e286]
+                    - img [ref=e288]
+                    - img [ref=e290]
+                    - img [ref=e292]
+                - generic [ref=e294]: 2h ago
+              - paragraph [ref=e295]: "\"Amazing app with beautiful design and smooth performance. Highly recommended!\""
+              - generic [ref=e296]:
+                - button "24" [ref=e297] [cursor=pointer]:
+                  - img [ref=e298]
+                  - generic [ref=e300]: "24"
+                - button "5" [ref=e301] [cursor=pointer]:
+                  - img [ref=e302]
+                  - generic [ref=e304]: "5"
+                - button [ref=e305] [cursor=pointer]:
+                  - img [ref=e306]
+          - navigation [ref=e312]:
+            - button "Home" [ref=e313] [cursor=pointer]:
+              - img [ref=e314]
+              - generic [ref=e317]: Home
+            - button "Search" [ref=e318] [cursor=pointer]:
+              - img [ref=e319]
+              - generic [ref=e322]: Search
+            - button "Create" [ref=e323] [cursor=pointer]:
+              - img [ref=e324]
+              - generic [ref=e328]: Create
+            - button "Activity" [ref=e329] [cursor=pointer]:
+              - img [ref=e330]
+              - generic [ref=e332]: Activity
+            - button "Profile" [ref=e333] [cursor=pointer]:
+              - img [ref=e334]
+              - generic [ref=e337]: Profile
+        - generic [ref=e338]:
+          - generic [ref=e339]:
+            - button "Tailwind Components" [ref=e340] [cursor=pointer]:
+              - img [ref=e341]
+              - text: Tailwind Components
+            - button "Design Tokens" [ref=e347] [cursor=pointer]:
+              - img [ref=e348]
+              - text: Design Tokens
+          - generic [ref=e354]:
+            - generic [ref=e355]:
+              - heading "Component Showcase" [level=2] [ref=e356]
+              - paragraph [ref=e357]: Browse Tailwind components and common app patterns
+            - generic [ref=e358]:
+              - button "Tailwind Components" [ref=e359] [cursor=pointer]
+              - button "Complex Patterns" [ref=e360] [cursor=pointer]
+            - generic [ref=e361]:
+              - generic [ref=e362]:
+                - heading "Data Table" [level=3] [ref=e363]
+                - table [ref=e365]:
+                  - rowgroup [ref=e366]:
+                    - row "Product Status Price Actions" [ref=e367]:
+                      - cell "Product" [ref=e368]:
+                        - generic [ref=e369]:
+                          - text: Product
+                          - img [ref=e370]
+                      - cell "Status" [ref=e375]
+                      - cell "Price" [ref=e376]
+                      - cell "Actions" [ref=e377]
+                  - rowgroup [ref=e378]:
+                    - row "Premium Plan Active $99/mo" [ref=e379]:
+                      - cell "Premium Plan" [ref=e380]
+                      - cell "Active" [ref=e381]
+                      - cell "$99/mo" [ref=e382]
+                      - cell [ref=e383]:
+                        - button [ref=e384] [cursor=pointer]:
+                          - img [ref=e385]
+                    - row "Starter Plan Active $29/mo" [ref=e389]:
+                      - cell "Starter Plan" [ref=e390]
+                      - cell "Active" [ref=e391]
+                      - cell "$29/mo" [ref=e392]
+                      - cell [ref=e393]:
+                        - button [ref=e394] [cursor=pointer]:
+                          - img [ref=e395]
+                    - row "Enterprise Pending $299/mo" [ref=e399]:
+                      - cell "Enterprise" [ref=e400]
+                      - cell "Pending" [ref=e401]
+                      - cell "$299/mo" [ref=e402]
+                      - cell [ref=e403]:
+                        - button [ref=e404] [cursor=pointer]:
+                          - img [ref=e405]
+                    - row "Free Trial Expired $0/mo" [ref=e409]:
+                      - cell "Free Trial" [ref=e410]
+                      - cell "Expired" [ref=e411]
+                      - cell "$0/mo" [ref=e412]
+                      - cell [ref=e413]:
+                        - button [ref=e414] [cursor=pointer]:
+                          - img [ref=e415]
+              - generic [ref=e419]:
+                - heading "Pagination" [level=3] [ref=e420]
+                - generic [ref=e421]:
+                  - paragraph [ref=e422]: Showing 1-10 of 97 results
+                  - generic [ref=e423]:
+                    - button [ref=e424] [cursor=pointer]:
+                      - img [ref=e425]
+                    - button "1" [ref=e427] [cursor=pointer]
+                    - button "2" [ref=e428] [cursor=pointer]
+                    - button "3" [ref=e429] [cursor=pointer]
+                    - button "..." [ref=e430] [cursor=pointer]
+                    - button "10" [ref=e431] [cursor=pointer]
+                    - button [ref=e432] [cursor=pointer]:
+                      - img [ref=e433]
+              - generic [ref=e435]:
+                - heading "Progress Indicators" [level=3] [ref=e436]
+                - generic [ref=e437]:
+                  - generic [ref=e439]:
+                    - generic [ref=e440]: Upload Progress
+                    - generic [ref=e441]: 75%
+                  - generic [ref=e444]:
+                    - paragraph [ref=e445]: Account Setup
+                    - generic [ref=e446]:
+                      - generic [ref=e447]:
+                        - img [ref=e449]
+                        - generic [ref=e451]: Profile
+                      - generic [ref=e453]:
+                        - img [ref=e455]
+                        - generic [ref=e457]: Verify
+                      - generic [ref=e459]:
+                        - generic [ref=e460]: "3"
+                        - generic [ref=e461]: Payment
+                      - generic [ref=e463]:
+                        - generic [ref=e464]: "4"
+                        - generic [ref=e465]: Complete
+                  - generic [ref=e466]:
+                    - generic [ref=e467]:
+                      - generic [ref=e468]:
+                        - img [ref=e469]
+                        - generic [ref=e472]: 65%
+                      - generic [ref=e473]: Storage
+                    - generic [ref=e474]:
+                      - generic [ref=e475]:
+                        - img [ref=e476]
+                        - generic [ref=e479]: 82%
+                      - generic [ref=e480]: Memory
+                    - generic [ref=e481]:
+                      - generic [ref=e482]:
+                        - img [ref=e483]
+                        - generic [ref=e486]: 45%
+                      - generic [ref=e487]: CPU
+              - heading "Skeleton Loaders" [level=3] [ref=e489]
+              - generic [ref=e513]:
+                - heading "Tooltips" [level=3] [ref=e514]
+                - generic [ref=e515]:
+                  - generic [ref=e516]:
+                    - button "Top" [ref=e517] [cursor=pointer]
+                    - generic: Tooltip on top
+                  - generic [ref=e518]:
+                    - button "Right" [ref=e519] [cursor=pointer]
+                    - generic: Tooltip on right
+                  - generic [ref=e520]:
+                    - button "Bottom" [ref=e521] [cursor=pointer]
+                    - generic: Tooltip on bottom
+                  - generic [ref=e522]:
+                    - button "Left" [ref=e523] [cursor=pointer]
+                    - generic: Tooltip on left
+              - generic [ref=e524]:
+                - heading "Accordion" [level=3] [ref=e525]
+                - generic [ref=e526]:
+                  - generic [ref=e527]:
+                    - button "What is your return policy?" [ref=e528] [cursor=pointer]:
+                      - generic [ref=e529]: What is your return policy?
+                      - img [ref=e530]
+                    - paragraph [ref=e533]: We offer a 30-day money-back guarantee on all purchases. If you're not satisfied, contact our support team for a full refund.
+                  - button "How do I track my order?" [ref=e535] [cursor=pointer]:
+                    - generic [ref=e536]: How do I track my order?
+                    - img [ref=e537]
+                  - button "Do you ship internationally?" [ref=e540] [cursor=pointer]:
+                    - generic [ref=e541]: Do you ship internationally?
+                    - img [ref=e542]
+              - generic [ref=e544]:
+                - heading "Alert Messages" [level=3] [ref=e545]
+                - generic [ref=e546]:
+                  - generic [ref=e547]:
+                    - img [ref=e548]
+                    - generic [ref=e550]:
+                      - paragraph [ref=e551]: Success!
+                      - paragraph [ref=e552]: Your changes have been saved
+                  - generic [ref=e553]:
+                    - img [ref=e554]
+                    - generic [ref=e558]:
+                      - paragraph [ref=e559]: Warning
+                      - paragraph [ref=e560]: Please review your settings
+                  - generic [ref=e561]:
+                    - img [ref=e562]
+                    - generic [ref=e566]:
+                      - paragraph [ref=e567]: Information
+                      - paragraph [ref=e568]: New features are available
+              - generic [ref=e569]:
+                - heading "Form Components" [level=3] [ref=e570]
+                - generic [ref=e571]:
+                  - generic [ref=e572]:
+                    - img [ref=e573]
+                    - textbox "Search for anything..." [ref=e576]
+                  - generic [ref=e577]:
+                    - button "Daily" [ref=e578] [cursor=pointer]
+                    - button "Weekly" [ref=e579] [cursor=pointer]
+                    - button "Monthly" [ref=e580] [cursor=pointer]
+```
