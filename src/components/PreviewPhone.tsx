@@ -25,11 +25,11 @@ export const PreviewPhone = () => {
   useTokenCSS();
 
   // Get everything from store
-  const { opts, selectedFont } = useDesignSystem();
+  const { opts, selectedPrimaryFont, selectedDisplayFont } = useDesignSystem();
   return (
     <div className="h-full flex items-start justify-center p-8 bg-[rgb(var(--color-bg-secondary))]/20 min-h-[600px]">
       {/* Phone Frame */}
-      <div className={`w-80 h-[640px] bg-[rgb(var(--color-bg-primary))] border-8 border-[rgb(var(--color-border))] rounded-[2.5rem] shadow-[var(--shadow-level-3)] overflow-hidden flex flex-col ${selectedFont}`}>
+      <div className={`w-80 h-[640px] bg-[rgb(var(--color-bg-primary))] border-8 border-[rgb(var(--color-border))] rounded-[2.5rem] shadow-[var(--shadow-level-3)] overflow-hidden flex flex-col ${selectedPrimaryFont}`}>
 
         {/* Status Bar */}
         <div className="bg-[rgb(var(--color-bg-primary))] px-4 py-1 flex justify-between items-center text-xs">

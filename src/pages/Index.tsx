@@ -41,8 +41,10 @@ const Index = () => {
     setCustomAccentColor,
     selectedScale,
     setScale,
-    selectedFont,
-    setFont,
+    selectedPrimaryFont,
+    setPrimaryFont,
+    selectedDisplayFont,
+    setDisplayFont,
     stylePresetId: selectedStylePreset,
     setStylePreset
   } = useDesignSystem();
@@ -293,7 +295,7 @@ ${stickyGuidelines}`
   };
 
   const generatePrompt = () => {
-    const fontName = fonts.find(f => f.class === selectedFont)?.name || 'Plus Jakarta Sans';
+    const fontName = fonts.find(f => f.class === selectedPrimaryFont)?.name || 'Plus Jakarta Sans';
     const colorThemes = {
       custom: customPrimaryColor,
       turquoise: '#1abc9c',
@@ -453,7 +455,7 @@ ${stickyGuidelines}`
     setIsDialogOpen(true);
   };
 
-  const [rightPanelView, setRightPanelView] = useState<'tailwind' | 'tokens'>('tailwind');
+  const [rightPanelView, setRightPanelView] = useState<'tailwind' | 'tokens'>('tokens');
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -512,17 +514,6 @@ ${stickyGuidelines}`
             {/* Toggle Buttons */}
             <div className="border-b border-border p-4 flex gap-2">
               <button
-                onClick={() => setRightPanelView('tailwind')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
-                  rightPanelView === 'tailwind'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                }`}
-              >
-                <Palette size={16} />
-                Tailwind Components
-              </button>
-              <button
                 onClick={() => setRightPanelView('tokens')}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
                   rightPanelView === 'tokens'
@@ -532,6 +523,17 @@ ${stickyGuidelines}`
               >
                 <Layers3 size={16} />
                 Design Tokens
+              </button>
+              <button
+                onClick={() => setRightPanelView('tailwind')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
+                  rightPanelView === 'tailwind'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                }`}
+              >
+                <Palette size={16} />
+                Tailwind Components
               </button>
             </div>
 
