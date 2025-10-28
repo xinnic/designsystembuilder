@@ -21,13 +21,59 @@ import tailwindLogo from '@/assets/logos/tailwind.png';
 
 interface SidebarProps {}
 
-const fonts = [
+// Primary fonts (Sans-serif only - for body text)
+const primaryFonts = [
   { name: 'Plus Jakarta Sans', class: 'font-jakarta' },
   { name: 'Be Vietnam Pro', class: 'font-vietnam' },
   { name: 'Wix Madefor Text', class: 'font-wix' },
   { name: 'Figtree', class: 'font-figtree' },
   { name: 'Albert Sans', class: 'font-albert' },
   { name: 'Satoshi', class: 'font-satoshi' },
+  { name: 'Epilogue', class: 'font-epilogue' },
+  { name: 'Manrope', class: 'font-manrope' },
+  { name: 'Public Sans', class: 'font-public' },
+  { name: 'Space Grotesk', class: 'font-space' },
+  { name: 'Work Sans', class: 'font-work' },
+  { name: 'Source Sans 3', class: 'font-source-sans' },
+  { name: 'Nunito Sans', class: 'font-nunito' },
+  { name: 'Arimo', class: 'font-arimo' },
+  { name: 'Hanken Grotesk', class: 'font-hanken' },
+  { name: 'Rubik', class: 'font-rubik' },
+  { name: 'DM Sans', class: 'font-dm' },
+  { name: 'IBM Plex Sans', class: 'font-ibm' },
+  { name: 'Sora', class: 'font-sora' },
+  { name: 'Montserrat', class: 'font-montserrat' },
+];
+
+// Display fonts (All fonts including serif - for headings and titles)
+const displayFonts = [
+  { name: 'Plus Jakarta Sans', class: 'font-jakarta' },
+  { name: 'Be Vietnam Pro', class: 'font-vietnam' },
+  { name: 'Wix Madefor Text', class: 'font-wix' },
+  { name: 'Figtree', class: 'font-figtree' },
+  { name: 'Albert Sans', class: 'font-albert' },
+  { name: 'Satoshi', class: 'font-satoshi' },
+  { name: 'Epilogue', class: 'font-epilogue' },
+  { name: 'Manrope', class: 'font-manrope' },
+  { name: 'Public Sans', class: 'font-public' },
+  { name: 'Space Grotesk', class: 'font-space' },
+  { name: 'Work Sans', class: 'font-work' },
+  { name: 'Source Sans 3', class: 'font-source-sans' },
+  { name: 'Nunito Sans', class: 'font-nunito' },
+  { name: 'Arimo', class: 'font-arimo' },
+  { name: 'Hanken Grotesk', class: 'font-hanken' },
+  { name: 'Rubik', class: 'font-rubik' },
+  { name: 'DM Sans', class: 'font-dm' },
+  { name: 'IBM Plex Sans', class: 'font-ibm' },
+  { name: 'Sora', class: 'font-sora' },
+  { name: 'Montserrat', class: 'font-montserrat' },
+  { name: 'Newsreader', class: 'font-newsreader' },
+  { name: 'Noto Serif', class: 'font-noto' },
+  { name: 'Domine', class: 'font-domine' },
+  { name: 'Libre Caslon Text', class: 'font-libre' },
+  { name: 'EB Garamond', class: 'font-garamond' },
+  { name: 'Literata', class: 'font-literata' },
+  { name: 'Source Serif 4', class: 'font-source-serif' },
 ];
 
 const scales = [
@@ -82,8 +128,10 @@ const accentColors = [
 
 export function Sidebar({}: SidebarProps) {
   const {
-    selectedFont,
-    setFont,
+    selectedPrimaryFont,
+    setPrimaryFont,
+    selectedDisplayFont,
+    setDisplayFont,
     selectedScale,
     setScale,
     selectedTheme,
@@ -121,19 +169,44 @@ export function Sidebar({}: SidebarProps) {
           </CollapsibleTrigger>
           <CollapsibleContent className="space-y-4 p-3">
             <div>
-              <label className="text-sm font-medium mb-2 block">Font Family</label>
+              <label className="text-sm font-medium mb-2 block">Primary Font</label>
+              <p className="text-xs text-muted-foreground mb-2">For body text and UI elements</p>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className={`w-full justify-between ${selectedFont}`}>
-                    {fonts.find(f => f.class === selectedFont)?.name || 'Select Font'}
+                  <Button variant="outline" className={`w-full justify-between ${selectedPrimaryFont}`}>
+                    {primaryFonts.find(f => f.class === selectedPrimaryFont)?.name || 'Select Font'}
                     <ChevronDown className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width] text-base" align="start">
-                  {fonts.map((font) => (
+                <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width] text-base max-h-[300px] overflow-y-auto" align="start">
+                  {primaryFonts.map((font) => (
                     <DropdownMenuItem
                       key={font.class}
-                      onClick={() => setFont(font.class)}
+                      onClick={() => setPrimaryFont(font.class)}
+                      className={`${font.class} text-base`}
+                    >
+                      {font.name}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium mb-2 block">Display Font</label>
+              <p className="text-xs text-muted-foreground mb-2">For headings and titles</p>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className={`w-full justify-between ${selectedDisplayFont}`}>
+                    {displayFonts.find(f => f.class === selectedDisplayFont)?.name || 'Select Font'}
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width] text-base max-h-[300px] overflow-y-auto" align="start">
+                  {displayFonts.map((font) => (
+                    <DropdownMenuItem
+                      key={font.class}
+                      onClick={() => setDisplayFont(font.class)}
                       className={`${font.class} text-base`}
                     >
                       {font.name}

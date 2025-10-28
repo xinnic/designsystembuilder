@@ -80,7 +80,8 @@ export interface DesignSystemState {
   selectedAccentColor: string;
   customAccentColor: string;
   selectedScale: 'small' | 'regular' | 'large';
-  selectedFont: string;
+  selectedPrimaryFont: string;
+  selectedDisplayFont: string;
   stylePresetId: string;
   spacingMode: 'compact' | 'normal' | 'comfortable';
 
@@ -94,7 +95,8 @@ export interface DesignSystemState {
   setAccentColor(accent: string): void;
   setCustomAccentColor(color: string): void;
   setScale(scale: 'small' | 'regular' | 'large'): void;
-  setFont(font: string): void;
+  setPrimaryFont(font: string): void;
+  setDisplayFont(font: string): void;
   setStylePreset(presetId: string): void;
   setSpacingMode(mode: 'compact' | 'normal' | 'comfortable'): void;
 }
@@ -175,7 +177,8 @@ export const useDesignSystem = create<DesignSystemState>((set) => ({
   selectedAccentColor: 'turquoise',
   customAccentColor: '#1abc9c',
   selectedScale: 'regular',
-  selectedFont: 'font-jakarta',
+  selectedPrimaryFont: 'font-jakarta',
+  selectedDisplayFont: 'font-jakarta',
   stylePresetId: 'modern',
   spacingMode: 'normal',
 
@@ -194,7 +197,8 @@ export const useDesignSystem = create<DesignSystemState>((set) => ({
   setAccentColor: (accent: string) => set({ selectedAccentColor: accent }),
   setCustomAccentColor: (color: string) => set({ customAccentColor: color }),
   setScale: (scale: 'small' | 'regular' | 'large') => set({ selectedScale: scale }),
-  setFont: (font: string) => set({ selectedFont: font }),
+  setPrimaryFont: (font: string) => set({ selectedPrimaryFont: font }),
+  setDisplayFont: (font: string) => set({ selectedDisplayFont: font }),
   setStylePreset: (presetId: string) => set({ stylePresetId: presetId }),
   setSpacingMode: (mode: 'compact' | 'normal' | 'comfortable') => set({ spacingMode: mode })
 }));
@@ -246,12 +250,38 @@ const typographyScales = {
 
 // Font family map
 const fontFamilyMap: Record<string, string> = {
+  // Existing fonts
   'font-jakarta': 'Plus Jakarta Sans, ui-sans-serif, system-ui',
   'font-vietnam': 'Be Vietnam Pro, ui-sans-serif, system-ui',
   'font-wix': 'Wix Madefor Text, ui-sans-serif, system-ui',
   'font-figtree': 'Figtree, ui-sans-serif, system-ui',
   'font-albert': 'Albert Sans, ui-sans-serif, system-ui',
-  'font-satoshi': 'Satoshi, ui-sans-serif, system-ui'
+  'font-satoshi': 'Satoshi, ui-sans-serif, system-ui',
+
+  // New Sans Serif fonts
+  'font-epilogue': 'Epilogue, ui-sans-serif, system-ui',
+  'font-manrope': 'Manrope, ui-sans-serif, system-ui',
+  'font-public': 'Public Sans, ui-sans-serif, system-ui',
+  'font-space': 'Space Grotesk, ui-sans-serif, system-ui',
+  'font-work': 'Work Sans, ui-sans-serif, system-ui',
+  'font-source-sans': 'Source Sans 3, ui-sans-serif, system-ui',
+  'font-nunito': 'Nunito Sans, ui-sans-serif, system-ui',
+  'font-arimo': 'Arimo, ui-sans-serif, system-ui',
+  'font-hanken': 'Hanken Grotesk, ui-sans-serif, system-ui',
+  'font-rubik': 'Rubik, ui-sans-serif, system-ui',
+  'font-dm': 'DM Sans, ui-sans-serif, system-ui',
+  'font-ibm': 'IBM Plex Sans, ui-sans-serif, system-ui',
+  'font-sora': 'Sora, ui-sans-serif, system-ui',
+
+  // New Serif fonts
+  'font-newsreader': 'Newsreader, ui-serif, serif',
+  'font-noto': 'Noto Serif, ui-serif, serif',
+  'font-domine': 'Domine, ui-serif, serif',
+  'font-libre': 'Libre Caslon Text, ui-serif, serif',
+  'font-garamond': 'EB Garamond, ui-serif, serif',
+  'font-literata': 'Literata, ui-serif, serif',
+  'font-source-serif': 'Source Serif 4, ui-serif, serif',
+  'font-montserrat': 'Montserrat, ui-sans-serif, system-ui'
 };
 
 // Spacing scale definitions
@@ -269,7 +299,8 @@ let lastUpdate = {
   customAccent: '#1abc9c',
   isDarkMode: false,
   scale: 'regular',
-  font: 'font-jakarta',
+  primaryFont: 'font-jakarta',
+  displayFont: 'font-jakarta',
   spacingMode: 'normal'
 };
 
@@ -283,7 +314,8 @@ useDesignSystem.subscribe((state) => {
     state.customAccentColor !== lastUpdate.customAccent ||
     state.isDarkMode !== lastUpdate.isDarkMode ||
     state.selectedScale !== lastUpdate.scale ||
-    state.selectedFont !== lastUpdate.font ||
+    state.selectedPrimaryFont !== lastUpdate.primaryFont ||
+    state.selectedDisplayFont !== lastUpdate.displayFont ||
     state.spacingMode !== lastUpdate.spacingMode;
 
   if (!hasChanged) return;
@@ -296,7 +328,8 @@ useDesignSystem.subscribe((state) => {
     customAccent: state.customAccentColor,
     isDarkMode: state.isDarkMode,
     scale: state.selectedScale,
-    font: state.selectedFont,
+    primaryFont: state.selectedPrimaryFont,
+    displayFont: state.selectedDisplayFont,
     spacingMode: state.spacingMode
   };
 
@@ -331,13 +364,14 @@ useDesignSystem.subscribe((state) => {
   // Get current typography scale
   const currentScale = typographyScales[state.selectedScale] || typographyScales.regular;
 
-  // Get current font family
-  const fontFamily = fontFamilyMap[state.selectedFont] || fontFamilyMap['font-jakarta'];
+  // Get current font families
+  const primaryFontFamily = fontFamilyMap[state.selectedPrimaryFont] || fontFamilyMap['font-jakarta'];
+  const displayFontFamily = fontFamilyMap[state.selectedDisplayFont] || fontFamilyMap['font-jakarta'];
 
   // Get current spacing scale
   const currentSpacing = spacingScales[state.spacingMode] || spacingScales.normal;
 
-  // Update tokens
+  // Update tokens (fontFamily is used for body text, we'll handle display font in CSS)
   state.setTokens({
     // Colors
     brand: hexToRgb(primaryColor),
@@ -349,7 +383,7 @@ useDesignSystem.subscribe((state) => {
     bgSecondary: state.isDarkMode ? '30 30 30' : '255 255 255',
     border: state.isDarkMode ? '44 44 44' : '229 231 235',
     // Typography
-    fontFamily,
+    fontFamily: primaryFontFamily,
     ...currentScale,
     // Spacing
     space: currentSpacing
@@ -358,7 +392,7 @@ useDesignSystem.subscribe((state) => {
 
 // Hook to bind tokens to CSS variables
 export const useTokenCSS = () => {
-  const { tokens, opts, isDarkMode, selectedFont, selectedScale, selectedTheme, stylePresetId } = useDesignSystem();
+  const { tokens, opts, isDarkMode, selectedPrimaryFont, selectedDisplayFont, selectedScale, selectedTheme, stylePresetId } = useDesignSystem();
 
   useEffect(() => {
     const root = document.documentElement;
@@ -370,10 +404,20 @@ export const useTokenCSS = () => {
       root.classList.remove('dark');
     }
 
-    // Handle font class
-    const fontClasses = ['font-jakarta', 'font-vietnam', 'font-wix', 'font-figtree', 'font-albert', 'font-satoshi'];
+    // Handle primary font class (for body text)
+    const fontClasses = [
+      'font-jakarta', 'font-vietnam', 'font-wix', 'font-figtree', 'font-albert', 'font-satoshi',
+      'font-epilogue', 'font-manrope', 'font-public', 'font-space', 'font-work', 'font-source-sans',
+      'font-nunito', 'font-arimo', 'font-hanken', 'font-rubik', 'font-dm', 'font-ibm', 'font-sora',
+      'font-newsreader', 'font-noto', 'font-domine', 'font-libre', 'font-garamond', 'font-literata',
+      'font-source-serif', 'font-montserrat'
+    ];
     fontClasses.forEach(fc => root.classList.remove(fc));
-    root.classList.add(selectedFont);
+    root.classList.add(selectedPrimaryFont);
+
+    // Set display font CSS variable for headings
+    const displayFontFamily = fontFamilyMap[selectedDisplayFont] || fontFamilyMap['font-jakarta'];
+    root.style.setProperty('--font-display', displayFontFamily);
 
     // Handle scale class
     root.classList.remove('scale-small', 'scale-regular', 'scale-large');
@@ -477,5 +521,5 @@ export const useTokenCSS = () => {
 
     root.style.setProperty('--cardBorderAlpha', opts.cardBorderTone === 'light' ? '.18' : '.10');
 
-  }, [tokens, opts, isDarkMode, selectedFont, selectedScale, selectedTheme, stylePresetId]);
+  }, [tokens, opts, isDarkMode, selectedPrimaryFont, selectedDisplayFont, selectedScale, selectedTheme, stylePresetId]);
 };
