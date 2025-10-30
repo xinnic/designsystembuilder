@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Copy, Layers3, Palette } from 'lucide-react';
 import { Sidebar } from '@/components/Sidebar';
-import { PreviewPhone } from '@/components/PreviewPhone';
+import { PreviewPhoneTamagui } from '@/components/PreviewPhoneTamagui';
 import DesignSystemOverview from '@/components/DesignSystemOverview';
-import TailwindShowcase from '@/panels/TailwindShowcase';
+import TamaguiShowcase from '@/panels/TamaguiShowcase';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -68,234 +68,498 @@ const Index = () => {
     return { weight: 400, size: "16px", line: "24px" };
   };
 
-  const getBaseLibraryContent = (baseLib: string, fontName: string, selectedScale: string, typographyStyles: any, colorRoles: any, spacingScale: string, radii: string, shadows: string, motion: string, themeModes: string, densityModes: string) => {
-    const foundationsContent = `### Foundations (Design Tokens)
-
-• **Typography (${fontName}, ${selectedScale.charAt(0).toUpperCase() + selectedScale.slice(1)} Scale)**
-  Display: ${typographyStyles.display.size} / ${typographyStyles.display.line} @ ${typographyStyles.display.weight}
-  H1: ${typographyStyles.h1.size} / ${typographyStyles.h1.line} @ ${typographyStyles.h1.weight}
-  H2: ${typographyStyles.h2.size} / ${typographyStyles.h2.line} @ ${typographyStyles.h2.weight}
-  Subhead: ${typographyStyles.subhead.size} / ${typographyStyles.subhead.line} @ ${typographyStyles.subhead.weight}
-  Body: ${typographyStyles.body.size} / ${typographyStyles.body.line} @ ${typographyStyles.body.weight}
-  Caption: ${typographyStyles.caption.size} / ${typographyStyles.caption.line} @ ${typographyStyles.caption.weight}
-  Button Text: ${typographyStyles.buttonText.size} / ${typographyStyles.buttonText.line} @ ${typographyStyles.buttonText.weight}, tracking 0.02em
-  Badge: ${typographyStyles.badge.size} / ${typographyStyles.badge.line} @ ${typographyStyles.badge.weight}, tracking 0.05em, uppercase
-
-• **Color Roles (Light / Dark)**
-  Text: text-primary (${colorRoles['text-primary']}), text-secondary (${colorRoles['text-secondary']}), text-disabled (${colorRoles['text-disabled']})
-  Surfaces: bg-primary (${colorRoles['bg-primary']}), bg-secondary (${colorRoles['bg-secondary']}), border (${colorRoles.border})
-  Brand: brand-primary (${colorRoles['brand-primary']}), brand-secondary (${colorRoles['brand-secondary']}), brand-accent (${colorRoles['brand-accent']})
-  Semantic: success (${colorRoles.success}), warning (${colorRoles.warning}), info (${colorRoles.info}), danger (${colorRoles.danger})
-  Focus ring: focus (${colorRoles.focus})
-  *(Values are for visualization; always reference by token name.)*
-
-• **Spacing**: ${spacingScale} (8-pt rhythm)
-• **Radii**: ${radii} (sm/md/lg/full)
-• **Elevation**: ${shadows} (level-1/2/3)
-• **Motion**: ${motion} (fast/base/easing)
-• **Theme Modes / Density**: ${themeModes}; ${densityModes} via token overrides only`;
-
-    const componentRecipes = `### Component Recipes (token-only)
-
-• **Button Hierarchy (5 types required)**:
-  - Primary: filled brand-primary background, white text, md radius
-  - Secondary: outlined brand-primary border, brand-primary text, transparent background
-  - Tertiary: text-only brand-primary, no background, underline on hover
-  - Destructive: filled danger background, white text, md radius
-  - Disabled: text-disabled color, bg-disabled background, no interactions
-
-• **Button States**: default, hover (~90% opacity), pressed (~80% opacity), focus (visible ring with focus token)
-
-• **Inputs & Forms**: text field (default/hover/focus/error/disabled), select, checkbox, radio, switch — all use bg-secondary/text-primary/border/focus tokens.
-• **Cards**: neutral bg-secondary, md radius, level-1 shadow; featured card with image + CTA uses brand-primary tokens.
-• **Dialogs/Modals**: overlay scrim, level-3 surface; header/body/actions.
-• **Navigation**: bottom tabs (Home/Explore/Activities/Profile/Settings).
-• **Feedback**: toast (success/error/info) and tooltip.`;
-
-    const themingDensity = `### Theming & Density
-
-• Light/Dark by **swapping token values only**.
-• Compact/Comfortable by **overriding spacing/line-height tokens**.`;
-
-    const accessibility = `### Accessibility & Quality
-
-• WCAG AA; focus ring ≥ 2px (tokenized); targets ≥ 44×44; body ≥ 14px; respect reduced-motion.`;
-
-    const assertions = `### Assertions
-
-• No hard-coded hex/px outside token definitions.
-• Theme switch = token swap only.
-• States derive from tokens.
-• Focus ring visible and tokenized.
-• Density changes only via tokens.`;
-
-    const stickyGuidelines = `### STICKY-GUIDELINES (remember)
-
-Token-only styling; AA contrast; visible focus ring; 44×44 targets; reduced-motion; light/dark via token swap; density via tokens; don't introduce literals.`;
-
-    const baseLibraryTemplates = {
-      none: `### Objective
-
-Generate a token-first, framework-agnostic design system. All visuals must come from **design tokens**. No hard-coded values.
-
-### How to Use This Prompt
-
-1. Create a **single source of truth**: tokens as CSS custom properties and JSON.
-2. Implement all visuals by **referencing token names**, never literals.
-3. Verify **Assertions** before returning work.
-
-${foundationsContent}
-
-${componentRecipes}
-
-${themingDensity}
-
-${accessibility}
-
-${assertions}
-
-${stickyGuidelines}`,
-
-      tailwind: `### Objective
-
-Generate a token-first design system wired to **Tailwind utilities**. No hard-coded values.
-
-### How to Use This Prompt
-
-1. **Extend Tailwind theme values** to reference tokens (colors/space/radius/shadows/motion).
-2. Compose utilities to build visuals; **do not create a parallel component library**.
-3. Verify **Assertions** before returning work.
-
-${foundationsContent}
-
-### Tailwind-specific Theming Instructions
-
-• Map semantic **colors** to tokens (brand, text, surface, border).
-• Expose **spacing/radii/shadows/motion** through Tailwind theme so utilities can consume tokens.
-• Use opacity by referencing color tokens, not ad-hoc shades.
-
-${componentRecipes}
-
-${themingDensity}
-
-${accessibility}
-
-${assertions}
-
-${stickyGuidelines}`,
-
-
-      daisyui: `### Objective
-
-Generate a token-first design system that **themes DaisyUI** using your tokens. **Do not redefine DaisyUI components.**
-
-### How to Use This Prompt
-
-1. Provide a **theme mapping** from token roles to DaisyUI theme roles.
-2. Keep DaisyUI classes/logic; only supply values.
-3. Verify **Assertions** before returning work.
-
-${foundationsContent}
-
-### DaisyUI Theme Mapping (use token names; no literals)
-
-• \`primary\` → **brand** (${colorRoles.brand})
-• \`primary-content\` → **text on brand** (choose the tokenized text color that passes AA on brand; do **not** hard-code)
-• \`base-100\` → **bg-primary** (${colorRoles['bg-primary']})
-• \`base-200\` → **bg-secondary** (${colorRoles['bg-secondary']})
-• \`base-content\` → **text-primary** (${colorRoles['text-primary']})
-• \`neutral\` → **border/neutral surface** (${colorRoles.border})
-• \`info\` → **brand-weak** (${colorRoles['brand-weak']})
-• \`success\` → derive from tokens (choose a green that maintains AA; if absent, keep DaisyUI default)
-• \`warning\` → derive from tokens (accessible amber; if absent, keep default)
-• \`error\` → **danger** (${colorRoles.danger})
-• **Radii**: map DaisyUI box/field radii to tokens (sm/md/lg/full).
-• **Shadows**: map DaisyUI elevations to token levels (1/2/3).
-• **States**: hover ≈ brand @ 90%, pressed ≈ 80%, focus = tokenized ring.
-
-### Component Coverage to Verify
-
-Buttons, Inputs, Cards, Modals, Tabs, Alerts/Toasts — all visuals must read from the theme mapping (tokens), not literals.
-
-${themingDensity}
-
-${accessibility}
-
-${assertions}
-
-${stickyGuidelines}`,
-
-      radix: `### Objective
-
-Generate a token-first design system that **styles Radix primitives**. No new logic.
-
-### How to Use This Prompt
-
-1. Style via tokens using Radix \`data-*\` states.
-2. Keep all behaviors intact.
-3. Verify **Assertions** before returning work.
-
-${foundationsContent}
-
-### Radix Styling Instructions
-
-• Buttons, Inputs, Dialog, Tabs, Tooltip, Toast built from primitives:
-  • Visuals (colors/radii/shadows/spacing/motion) come from tokens.
-  • States (open/closed, checked/unchecked, disabled) style via \`data-state\` with **brand/danger ramps**.
-  • Focus = tokenized ring (≥ 2px).
-
-${componentRecipes}
-
-${themingDensity}
-
-${accessibility}
-
-${assertions}
-
-${stickyGuidelines}`,
-
-      mui: `### Objective
-
-Generate a token-first design system as an **MUI theme**. Do not restyle components with literals.
-
-### How to Use This Prompt
-
-1. Create an MUI theme from tokens.
-2. Make components read theme tokens.
-3. Verify **Assertions** before returning work.
-
-${foundationsContent}
-
-### MUI Theme Mapping
-
-• \`palette\`:
-  • \`primary.main\` ← **brand**; \`primary.contrastText\` ← accessible text on brand (choose tokenized text color passing AA).
-  • \`error.main\` ← **danger**.
-  • \`text.primary\` / \`text.secondary\` ← text tokens.
-  • \`background.default\` ← **bg-primary**; \`background.paper\` ← **bg-secondary**; \`divider\` ← **border**.
-• \`typography\`: map each variant to Typography tokens (sizes/lines/weights).
-• \`shape.borderRadius\` ← default radius token (md).
-• \`spacing\` ← base grid (8-pt).
-• \`shadows\` ← tokenized levels (1/2/3).
-• \`transitions\` ← durations/easing from Motion tokens.
-• Ensure Button, TextField, Card, Dialog, Tabs, Alert read only from the theme.
-
-${componentRecipes}
-
-${themingDensity}
-
-${accessibility}
-
-${assertions}
-
-${stickyGuidelines}`
-    };
-
-    return baseLibraryTemplates[baseLib as keyof typeof baseLibraryTemplates] || baseLibraryTemplates.none;
+  const getTamaguiMegaprompt = (primaryFontName: string, displayFontName: string, selectedScale: string, typographyStyles: any, colorRoles: any, spacingScale: string, radii: string, shadows: string, motion: string, themeModes: string, densityModes: string) => {
+    return `# React Native Design System with Tamagui
+
+## Objective
+Create a comprehensive, cross-platform React Native design system using Tamagui that works seamlessly on Web, iOS, and Android. All components must be fully accessible, performant, and themeable.
+
+## Platform Requirements
+- **React Native**: 0.72+ with New Architecture support
+- **Tamagui**: Latest version for cross-platform UI
+- **Platforms**: iOS 13+, Android 5.0+, Modern Web Browsers
+- **Accessibility**: WCAG AA compliant, VoiceOver/TalkBack support
+
+## Project Structure
+\`\`\`
+src/
+├── design-system/
+│   ├── tamagui.config.ts       # Main Tamagui configuration
+│   ├── tokens/
+│   │   ├── colors.ts            # Color tokens
+│   │   ├── typography.ts        # Typography tokens  
+│   │   ├── spacing.ts           # Spacing tokens
+│   │   └── index.ts             # Export all tokens
+│   ├── themes/
+│   │   ├── light.ts             # Light theme
+│   │   ├── dark.ts              # Dark theme
+│   │   └── index.ts             # Theme provider
+│   └── components/
+│       ├── primitives/          # Base components
+│       └── composed/            # Complex components
+\`\`\`
+
+## Design Tokens Configuration
+
+### Typography System
+\`\`\`typescript
+// Primary Font: ${primaryFontName} (Body text, UI elements)
+// Display Font: ${displayFontName} (Headings, emphasis)
+// Scale: ${selectedScale}
+
+export const fonts = {
+  body: createFont({
+    family: Platform.select({
+      ios: '${primaryFontName}',
+      android: '${primaryFontName}',
+      default: 'var(--font-primary)',
+    }),
+    size: {
+      1: ${typographyStyles.caption.size},
+      2: ${typographyStyles.body.size},
+      3: ${typographyStyles.subhead.size},
+      4: ${typographyStyles.h2.size},
+      5: ${typographyStyles.h1.size},
+      6: ${typographyStyles.display.size},
+    },
+    lineHeight: {
+      1: ${typographyStyles.caption.line},
+      2: ${typographyStyles.body.line},
+      3: ${typographyStyles.subhead.line},
+      4: ${typographyStyles.h2.line},
+      5: ${typographyStyles.h1.line},
+      6: ${typographyStyles.display.line},
+    },
+    weight: {
+      4: '${typographyStyles.body.weight}',
+      6: '${typographyStyles.subhead.weight}',
+      7: '${typographyStyles.h1.weight}',
+    },
+  }),
+  heading: createFont({
+    family: Platform.select({
+      ios: '${displayFontName}',
+      android: '${displayFontName}',
+      default: 'var(--font-display)',
+    }),
+    // Same size/lineHeight/weight as body
+  }),
+};
+\`\`\`
+
+### Color Tokens
+\`\`\`typescript
+export const colors = {
+  // Brand Colors
+  brand: '${colorRoles['brand-primary']}',
+  brandWeak: lighten('${colorRoles['brand-primary']}', 0.4),
+  brandStrong: darken('${colorRoles['brand-primary']}', 0.2),
+  brandAccent: '${colorRoles['brand-accent']}',
+
+  // Text Colors
+  textPrimary: '${colorRoles['text-primary']}',
+  textSecondary: '${colorRoles['text-secondary']}',
+  textDisabled: '${colorRoles['text-disabled']}',
+  textInverse: isDark ? '#000000' : '#FFFFFF',
+
+  // Background Colors
+  bgPrimary: '${colorRoles['bg-primary']}',
+  bgSecondary: '${colorRoles['bg-secondary']}',
+  bgTertiary: isDark ? '#2A2A2A' : '#F5F5F5',
+
+  // Semantic Colors
+  success: '${colorRoles.success}',
+  warning: '${colorRoles.warning}',
+  info: '${colorRoles.info}',
+  danger: '${colorRoles.danger}',
+
+  // Border & Focus
+  border: '${colorRoles.border}',
+  focus: '${colorRoles.focus}',
+};
+\`\`\`
+
+### Spacing & Layout
+\`\`\`typescript
+export const space = {
+  ${spacingScale.split(', ').map(s => {
+    const [key, value] = s.split(': ');
+    const num = key.replace('space-', '');
+    return `${num}: ${value}`;
+  }).join(',\n  ')},
+};
+
+export const radius = {
+  ${radii.split(', ').map(r => {
+    const [key, value] = r.split(': ');
+    const num = key === 'sm' ? '1' : key === 'md' ? '2' : key === 'lg' ? '3' : '4';
+    return `${num}: ${value}`;
+  }).join(',\n  ')},
+};
+\`\`\`
+
+## Core Component Library
+
+### Button Component
+\`\`\`typescript
+import { styled, Button as TamaguiButton } from 'tamagui';
+
+export const Button = styled(TamaguiButton, {
+  name: 'Button',
+  backgroundColor: '$brand',
+  color: 'white',
+  fontSize: '$3',
+  paddingHorizontal: '$4',
+  paddingVertical: '$3',
+  borderRadius: '$2',
+  
+  pressStyle: {
+    opacity: 0.8,
+    scale: 0.98,
+  },
+  
+  hoverStyle: {
+    opacity: 0.9,
+  },
+  
+  focusStyle: {
+    borderWidth: 2,
+    borderColor: '$focus',
+  },
+  
+  variants: {
+    variant: {
+      primary: {
+        backgroundColor: '$brand',
+        color: 'white',
+      },
+      secondary: {
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: '$brand',
+        color: '$brand',
+      },
+      tertiary: {
+        backgroundColor: 'transparent',
+        color: '$brand',
+      },
+      destructive: {
+        backgroundColor: '$danger',
+        color: 'white',
+      },
+    },
+    size: {
+      small: {
+        fontSize: '$2',
+        paddingHorizontal: '$3',
+        paddingVertical: '$2',
+      },
+      medium: {
+        fontSize: '$3',
+        paddingHorizontal: '$4',
+        paddingVertical: '$3',
+      },
+      large: {
+        fontSize: '$4',
+        paddingHorizontal: '$5',
+        paddingVertical: '$4',
+      },
+    },
+  },
+  
+  defaultVariants: {
+    variant: 'primary',
+    size: 'medium',
+  },
+});
+\`\`\`
+
+### Input Component
+\`\`\`typescript
+export const Input = styled(TamaguiInput, {
+  backgroundColor: '$bgSecondary',
+  borderWidth: 1,
+  borderColor: '$border',
+  borderRadius: '$2',
+  paddingHorizontal: '$3',
+  paddingVertical: '$2',
+  fontSize: '$3',
+  color: '$textPrimary',
+  placeholderTextColor: '$textDisabled',
+  
+  focusStyle: {
+    borderColor: '$focus',
+    borderWidth: 2,
+  },
+});
+\`\`\`
+
+### Card Component
+\`\`\`typescript
+export const Card = styled(TamaguiCard, {
+  backgroundColor: '$bgSecondary',
+  borderRadius: '$3',
+  padding: '$4',
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+  shadowRadius: 4,
+  elevation: 3,
+  
+  variants: {
+    elevated: {
+      true: {
+        shadowOpacity: 0.15,
+        shadowRadius: 8,
+        elevation: 5,
+      },
+    },
+  },
+});
+\`\`\`
+
+## Navigation Components
+
+### Bottom Tab Bar
+\`\`\`typescript
+export const TabBar = ({ state, descriptors, navigation }) => {
+  return (
+    <XStack
+      backgroundColor="$bgSecondary"
+      borderTopWidth={1}
+      borderTopColor="$border"
+      paddingBottom={Platform.OS === 'ios' ? '$4' : '$2'}
+      paddingTop="$2"
+      justifyContent="space-around"
+    >
+      {state.routes.map((route, index) => (
+        <TabButton
+          key={route.key}
+          active={state.index === index}
+          onPress={() => navigation.navigate(route.name)}
+          icon={descriptors[route.key].options.tabBarIcon}
+          label={route.name}
+        />
+      ))}
+    </XStack>
+  );
+};
+\`\`\`
+
+## Form Controls
+
+### Switch Component
+\`\`\`typescript
+export const Switch = styled(TamaguiSwitch, {
+  size: '$4',
+  backgroundColor: '$border',
+  
+  checked: {
+    backgroundColor: '$brand',
+  },
+  
+  '& > span': {
+    backgroundColor: 'white',
+  },
+});
+\`\`\`
+
+### Checkbox Component
+\`\`\`typescript
+export const Checkbox = styled(TamaguiCheckbox, {
+  size: '$3',
+  borderRadius: '$1',
+  borderWidth: 2,
+  borderColor: '$border',
+  
+  checked: {
+    backgroundColor: '$brand',
+    borderColor: '$brand',
+  },
+});
+\`\`\`
+
+## Theme Configuration
+
+### Light Theme
+\`\`\`typescript
+export const lightTheme = {
+  ...lightColors,
+  background: colors.bgPrimary,
+  backgroundStrong: colors.bgSecondary,
+  color: colors.textPrimary,
+  colorHover: colors.textSecondary,
+  borderColor: colors.border,
+  brand: colors.brand,
+};
+\`\`\`
+
+### Dark Theme
+\`\`\`typescript
+export const darkTheme = {
+  ...darkColors,
+  background: colors.bgPrimary,
+  backgroundStrong: colors.bgSecondary,
+  color: colors.textPrimary,
+  colorHover: colors.textSecondary,
+  borderColor: colors.border,
+  brand: colors.brand,
+};
+\`\`\`
+
+## App Entry Point
+\`\`\`typescript
+import { TamaguiProvider } from 'tamagui';
+import config from './design-system/tamagui.config';
+
+export default function App() {
+  const colorScheme = useColorScheme();
+  
+  return (
+    <TamaguiProvider 
+      config={config} 
+      defaultTheme={colorScheme === 'dark' ? 'dark' : 'light'}
+    >
+      <NavigationContainer>
+        <Stack.Navigator>
+          {/* Your screens */}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </TamaguiProvider>
+  );
+}
+\`\`\`
+
+## Platform-Specific Adjustments
+
+### iOS Specific
+\`\`\`typescript
+const iosStyles = Platform.select({
+  ios: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+});
+\`\`\`
+
+### Android Specific
+\`\`\`typescript
+const androidStyles = Platform.select({
+  android: {
+    elevation: 3,
+  },
+});
+\`\`\`
+
+### Web Specific
+\`\`\`typescript
+const webStyles = Platform.select({
+  web: {
+    cursor: 'pointer',
+    userSelect: 'none',
+    transition: 'all 0.2s ease',
+  },
+});
+\`\`\`
+
+## Animation Configuration
+\`\`\`typescript
+export const animations = createAnimations({
+  bouncy: {
+    type: 'spring',
+    damping: 10,
+    mass: 0.9,
+    stiffness: 100,
+  },
+  lazy: {
+    type: 'spring',
+    damping: 20,
+    stiffness: 60,
+  },
+  quick: {
+    type: 'spring',
+    damping: 20,
+    mass: 1.2,
+    stiffness: 250,
+  },
+});
+\`\`\`
+
+## Accessibility Implementation
+- All interactive elements have minimum 44x44 touch targets
+- Proper accessibility labels and hints
+- Screen reader support with semantic HTML on web
+- VoiceOver (iOS) and TalkBack (Android) optimized
+- Keyboard navigation support on web
+- Focus indicators meeting WCAG AA standards
+- Color contrast ratios ≥ 4.5:1 for text
+
+## Performance Optimization
+- Use React.memo for expensive components
+- Implement FlatList for long scrollable content
+- Lazy load screens with React.lazy
+- Image optimization with FastImage
+- Minimize re-renders with proper state management
+- Use InteractionManager for heavy computations
+
+## Testing Requirements
+- Unit tests with Jest and React Native Testing Library
+- E2E tests with Detox (mobile) or Playwright (web)
+- Accessibility testing with react-native-accessibility-checker
+- Visual regression tests with Percy or Chromatic
+- Performance monitoring with Flipper
+
+## Build & Deployment
+\`\`\`json
+// package.json scripts
+{
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "web": "expo start --web",
+    "test": "jest",
+    "lint": "eslint . --ext .ts,.tsx",
+    "type-check": "tsc --noEmit"
+  }
+}
+\`\`\`
+
+## Required Dependencies
+\`\`\`json
+{
+  "dependencies": {
+    "react-native": "0.72.x",
+    "@tamagui/core": "latest",
+    "@tamagui/animations-react-native": "latest",
+    "@tamagui/font-inter": "latest",
+    "@tamagui/themes": "latest",
+    "react-native-safe-area-context": "latest",
+    "react-native-screens": "latest",
+    "@react-navigation/native": "latest",
+    "@react-navigation/bottom-tabs": "latest"
+  }
+}
+\`\`\`
+
+## IMPORTANT NOTES
+- All colors must be tokenized - no hardcoded values
+- Components must work identically on all three platforms
+- Theme switching must be instant without reload
+- Typography must respect system font scaling
+- All animations must respect prefers-reduced-motion
+- Components must be tree-shakeable for optimal bundle size
+
+---
+Generated for ${themeModes} mode with ${densityModes} support
+Primary Font: ${primaryFontName} | Display Font: ${displayFontName}
+`;
   };
 
   const generatePrompt = () => {
-    const fontName = fonts.find(f => f.class === selectedPrimaryFont)?.name || 'Plus Jakarta Sans';
+    const primaryFontName = fonts.find(f => f.class === selectedPrimaryFont)?.name || 'Plus Jakarta Sans';
+    const displayFontName = fonts.find(f => f.class === selectedDisplayFont)?.name || 'Plus Jakarta Sans';
     const colorThemes = {
       custom: customPrimaryColor,
       turquoise: '#1abc9c',
@@ -418,9 +682,9 @@ ${stickyGuidelines}`
     const themeModes = isDarkMode ? 'Dark' : 'Light';
     const densityModes = 'Comfortable, Compact';
 
-    return getBaseLibraryContent(
-      'tailwind', // Only Tailwind is supported
-      fontName,
+    return getTamaguiMegaprompt(
+      primaryFontName,
+      displayFontName,
       selectedScale,
       typographyStyles,
       colorRoles,
@@ -455,7 +719,7 @@ ${stickyGuidelines}`
     setIsDialogOpen(true);
   };
 
-  const [rightPanelView, setRightPanelView] = useState<'tailwind' | 'tokens'>('tokens');
+  const [rightPanelView, setRightPanelView] = useState<'tamagui' | 'tokens'>('tokens');
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -475,14 +739,14 @@ ${stickyGuidelines}`
                 className="gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0"
               >
                 <Copy className="h-4 w-4" />
-                Copy Prompt
+                Generate Megaprompt
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-4xl max-h-[80vh]">
               <DialogHeader>
-                <DialogTitle>Design System Prompt</DialogTitle>
+                <DialogTitle>React Native Design System Megaprompt</DialogTitle>
                 <DialogDescription>
-                  Copy this comprehensive prompt to generate your design system with AI
+                  Generate a complete React Native design system with Tamagui for cross-platform apps
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
@@ -506,7 +770,7 @@ ${stickyGuidelines}`
         <div className="flex-1 flex min-w-0">
           {/* Mobile App Preview */}
           <div className="flex-1 min-w-[400px] border-r border-border">
-            <PreviewPhone />
+            <PreviewPhoneTamagui />
           </div>
 
           {/* Right Panel - Tailwind Components or Design Tokens */}
@@ -525,22 +789,22 @@ ${stickyGuidelines}`
                 Design Tokens
               </button>
               <button
-                onClick={() => setRightPanelView('tailwind')}
+                onClick={() => setRightPanelView('tamagui')}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
-                  rightPanelView === 'tailwind'
+                  rightPanelView === 'tamagui'
                     ? 'bg-primary text-primary-foreground'
                     : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                 }`}
               >
                 <Palette size={16} />
-                Tailwind Components
+                React Native Components
               </button>
             </div>
 
             {/* Content */}
             <div className="flex-1 overflow-hidden">
-              {rightPanelView === 'tailwind' ? (
-                <TailwindShowcase />
+              {rightPanelView === 'tamagui' ? (
+                <TamaguiShowcase />
               ) : (
                 <DesignSystemOverview />
               )}
