@@ -11,8 +11,7 @@ describe('PreviewPhone Component', () => {
       setTheme,
       setAccentColor,
       setScale,
-      setPrimaryFont,
-      setDisplayFont,
+      setFont,
       setCustomPrimaryColor,
       setCustomAccentColor,
       setStylePreset,
@@ -24,8 +23,7 @@ describe('PreviewPhone Component', () => {
     setTheme('turquoise');
     setAccentColor('turquoise');
     setScale('regular');
-    setPrimaryFont('font-jakarta');
-    setDisplayFont('font-jakarta');
+    setFont('font-jakarta');
     setCustomPrimaryColor('#3498db');
     setCustomAccentColor('#1abc9c');
     setStylePreset('modern');
@@ -301,7 +299,7 @@ describe('PreviewPhone Component', () => {
 
   describe('Store Integration', () => {
     it('should apply selected font family', () => {
-      useDesignSystem.getState().setPrimaryFont('font-vietnam');
+      useDesignSystem.getState().setFont('font-vietnam');
 
       const { container } = render(<PreviewPhone />);
 
