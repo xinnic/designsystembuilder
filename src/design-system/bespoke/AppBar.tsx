@@ -1,4 +1,5 @@
-import { XStack, YStack, Image } from 'tamagui';
+import { Image } from 'tamagui';
+import { XStack } from '../components/Stack';
 import { H2 } from '../components/Text';
 import { Button } from '../components/Button';
 import { Search, Bell, Menu as MenuIcon } from 'lucide-react';

@@ -1,4 +1,5 @@
-import { ScrollView, XStack } from 'tamagui';
+import { ScrollView } from 'tamagui';
+import { XStack } from '../components/Stack';
 import { Button } from '../components/Button';
 import { Body } from '../components/Text';
 
