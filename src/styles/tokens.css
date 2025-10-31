@@ -61,6 +61,8 @@
   --space-4: 32px;
   --space-5: 40px;
   --space-6: 48px;
+  --space-7: 64px;
+  --space-8: 80px;
 
   /* Radius tokens */
   --radius-sm: 4px;
