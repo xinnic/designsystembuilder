@@ -18,7 +18,7 @@ import {
   Label as TamaguiLabel,
 } from 'tamagui';
 import { config } from '../tamagui.config';
-import { useDesignSystem } from '../state/designSystem';
+import { useDesignSystem, useTokenCSS } from '../state/designSystem';
 import { ChevronDown, Check } from 'lucide-react';
 
 // Import our design system components
@@ -35,9 +35,12 @@ import {
   Body,
   Caption,
   Label,
-} from '@/design-system/components';
+} from '../design-system/components';
 
 export default function TamaguiShowcase() {
+  // Initialize token CSS binding to ensure theme updates
+  useTokenCSS();
+
   const { isDarkMode, selectedPrimaryFont } = useDesignSystem();
   const [checked, setChecked] = useState(false);
   const [radioValue, setRadioValue] = useState('option1');
