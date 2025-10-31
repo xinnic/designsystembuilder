@@ -1,337 +1,567 @@
-# Design System Builder - Prioritized Task List for AI Assistant
+# Design System Builder - React Native Tamagui Integration Plan
 
-## 🎯 Current Project Status
-- ✅ Auto-sync architecture partially implemented
-- ✅ Zustand store with core settings working
-- ✅ Menu layout toggle (hamburger/bottom bar) syncing
-- ✅ Logo upload/generation working
-- ✅ Style presets updating shadows/radii
-- ⚠️ Some settings still using hybrid approach (need full migration)
-- 📝 **IMPORTANT:** Follow patterns in `claude.md`, `SYNC_ARCHITECTURE.md`, and `ADD_NEW_SETTING.md`
-
----
-
-## 🔴 Priority 1: Complete Auto-Sync Architecture (CRITICAL)
-*These tasks MUST be done first to establish consistent architecture*
-
-### ✅ Task 1.1: Complete Sidebar Component Refactoring - COMPLETED
-**Complexity:** Medium
-**Time Estimate:** 30 minutes
-**Status:** ✅ COMPLETED
-
-**Completed:**
-- Removed ALL props from Sidebar interface
-- Used `useDesignSystem()` hook to get all values directly
-- Updated `src/pages/Index.tsx` to call `<Sidebar />` with NO props
-- All controls working via store
+## 🎯 Current Project Status - TAMAGUI MIGRATION
+- ✅ Tamagui dependencies installed
+- ✅ Basic Tamagui configuration created
+- ✅ PreviewPhoneTamagui and TamaguiShowcase components created
+- ⚠️ **CRITICAL ISSUE:** Components are unstyled - Tamagui is headless
+- ⚠️ **CRITICAL ISSUE:** Need to bridge our design tokens with Tamagui
+- ⚠️ **CRITICAL ISSUE:** Middle preview looks broken/unstyled
+- ⚠️ **CRITICAL ISSUE:** Right panel components look unstyled
 
 ---
 
-### ✅ Task 1.2: Fix Color System to Use Store Properly - COMPLETED
-**Complexity:** Medium
-**Time Estimate:** 45 minutes
-**Status:** ✅ COMPLETED
+## 🔴 URGENT: Fix Tamagui Integration (DO THIS FIRST)
 
-**Completed:**
-- Added store subscription in `src/state/designSystem.ts` that watches color changes
-- Automatically updates tokens when `selectedTheme`, `customPrimaryColor`, `selectedAccentColor`, `customAccentColor`, or `isDarkMode` changes
-- Removed color useEffect from Sidebar.tsx
-- Primary and accent color changes update all panels instantly
+### The Core Problem
+**Tamagui is a primitive/headless system** - it provides the structure but NOT the styling. We need to:
+1. **Bridge our design tokens** (CSS variables) → Tamagui tokens
+2. **Style Tamagui primitives** with our design system
+3. **Create bespoke components** for app-specific patterns
 
----
+### Three-Layer Architecture
 
-### ✅ Task 1.3: Move Typography Scale Logic to Store - COMPLETED
-**Complexity:** Medium
-**Time Estimate:** 30 minutes
-**Status:** ✅ COMPLETED
+#### **Layer 1: Design Tokens** (Foundation)
+Our existing token system + Tamagui token mapping
 
-**Completed:**
-- Moved scale definitions to store constants (`typographyScales`)
-- Added font family map to store (`fontFamilyMap`)
-- Auto-applies typography tokens when `selectedScale` or `selectedFont` changes
-- Removed typography useEffects from Sidebar
-- All text sizes update across panels automatically
+**What to keep from our system:**
+- ✅ Color system (brand, semantic, text, backgrounds)
+- ✅ Typography scales (displayLg, h1, h2, subhead, body, caption, button, eyebrow)
+- ✅ Spacing scale (space-1 through space-8)
+- ✅ Border radius (sm, md, lg, full)
+- ✅ Shadows (level-1, level-2, level-3)
+- ✅ Motion/animations (duration-fast, duration-medium, easing)
 
----
+**What to add/modify:**
+- Create Tamagui-compatible token definitions
+- Map our RGB variables to Tamagui's token format
+- Create platform-specific font mappings
 
-## ✅ Priority 2: Add Missing Core Controls - COMPLETED
-*Essential UI controls that users expect*
+#### **Layer 2: Basic Components** (Styled Primitives)
+Tamagui components with our design system applied
 
-### ✅ Task 2.1: Add Spacing Scale Control - COMPLETED
-**Complexity:** Medium
-**Time Estimate:** 45 minutes
-**Status:** ✅ COMPLETED
+**Components to style:**
+1. **Button** - 5 variants (primary, secondary, tertiary, destructive, disabled)
+2. **Input/TextArea** - States (default, focus, error, disabled)
+3. **Card** - Elevation levels, borders
+4. **Switch/Checkbox/Radio** - Brand colors, states
+5. **Select/Dropdown** - Styled with our tokens
+6. **Tabs** - Active/inactive states
+7. **Progress/Slider** - Brand color fills
+8. **Dialog/Sheet** - Overlays, animations
+9. **Text** (H1-H6, Paragraph) - Typography scale mapping
 
-**Completed:**
-- Added `spacingMode: 'compact' | 'normal' | 'comfortable'` to state interface
-- Added default value `'normal'` and setter `setSpacingMode()` to store
-- Created spacing scale definitions: Compact [4,8,12,16,20,24,32,40], Normal [8,16,24,32,40,48,64,80], Comfortable [12,24,36,48,60,72,96,120]
-- Mapped spacing scales to CSS variables (--space-1 through --space-8) in store subscription
-- Added UI control with 3 buttons in StylingControls.tsx
-- Spacing updates automatically across all panels
+**Styling Approach:**
+```typescript
+// Example: Styled Button
+export const Button = styled(TamaguiButton, {
+  name: 'Button',
+  backgroundColor: '$brand',
+  color: 'white',
+  borderRadius: '$md',
+  fontSize: '$body',
+  paddingHorizontal: '$4',
+  paddingVertical: '$3',
+  fontFamily: '$body',
 
-**Priority 2 Status:** Core controls complete for now. Additional controls (animation speed, button style, focus ring) deferred.
+  variants: {
+    variant: {
+      primary: { bg: '$brand', color: 'white' },
+      secondary: { bg: 'transparent', borderWidth: 1, borderColor: '$brand', color: '$brand' },
+      // etc.
+    }
+  }
+});
+```
 
----
+#### **Layer 3: Bespoke Components** (App-Specific)
+Custom components not in Tamagui
 
-## ✅ Priority 3: Enhance Components & Preview - COMPLETED
-*Improve the visual feedback and component variety*
-
-### ✅ Task 3.1: Add More Tailwind Showcase Components - COMPLETED
-**Complexity:** Low (each component)
-**Time Estimate:** 20 minutes per component
-**Status:** ✅ COMPLETED
-
-**Completed:**
-- Added tab system to TailwindShowcase with "Tailwind Components" and "Complex Patterns" tabs
-- **Tailwind Components Tab:**
-  - ✅ Data table with sorting icon
-  - ✅ Pagination controls with numbered pages
-  - ✅ Progress bars (linear, stepped, circular)
-  - ✅ Skeleton loaders (card & list variants)
-  - ✅ Tooltip examples
-  - ✅ Accordion/Collapsible component
-  - Alert messages
-  - Form components (search, toggle buttons)
-- **Complex Patterns Tab:**
-  - Navigation patterns (app title bar, bottom nav, side menu, breadcrumb)
-  - Statistics cards
-  - Profile cards
-  - Loading states (moved from Task 3.3)
-
----
-
-### ✅ Task 3.3: Add Loading States to Complex Patterns - COMPLETED
-**Complexity:** Low
-**Time Estimate:** 30 minutes
-**Status:** ✅ COMPLETED (Integrated into Task 3.1)
-
-**Completed:**
-- Added comprehensive loading states section to Complex Patterns tab
-- Includes:
-  - ✅ Spinner variations (small, medium, large)
-  - ✅ Button loading states
-  - ✅ Page loading overlay with backdrop blur
-- All loading states use motion tokens and brand colors
+**Components to create:**
+1. **AppBar/TopBar** - Logo, title, actions
+2. **BottomTabBar** - Navigation with icons + labels
+3. **CategoryPills** - Horizontal scrolling filters
+4. **StatsCard** - Icon + label + value display
+5. **UserCard** - Avatar + name + status
+6. **ReviewCard** - Stars + content + actions
+7. **HeroCard** - Image + title + description + CTA
 
 ---
 
-## 🟢 Priority 4: Export & Productivity Features
-*Help users get their design system out of the builder*
+## 🔴 Priority 1: Fix Token Bridge & Configuration
 
-### Task 4.1: Add Export Design Tokens
-**Complexity:** Medium
-**Time Estimate:** 1 hour
-
-**Steps:**
-1. Add "Export" button in header
-2. Generate outputs:
-   - `tokens.json` - Raw token values
-   - `variables.css` - CSS custom properties
-   - `tailwind.config.js` - Tailwind configuration
-3. Use dialog to show all exports
-4. Add copy-to-clipboard for each
-
----
-
-### Task 4.2: Add Undo/Redo Functionality
-**Complexity:** Medium
-**Time Estimate:** 1 hour
-
-**Steps:**
-1. Install `zustand/middleware` for temporal state
-2. Wrap store with temporal middleware
-3. Add keyboard shortcuts (Ctrl+Z, Ctrl+Y)
-4. Add UI buttons in header
-5. Limit history to 50 actions
-
----
-
-### Task 4.3: Add Local Storage Persistence
-**Complexity:** Low
-**Time Estimate:** 30 minutes
-
-**Steps:**
-1. Add persist middleware to Zustand store
-2. Configure storage name and version
-3. Add "Reset to Defaults" button
-4. Handle migration for future updates
-
----
-
-### Task 4.4: Add Contrast Checker
-**Complexity:** Medium
-**Time Estimate:** 45 minutes
-
-**Steps:**
-1. Add WCAG contrast calculation utility
-2. Show contrast ratios for:
-   - Text on backgrounds
-   - Button text
-   - Brand colors
-3. Add warning badges for failing combinations
-4. Suggest accessible alternatives
-
----
-
-## ✅ Testing Infrastructure - COMPLETED
-*Comprehensive test coverage for quality assurance*
-
-### ✅ Task: Implement Comprehensive Testing Plan - COMPLETED
-**Complexity:** High
-**Time Estimate:** 4 hours
-**Status:** ✅ COMPLETED
-
-**Completed:**
-- ✅ Fixed infinite loop bug in designSystem.ts subscriber
-- ✅ Fixed test pattern for Zustand state access
-- ✅ All 174 unit/component/integration tests passing (100%)
-- ✅ Created comprehensive E2E test suite with Playwright
-- ✅ Fixed all selector ambiguity issues in workflow tests
-- ✅ Made accessibility tests practical (excluded design-related violations)
-- ✅ 38-40/40 E2E tests passing (~95-100%)
-
-**Test Coverage:**
-- Store tests: 33 tests (designSystem.ts at 99.69% coverage)
-- Component tests: 101 tests (Sidebar, StylingControls, PreviewPhone)
-- E2E workflow tests: 10 tests (color, typography, spacing, dark mode, etc.)
-- E2E accessibility tests: 10 tests (WCAG compliance, keyboard navigation)
-
-**Remaining Tasks:**
-- [ ] Verify final E2E test pass rate (pending WSL stability)
-- [ ] Re-enable WebKit browser tests (deferred - Chromium/Firefox stable)
-
----
-
-## 🔵 Priority 5: Polish & Advanced Features
-*Nice-to-have features that enhance the experience*
-
-### Task 5.1: Add Preset Themes
-**Complexity:** Low
-**Time Estimate:** 1 hour
-
-**Complete theme presets to add:**
-- Corporate (blue, conservative)
-- Startup (purple, modern)
-- E-commerce (green, trustworthy)
-- Healthcare (teal, clean)
-- Education (orange, friendly)
-- SaaS (gradient, tech)
-
-Each includes: colors, fonts, spacing, style preset
-
----
-
-### Task 5.2: Add Color Palette Generator
-**Complexity:** Medium
-**Time Estimate:** 1 hour
-
-**Steps:**
-1. Use color theory to generate palettes
-2. Create shades/tints from brand color
-3. Generate complementary colors
-4. Ensure accessibility
-5. Preview in real-time
-
----
-
-### Task 5.3: Add Component Code Export
+### Task 1.1: Create Proper Tamagui Token Configuration
 **Complexity:** High
 **Time Estimate:** 2 hours
+**Status:** 🚨 IN PROGRESS
 
 **Steps:**
-1. Add "View Code" button on showcase components
-2. Generate React + Tailwind code
-3. Include proper imports
-4. Format with prettier
-5. Copy to clipboard
+1. Update `src/tamagui.config.ts` to properly map our tokens:
+   ```typescript
+   // Map our CSS variables to Tamagui tokens
+   const tokens = createTokens({
+     color: {
+       brand: 'rgb(var(--color-brand))',
+       brandWeak: 'rgb(var(--color-brand-weak))',
+       textPrimary: 'rgb(var(--color-text-primary))',
+       textSecondary: 'rgb(var(--color-text-secondary))',
+       bgPrimary: 'rgb(var(--color-bg-primary))',
+       bgSecondary: 'rgb(var(--color-bg-secondary))',
+       border: 'rgb(var(--color-border))',
+       success: 'rgb(var(--color-success))',
+       danger: 'rgb(var(--color-danger))',
+       // etc.
+     },
+     space: {
+       1: 'var(--space-1)',
+       2: 'var(--space-2)',
+       3: 'var(--space-3)',
+       // Map all 8 space values
+     },
+     size: {
+       // Same as space for consistency
+     },
+     radius: {
+       sm: 'var(--radius-sm)',
+       md: 'var(--radius-md)',
+       lg: 'var(--radius-lg)',
+       full: 'var(--radius-full)',
+     }
+   });
+   ```
+
+2. Create fonts that reference our typography:
+   ```typescript
+   const fonts = {
+     body: createFont({
+       family: 'var(--font-family)', // Our primary font
+       size: {
+         1: 'var(--font-caption-size)',
+         2: 'var(--font-body-size)',
+         3: 'var(--font-subhead-size)',
+         4: 'var(--font-h2-size)',
+         5: 'var(--font-h1-size)',
+         6: 'var(--font-display-size)',
+       },
+       lineHeight: {
+         1: 'var(--font-caption-line)',
+         // Map all line heights
+       },
+       weight: {
+         // Map weights
+       }
+     }),
+     heading: createFont({
+       family: 'var(--font-display)', // Our display font
+       // Same size/line-height/weight as body
+     })
+   };
+   ```
+
+3. Make Tamagui config reactive to our store changes:
+   ```typescript
+   // Subscribe to design system changes
+   useDesignSystem.subscribe((state) => {
+     // Update Tamagui config when tokens change
+   });
+   ```
+
+**Acceptance Criteria:**
+- [ ] All our CSS variables accessible in Tamagui as `$token`
+- [ ] Color changes in store update Tamagui components
+- [ ] Font changes in store update Tamagui typography
+- [ ] Spacing/radius changes propagate to Tamagui
 
 ---
 
-## 📋 How to Work Through This List
+### Task 1.2: Create Styled Component Library
+**Complexity:** High
+**Time Estimate:** 3 hours
+**Status:** 🚨 PENDING
 
-### For Each Task:
-1. **Read the current status** in the task description
-2. **Follow the 4-step pattern** from `ADD_NEW_SETTING.md`:
-   - Define in state interface
-   - Add to store implementation
-   - Map to CSS variables
-   - Create UI control
-3. **Test immediately** after implementation
-4. **Verify auto-sync** works (change in left panel → updates everywhere)
+**Create:** `src/design-system/components/`
 
-### Key Files Reference:
-- **Store:** `src/state/designSystem.ts` - All state management
-- **Controls:** `src/left/StylingControls.tsx` - Left panel controls
-- **Phone:** `src/components/PreviewPhone.tsx` - Mobile preview
-- **Showcase:** `src/panels/TailwindShowcase.tsx` - Component examples
-- **Layout:** `src/pages/Index.tsx` - Main app layout
-- **Sidebar:** `src/components/Sidebar.tsx` - Typography/color controls
-
-### Architecture Rules (MUST FOLLOW):
-1. **NEVER pass props between panels** - Use store only
-2. **ALWAYS map settings to CSS variables** - Don't use values directly
-3. **ALWAYS test auto-sync** - Settings must update all panels instantly
-4. **FOLLOW the pattern** - Look at menuLayout or stylePresetId implementation
-
-### Testing Checklist:
-- [ ] Setting updates in left panel
-- [ ] Phone mockup updates immediately
-- [ ] Tailwind showcase updates immediately
-- [ ] No console errors
-- [ ] Smooth transitions
-
----
-
-## 🚀 Quick Commands
-
-```bash
-# Dev server (already running on port 8081)
-npm run dev
-
-# Install dependencies if needed
-npm install [package]
-
-# Type checking
-npx tsc --noEmit
-
-# Find files
-find . -name "*.tsx" | grep -i [search]
+**Files to create:**
 ```
+src/design-system/
+├── components/
+│   ├── Button.tsx          # Styled button with variants
+│   ├── Input.tsx           # Styled text inputs
+│   ├── Card.tsx            # Styled card container
+│   ├── Text.tsx            # Typography components (H1-H6, P)
+│   ├── Switch.tsx          # Styled switch
+│   ├── Checkbox.tsx        # Styled checkbox
+│   ├── Select.tsx          # Styled select/dropdown
+│   ├── Tabs.tsx            # Styled tabs
+│   ├── Progress.tsx        # Styled progress bar
+│   ├── Dialog.tsx          # Styled modal/dialog
+│   └── index.ts            # Export all
+├── bespoke/
+│   ├── AppBar.tsx          # Custom top bar
+│   ├── BottomNav.tsx       # Custom bottom navigation
+│   ├── CategoryPills.tsx   # Custom filter pills
+│   ├── StatsCard.tsx       # Custom stats display
+│   └── index.ts            # Export all
+└── tokens.ts               # Token utilities
+```
+
+**Each component should:**
+1. Import Tamagui primitive
+2. Apply our design tokens via `styled()`
+3. Define variants for different states
+4. Export typed props
+
+**Example Button.tsx:**
+```typescript
+import { Button as TamaguiButton, styled } from 'tamagui';
+
+export const Button = styled(TamaguiButton, {
+  name: 'Button',
+  fontFamily: '$body',
+  fontSize: '$3',
+  fontWeight: '600',
+  paddingHorizontal: '$4',
+  paddingVertical: '$3',
+  borderRadius: '$md',
+  cursor: 'pointer',
+
+  // Default: Primary variant
+  backgroundColor: '$brand',
+  color: 'white',
+
+  hoverStyle: {
+    opacity: 0.9,
+  },
+
+  pressStyle: {
+    opacity: 0.8,
+    scale: 0.98,
+  },
+
+  focusStyle: {
+    borderWidth: 2,
+    borderColor: '$focus',
+  },
+
+  variants: {
+    variant: {
+      primary: {
+        backgroundColor: '$brand',
+        color: 'white',
+      },
+      secondary: {
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: '$brand',
+        color: '$brand',
+      },
+      tertiary: {
+        backgroundColor: 'transparent',
+        color: '$brand',
+        hoverStyle: {
+          textDecorationLine: 'underline',
+        }
+      },
+      destructive: {
+        backgroundColor: '$danger',
+        color: 'white',
+      },
+    },
+    size: {
+      small: {
+        fontSize: '$2',
+        paddingHorizontal: '$3',
+        paddingVertical: '$2',
+      },
+      medium: {
+        fontSize: '$3',
+        paddingHorizontal: '$4',
+        paddingVertical: '$3',
+      },
+      large: {
+        fontSize: '$4',
+        paddingHorizontal: '$5',
+        paddingVertical: '$4',
+      },
+    },
+    disabled: {
+      true: {
+        opacity: 0.5,
+        cursor: 'not-allowed',
+        pointerEvents: 'none',
+      }
+    }
+  },
+
+  defaultVariants: {
+    variant: 'primary',
+    size: 'medium',
+  }
+});
+
+export type ButtonProps = React.ComponentProps<typeof Button>;
+```
+
+**Acceptance Criteria:**
+- [ ] All basic components styled and exported
+- [ ] Components use our design tokens (`$brand`, `$space`, etc.)
+- [ ] Variants match our design system (primary, secondary, etc.)
+- [ ] TypeScript types exported for each component
+- [ ] Components respond to theme changes (light/dark)
+
+---
+
+### Task 1.3: Rebuild PreviewPhoneTamagui with Styled Components
+**Complexity:** Medium
+**Time Estimate:** 2 hours
+**Status:** 🚨 PENDING
+
+**Update:** `src/components/PreviewPhoneTamagui.tsx`
+
+**Changes needed:**
+1. Import styled components from `src/design-system/components`
+2. Import bespoke components from `src/design-system/bespoke`
+3. Replace all unstyled Tamagui primitives with styled versions
+4. Match the visual design of original `PreviewPhone.tsx`
+5. Use proper backgrounds, shadows, borders, colors
+6. Ensure responsive to design token changes
+
+**Structure:**
+```typescript
+import { YStack, XStack, ScrollView } from 'tamagui';
+import { Button } from '@/design-system/components/Button';
+import { Card } from '@/design-system/components/Card';
+import { H1, H3, Paragraph } from '@/design-system/components/Text';
+import { AppBar } from '@/design-system/bespoke/AppBar';
+import { CategoryPills } from '@/design-system/bespoke/CategoryPills';
+import { StatsCard } from '@/design-system/bespoke/StatsCard';
+
+export const PreviewPhoneTamagui = () => {
+  // ... component implementation with styled components
+};
+```
+
+**Visual Requirements (match original):**
+- [ ] Phone frame with proper border and shadow
+- [ ] Status bar with time and battery
+- [ ] App header with logo, title, search, bell icons
+- [ ] Category pills with active state highlighting
+- [ ] Hero card with gradient, title, description, CTA button
+- [ ] Stats row with icons and values
+- [ ] List items with proper spacing
+- [ ] User cards with avatars and follow buttons
+- [ ] Action buttons side-by-side
+- [ ] Review card with stars and interaction buttons
+- [ ] Bottom navigation (when enabled)
+
+**Acceptance Criteria:**
+- [ ] Visual parity with original PreviewPhone
+- [ ] All interactions working (button hovers, etc.)
+- [ ] Responds to design token changes
+- [ ] Dark mode switching works
+- [ ] Font changes apply correctly
+- [ ] Spacing/radius changes visible
+
+---
+
+### Task 1.4: Rebuild TamaguiShowcase with Styled Components
+**Complexity:** Medium
+**Time Estimate:** 2 hours
+**Status:** 🚨 PENDING
+
+**Update:** `src/panels/TamaguiShowcase.tsx`
+
+**Changes needed:**
+1. Import all styled components
+2. Replace unstyled Tamagui primitives
+3. Organize into clear sections like original TailwindShowcase
+4. Add proper backgrounds, spacing, borders
+5. Show all component variants
+
+**Sections to include:**
+1. **Typography** - H1-H6, Paragraph, Caption using styled Text components
+2. **Buttons** - All variants (primary, secondary, tertiary, destructive, disabled)
+3. **Form Controls** - Input, TextArea, Switch, Checkbox, Radio, Select
+4. **Cards** - Basic card, elevated card, branded card
+5. **Tabs** - Working tab system
+6. **Progress** - Progress bars and sliders
+7. **Overlays** - Dialog and Sheet examples
+8. **Shapes & Avatars** - Circle, Square, Avatar components
+
+**Acceptance Criteria:**
+- [ ] All components properly styled
+- [ ] Visual parity with original TailwindShowcase
+- [ ] Components respond to theme changes
+- [ ] Interactive elements work (tabs, dialogs, etc.)
+- [ ] Proper backgrounds and shadows
+- [ ] Typography uses correct fonts
+
+---
+
+## 🟡 Priority 2: Polish & Refinement
+
+### Task 2.1: Add Platform-Specific Styling
+**Complexity:** Low
+**Time Estimate:** 30 minutes
+
+**Add to styled components:**
+```typescript
+import { Platform } from 'react-native';
+
+const platformStyles = Platform.select({
+  web: {
+    cursor: 'pointer',
+    userSelect: 'none',
+  },
+  ios: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+  },
+  android: {
+    elevation: 3,
+  },
+});
+```
+
+---
+
+### Task 2.2: Fix Typography Duality
+**Complexity:** Medium
+**Time Estimate:** 1 hour
+
+**Problem:** We have two typography systems:
+1. Our semantic token system (displayLg, h1, h2, etc.)
+2. Tamagui's size system (1-6)
+
+**Solution:**
+- Map our semantic names to Tamagui sizes in config
+- Create convenience components: `<H1>`, `<H2>`, `<Body>`, `<Caption>`
+- These wrap Tamagui's Text with correct size props
+
+```typescript
+// src/design-system/components/Text.tsx
+import { Text as TamaguiText, styled } from 'tamagui';
+
+export const H1 = styled(TamaguiText, {
+  fontFamily: '$heading',
+  fontSize: '$5', // Maps to our h1 size
+  fontWeight: '700',
+  lineHeight: '$5',
+});
+
+export const H2 = styled(TamaguiText, {
+  fontFamily: '$heading',
+  fontSize: '$4', // Maps to our h2 size
+  fontWeight: '600',
+  lineHeight: '$4',
+});
+
+export const Body = styled(TamaguiText, {
+  fontFamily: '$body',
+  fontSize: '$2', // Maps to our body size
+  fontWeight: '400',
+  lineHeight: '$2',
+});
+```
+
+---
+
+### Task 2.3: Test All Design System Controls
+**Complexity:** Low
+**Time Estimate:** 1 hour
+
+**Test that everything still works:**
+- [ ] Color theme changes update Tamagui components
+- [ ] Primary font changes apply to body text
+- [ ] Display font changes apply to headings
+- [ ] Typography scale affects all text sizes
+- [ ] Spacing mode changes update component spacing
+- [ ] Dark mode switches properly
+- [ ] Border radius changes visible
+- [ ] Logo upload displays correctly
+- [ ] Menu layout toggle works
 
 ---
 
 ## 📊 Progress Tracking
 
-### Completed Recently:
-- ✅ Fixed menu layout toggle sync
-- ✅ Added logo display in phone
-- ✅ Fixed style presets to use store
-- ✅ Removed props from PreviewPhone
-- ✅ Updated Index.tsx to use store
-- ✅ Task 1.1: Complete Sidebar refactoring
-- ✅ Task 1.2: Fix color system to use store properly
-- ✅ Task 1.3: Move typography scale logic to store
-- ✅ Task 2.1: Add Spacing Scale Control
-- ✅ Task 3.1: Add More Tailwind Showcase Components (with tabs)
-- ✅ Task 3.3: Add Loading States to Complex Patterns
-- ✅ **Testing Infrastructure: Comprehensive test suite (214 tests, ~95-100% E2E pass rate)**
+### Current Architecture
 
-### Next Session Should Start With:
-**Task 4.1** - Add Export Design Tokens
-*(Optional: Verify E2E test pass rate once WSL is stable)*
+**Token Flow:**
+```
+User Changes Setting
+  ↓
+Zustand Store Updates
+  ↓
+CSS Variables Updated (--color-brand, etc.)
+  ↓
+Tamagui Config References CSS Variables
+  ↓
+Styled Components Use Tamagui Tokens ($brand, etc.)
+  ↓
+Components Re-render with New Styles
+```
 
-### Estimated Time to Complete All:
-- Priority 1: ✅ COMPLETED
-- Priority 2: ✅ COMPLETED
-- Priority 3: ✅ COMPLETED
-- Testing: ✅ COMPLETED (minor verification pending)
-- Priority 4: 3 hours
-- Priority 5: 4 hours
-- **Total: ~7 hours remaining**
+**Component Hierarchy:**
+```
+Tamagui Primitive (unstyled)
+  ↓
+Styled Component (our design applied)
+  ↓
+Bespoke Component (app-specific patterns)
+```
 
 ---
 
-**Last Updated:** 2025-10-18 (Testing Infrastructure Completed)
-**Next Task:** Task 4.1 - Add Export Design Tokens
-**Critical Path:** Priorities 1, 2, 3 & Testing COMPLETE ✅ - Moving to Priority 4
+## 🎯 Recommendations Summary
+
+### Design Tokens Layer
+**Keep:** All our existing tokens (colors, typography, spacing, radius, shadows)
+**Add:** Tamagui-compatible token definitions that reference our CSS variables
+**Approach:** Bridge layer that maps `rgb(var(--color-brand))` → `$brand` token
+
+### Basic Components Layer
+**Use:** Tamagui primitives as base
+**Style:** Via `styled()` API with our tokens
+**Pattern:** One styled component file per primitive
+**Include:** All variants our design system supports
+
+### Bespoke Components Layer
+**Create:** App-specific components not in Tamagui
+**Examples:** AppBar, BottomNav, CategoryPills, StatsCard
+**Build:** Compose from styled basic components
+**Goal:** Match visual fidelity of original PreviewPhone
+
+---
+
+## ⏱️ Time Estimates
+
+- Task 1.1: Fix token bridge - **2 hours**
+- Task 1.2: Create styled library - **3 hours**
+- Task 1.3: Rebuild PreviewPhoneTamagui - **2 hours**
+- Task 1.4: Rebuild TamaguiShowcase - **2 hours**
+- Task 2.1: Platform-specific styling - **30 minutes**
+- Task 2.2: Fix typography duality - **1 hour**
+- Task 2.3: Testing - **1 hour**
+
+**Total: ~11.5 hours**
+
+---
+
+## 🚀 Success Criteria
+
+When complete, we should have:
+1. ✅ Visual parity between PreviewPhone and PreviewPhoneTamagui
+2. ✅ All components properly styled with our design system
+3. ✅ Design token changes propagate to Tamagui components
+4. ✅ Typography system merged and working
+5. ✅ All original functionality maintained
+6. ✅ Cross-platform code that works on Web, iOS, Android
+7. ✅ Generated megaprompt produces functional React Native apps
+
+---
+
+**Last Updated:** 2025-10-31 (Tamagui Integration Analysis)
+**Next Task:** Task 1.1 - Fix Token Bridge & Configuration
+**Critical Path:** Must complete Priority 1 tasks before continuing
