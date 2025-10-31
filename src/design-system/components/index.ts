@@ -43,3 +43,6 @@ export {
 // Form components
 export { Input, TextArea, type InputProps, type TextAreaProps } from './Input';
 export { Switch, type SwitchProps } from './Switch';
+
+// Layout components
+export { XStack, YStack, Stack } from './Stack';

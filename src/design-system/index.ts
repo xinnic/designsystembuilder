@@ -14,13 +14,13 @@
 export * from './components';
 export * from './bespoke';
 
-// Re-export Tamagui primitives for custom layouts
+// Re-export our styled Stack components with proper defaults
+export { XStack, YStack, Stack } from './components/Stack';
+
+// Re-export other Tamagui primitives for custom layouts
 export {
-  YStack,
-  XStack,
   ZStack,
   ScrollView,
-  Stack,
   Circle,
   Square,
   Image,
