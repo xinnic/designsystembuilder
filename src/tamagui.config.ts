@@ -177,6 +177,7 @@ export const createDynamicConfig = () => {
     themes: {
       light: {
         background: tokens.color.bgPrimary,
+        backgroundHover: tokens.color.bgSecondary,
         backgroundStrong: tokens.color.bgSecondary,
         color: tokens.color.textPrimary,
         colorHover: tokens.color.textSecondary,
@@ -187,6 +188,7 @@ export const createDynamicConfig = () => {
       },
       dark: {
         background: tokens.color.bgPrimary,
+        backgroundHover: tokens.color.bgSecondary,
         backgroundStrong: tokens.color.bgSecondary,
         color: tokens.color.textPrimary,
         colorHover: tokens.color.textSecondary,
