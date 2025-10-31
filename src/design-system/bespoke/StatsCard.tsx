@@ -1,6 +1,6 @@
-import { YStack } from 'tamagui';
-import { H2, Caption } from '../components/Text';
 import { ReactNode } from 'react';
+import { YStack } from '../components/Stack';
+import { H2, Caption } from '../components/Text';
 
 interface StatsCardProps {
   icon?: ReactNode;

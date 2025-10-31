@@ -1,5 +1,4 @@
-import { YStack } from 'tamagui';
-import { Card } from '../components/Card';
+import { YStack, Card } from '../components';
 import { H2, Body } from '../components/Text';
 import { Button } from '../components/Button';
 

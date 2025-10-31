@@ -1,7 +1,7 @@
-import { XStack, YStack } from 'tamagui';
+import { ReactNode } from 'react';
+import { XStack, YStack } from '../components/Stack';
 import { Button } from '../components/Button';
 import { Caption } from '../components/Text';
-import { ReactNode } from 'react';
 
 interface NavItem {
   id: string;
