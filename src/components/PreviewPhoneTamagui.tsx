@@ -1,7 +1,7 @@
 import React from 'react';
 import { TamaguiProvider, YStack, XStack, ScrollView, Circle, Image } from 'tamagui';
 import { config } from '../tamagui.config';
-import { useDesignSystem } from '../state/designSystem';
+import { useDesignSystem, useTokenCSS } from '../state/designSystem';
 import {
   Home,
   Search,
@@ -27,7 +27,7 @@ import {
   H3,
   Body,
   Caption,
-} from '@/design-system/components';
+} from '../design-system/components';
 import {
   AppBar,
   CategoryPills,
@@ -35,9 +35,12 @@ import {
   HeroCard,
   UserCard,
   BottomNav,
-} from '@/design-system/bespoke';
+} from '../design-system/bespoke';
 
 export const PreviewPhoneTamagui = () => {
+  // Initialize token CSS binding to ensure theme updates
+  useTokenCSS();
+
   const { opts, selectedPrimaryFont, isDarkMode } = useDesignSystem();
 
   return (
