@@ -189,8 +189,13 @@ export default function TamaguiShowcase() {
                 {/* Switch */}
                 <XStack gap="$3" alignItems="center" justifyContent="space-between">
                   <Label>Toggle Switch</Label>
-                  <Switch size="medium" checked={checked} onCheckedChange={setChecked}>
-                    <Switch.Thumb animation="bouncy" />
+                  <Switch
+                    size="$4"
+                    checked={checked}
+                    onCheckedChange={setChecked}
+                    backgroundColor={checked ? '$brand' : '$border'}
+                  >
+                    <Switch.Thumb animation="bouncy" backgroundColor="white" />
                   </Switch>
                 </XStack>
 
