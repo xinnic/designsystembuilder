@@ -90,3 +90,121 @@ export {
 
 // Layout components
 export { XStack, YStack, Stack } from './Stack';
+
+// Avatar components
+export {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+  type AvatarProps,
+  type AvatarImageProps,
+  type AvatarFallbackProps,
+} from './Avatar';
+
+// ListItem components
+export {
+  ListItem,
+  ListItemTitle,
+  ListItemSubtitle,
+  type ListItemProps,
+  type ListItemTitleProps,
+  type ListItemSubtitleProps,
+} from './ListItem';
+
+// Separator component
+export { Separator, type SeparatorProps } from './Separator';
+
+// Slider components
+export {
+  Slider,
+  SliderTrack,
+  SliderTrackActive,
+  SliderThumb,
+  type SliderProps,
+  type SliderTrackProps,
+  type SliderTrackActiveProps,
+  type SliderThumbProps,
+} from './Slider';
+
+// RadioGroup components
+export {
+  RadioGroup,
+  RadioGroupItem,
+  RadioGroupIndicator,
+  RadioGroupItemWithLabel,
+  type RadioGroupProps,
+  type RadioGroupItemProps,
+  type RadioGroupIndicatorProps,
+} from './RadioGroup';
+
+// ToggleGroup components
+export {
+  ToggleGroup,
+  ToggleGroupItem,
+  type ToggleGroupProps,
+  type ToggleGroupItemProps,
+} from './ToggleGroup';
+
+// Accordion components
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+  AccordionChevron,
+  type AccordionProps,
+  type AccordionItemProps,
+  type AccordionTriggerProps,
+  type AccordionContentProps,
+} from './Accordion';
+
+// Sheet components
+export {
+  Sheet,
+  SheetOverlay,
+  SheetFrame,
+  SheetHandle,
+  type SheetProps,
+  type SheetOverlayProps,
+  type SheetFrameProps,
+  type SheetHandleProps,
+} from './Sheet';
+
+// Popover components
+export {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverClose,
+  type PopoverProps,
+  type PopoverTriggerProps,
+  type PopoverContentProps,
+  type PopoverArrowProps,
+  type PopoverCloseProps,
+} from './Popover';
+
+// Tooltip components
+export {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipArrow,
+  type TooltipProps,
+  type TooltipTriggerProps,
+  type TooltipContentProps,
+  type TooltipArrowProps,
+} from './Tooltip';
+
+// Toast components
+export {
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  type ToastProps,
+  type ToastTitleProps,
+  type ToastDescriptionProps,
+} from './Toast';
+
+// Spinner component
+export { Spinner, type SpinnerProps } from './Spinner';

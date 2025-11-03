@@ -4,22 +4,12 @@ import {
   XStack,
   YStack,
   ScrollView,
-  Separator,
-  Tabs,
-  Sheet,
-  Dialog,
-  Progress,
-  Slider,
-  Checkbox,
-  RadioGroup,
-  ToggleGroup,
   Circle,
   Square,
-  Label as TamaguiLabel,
 } from 'tamagui';
 import { config } from '../tamagui.config';
 import { useDesignSystem, useTokenCSS } from '../state/designSystem';
-import { ChevronDown, Check } from 'lucide-react';
+import { ChevronDown, Check, User, Settings, Bell } from 'lucide-react';
 
 // Import our design system components
 import {
@@ -35,6 +25,43 @@ import {
   Body,
   Caption,
   Label,
+  // New styled components
+  Separator,
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+  ListItem,
+  ListItemTitle,
+  ListItemSubtitle,
+  Slider,
+  SliderTrack,
+  SliderTrackActive,
+  SliderThumb,
+  RadioGroup,
+  RadioGroupItem,
+  RadioGroupIndicator,
+  RadioGroupItemWithLabel,
+  ToggleGroup,
+  ToggleGroupItem,
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+  AccordionChevron,
+  Sheet,
+  SheetOverlay,
+  SheetFrame,
+  SheetHandle,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  Spinner,
 } from '../design-system/components';
 
 export default function TamaguiShowcase() {
@@ -202,44 +229,17 @@ export default function TamaguiShowcase() {
                   </Switch>
                 </XStack>
 
-                {/* Checkbox - Using Tamagui (we don't have styled version) */}
-                <XStack gap="$3" alignItems="center">
-                  <Checkbox id="checkbox1" size="$4">
-                    <Checkbox.Indicator>
-                      <Check />
-                    </Checkbox.Indicator>
-                  </Checkbox>
-                  <TamaguiLabel htmlFor="checkbox1" color="$textPrimary">
-                    Accept terms and conditions
-                  </TamaguiLabel>
-                </XStack>
-
-                {/* Radio Group - Using Tamagui (we don't have styled version) */}
+                {/* Radio Group - Styled */}
                 <YStack gap="$2">
                   <Label>Radio Options</Label>
                   <RadioGroup value={radioValue} onValueChange={setRadioValue}>
-                    <YStack gap="$2">
-                      <XStack gap="$3" alignItems="center">
-                        <RadioGroup.Item value="option1" id="r1" size="$3">
-                          <RadioGroup.Indicator />
-                        </RadioGroup.Item>
-                        <TamaguiLabel htmlFor="r1" color="$textPrimary">
-                          Option 1
-                        </TamaguiLabel>
-                      </XStack>
-                      <XStack gap="$3" alignItems="center">
-                        <RadioGroup.Item value="option2" id="r2" size="$3">
-                          <RadioGroup.Indicator />
-                        </RadioGroup.Item>
-                        <TamaguiLabel htmlFor="r2" color="$textPrimary">
-                          Option 2
-                        </TamaguiLabel>
-                      </XStack>
-                    </YStack>
+                    <RadioGroupItemWithLabel value="option1" id="r1" label="Option 1" />
+                    <RadioGroupItemWithLabel value="option2" id="r2" label="Option 2" />
+                    <RadioGroupItemWithLabel value="option3" id="r3" label="Option 3" />
                   </RadioGroup>
                 </YStack>
 
-                {/* Slider - Using Tamagui (we don't have styled version) */}
+                {/* Slider - Styled */}
                 <YStack gap="$2">
                   <Label>Slider: {sliderValue[0]}</Label>
                   <Slider
@@ -248,33 +248,33 @@ export default function TamaguiShowcase() {
                     step={1}
                     value={sliderValue}
                     onValueChange={setSliderValue}
+                    size="medium"
                   >
-                    <Slider.Track backgroundColor="$border">
-                      <Slider.TrackActive backgroundColor="$brand" />
-                    </Slider.Track>
-                    <Slider.Thumb index={0} circular backgroundColor="$brand" />
+                    <SliderTrack>
+                      <SliderTrackActive />
+                    </SliderTrack>
+                    <SliderThumb index={0} circular />
                   </Slider>
                 </YStack>
 
-                {/* Toggle Group - Using Tamagui (we don't have styled version) */}
+                {/* Toggle Group - Styled */}
                 <YStack gap="$2">
                   <Label>Toggle Group</Label>
                   <ToggleGroup
                     type="single"
                     value={toggleValue}
                     onValueChange={setToggleValue}
-                    backgroundColor="$bgSecondary"
-                    borderRadius="$2"
+                    orientation="horizontal"
                   >
-                    <ToggleGroup.Item value="left">
+                    <ToggleGroupItem value="left" active={toggleValue === 'left'}>
                       <Body>Left</Body>
-                    </ToggleGroup.Item>
-                    <ToggleGroup.Item value="center">
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="center" active={toggleValue === 'center'}>
                       <Body>Center</Body>
-                    </ToggleGroup.Item>
-                    <ToggleGroup.Item value="right">
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="right" active={toggleValue === 'right'}>
                       <Body>Right</Body>
-                    </ToggleGroup.Item>
+                    </ToggleGroupItem>
                   </ToggleGroup>
                 </YStack>
               </YStack>
@@ -409,7 +409,7 @@ export default function TamaguiShowcase() {
             </Card>
           </YStack>
 
-          {/* Sheet Component */}
+          {/* Sheet Component - Styled */}
           <Sheet
             modal
             open={sheetOpen}
@@ -418,51 +418,175 @@ export default function TamaguiShowcase() {
             position={0}
             dismissOnSnapToBottom
           >
-            <Sheet.Overlay animation="lazy" backgroundColor="rgba(0,0,0,0.5)" />
-            <Sheet.Frame padding="$4" backgroundColor="$bgPrimary">
-              <Sheet.Handle backgroundColor="$border" />
-              <YStack gap="$4">
+            <SheetOverlay />
+            <SheetFrame>
+              <SheetHandle />
+              <YStack gap="$4" padding="$4">
                 <H2>Bottom Sheet</H2>
-                <Body>This is a modal bottom sheet component with smooth animations.</Body>
+                <Body>This is a styled bottom sheet component with smooth animations and design tokens.</Body>
                 <Button variant="primary" onPress={() => setSheetOpen(false)}>
                   Close
                 </Button>
               </YStack>
-            </Sheet.Frame>
+            </SheetFrame>
           </Sheet>
 
-          {/* Dialog Component */}
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <Dialog.Portal>
-              <Dialog.Overlay animation="quick" backgroundColor="rgba(0,0,0,0.5)" />
-              <Dialog.Content
-                bordered
-                elevate
-                animation="quick"
-                padding="$4"
-                gap="$4"
-                backgroundColor="$bgPrimary"
-                borderColor="$border"
-              >
-                <Dialog.Title asChild>
-                  <H3>Dialog Title</H3>
-                </Dialog.Title>
-                <Dialog.Description asChild>
+          {/* Avatar Section */}
+          <YStack gap="$3">
+            <H2>Avatars</H2>
+            <Card variant="default" padding="large">
+              <YStack gap="$4">
+                <YStack gap="$2">
+                  <Caption fontWeight="600">Sizes</Caption>
+                  <XStack gap="$3" alignItems="center">
+                    <Avatar size="small">
+                      <AvatarFallback>S</AvatarFallback>
+                    </Avatar>
+                    <Avatar size="medium">
+                      <AvatarFallback>M</AvatarFallback>
+                    </Avatar>
+                    <Avatar size="large">
+                      <AvatarFallback>L</AvatarFallback>
+                    </Avatar>
+                    <Avatar size="xlarge">
+                      <AvatarFallback>XL</AvatarFallback>
+                    </Avatar>
+                  </XStack>
+                </YStack>
+
+                <YStack gap="$2">
+                  <Caption fontWeight="600">With Initials</Caption>
+                  <XStack gap="$3" alignItems="center">
+                    <Avatar><AvatarFallback>JD</AvatarFallback></Avatar>
+                    <Avatar><AvatarFallback>AB</AvatarFallback></Avatar>
+                    <Avatar><AvatarFallback>MK</AvatarFallback></Avatar>
+                  </XStack>
+                </YStack>
+              </YStack>
+            </Card>
+          </YStack>
+
+          {/* List Items Section */}
+          <YStack gap="$3">
+            <H2>List Items</H2>
+            <Card variant="default" padding="none">
+              <YStack>
+                <ListItem size="medium">
+                  <XStack gap="$3" alignItems="center" flex={1}>
+                    <User size={20} color="rgb(var(--color-text-secondary))" />
+                    <YStack flex={1}>
+                      <ListItemTitle>Profile Settings</ListItemTitle>
+                      <ListItemSubtitle>Manage your account</ListItemSubtitle>
+                    </YStack>
+                    <ChevronDown size={16} color="rgb(var(--color-text-secondary))" />
+                  </XStack>
+                </ListItem>
+                <Separator />
+                <ListItem size="medium">
+                  <XStack gap="$3" alignItems="center" flex={1}>
+                    <Bell size={20} color="rgb(var(--color-text-secondary))" />
+                    <YStack flex={1}>
+                      <ListItemTitle>Notifications</ListItemTitle>
+                      <ListItemSubtitle>Push, email, SMS</ListItemSubtitle>
+                    </YStack>
+                    <ChevronDown size={16} color="rgb(var(--color-text-secondary))" />
+                  </XStack>
+                </ListItem>
+                <Separator />
+                <ListItem size="medium">
+                  <XStack gap="$3" alignItems="center" flex={1}>
+                    <Settings size={20} color="rgb(var(--color-text-secondary))" />
+                    <YStack flex={1}>
+                      <ListItemTitle>Preferences</ListItemTitle>
+                      <ListItemSubtitle>Customize experience</ListItemSubtitle>
+                    </YStack>
+                    <ChevronDown size={16} color="rgb(var(--color-text-secondary))" />
+                  </XStack>
+                </ListItem>
+              </YStack>
+            </Card>
+          </YStack>
+
+          {/* Accordion Section */}
+          <YStack gap="$3">
+            <H2>Accordion</H2>
+            <Accordion type="single" collapsible>
+              <AccordionItem value="item1">
+                <AccordionTrigger>
+                  <XStack justifyContent="space-between" flex={1} alignItems="center">
+                    <Body fontWeight="600">What is Tamagui?</Body>
+                    <AccordionChevron />
+                  </XStack>
+                </AccordionTrigger>
+                <AccordionContent>
                   <Body color="$textSecondary">
-                    This is a dialog component with smooth animations and proper styling.
+                    Tamagui is a universal UI kit for React Native and Web with an optimizing compiler.
                   </Body>
-                </Dialog.Description>
-                <XStack gap="$3" justifyContent="flex-end">
-                  <Button variant="secondary" onPress={() => setDialogOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button variant="primary" onPress={() => setDialogOpen(false)}>
-                    Confirm
-                  </Button>
-                </XStack>
-              </Dialog.Content>
-            </Dialog.Portal>
-          </Dialog>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item2">
+                <AccordionTrigger>
+                  <XStack justifyContent="space-between" flex={1} alignItems="center">
+                    <Body fontWeight="600">How does it work?</Body>
+                    <AccordionChevron />
+                  </XStack>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <Body color="$textSecondary">
+                    It uses a styling system that works across platforms with design tokens and variants.
+                  </Body>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </YStack>
+
+          {/* Popover & Tooltip Section */}
+          <YStack gap="$3">
+            <H2>Popovers & Tooltips</H2>
+            <Card variant="default" padding="large">
+              <XStack gap="$3" flexWrap="wrap">
+                <Popover>
+                  <PopoverTrigger>
+                    <Button variant="secondary">Open Popover</Button>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <YStack gap="$2">
+                      <H3 fontSize="$3">Quick Actions</H3>
+                      <Button variant="ghost" size="small">Edit</Button>
+                      <Button variant="ghost" size="small">Share</Button>
+                      <Button variant="ghost" size="small">Delete</Button>
+                    </YStack>
+                  </PopoverContent>
+                </Popover>
+
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button variant="secondary">Hover for Tooltip</Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <Caption>This is a helpful tooltip!</Caption>
+                  </TooltipContent>
+                </Tooltip>
+              </XStack>
+            </Card>
+          </YStack>
+
+          {/* Loading States Section */}
+          <YStack gap="$3">
+            <H2>Loading States</H2>
+            <Card variant="default" padding="large">
+              <YStack gap="$4">
+                <YStack gap="$2">
+                  <Caption fontWeight="600">Spinner Sizes</Caption>
+                  <XStack gap="$4" alignItems="center">
+                    <Spinner size="small" />
+                    <Spinner size="medium" />
+                    <Spinner size="large" />
+                  </XStack>
+                </YStack>
+              </YStack>
+            </Card>
+          </YStack>
 
           {/* Shapes Section */}
           <YStack gap="$3">

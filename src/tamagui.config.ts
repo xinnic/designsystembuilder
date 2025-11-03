@@ -176,26 +176,94 @@ export const createDynamicConfig = () => {
     },
     themes: {
       light: {
+        // Base colors for all components
         background: tokens.color.bgPrimary,
         backgroundHover: tokens.color.bgSecondary,
+        backgroundPress: tokens.color.bgSecondary,
+        backgroundFocus: tokens.color.brandWeak,
         backgroundStrong: tokens.color.bgSecondary,
+        backgroundTransparent: 'transparent',
+
+        // Text colors
         color: tokens.color.textPrimary,
-        colorHover: tokens.color.textSecondary,
+        colorHover: tokens.color.brand,
+        colorPress: tokens.color.brand,
+        colorFocus: tokens.color.textPrimary,
+        colorTransparent: 'transparent',
+
+        // Border colors
         borderColor: tokens.color.border,
+        borderColorHover: tokens.color.brand,
+        borderColorPress: tokens.color.brand,
+        borderColorFocus: tokens.color.focus,
+
+        // Placeholder
         placeholderColor: tokens.color.textDisabled,
+
+        // Brand colors
         brand: tokens.color.brand,
         brandHover: tokens.color.brandWeak,
+        brandPress: tokens.color.brand,
+
+        // Semantic colors
+        success: tokens.color.success,
+        successBackground: tokens.color.success,
+        warning: tokens.color.warning,
+        warningBackground: tokens.color.warning,
+        danger: tokens.color.danger,
+        dangerBackground: tokens.color.danger,
+        info: tokens.color.info,
+        infoBackground: tokens.color.info,
+
+        // Shadows
+        shadowColor: 'rgba(0, 0, 0, 0.1)',
+        shadowColorHover: 'rgba(0, 0, 0, 0.15)',
+        shadowColorPress: 'rgba(0, 0, 0, 0.2)',
       },
       dark: {
+        // Base colors for all components
         background: tokens.color.bgPrimary,
         backgroundHover: tokens.color.bgSecondary,
+        backgroundPress: tokens.color.bgSecondary,
+        backgroundFocus: tokens.color.brandWeak,
         backgroundStrong: tokens.color.bgSecondary,
+        backgroundTransparent: 'transparent',
+
+        // Text colors
         color: tokens.color.textPrimary,
-        colorHover: tokens.color.textSecondary,
+        colorHover: tokens.color.brand,
+        colorPress: tokens.color.brand,
+        colorFocus: tokens.color.textPrimary,
+        colorTransparent: 'transparent',
+
+        // Border colors
         borderColor: tokens.color.border,
+        borderColorHover: tokens.color.brand,
+        borderColorPress: tokens.color.brand,
+        borderColorFocus: tokens.color.focus,
+
+        // Placeholder
         placeholderColor: tokens.color.textDisabled,
+
+        // Brand colors
         brand: tokens.color.brand,
         brandHover: tokens.color.brandWeak,
+        brandPress: tokens.color.brand,
+
+        // Semantic colors
+        success: tokens.color.success,
+        successBackground: tokens.color.success,
+        warning: tokens.color.warning,
+        warningBackground: tokens.color.warning,
+        danger: tokens.color.danger,
+        dangerBackground: tokens.color.danger,
+        info: tokens.color.info,
+        infoBackground: tokens.color.info,
+
+        // Shadows
+        shadowColor: 'rgba(0, 0, 0, 0.3)',
+        shadowColorHover: 'rgba(0, 0, 0, 0.4)',
+        shadowColorPress: 'rgba(0, 0, 0, 0.5)',
       }
     },
     media: {
