@@ -25,6 +25,9 @@ export const Button = styled(TamaguiButton, {
   fontWeight: '600',
   cursor: 'pointer',
   borderWidth: 0,
+  minHeight: 44, // Minimum tap target for accessibility
+  userSelect: 'none', // Prevent text selection for better UX
+  letterSpacing: 0.02, // Improve button text readability
 
   // Accessibility
   focusable: true,
@@ -114,7 +117,7 @@ export const Button = styled(TamaguiButton, {
 
     disabled: {
       true: {
-        opacity: 0.5,
+        opacity: 0.38, // Standard disabled opacity for better accessibility
         cursor: 'not-allowed',
         pointerEvents: 'none',
       },

@@ -143,7 +143,9 @@ export function Sidebar({}: SidebarProps) {
     customAccentColor,
     setCustomAccentColor,
     isDarkMode,
-    setDarkMode
+    setDarkMode,
+    cornerRadius,
+    setCornerRadius
   } = useDesignSystem();
   const [typographyOpen, setTypographyOpen] = React.useState(true);
   const [colorsOpen, setColorsOpen] = React.useState(true);
@@ -251,6 +253,60 @@ export function Sidebar({}: SidebarProps) {
                   title="Large Scale"
                 >
                   <span className="text-lg font-bold text-foreground">Aa</span>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium mb-2 block">Corner radius</label>
+              <div className="grid grid-cols-4 gap-2">
+                <button
+                  className={`p-3 border-2 transition-colors flex items-center justify-center ${
+                    cornerRadius === 'none'
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border hover:bg-muted'
+                  }`}
+                  style={{ borderRadius: '8px' }}
+                  onClick={() => setCornerRadius('none')}
+                  title="None"
+                >
+                  <div className="w-8 h-8 border-2 border-foreground" style={{ borderRadius: '0px' }} />
+                </button>
+                <button
+                  className={`p-3 border-2 transition-colors flex items-center justify-center ${
+                    cornerRadius === 'small'
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border hover:bg-muted'
+                  }`}
+                  style={{ borderRadius: '8px' }}
+                  onClick={() => setCornerRadius('small')}
+                  title="Small"
+                >
+                  <div className="w-8 h-8 border-2 border-foreground" style={{ borderRadius: '4px' }} />
+                </button>
+                <button
+                  className={`p-3 border-2 transition-colors flex items-center justify-center ${
+                    cornerRadius === 'medium'
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border hover:bg-muted'
+                  }`}
+                  style={{ borderRadius: '8px' }}
+                  onClick={() => setCornerRadius('medium')}
+                  title="Medium"
+                >
+                  <div className="w-8 h-8 border-2 border-foreground" style={{ borderRadius: '10px' }} />
+                </button>
+                <button
+                  className={`p-3 border-2 transition-colors flex items-center justify-center ${
+                    cornerRadius === 'large'
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border hover:bg-muted'
+                  }`}
+                  style={{ borderRadius: '8px' }}
+                  onClick={() => setCornerRadius('large')}
+                  title="Large"
+                >
+                  <div className="w-8 h-8 border-2 border-foreground" style={{ borderRadius: '20px' }} />
                 </button>
               </div>
             </div>

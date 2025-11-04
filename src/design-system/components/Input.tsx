@@ -25,11 +25,12 @@ export const Input = styled(TamaguiInput, {
   fontSize: '$2',
   color: '$textPrimary',
   backgroundColor: '$bgSecondary',
-  borderWidth: 1,
+  borderWidth: 2, // Thicker border for better visual hierarchy
   borderColor: '$border',
   borderRadius: '$2',
   paddingHorizontal: '$3',
   paddingVertical: '$2',
+  minHeight: 44, // Minimum tap target for accessibility
   outlineWidth: 0,
 
   placeholderTextColor: '$textDisabled',
@@ -50,18 +51,18 @@ export const Input = styled(TamaguiInput, {
     variant: {
       filled: {
         backgroundColor: '$bgSecondary',
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: '$border',
       },
       outlined: {
         backgroundColor: 'transparent',
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: '$border',
       },
       underline: {
         backgroundColor: 'transparent',
         borderWidth: 0,
-        borderBottomWidth: 1,
+        borderBottomWidth: 2,
         borderColor: '$border',
         borderRadius: 0,
         paddingHorizontal: 0,
@@ -98,7 +99,7 @@ export const Input = styled(TamaguiInput, {
 
     disabled: {
       true: {
-        opacity: 0.5,
+        opacity: 0.38, // Standard disabled opacity for better accessibility
         cursor: 'not-allowed',
         pointerEvents: 'none',
       },
@@ -129,7 +130,7 @@ export const TextArea = styled(TamaguiTextArea, {
   fontSize: '$2',
   color: '$textPrimary',
   backgroundColor: '$bgSecondary',
-  borderWidth: 1,
+  borderWidth: 2, // Thicker border for better visual hierarchy
   borderColor: '$border',
   borderRadius: '$2',
   paddingHorizontal: '$3',
@@ -155,12 +156,12 @@ export const TextArea = styled(TamaguiTextArea, {
     variant: {
       filled: {
         backgroundColor: '$bgSecondary',
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: '$border',
       },
       outlined: {
         backgroundColor: 'transparent',
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: '$border',
       },
     },
@@ -177,7 +178,7 @@ export const TextArea = styled(TamaguiTextArea, {
 
     disabled: {
       true: {
-        opacity: 0.5,
+        opacity: 0.38, // Standard disabled opacity for better accessibility
         cursor: 'not-allowed',
         pointerEvents: 'none',
       },

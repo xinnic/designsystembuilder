@@ -22,3 +22,47 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Reference files and folders
+references/
+reference/
+*.reference
+*.ref
+
+# Temporary research files
+research/
+*.research
+
+# Claude/AI specific
+.claude/
+
+# Screenshots and images for reference
+*.png
+*.jpg
+*.jpeg
+*.gif
+!public/**/*.png
+!public/**/*.jpg
+!public/**/*.jpeg
+!public/**/*.gif
+!src/assets/**/*.png
+!src/assets/**/*.jpg
+!src/assets/**/*.jpeg
+!src/assets/**/*.gif
+
+# Backup files
+*.backup
+*.bak
+*.tmp
+*~
+
+# OS files
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Environment files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

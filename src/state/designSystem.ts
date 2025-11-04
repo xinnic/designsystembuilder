@@ -7,6 +7,7 @@ export type BorderTone = 'light' | 'ultraLight';
 export type InputStyle = 'filled' | 'outlined' | 'underline' | 'none';
 export type CardWidth = 'full' | 'withMargins';
 export type TechStack = 'web-react' | 'react-native-expo' | 'ios-swiftui' | 'android-compose' | 'flutter';
+export type CornerRadius = 'none' | 'small' | 'medium' | 'large';
 
 export interface HapticsConfig {
   enabled: boolean;
@@ -84,6 +85,7 @@ export interface DesignSystemState {
   selectedDisplayFont: string;
   stylePresetId: string;
   spacingMode: 'compact' | 'normal' | 'comfortable';
+  cornerRadius: CornerRadius;
 
   // Setters
   setTokens(partial: Partial<Tokens>): void;
@@ -99,6 +101,7 @@ export interface DesignSystemState {
   setDisplayFont(font: string): void;
   setStylePreset(presetId: string): void;
   setSpacingMode(mode: 'compact' | 'normal' | 'comfortable'): void;
+  setCornerRadius(radius: CornerRadius): void;
 }
 
 // Default values
@@ -181,6 +184,7 @@ export const useDesignSystem = create<DesignSystemState>((set) => ({
   selectedDisplayFont: 'font-jakarta',
   stylePresetId: 'modern',
   spacingMode: 'normal',
+  cornerRadius: 'medium',
 
   setTokens: (partial: Partial<Tokens>) =>
     set((state: DesignSystemState) => ({ tokens: { ...state.tokens, ...partial } })),
@@ -200,7 +204,8 @@ export const useDesignSystem = create<DesignSystemState>((set) => ({
   setPrimaryFont: (font: string) => set({ selectedPrimaryFont: font }),
   setDisplayFont: (font: string) => set({ selectedDisplayFont: font }),
   setStylePreset: (presetId: string) => set({ stylePresetId: presetId }),
-  setSpacingMode: (mode: 'compact' | 'normal' | 'comfortable') => set({ spacingMode: mode })
+  setSpacingMode: (mode: 'compact' | 'normal' | 'comfortable') => set({ spacingMode: mode }),
+  setCornerRadius: (radius: CornerRadius) => set({ cornerRadius: radius })
 }));
 
 // Helper function to convert hex to RGB triplet
@@ -291,6 +296,14 @@ const spacingScales = {
   comfortable: [12, 24, 36, 48, 60, 72, 96, 120]
 };
 
+// Corner radius scale definitions
+const cornerRadiusScales = {
+  none: { sm: '0px', md: '0px', lg: '0px', full: '9999px' },
+  small: { sm: '4px', md: '6px', lg: '8px', full: '9999px' },
+  medium: { sm: '6px', md: '10px', lg: '16px', full: '9999px' },
+  large: { sm: '12px', md: '20px', lg: '28px', full: '9999px' }
+};
+
 // Track the last update to prevent infinite loops
 let lastUpdate = {
   theme: 'turquoise',
@@ -301,7 +314,8 @@ let lastUpdate = {
   scale: 'regular',
   primaryFont: 'font-jakarta',
   displayFont: 'font-jakarta',
-  spacingMode: 'normal'
+  spacingMode: 'normal',
+  cornerRadius: 'medium' as CornerRadius
 };
 
 // Subscribe to changes and auto-update tokens
@@ -316,7 +330,8 @@ useDesignSystem.subscribe((state) => {
     state.selectedScale !== lastUpdate.scale ||
     state.selectedPrimaryFont !== lastUpdate.primaryFont ||
     state.selectedDisplayFont !== lastUpdate.displayFont ||
-    state.spacingMode !== lastUpdate.spacingMode;
+    state.spacingMode !== lastUpdate.spacingMode ||
+    state.cornerRadius !== lastUpdate.cornerRadius;
 
   if (!hasChanged) return;
 
@@ -330,7 +345,8 @@ useDesignSystem.subscribe((state) => {
     scale: state.selectedScale,
     primaryFont: state.selectedPrimaryFont,
     displayFont: state.selectedDisplayFont,
-    spacingMode: state.spacingMode
+    spacingMode: state.spacingMode,
+    cornerRadius: state.cornerRadius
   };
 
   const colorMap: Record<string, string> = {
@@ -371,6 +387,9 @@ useDesignSystem.subscribe((state) => {
   // Get current spacing scale
   const currentSpacing = spacingScales[state.spacingMode] || spacingScales.normal;
 
+  // Get current corner radius scale
+  const currentRadius = cornerRadiusScales[state.cornerRadius] || cornerRadiusScales.medium;
+
   // Update tokens (fontFamily is used for body text, we'll handle display font in CSS)
   state.setTokens({
     // Colors
@@ -386,13 +405,15 @@ useDesignSystem.subscribe((state) => {
     fontFamily: primaryFontFamily,
     ...currentScale,
     // Spacing
-    space: currentSpacing
+    space: currentSpacing,
+    // Corner radius
+    radius: currentRadius
   });
 });
 
 // Hook to bind tokens to CSS variables
 export const useTokenCSS = () => {
-  const { tokens, opts, isDarkMode, selectedPrimaryFont, selectedDisplayFont, selectedScale, selectedTheme, stylePresetId } = useDesignSystem();
+  const { tokens, opts, isDarkMode, selectedPrimaryFont, selectedDisplayFont, selectedScale, selectedTheme, stylePresetId, cornerRadius } = useDesignSystem();
 
   useEffect(() => {
     const root = document.documentElement;
@@ -521,5 +542,5 @@ export const useTokenCSS = () => {
 
     root.style.setProperty('--cardBorderAlpha', opts.cardBorderTone === 'light' ? '.18' : '.10');
 
-  }, [tokens, opts, isDarkMode, selectedPrimaryFont, selectedDisplayFont, selectedScale, selectedTheme, stylePresetId]);
+  }, [tokens, opts, isDarkMode, selectedPrimaryFont, selectedDisplayFont, selectedScale, selectedTheme, stylePresetId, cornerRadius]);
 };

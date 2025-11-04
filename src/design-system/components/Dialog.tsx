@@ -56,19 +56,28 @@ export const DialogContent = styled(TamaguiDialog.Content, {
   width: '90%',
   maxWidth: 500,
   maxHeight: '85vh',
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 10 },
-  shadowOpacity: 0.2,
-  shadowRadius: 30,
-  elevation: 10,
-  animation: 'quick',
+  shadowColor: '#475569', // Bluish-grey shadow for better depth perception
+  shadowOffset: { width: 0, height: 8 },
+  shadowOpacity: 0.15,
+  shadowRadius: 24,
+  elevation: 3,
+  animation: [
+    'quick',
+    {
+      opacity: { overshootClamping: true },
+    },
+  ],
   enterStyle: {
-    scale: 0.9,
+    x: 0,
+    y: -20,
     opacity: 0,
+    scale: 0.9,
   },
   exitStyle: {
-    scale: 0.95,
+    x: 0,
+    y: 10,
     opacity: 0,
+    scale: 0.95,
   },
 
   variants: {
@@ -96,8 +105,11 @@ export const DialogContent = styled(TamaguiDialog.Content, {
     variant: {
       default: {},
       elevated: {
-        shadowOpacity: 0.3,
-        shadowRadius: 50,
+        shadowColor: '#475569', // Bluish-grey shadow
+        shadowOffset: { width: 0, height: 12 },
+        shadowOpacity: 0.2,
+        shadowRadius: 40,
+        elevation: 5,
       },
       flat: {
         borderWidth: 0,

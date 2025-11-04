@@ -132,7 +132,7 @@ export const createDynamicConfig = () => {
   });
 
   const headingFont = createFont({
-    family: 'var(--font-family)',
+    family: 'var(--font-display)',
     size: {
       1: 'var(--font-caption-size)',
       2: 'var(--font-body-size)',

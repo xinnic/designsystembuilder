@@ -54,7 +54,7 @@ export const Checkbox = styled(TamaguiCheckbox, {
 
     disabled: {
       true: {
-        opacity: 0.5,
+        opacity: 0.38, // Standard disabled opacity for better accessibility
         cursor: 'not-allowed',
       },
     },

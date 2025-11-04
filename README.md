@@ -50,6 +50,17 @@ This is the **only** React Native design system builder that:
 - **Zustand**: State management
 - **Lucide Icons**: Beautiful icon set
 
+## 📚 Documentation
+
+Complete documentation is available in the [`docs/`](./docs/) folder:
+
+### Quick Links
+- **[Product Strategy](./docs/strategy/product-plan.md)** - Vision and roadmap
+- **[Development Tasks](./docs/strategy/tasks.md)** - Current sprint priorities
+- **[Architecture Guide](./docs/architecture/architecture.md)** - Technical design
+- **[Token Implementation](./docs/architecture/TOKEN_IMPLEMENTATION.md)** - All design token values
+- **[Documentation Index](./docs/README.md)** - Complete documentation overview
+
 ## 📦 Installation
 
 ```bash

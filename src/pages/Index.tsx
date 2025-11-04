@@ -46,7 +46,8 @@ const Index = () => {
     selectedDisplayFont,
     setDisplayFont,
     stylePresetId: selectedStylePreset,
-    setStylePreset
+    setStylePreset,
+    tokens
   } = useDesignSystem();
 
   const [selectedBaseLib, setSelectedBaseLib] = useState('shadcn');
@@ -676,7 +677,7 @@ Primary Font: ${primaryFontName} | Display Font: ${displayFontName}
 
     // Define other token systems
     const spacingScale = 'space-1: 4px, space-2: 8px, space-3: 12px, space-4: 16px, space-5: 20px, space-6: 24px, space-8: 32px, space-10: 40px, space-12: 48px, space-16: 64px';
-    const radii = 'sm: 4px, md: 8px, lg: 12px, full: 9999px';
+    const radii = `sm: ${tokens.radius.sm}, md: ${tokens.radius.md}, lg: ${tokens.radius.lg}, full: ${tokens.radius.full}`;
     const shadows = 'level-1: subtle (cards, inputs), level-2: medium (dropdowns, popovers), level-3: strong (modals, drawers)';
     const motion = 'duration-fast: 150ms, duration-medium: 300ms, duration-slow: 500ms, easing-ease-out: cubic-bezier(0, 0, 0.2, 1), easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1)';
     const themeModes = isDarkMode ? 'Dark' : 'Light';
