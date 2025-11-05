@@ -325,7 +325,6 @@ export function useTokenSystem(theme: Theme = 'light') {
  * Hook to get current theme from system preference or user setting
  */
 export function useTheme(): Theme {
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  // You can also get this from your state management
-  return prefersDark ? 'dark' : 'light';
+  const { isDarkMode } = useDesignSystem();
+  return isDarkMode ? 'dark' : 'light';
 }
