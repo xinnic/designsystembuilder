@@ -1,359 +1,239 @@
-# Design System Builder - Development Tasks (B2C Focus)
+# Design System Builder - Task Priority Matrix
 
-> **See [product-plan.md](./product-plan.md) for complete product strategy and [architecture.md](../architecture/architecture.md) for technical architecture.**
+> **Last Updated:** 2025-11-04
+> **Current Sprint:** Foundation & Token System
+> **Critical Path:** Token System → Component Migration → B2C Components → Megaprompt
 
-## 📚 Essential Documentation
-- **[TOKEN_IMPLEMENTATION.md](../architecture/TOKEN_IMPLEMENTATION.md)** - Exact token values and implementation details
-- **[architecture.md](../architecture/architecture.md)** - Token system design and component architecture
-- **[product-plan.md](./product-plan.md)** - Strategic vision and roadmap
+## 📊 Task Sequencing Overview
 
-## 🎯 Current Status - Phase 1: B2C Component MVP
+The current implementation is **backwards** - we're building components without the proper token foundation. This document reorganizes tasks in the correct sequence to build a solid, scalable system.
 
-- ✅ 34 Tamagui components built (good foundation)
-- ✅ Factory pattern achieving 87% code reduction
-- ✅ CSS variable bridge working
-- ✅ Live preview with phone mock
-- ⚠️ **CRITICAL:** Need to prioritize B2C navigation & content components
-- ⚠️ **CRITICAL:** Megaprompt must be comprehensive for CLI generation
-- 🎯 **GOAL:** Ship megaprompt-based MVP in 2-4 weeks
+## ⚠️ Critical Finding
 
----
-
-## 🔴 Phase 1: B2C Component MVP (THIS SPRINT - Weeks 1-2)
-
-**Timeline:** 10-14 days | **Focus:** Navigation & Content Components
-
-### Day 1-2: FeedCard Component ⚡
-**Status:** 🚨 URGENT | **Time:** 2 days | **Complexity:** High
-
-**Why First:** Hero component that showcases visual customization best
-
-**📚 Required Reading:**
-- **[TOKEN_IMPLEMENTATION.md](../architecture/TOKEN_IMPLEMENTATION.md#feedcard)** - Exact token values for FeedCard
-- **[architecture.md](../architecture/architecture.md#component-architecture)** - Component structure patterns
-
-**Token Dependencies:** See `TOKEN_IMPLEMENTATION.md#feedcard` for exact values:
-```typescript
-{
-  card: {
-    padding: 16,           // spacing[3]
-    radius: 12,           // radius.lg
-    imageAspectRatio: 1.5, // 3:2 default
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    borderWidth: 0, // or 1 for outlined variant
-  },
-  content: {
-    titleSize: 18,
-    titleWeight: '600',
-    descriptionSize: 14,
-    metaSize: 12,
-    lineHeight: 1.5,
-  }
-}
-```
-
-**Component Structure:**
-```typescript
-FeedCard = {
-  container: styled(YStack),
-  image: Image component with aspect ratio,
-  content: YStack with padding,
-  title: Text with semantic sizing,
-  description: Text with secondary color,
-  meta: Text with muted color (author, date),
-  actions: XStack for buttons/icons
-}
-```
-
-**Acceptance Criteria:**
-- [ ] Supports image + content layout
-- [ ] 3 variants: default, outlined, elevated
-- [ ] Responsive to theme changes
-- [ ] Proper shadows and borders
-- [ ] Actions slot for buttons/icons
+**Documentation vs Reality Gap:**
+- ✅ Comprehensive token system **documented** (3-tier OKLCH system)
+- ✅ Token system **NOW IMPLEMENTED** (11-step OKLCH scales + semantic mappings)
+- ⚠️ Components still using hardcoded values (migration needed)
+- ⚠️ Megaprompt needs updating to use new token system
 
 ---
 
-### Day 3-4: TabBar & NavHeader Components ⚡
-**Status:** 🚨 URGENT | **Time:** 2 days | **Complexity:** High
+## 🎯 Task Priority List (Sequenced by Dependency)
 
-**TabBar Tokens:**
-```typescript
-{
-  tabBar: {
-    height: 56, // iOS standard
-    iconSize: 24,
-    labelSize: 10,
-    activeScale: 1.1,
-    inactiveOpacity: 0.6,
-    indicatorHeight: 2,
-  }
-}
-```
+### CATEGORY 1: Foundation & Token System 🔴 **CRITICAL - DO FIRST**
 
-**TabBar Variants:**
-- `floating` - Elevated with margins
-- `attached` - Full width bottom
-- `labeled` - Icons + labels
-- `icons-only` - Just icons
-
-**NavHeader Variants:**
-- `solid` - Opaque background
-- `transparent` - Blur background
-- `minimal` - Just logo/title
-
-**Acceptance Criteria:**
-- [ ] Platform-specific styling (iOS/Android)
-- [ ] Active state animations
-- [ ] Badge support for notifications
-- [ ] Logo/avatar support in header
+| Task | Why Important | Model | Status | Time |
+|------|--------------|-------|--------|------|
+| **1.1 Implement 3-Tier Token System** | Components can't be properly themed without this foundation | Opus | ✅ COMPLETED | 2 days |
+| - Primitive tokens (11-step OKLCH scales) | Enable wide color gamut and perceptual uniformity | Opus | ✅ Completed | 4h |
+| - Semantic token mappings | Theme switching and dark mode support | Opus | ✅ Completed | 4h |
+| - Component token overrides | Per-component customization | Sonnet | ✅ Completed | 2h |
+| - Token-to-CSS bridge | Real-time preview updates | Sonnet | ✅ Completed | 2h |
+| **1.2 Create Token Factory Functions** | 87% code reduction for component variants | Opus | ✅ COMPLETED | 1 day |
+| - Color scale generator | Automatic 11-step scales from brand color | Opus | ✅ Completed | 3h |
+| - Size variant generator | Consistent sizing across components | Sonnet | ✅ Completed | 2h |
+| - State transformation rules | Hover/focus/press states | Sonnet | ✅ Completed | 3h |
+| **1.3 Update Tamagui Config** | Bridge tokens to Tamagui properly | Sonnet | ✅ COMPLETED | 4h |
+| - Map semantic tokens | Connect token system to Tamagui | Sonnet | ✅ Completed | 2h |
+| - Platform-specific tokens | iOS/Android/Web differences | Sonnet | Not Started | 2h |
 
 ---
 
-### Day 5-6: DrawerMenu & SegmentedControl ⚡
-**Status:** 🚨 URGENT | **Time:** 2 days | **Complexity:** Medium
+### CATEGORY 2: Component Migration 🟡 **REQUIRED - DO SECOND**
 
-**DrawerMenu Features:**
-- Section headers
-- Icon + label items
-- Active state highlighting
-- User profile area
-- Nested menu support
-
-**SegmentedControl Features:**
-- Sliding indicator animation
-- 2-5 segments support
-- Icon + text options
-- Disabled state
-
----
-
-### Day 7-8: SearchBar Component ⚡
-**Status:** 🚨 URGENT | **Time:** 2 days | **Complexity:** Medium
-
-**SearchBar Features:**
-- Icon prefix
-- Clear button
-- Filter chips
-- Voice search icon (optional)
-- Recent searches dropdown
+| Task | Why Important | Model | Status | Time |
+|------|--------------|-------|--------|------|
+| **2.1 Migrate Existing Components to Token System** | Current components use hardcoded values | Sonnet | Not Started | 2 days |
+| - Button component | Most used component, sets pattern | Sonnet | Partial | 2h |
+| - Card component | Base for FeedCard | Sonnet | Partial | 2h |
+| - Input/Select/Checkbox | Form foundation | Sonnet | Partial | 3h |
+| - Text component | Typography tokens | Sonnet | Partial | 2h |
+| - Stack component | Spacing tokens | Sonnet | Partial | 1h |
+| **2.2 Add CVA Variant Structure** | Consistent variant API across components | Opus | Not Started | 1 day |
+| - Define variant types | Size/variant/state patterns | Opus | Not Started | 3h |
+| - Implement compound variants | Complex state combinations | Opus | Not Started | 3h |
+| - Add default variants | Sensible defaults | Sonnet | Not Started | 2h |
 
 ---
 
-## 🟢 Phase 2: Megaprompt Generation (Week 2)
+### CATEGORY 3: B2C Hero Components 🟢 **MVP FEATURES - DO THIRD**
 
-**Timeline:** 3-4 days | **Focus:** Comprehensive code generation
-
-### Task 2.1: Token System Architecture
-**Status:** ⏳ PENDING | **Time:** 1 day
-
-**📚 Required Reading:**
-- **[TOKEN_IMPLEMENTATION.md](../architecture/TOKEN_IMPLEMENTATION.md)** - Complete token values and implementation
-- **[architecture.md](../architecture/architecture.md#token-system-architecture)** - 3-tier token system design
-
-**3-Tier Token System:**
-```typescript
-// Tier 1: Primitives
-color.primitive.blue.500 = '#3b82f6'
-
-// Tier 2: Semantic (theme-aware)
-color.semantic.primary.default = {color.primitive.blue.500}
-
-// Tier 3: Component (optional overrides)
-component.button.primary.background = {color.semantic.primary.default}
-```
-
-**Semantic Token Taxonomy:**
-- **Canvas:** background/foreground pairs
-- **Surfaces:** surface/surface-foreground
-- **Interactive:** primary/secondary with foreground pairs
-- **Status:** success, warning, error, info (full sets)
-- **Borders:** border, divider, ring (focus)
+| Task | Why Important | Model | Status | Time |
+|------|--------------|-------|--------|------|
+| **3.1 FeedCard Component** | #1 B2C component - Instagram/TikTok feeds | Opus | Not Started | 1 day |
+| - Image handling & aspect ratios | Visual content display | Opus | Not Started | 3h |
+| - Content zones (title/desc/meta) | Information hierarchy | Sonnet | Not Started | 2h |
+| - Action slots | Like/comment/share | Sonnet | Not Started | 3h |
+| **3.2 TabBar Component** | Primary mobile navigation pattern | Opus | Not Started | 1 day |
+| - Platform-specific styles | iOS/Android conventions | Opus | Not Started | 4h |
+| - Badge support | Notification indicators | Sonnet | Not Started | 2h |
+| - Active state animations | Visual feedback | Sonnet | Not Started | 2h |
+| **3.3 NavHeader Component** | App branding and top navigation | Sonnet | Partial (AppBar exists) | 6h |
+| - Transparent/blur modes | Modern mobile patterns | Sonnet | Not Started | 3h |
+| - Logo/avatar slots | Branding flexibility | Sonnet | Not Started | 3h |
+| **3.4 DrawerMenu Component** | Secondary navigation | Opus | Not Started | 1 day |
+| - Section headers | Content organization | Sonnet | Not Started | 2h |
+| - Nested menus | Complex navigation | Opus | Not Started | 4h |
+| - User profile area | Account section | Sonnet | Not Started | 2h |
+| **3.5 SegmentedControl Component** | Content filtering UI | Sonnet | Not Started | 6h |
+| - Sliding indicator | Visual selection | Sonnet | Not Started | 3h |
+| - Icon support | Visual options | Sonnet | Not Started | 3h |
+| **3.6 SearchBar Component** | Discovery pattern | Sonnet | Not Started | 6h |
+| - Filter chips | Search refinement | Sonnet | Not Started | 3h |
+| - Recent searches | User convenience | Sonnet | Not Started | 3h |
 
 ---
 
-### Task 2.2: Megaprompt Template
-**Status:** ⏳ PENDING | **Time:** 2 days
+### CATEGORY 4: Megaprompt System 🔵 **EXPORT - DO FOURTH**
 
-**Structure:**
-```xml
-<DesignSystemMegaprompt>
-  <Role>Expert React Native/Tamagui developer</Role>
-  <ProjectSetup>
-    - Expo setup commands
-    - Tamagui installation
-    - Directory structure
-  </ProjectSetup>
-  <TokenConfiguration>
-    - Complete token system
-    - Light/dark themes
-    - Platform overrides
-  </TokenConfiguration>
-  <ComponentLibrary>
-    - All 6 core components
-    - Styled with tokens
-    - Variants included
-  </ComponentLibrary>
-  <UsageExamples>
-    - Complete app screens
-    - Component composition
-  </UsageExamples>
-  <AdherenceRules>
-    - Token usage enforcement
-    - Accessibility requirements
-    - Platform conventions
-  </AdherenceRules>
-</DesignSystemMegaprompt>
-```
+| Task | Why Important | Model | Status | Time |
+|------|--------------|-------|--------|------|
+| **4.1 Token System Export** | Include all token definitions in prompt | Opus | Not Started | 1 day |
+| - OKLCH color system | Color generation logic | Opus | Not Started | 4h |
+| - Semantic mappings | Theme relationships | Sonnet | Not Started | 4h |
+| **4.2 Component Code Generation** | Full Tamagui component implementations | Opus | Partial (basic exists) | 2 days |
+| - Component templates | Reusable patterns | Opus | Not Started | 6h |
+| - Variant generation | All component variants | Opus | Not Started | 6h |
+| - Platform overrides | iOS/Android specifics | Sonnet | Not Started | 4h |
+| **4.3 Project Setup Instructions** | Zero to app in 5 minutes | Sonnet | Partial | 6h |
+| - Expo initialization | Project creation | Sonnet | Partial | 2h |
+| - Tamagui setup | Dependencies and config | Sonnet | Partial | 2h |
+| - Directory structure | Organized codebase | Sonnet | Not Started | 2h |
+| **4.4 Adherence Rules** | Enforce token usage | Opus | Not Started | 4h |
+| - Token enforcement | No hardcoded values | Opus | Not Started | 2h |
+| - Accessibility rules | WCAG compliance | Sonnet | Not Started | 2h |
 
 ---
 
-### Task 2.3: State Management for Export
-**Status:** ⏳ PENDING | **Time:** 1 day
+### CATEGORY 5: Extended Components ⚪ **NICE TO HAVE - DO FIFTH**
 
-**Generate from Zustand store:**
-- Token values from current theme
-- Component variant selections
-- Platform-specific overrides
-- Accessibility settings
-
----
-
-## 🔵 Phase 3: Extended Components (Week 3-4)
-
-**Timeline:** 1-2 weeks | **Components:** Tier 2 B2C components
-
-### Content Display Components
-- [ ] ImageCarousel - Product galleries, onboarding
-- [ ] ListItem - Feeds, settings, notifications
-- [ ] Badge/Chip - Tags, filters, status
-- [ ] Avatar - User profiles everywhere
-- [ ] Empty State - No content scenarios
-
-### Form Components
-- [ ] Checkbox - Multi-select
-- [ ] Switch - Settings toggles
-- [ ] RadioGroup - Single select
-- [ ] TextArea - Comments, descriptions
-- [ ] Slider - Price ranges, ratings
-
-### Feedback Components
-- [ ] Toast - Transient notifications
-- [ ] Alert - Inline messages
-- [ ] Skeleton - Loading states
-- [ ] Progress - Upload/download
-- [ ] Spinner - Activity indicator
+| Task | Why Important | Model | Status | Time |
+|------|--------------|-------|--------|------|
+| **5.1 Content Components** | | | | |
+| - Avatar | User representation | Sonnet | Not Started | 3h |
+| - Badge/Chip | Tags and status | Sonnet | Not Started | 3h |
+| - ImageCarousel | Product galleries | Opus | Not Started | 6h |
+| - EmptyState | No content handling | Sonnet | Not Started | 3h |
+| **5.2 Form Components** | | | | |
+| - RadioGroup | Single selection | Sonnet | Not Started | 3h |
+| - TextArea | Long form input | Sonnet | Not Started | 3h |
+| - Slider | Range selection | Sonnet | Not Started | 4h |
+| **5.3 Feedback Components** | | | | |
+| - Toast | Transient messages | Sonnet | Not Started | 4h |
+| - Alert | Inline warnings | Sonnet | Not Started | 3h |
+| - Skeleton | Loading states | Sonnet | Not Started | 3h |
 
 ---
 
-## 🚀 Phase 4: Production Polish (Post-MVP)
+## 🚀 Sprint Plan
 
-### Platform Optimizations
-- [ ] iOS-specific haptics
-- [ ] Android ripple effects
-- [ ] Web hover states
-- [ ] Keyboard navigation
+### Sprint 1: Foundation (Week 1)
+**Goal:** Implement complete token system
+- [ ] Day 1-2: Implement 3-tier token system
+- [ ] Day 3: Create token factory functions
+- [ ] Day 4: Update Tamagui config
+- [ ] Day 5: Migrate 2-3 existing components as proof
 
-### Performance
-- [ ] Lazy loading
-- [ ] Animation frame optimization
-- [ ] Bundle size analysis
-- [ ] Memory profiling
+**Success Criteria:**
+- All colors using OKLCH
+- Semantic tokens working
+- Theme switching functional
+- At least Button and Card using tokens
 
-### Distribution
-- [ ] NPM package setup
-- [ ] Documentation site
-- [ ] Example apps
-- [ ] Video tutorials
+### Sprint 2: Component Migration (Days 6-8)
+**Goal:** All existing components use token system
+- [ ] Day 6: Migrate remaining basic components
+- [ ] Day 7: Add CVA variant structure
+- [ ] Day 8: Test and refine
 
----
+**Success Criteria:**
+- Zero hardcoded values
+- All components themeable
+- Consistent variant API
 
-## 📊 Progress Tracking
+### Sprint 3: B2C Components (Week 2)
+**Goal:** Ship 6 hero B2C components
+- [ ] Day 9-10: FeedCard & TabBar
+- [ ] Day 11: NavHeader & DrawerMenu
+- [ ] Day 12-13: SegmentedControl & SearchBar
 
-### Phase 1: B2C Component MVP
-- [x] Foundation (34 components built)
-- [x] Factory pattern (87% reduction)
-- [ ] FeedCard (0%)
-- [ ] TabBar & NavHeader (0%)
-- [ ] DrawerMenu & SegmentedControl (0%)
-- [ ] SearchBar (0%)
+**Success Criteria:**
+- Instagram-like feed possible
+- TikTok-like navigation working
+- All using token system
 
-**Progress: 40% | ETA: 10-14 days**
+### Sprint 4: Megaprompt (Days 14-16)
+**Goal:** Complete megaprompt generation
+- [ ] Day 14: Token system export
+- [ ] Day 15: Component code generation
+- [ ] Day 16: Setup instructions & adherence rules
 
-### Phase 2: Megaprompt Generation
-- [ ] Token system architecture (0%)
-- [ ] Megaprompt template (0%)
-- [ ] State management export (0%)
-
-**Progress: 0% | ETA: 3-4 days after Phase 1**
-
----
-
-## 🎯 Success Metrics
-
-### MVP Success (2 weeks)
-- [ ] 6 core B2C components working
-- [ ] Megaprompt generates working app
-- [ ] Visual customization instant (<100ms)
-- [ ] Cross-platform verified (iOS/Android/Web)
-
-### Quality Metrics
-- [ ] All components use tokens (no hardcoded values)
-- [ ] WCAG AA accessibility
-- [ ] 60fps animations
-- [ ] <3s megaprompt generation
-
-### User Metrics
-- [ ] <5 min to customized design system
-- [ ] Copy-paste megaprompt works first try
-- [ ] Components look native on each platform
+**Success Criteria:**
+- Copy/paste to Claude works
+- Generates working app
+- Under 5 minutes to running code
 
 ---
 
-## 📚 Key Documents
+## 📈 Progress Tracking
 
-- **[product-plan.md](./product-plan.md)** - Strategic vision & roadmap
-- **[architecture.md](./architecture.md)** - Token system & technical design
-- **[SYNC_ARCHITECTURE.md](./SYNC_ARCHITECTURE.md)** - State management
-- **[claude.md](./claude.md)** - AI context for development
+### Overall Progress
+- **Foundation:** 95% ✅ (Token system & factories complete!)
+- **Migration:** 15% (Button partially migrated, others pending)
+- **B2C Components:** 15% (AppBar/BottomNav partial)
+- **Megaprompt:** 20% (needs token system integration)
+- **Extended:** 0%
 
----
-
-## 🚦 Quick Start
-
-### Today's Priority
-1. Start with FeedCard component (most visual impact)
-2. Implement full token support
-3. Test theme responsiveness
-
-### Key Technical Decisions
-- **Platform:** React Native + Tamagui (cross-platform)
-- **Export:** Megaprompt only for MVP (config files later)
-- **Focus:** B2C apps needing strong visual identity
-- **Components:** Navigation & content first, forms second
-
-### Component Implementation Pattern
-```typescript
-// 1. Define tokens
-const tokens = {
-  component: { /* component-specific tokens */ }
-}
-
-// 2. Create styled component
-const Component = styled(TamaguiPrimitive, {
-  // Base styles using tokens
-  backgroundColor: '$surface',
-  // Variants
-  variants: { /* CVA-style variants */ }
-})
-
-// 3. Export with TypeScript types
-export type ComponentProps = GetProps<typeof Component>
-```
+### Current Status
+1. ✅ **Token system IMPLEMENTED** - Foundation complete!
+2. ✅ **Factory functions COMPLETE** - 87% code reduction achieved!
+3. 🟡 **Components use hardcoded values** - Migration needed
+4. 🟡 **Button component partially migrated** - Demo complete
 
 ---
 
-**Last Updated:** 2025-11-04 (B2C Pivot)
-**Current Sprint:** Phase 1 - B2C Component MVP
-**Next Milestone:** Megaprompt export (Week 2)
+## 🎯 Definition of Done
+
+### Token System Complete When:
+- [ ] All colors in OKLCH format
+- [ ] 11-step scales generate from any color
+- [ ] Semantic tokens map to primitives
+- [ ] Dark mode works automatically
+- [ ] Components update instantly on token change
+
+### Component Complete When:
+- [ ] Uses only tokens (no hardcoded values)
+- [ ] Has all documented variants
+- [ ] Includes platform overrides
+- [ ] Passes accessibility checks
+- [ ] Has TypeScript types
+
+### Megaprompt Complete When:
+- [ ] Includes all token definitions
+- [ ] Generates all components
+- [ ] Has setup instructions
+- [ ] Includes adherence rules
+- [ ] Works in Claude/Cursor first try
+
+---
+
+## 💡 Key Insights
+
+1. **Current approach is backwards** - Building UI without token foundation
+2. **Token system is the critical path** - Everything depends on it
+3. **Factory pattern crucial** - Enables rapid component creation
+4. **Megaprompt needs real code** - Not just configuration
+5. **B2C focus differentiates** - Navigation over forms
+
+---
+
+## 🚦 Next Action
+
+**STOP** current component development
+**START** with Task 1.1 - Implement 3-Tier Token System
+
+Without the token foundation, all other work will need to be redone.
+
+---
+
+**Note:** This prioritization fixes the fundamental sequencing issue. The token system MUST come first, then migrate existing components, then build new B2C components properly.

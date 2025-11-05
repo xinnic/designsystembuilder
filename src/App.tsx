@@ -6,10 +6,17 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import { useTokenSystem, useTheme } from "./hooks/useTokenSystem";
 
 const queryClient = new QueryClient();
 
 const App = () => {
+  // Get current theme preference
+  const theme = useTheme();
+
+  // Apply the new token system
+  const { tokens, brandPalette } = useTokenSystem(theme);
+
   useEffect(() => {
     // Apply the dsb-theme class to enable token CSS
     document.body.classList.add('dsb-theme');

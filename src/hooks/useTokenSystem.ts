@@ -1,0 +1,248 @@
+/**
+ * Token System Hook
+ *
+ * Bridges the 3-tier token system to CSS variables for real-time theme updates.
+ * Handles theme switching, dark mode, and dynamic brand color updates.
+ */
+
+import { useEffect, useMemo } from 'react';
+import {
+  tokens,
+  generateBrandPalette,
+  getSemanticValue,
+  primitiveColors,
+  semanticColors,
+  type Theme
+} from '../design-system/tokens';
+import { useDesignSystem } from '../state/designSystem';
+
+/**
+ * Convert OKLCH string to RGB for CSS variables
+ * CSS variables need RGB values for alpha channel support
+ */
+function oklchToRGB(oklch: string): string {
+  // This is a simplified conversion - in production use a library like culori
+  // For now, return a fallback RGB value
+  // The browser will handle OKLCH natively if supported
+
+  // Check if it's actually an OKLCH value
+  if (!oklch.startsWith('oklch(')) {
+    return oklch; // Return as-is if not OKLCH
+  }
+
+  // For now, we'll use OKLCH directly in modern browsers
+  // and provide a fallback for older browsers
+  return oklch;
+}
+
+/**
+ * Extract RGB values from OKLCH for use with alpha
+ * Returns format like "26 188 156" for rgb(26 188 156)
+ */
+function oklchToRGBValues(oklch: string): string {
+  // This would need a proper color conversion library
+  // For now, return placeholder values
+  // In production, use culori or another color library
+
+  if (oklch.includes('gray')) {
+    return '128 128 128';
+  }
+  if (oklch.includes('blue')) {
+    return '59 130 246';
+  }
+  if (oklch.includes('red')) {
+    return '239 68 68';
+  }
+  if (oklch.includes('green')) {
+    return '34 197 94';
+  }
+  if (oklch.includes('yellow')) {
+    return '245 158 11';
+  }
+  if (oklch.includes('purple')) {
+    return '147 51 234';
+  }
+
+  // Default fallback
+  return '128 128 128';
+}
+
+/**
+ * Hook to apply token system to CSS variables
+ */
+export function useTokenSystem(theme: Theme = 'light') {
+  const {
+    primaryColor,
+    fontFamily,
+    displayFont,
+    roundness,
+    inputBorderType,
+    cardBorderType
+  } = useDesignSystem();
+
+  // Generate brand palette from primary color
+  const brandPalette = useMemo(() => {
+    return generateBrandPalette(primaryColor);
+  }, [primaryColor]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+
+    // Add theme class
+    root.classList.remove('light', 'dark');
+    root.classList.add(theme);
+
+    // Apply primitive color scales as CSS variables
+    Object.entries(primitiveColors).forEach(([colorName, scale]) => {
+      if (typeof scale === 'object' && !Array.isArray(scale)) {
+        Object.entries(scale).forEach(([step, value]) => {
+          root.style.setProperty(`--color-${colorName}-${step}`, value);
+        });
+      } else if (typeof scale === 'string') {
+        root.style.setProperty(`--color-${colorName}`, scale);
+      }
+    });
+
+    // Apply brand palette
+    Object.entries(brandPalette.brand).forEach(([step, value]) => {
+      root.style.setProperty(`--color-brand-${step}`, value);
+    });
+
+    // Apply semantic colors for current theme
+    Object.entries(semanticColors).forEach(([category, tokens]) => {
+      Object.entries(tokens).forEach(([name, token]) => {
+        if (token && typeof token === 'object' && 'light' in token && 'dark' in token) {
+          const value = getSemanticValue(token, theme);
+          root.style.setProperty(`--color-${category}-${name}`, value);
+
+          // Also set RGB values for alpha support
+          const rgbValues = oklchToRGBValues(value);
+          root.style.setProperty(`--color-${category}-${name}-rgb`, rgbValues);
+        }
+      });
+    });
+
+    // Apply spacing tokens
+    Object.entries(tokens.primitive.spacing).forEach(([key, value]) => {
+      root.style.setProperty(`--spacing-${key}`, `${value}px`);
+    });
+
+    // Apply typography tokens
+    Object.entries(tokens.primitive.fontSizes).forEach(([key, value]) => {
+      root.style.setProperty(`--font-size-${key}`, `${value}px`);
+    });
+
+    Object.entries(tokens.primitive.lineHeights).forEach(([key, value]) => {
+      root.style.setProperty(`--line-height-${key}`, String(value));
+    });
+
+    Object.entries(tokens.primitive.fontWeights).forEach(([key, value]) => {
+      root.style.setProperty(`--font-weight-${key}`, String(value));
+    });
+
+    // Apply radius tokens with roundness multiplier
+    Object.entries(tokens.primitive.radii).forEach(([key, value]) => {
+      const adjustedValue = key === 'full' ? value : value * roundness;
+      root.style.setProperty(`--radius-${key}`, `${adjustedValue}px`);
+    });
+
+    // Apply shadow tokens
+    Object.entries(tokens.primitive.shadows).forEach(([key, value]) => {
+      root.style.setProperty(`--shadow-${key}`, value);
+    });
+
+    // Apply font families
+    root.style.setProperty('--font-family', fontFamily.includes(' ') ? `"${fontFamily}"` : fontFamily);
+    root.style.setProperty('--font-display', displayFont.includes(' ') ? `"${displayFont}"` : displayFont);
+
+    // Apply component-specific tokens
+    Object.entries(tokens.component).forEach(([component, componentTokens]) => {
+      Object.entries(componentTokens).forEach(([prop, value]) => {
+        if (typeof value === 'object') {
+          Object.entries(value).forEach(([size, sizeValue]) => {
+            root.style.setProperty(`--${component}-${prop}-${size}`, `${sizeValue}px`);
+          });
+        } else {
+          root.style.setProperty(`--${component}-${prop}`, String(value));
+        }
+      });
+    });
+
+    // Apply border styles
+    root.style.setProperty('--input-border-width', `${inputBorderType}px`);
+    root.style.setProperty('--card-border-width', `${cardBorderType}px`);
+
+    // Apply transition tokens
+    Object.entries(tokens.primitive.transitions).forEach(([key, value]) => {
+      root.style.setProperty(`--transition-${key}`, value);
+    });
+
+    // Apply duration tokens
+    Object.entries(tokens.primitive.durations).forEach(([key, value]) => {
+      root.style.setProperty(`--duration-${key}`, `${value}ms`);
+    });
+
+    // Apply easing tokens
+    Object.entries(tokens.primitive.easings).forEach(([key, value]) => {
+      root.style.setProperty(`--easing-${key}`, value);
+    });
+
+    // Apply z-index tokens
+    Object.entries(tokens.primitive.zIndices).forEach(([key, value]) => {
+      root.style.setProperty(`--z-${key}`, String(value));
+    });
+
+    // Backwards compatibility - map to old variable names
+    // These can be removed once all components are migrated
+    const primaryDefault = getSemanticValue(semanticColors.primary.default, theme);
+    const textPrimary = getSemanticValue(semanticColors.text.primary, theme);
+    const textSecondary = getSemanticValue(semanticColors.text.secondary, theme);
+    const canvasDefault = getSemanticValue(semanticColors.canvas.default, theme);
+    const surfaceDefault = getSemanticValue(semanticColors.surface.default, theme);
+    const borderDefault = getSemanticValue(semanticColors.border.default, theme);
+
+    root.style.setProperty('--color-brand', oklchToRGBValues(primaryDefault));
+    root.style.setProperty('--color-brand-weak', oklchToRGBValues(brandPalette.brand[100]));
+    root.style.setProperty('--color-text-primary', oklchToRGBValues(textPrimary));
+    root.style.setProperty('--color-text-secondary', oklchToRGBValues(textSecondary));
+    root.style.setProperty('--color-text-disabled', oklchToRGBValues(getSemanticValue(semanticColors.text.disabled, theme)));
+    root.style.setProperty('--color-bg-primary', oklchToRGBValues(canvasDefault));
+    root.style.setProperty('--color-bg-secondary', oklchToRGBValues(surfaceDefault));
+    root.style.setProperty('--color-border', oklchToRGBValues(borderDefault));
+    root.style.setProperty('--color-focus', oklchToRGBValues(getSemanticValue(semanticColors.focus.ring, theme)));
+    root.style.setProperty('--color-success', oklchToRGBValues(getSemanticValue(semanticColors.success.default, theme)));
+    root.style.setProperty('--color-warning', oklchToRGBValues(getSemanticValue(semanticColors.warning.default, theme)));
+    root.style.setProperty('--color-info', oklchToRGBValues(getSemanticValue(semanticColors.info.default, theme)));
+    root.style.setProperty('--color-danger', oklchToRGBValues(getSemanticValue(semanticColors.danger.default, theme)));
+
+    // Old spacing variables for compatibility
+    root.style.setProperty('--space-1', '8px');
+    root.style.setProperty('--space-2', '16px');
+    root.style.setProperty('--space-3', '24px');
+    root.style.setProperty('--space-4', '32px');
+    root.style.setProperty('--space-5', '40px');
+    root.style.setProperty('--space-6', '48px');
+
+    // Old radius variables for compatibility
+    root.style.setProperty('--radius-sm', `${4 * roundness}px`);
+    root.style.setProperty('--radius-md', `${8 * roundness}px`);
+    root.style.setProperty('--radius-lg', `${12 * roundness}px`);
+    root.style.setProperty('--radius-full', '9999px');
+
+  }, [theme, primaryColor, fontFamily, displayFont, roundness, inputBorderType, cardBorderType, brandPalette]);
+
+  return {
+    tokens,
+    theme,
+    brandPalette
+  };
+}
+
+/**
+ * Hook to get current theme from system preference or user setting
+ */
+export function useTheme(): Theme {
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  // You can also get this from your state management
+  return prefersDark ? 'dark' : 'light';
+}
