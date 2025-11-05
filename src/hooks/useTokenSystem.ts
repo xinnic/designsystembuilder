@@ -40,6 +40,11 @@ function oklchToRGB(oklch: string): string {
  * Returns format like "26 188 156" for rgb(26 188 156)
  */
 function oklchToRGBValues(oklch: string): string {
+  // Handle null/undefined values
+  if (!oklch || typeof oklch !== 'string') {
+    return '128 128 128'; // Default gray
+  }
+
   // This would need a proper color conversion library
   // For now, return placeholder values
   // In production, use culori or another color library
