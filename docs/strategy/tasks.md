@@ -102,6 +102,9 @@ The current implementation is **backwards** - we're building components without 
 | **4.4 Adherence Rules** | Enforce token usage | Opus | Not Started | 4h |
 | - Token enforcement | No hardcoded values | Opus | Not Started | 2h |
 | - Accessibility rules | WCAG compliance | Sonnet | Not Started | 2h |
+| **4.5 AI Enhancement Features** | Make megaprompt more powerful | Opus | Not Started | 6h |
+| - Illustration generation capabilities | Enable AI to generate SVG illustrations/icons | Opus | Not Started | 3h |
+| - Claude skills/instructions | Add specific Claude capabilities and best practices | Opus | Not Started | 3h |
 
 ---
 
