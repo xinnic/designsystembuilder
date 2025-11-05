@@ -14,7 +14,7 @@ import {
   semanticColors,
   type Theme
 } from '../design-system/tokens';
-import { useDesignSystem } from '../state/designSystem';
+import { useDesignSystem, type CornerRadius, type BorderWeight } from '../state/designSystem';
 
 /**
  * Convert OKLCH string to RGB for CSS variables
@@ -67,18 +67,62 @@ function oklchToRGBValues(oklch: string): string {
   return '128 128 128';
 }
 
+// Color theme mappings
+const colorThemes: Record<string, string> = {
+  turquoise: '#1abc9c',
+  emerald: '#2ecc71',
+  nephritis: '#27ae60',
+  'peter-river': '#3498db',
+  'belize-hole': '#2980b9',
+  amethyst: '#9b59b6',
+  wisteria: '#8e44ad',
+  'wet-asphalt': '#34495e',
+  'midnight-blue': '#2c3e50',
+  'sun-flower': '#f1c40f',
+  orange: '#f39c12',
+  carrot: '#e67e22',
+  pumpkin: '#d35400',
+  alizarin: '#e74c3c',
+  pomegranate: '#c0392b',
+  concrete: '#95a5a6',
+  asbestos: '#7f8c8d'
+};
+
 /**
  * Hook to apply token system to CSS variables
  */
 export function useTokenSystem(theme: Theme = 'light') {
   const {
-    primaryColor,
-    fontFamily,
-    displayFont,
-    roundness,
-    inputBorderType,
-    cardBorderType
+    selectedTheme,
+    customPrimaryColor,
+    selectedPrimaryFont,
+    selectedDisplayFont,
+    cornerRadius,
+    opts
   } = useDesignSystem();
+
+  // Compute primary color from theme selection
+  const primaryColor = selectedTheme === 'custom'
+    ? customPrimaryColor || '#3498db'
+    : colorThemes[selectedTheme] || '#3498db';
+
+  // Convert corner radius to roundness multiplier
+  const roundnessMultipliers: Record<CornerRadius, number> = {
+    none: 0,
+    small: 0.5,
+    medium: 1,
+    large: 1.5
+  };
+  const roundness = roundnessMultipliers[cornerRadius] || 1;
+
+  // Convert border weight to pixel values
+  const borderWeightMap: Record<BorderWeight, number> = {
+    none: 0,
+    thin: 1,
+    thick: 2
+  };
+  const inputBorderWidth = borderWeightMap[opts.inputBorderWeight] || 1;
+  const cardBorderWidth = borderWeightMap[opts.cardBorderWeight] || 0;
 
   // Generate brand palette from primary color
   const brandPalette = useMemo(() => {
@@ -152,7 +196,41 @@ export function useTokenSystem(theme: Theme = 'light') {
     });
 
     // Apply font families
-    root.style.setProperty('--font-family', fontFamily.includes(' ') ? `"${fontFamily}"` : fontFamily);
+    // Convert font class names to actual font family names
+    const fontFamilyMap: Record<string, string> = {
+      'font-jakarta': 'Plus Jakarta Sans',
+      'font-vietnam': 'Be Vietnam Pro',
+      'font-wix': 'Wix Madefor Text',
+      'font-figtree': 'Figtree',
+      'font-albert': 'Albert Sans',
+      'font-satoshi': 'Satoshi',
+      'font-epilogue': 'Epilogue',
+      'font-manrope': 'Manrope',
+      'font-public': 'Public Sans',
+      'font-space': 'Space Grotesk',
+      'font-work': 'Work Sans',
+      'font-source-sans': 'Source Sans 3',
+      'font-nunito': 'Nunito Sans',
+      'font-arimo': 'Arimo',
+      'font-hanken': 'Hanken Grotesk',
+      'font-rubik': 'Rubik',
+      'font-dm': 'DM Sans',
+      'font-ibm': 'IBM Plex Sans',
+      'font-sora': 'Sora',
+      'font-montserrat': 'Montserrat',
+      'font-newsreader': 'Newsreader',
+      'font-noto': 'Noto Serif',
+      'font-domine': 'Domine',
+      'font-libre': 'Libre Caslon Text',
+      'font-garamond': 'EB Garamond',
+      'font-literata': 'Literata',
+      'font-source-serif': 'Source Serif 4'
+    };
+
+    const primaryFont = fontFamilyMap[selectedPrimaryFont] || 'Plus Jakarta Sans';
+    const displayFont = fontFamilyMap[selectedDisplayFont] || 'Plus Jakarta Sans';
+
+    root.style.setProperty('--font-family', primaryFont.includes(' ') ? `"${primaryFont}"` : primaryFont);
     root.style.setProperty('--font-display', displayFont.includes(' ') ? `"${displayFont}"` : displayFont);
 
     // Apply component-specific tokens
@@ -169,8 +247,8 @@ export function useTokenSystem(theme: Theme = 'light') {
     });
 
     // Apply border styles
-    root.style.setProperty('--input-border-width', `${inputBorderType}px`);
-    root.style.setProperty('--card-border-width', `${cardBorderType}px`);
+    root.style.setProperty('--input-border-width', `${inputBorderWidth}px`);
+    root.style.setProperty('--card-border-width', `${cardBorderWidth}px`);
 
     // Apply transition tokens
     Object.entries(tokens.primitive.transitions).forEach(([key, value]) => {
@@ -229,7 +307,7 @@ export function useTokenSystem(theme: Theme = 'light') {
     root.style.setProperty('--radius-lg', `${12 * roundness}px`);
     root.style.setProperty('--radius-full', '9999px');
 
-  }, [theme, primaryColor, fontFamily, displayFont, roundness, inputBorderType, cardBorderType, brandPalette]);
+  }, [theme, primaryColor, selectedPrimaryFont, selectedDisplayFont, roundness, inputBorderWidth, cardBorderWidth, brandPalette]);
 
   return {
     tokens,

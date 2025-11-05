@@ -79,6 +79,11 @@ export function generateColorScale(
  * This is a simplified conversion - in production you'd use a library like culori
  */
 export function hexToOKLCH(hex: string): OKLCHColor {
+  // Handle null/undefined
+  if (!hex) {
+    hex = '#3498db'; // Default to a nice blue
+  }
+
   // Remove # if present
   hex = hex.replace('#', '');
 
