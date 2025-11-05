@@ -2,6 +2,7 @@ import React from 'react';
 import { ChevronDown, Settings, Palette, Type, Grid } from 'lucide-react';
 import StylingControls from '../left/StylingControls';
 import { useDesignSystem } from '../state/designSystem';
+import { generateSecondaryColor } from '../utils/colorGeneration';
 import {
   Collapsible,
   CollapsibleContent,
@@ -142,6 +143,8 @@ export function Sidebar({}: SidebarProps) {
     setAccentColor,
     customAccentColor,
     setCustomAccentColor,
+    isSecondaryManual,
+    setIsSecondaryManual,
     isDarkMode,
     setDarkMode,
     cornerRadius,
@@ -149,6 +152,35 @@ export function Sidebar({}: SidebarProps) {
   } = useDesignSystem();
   const [typographyOpen, setTypographyOpen] = React.useState(true);
   const [colorsOpen, setColorsOpen] = React.useState(true);
+
+  // Helper function to handle primary color changes
+  const handlePrimaryColorChange = (theme: string, customColor?: string) => {
+    setTheme(theme);
+
+    // Only auto-generate secondary if it wasn't manually selected
+    if (!isSecondaryManual) {
+      const primaryColor = theme === 'custom' && customColor
+        ? customColor
+        : colorThemes.find(t => t.name === theme)?.color || '#3498db';
+
+      // Generate analogous color (30 degrees rotation for harmony)
+      const generatedSecondary = generateSecondaryColor(primaryColor, 'analogous');
+
+      // Set secondary as custom with the generated color
+      setAccentColor('custom');
+      setCustomAccentColor(generatedSecondary);
+    }
+  };
+
+  // Helper function to handle secondary color manual selection
+  const handleSecondaryColorChange = (accent: string, customColor?: string) => {
+    setAccentColor(accent);
+    if (customColor) {
+      setCustomAccentColor(customColor);
+    }
+    // Mark secondary as manually selected
+    setIsSecondaryManual(true);
+  };
 
   return (
     <div className="w-80 bg-background border-r border-border h-screen overflow-y-auto p-6">
@@ -324,7 +356,7 @@ export function Sidebar({}: SidebarProps) {
           </CollapsibleTrigger>
           <CollapsibleContent className="space-y-4 p-3">
             <div>
-              <label className="text-sm font-medium mb-2 block">Primary Color</label>
+              <label className="text-sm font-medium mb-2 block">Primary</label>
               <div className="grid grid-cols-6 gap-1">
                 {colorThemes.map((theme) => (
                   <div key={theme.name} className="relative">
@@ -334,8 +366,8 @@ export function Sidebar({}: SidebarProps) {
                           type="color"
                           value={customPrimaryColor || '#3498db'}
                           onChange={(e) => {
-                            setTheme('custom');
                             setCustomPrimaryColor(e.target.value);
+                            handlePrimaryColorChange('custom', e.target.value);
                           }}
                           className="w-7 h-7 rounded-full border cursor-pointer opacity-0 absolute inset-0"
                           title={theme.label}
@@ -348,10 +380,11 @@ export function Sidebar({}: SidebarProps) {
                             background: 'conic-gradient(from 0deg, #e74c3c 0deg, #f39c12 45deg, #f1c40f 90deg, #2ecc71 135deg, #1abc9c 180deg, #3498db 225deg, #9b59b6 270deg, #e91e63 315deg, #e74c3c 360deg)'
                           }}
                           onClick={() => {
-                            setTheme('custom');
+                            const color = customPrimaryColor || '#3498db';
                             if (!customPrimaryColor) {
-                              setCustomPrimaryColor('#3498db');
+                              setCustomPrimaryColor(color);
                             }
+                            handlePrimaryColorChange('custom', color);
                           }}
                           title={theme.label}
                         />
@@ -362,7 +395,7 @@ export function Sidebar({}: SidebarProps) {
                           selectedTheme === theme.name ? 'border-foreground border-2' : 'border-border'
                         }`}
                         style={{ backgroundColor: theme.color }}
-                        onClick={() => setTheme(theme.name)}
+                        onClick={() => handlePrimaryColorChange(theme.name)}
                         title={theme.label}
                       />
                     )}
@@ -372,7 +405,7 @@ export function Sidebar({}: SidebarProps) {
             </div>
 
             <div>
-              <label className="text-sm font-medium mb-2 block">Accent Color</label>
+              <label className="text-sm font-medium mb-2 block">Secondary</label>
               <div className="grid grid-cols-6 gap-1">
                 {accentColors.map((accent) => (
                   <div key={accent.name} className="relative">
@@ -382,8 +415,7 @@ export function Sidebar({}: SidebarProps) {
                           type="color"
                           value={customAccentColor || '#1abc9c'}
                           onChange={(e) => {
-                            setAccentColor('custom');
-                            setCustomAccentColor(e.target.value);
+                            handleSecondaryColorChange('custom', e.target.value);
                           }}
                           className="w-7 h-7 rounded-full border cursor-pointer opacity-0 absolute inset-0"
                           title={accent.label}
@@ -396,10 +428,11 @@ export function Sidebar({}: SidebarProps) {
                             background: 'conic-gradient(from 0deg, #e74c3c 0deg, #f39c12 45deg, #f1c40f 90deg, #2ecc71 135deg, #1abc9c 180deg, #3498db 225deg, #9b59b6 270deg, #e91e63 315deg, #e74c3c 360deg)'
                           }}
                           onClick={() => {
-                            setAccentColor('custom');
+                            const color = customAccentColor || '#1abc9c';
                             if (!customAccentColor) {
-                              setCustomAccentColor('#1abc9c');
+                              setCustomAccentColor(color);
                             }
+                            handleSecondaryColorChange('custom', color);
                           }}
                           title={accent.label}
                         />
@@ -410,7 +443,7 @@ export function Sidebar({}: SidebarProps) {
                           selectedAccentColor === accent.name ? 'border-foreground border-2' : 'border-border'
                         }`}
                         style={{ backgroundColor: accent.color }}
-                        onClick={() => setAccentColor(accent.name)}
+                        onClick={() => handleSecondaryColorChange(accent.name)}
                         title={accent.label}
                       />
                     )}

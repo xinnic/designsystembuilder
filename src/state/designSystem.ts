@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { useEffect } from 'react';
+import { generateSecondaryColor } from '../utils/colorGeneration';
 
 export type MenuLayout = 'bottomBar' | 'hamburger';
 export type BorderWeight = 'none' | 'thin' | 'thick';
@@ -80,6 +81,7 @@ export interface DesignSystemState {
   customPrimaryColor: string;
   selectedAccentColor: string;
   customAccentColor: string;
+  isSecondaryManual: boolean; // Track if secondary was manually selected
   selectedScale: 'small' | 'regular' | 'large';
   selectedPrimaryFont: string;
   selectedDisplayFont: string;
@@ -96,6 +98,7 @@ export interface DesignSystemState {
   setCustomPrimaryColor(color: string): void;
   setAccentColor(accent: string): void;
   setCustomAccentColor(color: string): void;
+  setIsSecondaryManual(isManual: boolean): void;
   setScale(scale: 'small' | 'regular' | 'large'): void;
   setPrimaryFont(font: string): void;
   setDisplayFont(font: string): void;
@@ -179,6 +182,7 @@ export const useDesignSystem = create<DesignSystemState>((set) => ({
   customPrimaryColor: '#3498db',
   selectedAccentColor: 'turquoise',
   customAccentColor: '#1abc9c',
+  isSecondaryManual: false, // Default to auto-generated
   selectedScale: 'regular',
   selectedPrimaryFont: 'font-jakarta',
   selectedDisplayFont: 'font-jakarta',
@@ -200,6 +204,7 @@ export const useDesignSystem = create<DesignSystemState>((set) => ({
   setCustomPrimaryColor: (color: string) => set({ customPrimaryColor: color }),
   setAccentColor: (accent: string) => set({ selectedAccentColor: accent }),
   setCustomAccentColor: (color: string) => set({ customAccentColor: color }),
+  setIsSecondaryManual: (isManual: boolean) => set({ isSecondaryManual: isManual }),
   setScale: (scale: 'small' | 'regular' | 'large') => set({ selectedScale: scale }),
   setPrimaryFont: (font: string) => set({ selectedPrimaryFont: font }),
   setDisplayFont: (font: string) => set({ selectedDisplayFont: font }),

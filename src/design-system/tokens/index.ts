@@ -7,9 +7,11 @@
 
 export * from './primitives';
 export * from './semantic';
+export * from './platform';
 
 import { primitiveTokens, generateColorScale, hexToOKLCH, type OKLCHColor } from './primitives';
 import { semanticTokens, getSemanticValue, type SemanticToken } from './semantic';
+import { platformTokens, getPlatformValue, detectPlatform, type Platform, type PlatformToken } from './platform';
 
 /**
  * Generate a complete brand color palette from a single hex color
@@ -37,7 +39,7 @@ export function generateBrandPalette(brandHex: string) {
 
 /**
  * Component Token Layer (Tier 3)
- * Optional overrides for specific components
+ * Optional overrides for specific components with platform-specific values
  */
 export const componentTokens = {
   // Button specific tokens
@@ -55,46 +57,63 @@ export const componentTokens = {
       md: 16,
       lg: 24,
       xl: 32
-    }
+    },
+    // Platform-specific overrides
+    borderRadius: platformTokens.radii.button,
+    touchTarget: platformTokens.dimensions.touchTarget,
+    typography: platformTokens.typography.button,
+    elevation: platformTokens.elevation.button,
+    pressScale: platformTokens.interaction.pressScale
   },
 
   // FeedCard specific tokens
   feedCard: {
-    padding: 16,
+    padding: platformTokens.spacing.cardPadding,
     imageAspectRatio: 1.5,
     titleSize: 18,
     titleWeight: 600,
     descriptionSize: 14,
-    metaSize: 12
+    metaSize: 12,
+    borderRadius: platformTokens.radii.card,
+    elevation: platformTokens.elevation.card
   },
 
   // TabBar specific tokens
   tabBar: {
-    height: 56,
+    height: platformTokens.dimensions.tabBarHeight,
     iconSize: 24,
-    labelSize: 10,
+    labelSize: platformTokens.typography.tabBarLabel.size,
     activeScale: 1.1,
     inactiveOpacity: 0.6,
-    indicatorHeight: 2
+    indicatorHeight: 2,
+    padding: platformTokens.spacing.tabBarPadding,
+    itemBorderRadius: platformTokens.radii.tabBarItem
   },
 
   // NavHeader specific tokens
   navHeader: {
-    height: 56,
+    height: platformTokens.dimensions.headerHeight,
     logoSize: 32,
-    titleSize: 20,
+    titleSize: platformTokens.typography.navTitle.size,
+    titleWeight: platformTokens.typography.navTitle.weight,
     iconSize: 24,
-    blurIntensity: 20
+    blurIntensity: 20,
+    paddingX: platformTokens.spacing.headerPaddingX,
+    elevation: platformTokens.elevation.header,
+    supportsBlur: platformTokens.interaction.blur
   },
 
   // DrawerMenu specific tokens
   drawerMenu: {
     width: 280,
-    itemHeight: 48,
+    itemHeight: platformTokens.dimensions.listItemHeight,
     sectionHeaderHeight: 32,
     iconSize: 20,
     fontSize: 16,
-    activeBgOpacity: 0.1
+    activeBgOpacity: 0.1,
+    padding: platformTokens.spacing.drawerPadding,
+    borderRadius: platformTokens.radii.card,
+    elevation: platformTokens.elevation.modal
   },
 
   // SegmentedControl specific tokens
@@ -103,7 +122,12 @@ export const componentTokens = {
     minSegmentWidth: 60,
     borderWidth: 1,
     indicatorInset: 2,
-    fontSize: 14
+    fontSize: 14,
+    borderRadius: platformTokens.radii.button,
+    animation: {
+      duration: platformTokens.animation.duration.normal,
+      easing: platformTokens.animation.easing.standard
+    }
   },
 
   // SearchBar specific tokens
@@ -111,7 +135,8 @@ export const componentTokens = {
     height: 40,
     iconSize: 20,
     fontSize: 16,
-    paddingHorizontal: 16
+    paddingHorizontal: platformTokens.spacing.listItemPadding,
+    borderRadius: platformTokens.radii.input
   }
 };
 
@@ -150,6 +175,7 @@ export const tokens = {
   primitive: primitiveTokens,
   semantic: semanticTokens,
   component: componentTokens,
+  platform: platformTokens,
 
   // Utilities
   utils: {
@@ -157,7 +183,9 @@ export const tokens = {
     generateColorScale,
     hexToOKLCH,
     getSemanticValue,
-    resolveToken
+    resolveToken,
+    getPlatformValue,
+    detectPlatform
   }
 };
 
@@ -168,7 +196,11 @@ export type TokenSystem = typeof tokens;
 export type PrimitiveTokens = typeof primitiveTokens;
 export type SemanticTokens = typeof semanticTokens;
 export type ComponentTokens = typeof componentTokens;
+export type PlatformTokens = typeof platformTokens;
 export type Theme = 'light' | 'dark';
+
+// Re-export platform types
+export type { Platform, PlatformToken };
 
 /**
  * Default export for convenience
