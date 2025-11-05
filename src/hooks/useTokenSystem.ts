@@ -312,6 +312,42 @@ export function useTokenSystem(theme: Theme = 'light') {
     root.style.setProperty('--radius-lg', `${12 * roundness}px`);
     root.style.setProperty('--radius-full', '9999px');
 
+    // Tailwind CSS variable mappings
+    // These override the static CSS values when theme changes
+    // Note: Tailwind expects HSL values WITHOUT the hsl() wrapper
+    // Update Tailwind variables based on current theme
+    if (theme === 'dark') {
+      root.style.setProperty('--background', '0 0% 7%');
+      root.style.setProperty('--foreground', '0 0% 88%');
+      root.style.setProperty('--card', '0 0% 12%');
+      root.style.setProperty('--card-foreground', '0 0% 88%');
+      root.style.setProperty('--popover', '0 0% 12%');
+      root.style.setProperty('--popover-foreground', '0 0% 88%');
+      root.style.setProperty('--muted', '0 0% 17%');
+      root.style.setProperty('--muted-foreground', '0 0% 66%');
+      root.style.setProperty('--accent', '0 0% 17%');
+      root.style.setProperty('--accent-foreground', '0 0% 88%');
+      root.style.setProperty('--border', '0 0% 17%');
+      root.style.setProperty('--input', '0 0% 17%');
+      root.style.setProperty('--text-primary', '0 0% 88%');
+      root.style.setProperty('--text-secondary', '0 0% 66%');
+    } else {
+      root.style.setProperty('--background', '0 0% 100%');
+      root.style.setProperty('--foreground', '240 10% 3.9%');
+      root.style.setProperty('--card', '0 0% 100%');
+      root.style.setProperty('--card-foreground', '240 10% 3.9%');
+      root.style.setProperty('--popover', '0 0% 100%');
+      root.style.setProperty('--popover-foreground', '240 10% 3.9%');
+      root.style.setProperty('--muted', '210 40% 96%');
+      root.style.setProperty('--muted-foreground', '215.4 16.3% 46.9%');
+      root.style.setProperty('--accent', '210 40% 96%');
+      root.style.setProperty('--accent-foreground', '222.2 84% 4.9%');
+      root.style.setProperty('--border', '214.3 31.8% 91.4%');
+      root.style.setProperty('--input', '214.3 31.8% 91.4%');
+      root.style.setProperty('--text-primary', '210 11% 11%');
+      root.style.setProperty('--text-secondary', '210 6% 39%');
+    }
+
   }, [theme, primaryColor, selectedPrimaryFont, selectedDisplayFont, roundness, inputBorderWidth, cardBorderWidth, brandPalette]);
 
   return {
