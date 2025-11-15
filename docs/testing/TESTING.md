@@ -237,7 +237,51 @@ describe('Store subscriptions', () => {
 })
 ```
 
-### 4. End-to-End Tests
+### 4. Visual Regression Tests ✅ COMPLETED
+
+#### Visual Consistency Tests (e2e/visual-regression/styling-consistency.spec.ts)
+**File**: `e2e/visual-regression/styling-consistency.spec.ts`
+**Config**: `playwright.visual.config.ts`
+
+```typescript
+// Comprehensive visual regression tests
+- [x] No black borders anywhere (soft gray validation)
+- [x] Proper spacing (no excessive gaps)
+- [x] No text overflow in components
+- [x] Teal color consistency when switching tabs
+- [x] Soft gray borders in light mode (229 231 235)
+- [x] Dark gray borders in dark mode (44 44 44)
+- [x] Consistent spacing in phone preview
+- [x] All typography scales render correctly
+- [x] Dark mode without black borders
+- [x] All color themes without visual issues
+```
+
+#### Test Features
+- **Screenshot Capture**: Automated screenshots for visual comparison
+- **CSS Variable Inspection**: Direct validation of computed styles
+- **Element Style Verification**: Checks border colors, spacing, overflow
+- **Cross-Tab Consistency**: Ensures colors don't change when switching tabs
+- **Theme Testing**: Validates all color themes render correctly
+
+#### Running Visual Tests
+```bash
+# Run visual tests headlessly
+npm run test:visual
+
+# Run with browser visible (headed mode)
+npm run test:visual:headed
+
+# Run with Playwright UI for debugging
+npm run test:visual:ui
+```
+
+#### Screenshot Storage
+Visual regression screenshots are saved to:
+- `tests/visual-regression/__screenshots__/`
+- Includes screenshots for: initial load, theme variations, typography scales, dark mode, tab switches
+
+### 5. End-to-End Tests
 
 #### User Workflows
 ```typescript
