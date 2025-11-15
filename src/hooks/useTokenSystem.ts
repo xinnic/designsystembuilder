@@ -6,6 +6,7 @@
  */
 
 import { useEffect, useMemo } from 'react';
+import { converter, formatRgb } from 'culori';
 import {
   tokens,
   generateBrandPalette,
@@ -45,31 +46,25 @@ function oklchToRGBValues(oklch: string): string {
     return '128 128 128'; // Default gray
   }
 
-  // This would need a proper color conversion library
-  // For now, return placeholder values
-  // In production, use culori or another color library
+  try {
+    // Use culori to convert OKLCH to RGB
+    const toRgb = converter('rgb');
+    const rgb = toRgb(oklch);
 
-  if (oklch.includes('gray')) {
+    if (!rgb) {
+      return '128 128 128';
+    }
+
+    // Convert to 0-255 range and format as space-separated values
+    const r = Math.round((rgb.r || 0) * 255);
+    const g = Math.round((rgb.g || 0) * 255);
+    const b = Math.round((rgb.b || 0) * 255);
+
+    return `${r} ${g} ${b}`;
+  } catch (error) {
+    console.error('Error converting OKLCH to RGB:', oklch, error);
     return '128 128 128';
   }
-  if (oklch.includes('blue')) {
-    return '59 130 246';
-  }
-  if (oklch.includes('red')) {
-    return '239 68 68';
-  }
-  if (oklch.includes('green')) {
-    return '34 197 94';
-  }
-  if (oklch.includes('yellow')) {
-    return '245 158 11';
-  }
-  if (oklch.includes('purple')) {
-    return '147 51 234';
-  }
-
-  // Default fallback
-  return '128 128 128';
 }
 
 // Color theme mappings

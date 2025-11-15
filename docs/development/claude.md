@@ -185,18 +185,21 @@ After adding any new setting:
 
 ## 🔧 Current Architecture Status
 
-### Already in Zustand Store:
+### ✅ All Settings in Zustand Store:
 - tokens (colors, typography, spacing, etc.)
 - opts (menu layout, borders, inputs)
 - haptics configuration
+- isDarkMode (with auto dark mode CSS class handling)
+- selectedTheme (with auto theme class handling)
+- selectedPrimaryFont & selectedDisplayFont (with auto font class handling)
+- selectedScale (with auto scale class handling)
+- stylePresetId (with preset application logic)
+- customPrimaryColor & customAccentColor (custom color values)
+- spacingMode (compact, normal, comfortable)
+- cornerRadius (none, small, medium, large)
 
-### Need to Move to Store (Refactor TODO):
-- isDarkMode
-- selectedTheme
-- selectedFont
-- selectedScale
-- stylePresetId
-- Custom color values
+### ✅ All Settings Auto-Sync via CSS Variables:
+All settings above automatically update CSS variables through the `useTokenCSS` hook, ensuring instant synchronization across all panels without manual intervention.
 
 ## 💡 Pro Tips
 

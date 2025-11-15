@@ -183,7 +183,7 @@ export function Sidebar({}: SidebarProps) {
   };
 
   return (
-    <div className="w-80 bg-background border-r border-border h-screen overflow-y-auto p-6">
+    <div className="w-80 bg-background h-screen overflow-y-auto p-6" style={{ boxShadow: '1px 0 3px rgba(0,0,0,0.04)' }}>
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-2">Design System Builder</h1>
         <p className="text-sm text-muted-foreground">

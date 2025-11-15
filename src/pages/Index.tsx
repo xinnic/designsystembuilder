@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Copy, Layers3, Palette } from 'lucide-react';
+import { TamaguiProvider } from 'tamagui';
+import { config } from '../tamagui.config';
 import { Sidebar } from '@/components/Sidebar';
 import { PreviewPhoneTamagui } from '@/components/PreviewPhoneTamagui';
 import DesignSystemOverview from '@/components/DesignSystemOverview';
@@ -732,7 +734,7 @@ Primary Font: ${primaryFontName} | Display Font: ${displayFontName}
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
         {/* Header with Copy Prompt Button */}
-        <header className="border-b border-border p-4 flex justify-end">
+        <header className="p-4 flex justify-end shadow-sm" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button 
@@ -767,51 +769,57 @@ Primary Font: ${primaryFontName} | Display Font: ${displayFontName}
           </Dialog>
         </header>
 
-        {/* Preview Panels */}
-        <div className="flex-1 flex min-w-0">
-          {/* Mobile App Preview */}
-          <div className="flex-1 min-w-[400px] border-r border-border">
-            <PreviewPhoneTamagui />
-          </div>
-
-          {/* Right Panel - Tailwind Components or Design Tokens */}
-          <div className="flex-1 min-w-[300px] flex flex-col">
-            {/* Toggle Buttons */}
-            <div className="border-b border-border p-4 flex gap-2">
-              <button
-                onClick={() => setRightPanelView('tokens')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
-                  rightPanelView === 'tokens'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                }`}
-              >
-                <Layers3 size={16} />
-                Design Tokens
-              </button>
-              <button
-                onClick={() => setRightPanelView('tamagui')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
-                  rightPanelView === 'tamagui'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                }`}
-              >
-                <Palette size={16} />
-                React Native Components
-              </button>
+        {/* Preview Panels - Wrapped in TamaguiProvider for consistent app environment */}
+        <TamaguiProvider
+          config={config}
+          defaultTheme={isDarkMode ? 'dark' : 'light'}
+          key={isDarkMode ? 'dark' : 'light'}
+        >
+          <div className="flex-1 flex min-w-0">
+            {/* Mobile App Preview */}
+            <div className="flex-1 min-w-[400px]" style={{ boxShadow: '1px 0 3px rgba(0,0,0,0.04)' }}>
+              <PreviewPhoneTamagui />
             </div>
 
-            {/* Content */}
-            <div className="flex-1 overflow-hidden">
-              {rightPanelView === 'tamagui' ? (
-                <TamaguiShowcase />
-              ) : (
-                <DesignSystemOverview />
-              )}
+            {/* Right Panel - Tailwind Components or Design Tokens */}
+            <div className="flex-1 min-w-[300px] flex flex-col">
+              {/* Toggle Buttons */}
+              <div className="p-4 flex gap-2" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                <button
+                  onClick={() => setRightPanelView('tokens')}
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
+                    rightPanelView === 'tokens'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                  }`}
+                >
+                  <Layers3 size={16} />
+                  Design Tokens
+                </button>
+                <button
+                  onClick={() => setRightPanelView('tamagui')}
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
+                    rightPanelView === 'tamagui'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                  }`}
+                >
+                  <Palette size={16} />
+                  React Native Components
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 overflow-hidden">
+                {rightPanelView === 'tamagui' ? (
+                  <TamaguiShowcase />
+                ) : (
+                  <DesignSystemOverview />
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        </TamaguiProvider>
       </div>
     </div>
   );

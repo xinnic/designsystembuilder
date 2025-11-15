@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  TamaguiProvider,
   XStack,
   YStack,
   ScrollView,
@@ -17,7 +16,6 @@ import {
   Square,
   Label as TamaguiLabel,
 } from 'tamagui';
-import { config } from '../tamagui.config';
 import { useDesignSystem, useTokenCSS } from '../state/designSystem';
 import { ChevronDown, Check } from 'lucide-react';
 
@@ -51,13 +49,12 @@ export default function TamaguiShowcase() {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
-    <TamaguiProvider config={config} defaultTheme={isDarkMode ? 'dark' : 'light'}>
-      <ScrollView
-        className={selectedPrimaryFont}
-        backgroundColor="$bgPrimary"
-        flex={1}
-        padding="$4"
-      >
+    <ScrollView
+      className={selectedPrimaryFont}
+      backgroundColor="$bgPrimary"
+      flex={1}
+      padding="$4"
+    >
         <YStack gap="$6">
           {/* Typography Section */}
           <YStack gap="$4">
@@ -491,7 +488,6 @@ export default function TamaguiShowcase() {
             </YStack>
           </Card>
         </YStack>
-      </ScrollView>
-    </TamaguiProvider>
+    </ScrollView>
   );
 }

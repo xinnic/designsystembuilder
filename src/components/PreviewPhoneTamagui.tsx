@@ -1,6 +1,5 @@
 import React from 'react';
-import { TamaguiProvider, YStack, XStack, ScrollView, Circle, Image } from 'tamagui';
-import { config } from '../tamagui.config';
+import { YStack, XStack, ScrollView, Circle, Image } from 'tamagui';
 import { useDesignSystem, useTokenCSS } from '../state/designSystem';
 import {
   Home,
@@ -44,22 +43,22 @@ export const PreviewPhoneTamagui = () => {
   const { opts, selectedPrimaryFont, isDarkMode } = useDesignSystem();
 
   return (
-    <TamaguiProvider config={config} defaultTheme={isDarkMode ? 'dark' : 'light'}>
-      <div className="h-full flex items-start justify-center p-8 bg-gray-100 min-h-[600px]">
+    <div className={`h-full flex items-start justify-center p-8 min-h-[600px] ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
         <YStack
           className={selectedPrimaryFont}
           backgroundColor="$bgPrimary"
-          borderColor="$border"
-          borderWidth={8}
           borderRadius={40}
           width={320}
           height={640}
           overflow="hidden"
           shadowColor="#000"
-          shadowOffset={{ width: 0, height: 10 }}
-          shadowOpacity={0.15}
-          shadowRadius={30}
-          elevation={10}
+          shadowOffset={{ width: 0, height: 20 }}
+          shadowOpacity={0.08}
+          shadowRadius={40}
+          elevation={8}
+          style={{
+            boxShadow: '0 10px 40px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)'
+          }}
         >
           {/* Status Bar */}
           <XStack
@@ -331,7 +330,6 @@ export const PreviewPhoneTamagui = () => {
             />
           )}
         </YStack>
-      </div>
-    </TamaguiProvider>
+    </div>
   );
 };
