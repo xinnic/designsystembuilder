@@ -1,6 +1,12 @@
 import { create } from 'zustand';
 import { useEffect } from 'react';
 import { generateSecondaryColor } from '../utils/colorGeneration';
+import {
+  generateBrandPalette,
+  hexToOKLCH,
+  getSemanticValue,
+  semanticColors
+} from '../design-system/tokens';
 
 export type MenuLayout = 'bottomBar' | 'hamburger';
 export type BorderWeight = 'none' | 'thin' | 'thick';
@@ -224,6 +230,36 @@ const hexToRgb = (hex: string): string => {
   ].join(' ');
 };
 
+// Helper function to convert OKLCH to RGB triplet
+// Simplified conversion for CSS compatibility
+const oklchToRgb = (oklchString: string): string => {
+  // Parse OKLCH string like "oklch(0.50 0.20 237)"
+  const match = oklchString.match(/oklch\(([\d.]+)\s+([\d.]+)\s+([\d.]+)\)/);
+  if (!match) return hexToRgb('#3498db'); // fallback
+
+  const l = parseFloat(match[1]);
+  const c = parseFloat(match[2]);
+  const h = parseFloat(match[3]);
+
+  // Convert to RGB (simplified linear approximation)
+  // In production, use a proper color conversion library like culori
+  const hRad = (h * Math.PI) / 180;
+  const a = c * Math.cos(hRad);
+  const b = c * Math.sin(hRad);
+
+  // Linear approximation of OKLCH to RGB
+  let r = l + 0.4 * a - 0.1 * b;
+  let g = l - 0.4 * a + 0.3 * b;
+  let bVal = l - 0.5 * a - 0.8 * b;
+
+  // Clamp and convert to 0-255
+  r = Math.max(0, Math.min(1, r)) * 255;
+  g = Math.max(0, Math.min(1, g)) * 255;
+  bVal = Math.max(0, Math.min(1, bVal)) * 255;
+
+  return `${Math.round(r)} ${Math.round(g)} ${Math.round(bVal)}`;
+};
+
 // Typography scale definitions
 const typographyScales = {
   small: {
@@ -395,17 +431,39 @@ useDesignSystem.subscribe((state) => {
   // Get current corner radius scale
   const currentRadius = cornerRadiusScales[state.cornerRadius] || cornerRadiusScales.medium;
 
+  // Determine theme mode for semantic tokens
+  const theme = state.isDarkMode ? 'dark' : 'light';
+
+  // Use semantic tokens for proper dark mode support
+  // Convert OKLCH to RGB for CSS compatibility
+  const brandRgb = hexToRgb(primaryColor);
+  const accentRgb = hexToRgb(accentColor);
+
+  // Get semantic colors based on theme mode
+  const textPrimaryColor = oklchToRgb(getSemanticValue(semanticColors.text.primary, theme));
+  const textSecondaryColor = oklchToRgb(getSemanticValue(semanticColors.text.secondary, theme));
+  const textDisabledColor = oklchToRgb(getSemanticValue(semanticColors.text.disabled, theme));
+  const bgPrimaryColor = oklchToRgb(getSemanticValue(semanticColors.canvas.default, theme));
+  const bgSecondaryColor = oklchToRgb(getSemanticValue(semanticColors.surface.default, theme));
+  const borderColor = oklchToRgb(getSemanticValue(semanticColors.border.default, theme));
+
   // Update tokens (fontFamily is used for body text, we'll handle display font in CSS)
   state.setTokens({
-    // Colors
-    brand: hexToRgb(primaryColor),
-    brandWeak: hexToRgb(accentColor),
-    textPrimary: state.isDarkMode ? '225 225 225' : '26 26 26',
-    textSecondary: state.isDarkMode ? '168 168 168' : '108 117 136',
-    textDisabled: state.isDarkMode ? '102 102 102' : '161 161 161',
-    bgPrimary: state.isDarkMode ? '18 18 18' : '248 249 250',
-    bgSecondary: state.isDarkMode ? '30 30 30' : '255 255 255',
-    border: state.isDarkMode ? '44 44 44' : '229 231 235',
+    // Colors - using OKLCH semantic tokens
+    brand: brandRgb,
+    brandWeak: accentRgb,
+    textPrimary: textPrimaryColor,
+    textSecondary: textSecondaryColor,
+    textDisabled: textDisabledColor,
+    bgPrimary: bgPrimaryColor,
+    bgSecondary: bgSecondaryColor,
+    border: borderColor,
+    // Semantic colors for states
+    focus: oklchToRgb(getSemanticValue(semanticColors.primary.default, theme)),
+    success: oklchToRgb(getSemanticValue(semanticColors.success.default, theme)),
+    warning: oklchToRgb(getSemanticValue(semanticColors.warning.default, theme)),
+    info: oklchToRgb(getSemanticValue(semanticColors.primary.default, theme)),
+    danger: oklchToRgb(getSemanticValue(semanticColors.danger.default, theme)),
     // Typography
     fontFamily: primaryFontFamily,
     ...currentScale,
