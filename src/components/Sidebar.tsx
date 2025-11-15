@@ -4,6 +4,13 @@ import StylingControls from '../left/StylingControls';
 import { useDesignSystem } from '../state/designSystem';
 import { generateSecondaryColor } from '../utils/colorGeneration';
 import {
+  colorThemes,
+  accentColors,
+  RAINBOW_GRADIENT,
+  DEFAULT_PRIMARY,
+  DEFAULT_ACCENT,
+} from '../config/colorThemes';
+import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
@@ -81,48 +88,6 @@ const scales = [
   { value: 'small', label: 'Small' },
   { value: 'regular', label: 'Regular' },
   { value: 'large', label: 'Large' },
-];
-
-const colorThemes = [
-  { name: 'custom', color: 'rainbow', label: 'Custom', isCustom: true },
-  { name: 'turquoise', color: '#1abc9c', label: 'Turquoise' },
-  { name: 'emerald', color: '#2ecc71', label: 'Emerald' },
-  { name: 'nephritis', color: '#27ae60', label: 'Nephritis' },
-  { name: 'peter-river', color: '#3498db', label: 'Peter River' },
-  { name: 'belize-hole', color: '#2980b9', label: 'Belize Hole' },
-  { name: 'amethyst', color: '#9b59b6', label: 'Amethyst' },
-  { name: 'wisteria', color: '#8e44ad', label: 'Wisteria' },
-  { name: 'wet-asphalt', color: '#34495e', label: 'Wet Asphalt' },
-  { name: 'midnight-blue', color: '#2c3e50', label: 'Midnight Blue' },
-  { name: 'sun-flower', color: '#f1c40f', label: 'Sun Flower' },
-  { name: 'orange', color: '#f39c12', label: 'Orange' },
-  { name: 'carrot', color: '#e67e22', label: 'Carrot' },
-  { name: 'pumpkin', color: '#d35400', label: 'Pumpkin' },
-  { name: 'alizarin', color: '#e74c3c', label: 'Alizarin' },
-  { name: 'pomegranate', color: '#c0392b', label: 'Pomegranate' },
-  { name: 'concrete', color: '#95a5a6', label: 'Concrete' },
-  { name: 'asbestos', color: '#7f8c8d', label: 'Asbestos' },
-];
-
-const accentColors = [
-  { name: 'custom', color: 'rainbow', label: 'Custom', isCustom: true },
-  { name: 'turquoise', color: '#1abc9c', label: 'Turquoise' },
-  { name: 'emerald', color: '#2ecc71', label: 'Emerald' },
-  { name: 'nephritis', color: '#27ae60', label: 'Nephritis' },
-  { name: 'peter-river', color: '#3498db', label: 'Peter River' },
-  { name: 'belize-hole', color: '#2980b9', label: 'Belize Hole' },
-  { name: 'amethyst', color: '#9b59b6', label: 'Amethyst' },
-  { name: 'wisteria', color: '#8e44ad', label: 'Wisteria' },
-  { name: 'wet-asphalt', color: '#34495e', label: 'Wet Asphalt' },
-  { name: 'midnight-blue', color: '#2c3e50', label: 'Midnight Blue' },
-  { name: 'sun-flower', color: '#f1c40f', label: 'Sun Flower' },
-  { name: 'orange', color: '#f39c12', label: 'Orange' },
-  { name: 'carrot', color: '#e67e22', label: 'Carrot' },
-  { name: 'pumpkin', color: '#d35400', label: 'Pumpkin' },
-  { name: 'alizarin', color: '#e74c3c', label: 'Alizarin' },
-  { name: 'pomegranate', color: '#c0392b', label: 'Pomegranate' },
-  { name: 'concrete', color: '#95a5a6', label: 'Concrete' },
-  { name: 'asbestos', color: '#7f8c8d', label: 'Asbestos' },
 ];
 
 // Tailwind is the only supported library
@@ -364,7 +329,7 @@ export function Sidebar({}: SidebarProps) {
                       <div className="relative">
                         <input
                           type="color"
-                          value={customPrimaryColor || '#3498db'}
+                          value={customPrimaryColor || DEFAULT_PRIMARY}
                           onChange={(e) => {
                             setCustomPrimaryColor(e.target.value);
                             handlePrimaryColorChange('custom', e.target.value);
@@ -377,10 +342,10 @@ export function Sidebar({}: SidebarProps) {
                             selectedTheme === theme.name ? 'border-foreground border-2' : 'border-border'
                           } cursor-pointer`}
                           style={{
-                            background: 'conic-gradient(from 0deg, #e74c3c 0deg, #f39c12 45deg, #f1c40f 90deg, #2ecc71 135deg, #1abc9c 180deg, #3498db 225deg, #9b59b6 270deg, #e91e63 315deg, #e74c3c 360deg)'
+                            background: RAINBOW_GRADIENT
                           }}
                           onClick={() => {
-                            const color = customPrimaryColor || '#3498db';
+                            const color = customPrimaryColor || DEFAULT_PRIMARY;
                             if (!customPrimaryColor) {
                               setCustomPrimaryColor(color);
                             }
@@ -413,7 +378,7 @@ export function Sidebar({}: SidebarProps) {
                       <div className="relative">
                         <input
                           type="color"
-                          value={customAccentColor || '#1abc9c'}
+                          value={customAccentColor || DEFAULT_ACCENT}
                           onChange={(e) => {
                             handleSecondaryColorChange('custom', e.target.value);
                           }}
@@ -425,10 +390,10 @@ export function Sidebar({}: SidebarProps) {
                             selectedAccentColor === accent.name ? 'border-foreground border-2' : 'border-border'
                           } cursor-pointer`}
                           style={{
-                            background: 'conic-gradient(from 0deg, #e74c3c 0deg, #f39c12 45deg, #f1c40f 90deg, #2ecc71 135deg, #1abc9c 180deg, #3498db 225deg, #9b59b6 270deg, #e91e63 315deg, #e74c3c 360deg)'
+                            background: RAINBOW_GRADIENT
                           }}
                           onClick={() => {
-                            const color = customAccentColor || '#1abc9c';
+                            const color = customAccentColor || DEFAULT_ACCENT;
                             if (!customAccentColor) {
                               setCustomAccentColor(color);
                             }

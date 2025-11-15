@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { useEffect } from 'react';
 import { generateSecondaryColor } from '../utils/colorGeneration';
+import { COLOR_VALUES } from '../config/colorThemes';
 
 export type MenuLayout = 'bottomBar' | 'hamburger';
 export type BorderWeight = 'none' | 'thin' | 'thick';
@@ -354,25 +355,8 @@ useDesignSystem.subscribe((state) => {
     cornerRadius: state.cornerRadius
   };
 
-  const colorMap: Record<string, string> = {
-    turquoise: '#1abc9c',
-    emerald: '#2ecc71',
-    'peter-river': '#3498db',
-    amethyst: '#9b59b6',
-    'wet-asphalt': '#34495e',
-    'sun-flower': '#f1c40f',
-    carrot: '#e67e22',
-    alizarin: '#e74c3c',
-    concrete: '#95a5a6',
-    orange: '#f39c12',
-    pumpkin: '#d35400',
-    pomegranate: '#c0392b',
-    nephritis: '#27ae60',
-    'belize-hole': '#2980b9',
-    wisteria: '#8e44ad',
-    'midnight-blue': '#2c3e50',
-    asbestos: '#7f8c8d'
-  };
+  // Use centralized color configuration
+  const colorMap = COLOR_VALUES;
 
   const primaryColor = state.selectedTheme === 'custom' && state.customPrimaryColor
     ? state.customPrimaryColor
@@ -426,25 +410,8 @@ useDesignSystem.subscribe((state) => {
 setTimeout(() => {
   const state = useDesignSystem.getState();
 
-  const colorMap: Record<string, string> = {
-    turquoise: '#1abc9c',
-    emerald: '#2ecc71',
-    'peter-river': '#3498db',
-    amethyst: '#9b59b6',
-    'wet-asphalt': '#34495e',
-    'sun-flower': '#f1c40f',
-    carrot: '#e67e22',
-    alizarin: '#e74c3c',
-    concrete: '#95a5a6',
-    orange: '#f39c12',
-    pumpkin: '#d35400',
-    pomegranate: '#c0392b',
-    nephritis: '#27ae60',
-    'belize-hole': '#2980b9',
-    wisteria: '#8e44ad',
-    'midnight-blue': '#2c3e50',
-    asbestos: '#7f8c8d'
-  };
+  // Use centralized color configuration
+  const colorMap = COLOR_VALUES;
 
   const primaryColor = state.selectedTheme === 'custom' && state.customPrimaryColor
     ? state.customPrimaryColor
