@@ -1,11 +1,6 @@
 import { create } from 'zustand';
 import { useEffect } from 'react';
 import { generateSecondaryColor } from '../utils/colorGeneration';
-import { converter, formatRgb } from 'culori';
-import {
-  getSemanticValue,
-  semanticColors
-} from '../design-system/tokens';
 
 export type MenuLayout = 'bottomBar' | 'hamburger';
 export type BorderWeight = 'none' | 'thin' | 'thick';
@@ -229,29 +224,6 @@ const hexToRgb = (hex: string): string => {
   ].join(' ');
 };
 
-// Proper OKLCH to RGB conversion using culori
-const oklchToRgb = (oklchString: string): string => {
-  try {
-    // Parse OKLCH color using culori
-    const rgb = converter('rgb')(oklchString);
-
-    if (!rgb) {
-      console.warn('Failed to convert OKLCH:', oklchString);
-      return '128 128 128'; // fallback to gray
-    }
-
-    // Convert to 0-255 range and format as "R G B"
-    const r = Math.round((rgb.r || 0) * 255);
-    const g = Math.round((rgb.g || 0) * 255);
-    const b = Math.round((rgb.b || 0) * 255);
-
-    return `${r} ${g} ${b}`;
-  } catch (error) {
-    console.error('Error converting OKLCH to RGB:', error);
-    return '128 128 128'; // fallback to gray
-  }
-};
-
 // Typography scale definitions
 const typographyScales = {
   small: {
@@ -423,34 +395,22 @@ useDesignSystem.subscribe((state) => {
   // Get current corner radius scale
   const currentRadius = cornerRadiusScales[state.cornerRadius] || cornerRadiusScales.medium;
 
-  // Determine theme mode for semantic tokens
-  const theme = state.isDarkMode ? 'dark' : 'light';
-
-  // Use semantic OKLCH tokens with proper culori conversion
-  const textPrimaryColor = oklchToRgb(getSemanticValue(semanticColors.text.primary, theme));
-  const textSecondaryColor = oklchToRgb(getSemanticValue(semanticColors.text.secondary, theme));
-  const textDisabledColor = oklchToRgb(getSemanticValue(semanticColors.text.disabled, theme));
-  const bgPrimaryColor = oklchToRgb(getSemanticValue(semanticColors.canvas.default, theme));
-  const bgSecondaryColor = oklchToRgb(getSemanticValue(semanticColors.surface.default, theme));
-  const borderColor = oklchToRgb(getSemanticValue(semanticColors.border.default, theme));
-
-  // Update tokens using OKLCH semantic system
+  // Update tokens - using simple hex-based colors only
   state.setTokens({
-    // Colors - brand colors stay hex-based, UI colors use OKLCH semantics
+    // Colors
     brand: hexToRgb(primaryColor),
     brandWeak: hexToRgb(accentColor),
-    textPrimary: textPrimaryColor,
-    textSecondary: textSecondaryColor,
-    textDisabled: textDisabledColor,
-    bgPrimary: bgPrimaryColor,
-    bgSecondary: bgSecondaryColor,
-    border: borderColor,
-    // Semantic colors for states using OKLCH
-    focus: oklchToRgb(getSemanticValue(semanticColors.primary.default, theme)),
-    success: oklchToRgb(getSemanticValue(semanticColors.success.default, theme)),
-    warning: oklchToRgb(getSemanticValue(semanticColors.warning.default, theme)),
-    info: oklchToRgb(getSemanticValue(semanticColors.primary.default, theme)),
-    danger: oklchToRgb(getSemanticValue(semanticColors.danger.default, theme)),
+    textPrimary: state.isDarkMode ? '225 225 225' : '26 26 26',
+    textSecondary: state.isDarkMode ? '168 168 168' : '108 117 136',
+    textDisabled: state.isDarkMode ? '102 102 102' : '161 161 161',
+    bgPrimary: state.isDarkMode ? '18 18 18' : '248 249 250',
+    bgSecondary: state.isDarkMode ? '30 30 30' : '255 255 255',
+    border: state.isDarkMode ? '44 44 44' : '229 231 235',
+    focus: hexToRgb('#0066CC'),
+    success: hexToRgb('#22c55e'),
+    warning: hexToRgb('#f59e0b'),
+    info: hexToRgb('#3b82f6'),
+    danger: hexToRgb('#f44444'),
     // Typography
     fontFamily: primaryFontFamily,
     ...currentScale,
@@ -461,45 +421,44 @@ useDesignSystem.subscribe((state) => {
   });
 });
 
-// Trigger initial update to sync tokens with initial state
-// This ensures the UI matches the default selectedTheme on first load
-const initialState = useDesignSystem.getState();
-const colorMap: Record<string, string> = {
-  turquoise: '#1abc9c',
-  emerald: '#2ecc71',
-  'peter-river': '#3498db',
-  amethyst: '#9b59b6',
-  'wet-asphalt': '#34495e',
-  'sun-flower': '#f1c40f',
-  carrot: '#e67e22',
-  alizarin: '#e74c3c',
-  concrete: '#95a5a6',
-  orange: '#f39c12',
-  pumpkin: '#d35400',
-  pomegranate: '#c0392b',
-  nephritis: '#27ae60',
-  'belize-hole': '#2980b9',
-  wisteria: '#8e44ad',
-  'midnight-blue': '#2c3e50',
-  asbestos: '#7f8c8d'
-};
+// Manually trigger initial token update to ensure colors load correctly on first render
+// The subscription won't fire until a state change, so we need to manually set tokens once
+setTimeout(() => {
+  const state = useDesignSystem.getState();
 
-const initialPrimaryColor = initialState.selectedTheme === 'custom' && initialState.customPrimaryColor
-  ? initialState.customPrimaryColor
-  : colorMap[initialState.selectedTheme] || '#1abc9c';
+  const colorMap: Record<string, string> = {
+    turquoise: '#1abc9c',
+    emerald: '#2ecc71',
+    'peter-river': '#3498db',
+    amethyst: '#9b59b6',
+    'wet-asphalt': '#34495e',
+    'sun-flower': '#f1c40f',
+    carrot: '#e67e22',
+    alizarin: '#e74c3c',
+    concrete: '#95a5a6',
+    orange: '#f39c12',
+    pumpkin: '#d35400',
+    pomegranate: '#c0392b',
+    nephritis: '#27ae60',
+    'belize-hole': '#2980b9',
+    wisteria: '#8e44ad',
+    'midnight-blue': '#2c3e50',
+    asbestos: '#7f8c8d'
+  };
 
-const initialAccentColor = initialState.selectedAccentColor === 'custom' && initialState.customAccentColor
-  ? initialState.customAccentColor
-  : colorMap[initialState.selectedAccentColor] || '#1abc9c';
+  const primaryColor = state.selectedTheme === 'custom' && state.customPrimaryColor
+    ? state.customPrimaryColor
+    : colorMap[state.selectedTheme] || '#1abc9c';
 
-initialState.setTokens({
-  brand: hexToRgb(initialPrimaryColor),
-  brandWeak: hexToRgb(initialAccentColor),
-});
+  const accentColor = state.selectedAccentColor === 'custom' && state.customAccentColor
+    ? state.customAccentColor
+    : colorMap[state.selectedAccentColor] || '#1abc9c';
 
-// Update lastUpdate to match initial state to prevent first-click issues
-lastUpdate.theme = initialState.selectedTheme;
-lastUpdate.accent = initialState.selectedAccentColor;
+  state.setTokens({
+    brand: hexToRgb(primaryColor),
+    brandWeak: hexToRgb(accentColor),
+  });
+}, 0);
 
 // Hook to bind tokens to CSS variables
 export const useTokenCSS = () => {
