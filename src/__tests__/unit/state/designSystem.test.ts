@@ -17,9 +17,11 @@ describe('DesignSystem Store', () => {
     store.setAccentColor('turquoise');
     store.setCustomAccentColor('#1abc9c');
     store.setScale('regular');
-    store.setFont('font-jakarta');
+    store.setPrimaryFont('font-jakarta');
+    store.setDisplayFont('font-jakarta');
     store.setStylePreset('modern');
     store.setSpacingMode('normal');
+    store.setCornerRadius('medium');
 
     // Wait for any subscribers to finish
     await waitForUpdate();
@@ -32,9 +34,11 @@ describe('DesignSystem Store', () => {
       expect(state.isDarkMode).toBe(false);
       expect(state.selectedTheme).toBe('turquoise');
       expect(state.selectedScale).toBe('regular');
-      expect(state.selectedFont).toBe('font-jakarta');
+      expect(state.selectedPrimaryFont).toBe('font-jakarta');
+      expect(state.selectedDisplayFont).toBe('font-jakarta');
       expect(state.stylePresetId).toBe('modern');
       expect(state.spacingMode).toBe('normal');
+      expect(state.cornerRadius).toBe('medium');
     });
 
     it('should have valid default tokens', () => {
@@ -306,18 +310,18 @@ describe('DesignSystem Store', () => {
 
   describe('Font Family', () => {
     it('should change font family', async () => {
-      const { setFont } = useDesignSystem.getState();
+      const { setPrimaryFont } = useDesignSystem.getState();
 
-      setFont('font-vietnam');
+      setPrimaryFont('font-vietnam');
       await waitForUpdate();
 
       const state = useDesignSystem.getState();
-      expect(state.selectedFont).toBe('font-vietnam');
+      expect(state.selectedPrimaryFont).toBe('font-vietnam');
       expect(state.tokens.fontFamily).toBe('Be Vietnam Pro, ui-sans-serif, system-ui');
     });
 
     it('should handle multiple font families', async () => {
-      const { setFont } = useDesignSystem.getState();
+      const { setPrimaryFont } = useDesignSystem.getState();
 
       const fontTests = [
         { id: 'font-jakarta', family: 'Plus Jakarta Sans, ui-sans-serif, system-ui' },
@@ -328,7 +332,7 @@ describe('DesignSystem Store', () => {
       ];
 
       for (const { id, family } of fontTests) {
-        setFont(id);
+        setPrimaryFont(id);
         await waitForUpdate();
         const state = useDesignSystem.getState();
         expect(state.tokens.fontFamily).toBe(family);
@@ -420,6 +424,267 @@ describe('DesignSystem Store', () => {
       const state = useDesignSystem.getState();
       const brand = state.tokens.brand;
       expect(brand).toBe('255 0 0'); // Red in RGB triplet
+    });
+  });
+
+  describe('Regression Tests - Tab Switching Color Consistency', () => {
+    it('should not change colors when re-rendering (tab switch simulation)', async () => {
+      const { setTheme, setTokens } = useDesignSystem.getState();
+
+      // Set teal theme
+      setTheme('turquoise');
+      await waitForUpdate();
+
+      const brandAfterThemeChange = useDesignSystem.getState().tokens.brand;
+
+      // Simulate tab switch - this used to cause colors to revert to blue
+      // due to conflicting CSS variables in index.css
+      setTokens({}); // Empty update to trigger a re-render
+      await waitForUpdate();
+
+      const state = useDesignSystem.getState();
+
+      // Color should remain the same
+      expect(state.tokens.brand).toBe(brandAfterThemeChange);
+      expect(state.selectedTheme).toBe('turquoise');
+    });
+
+    it('should maintain theme color after multiple token updates', async () => {
+      const { setTheme, setTokens } = useDesignSystem.getState();
+
+      setTheme('emerald');
+      await waitForUpdate();
+
+      const initialBrand = useDesignSystem.getState().tokens.brand;
+
+      // Trigger multiple token updates (simulating complex UI interactions)
+      setTokens({ textPrimary: '100 100 100' });
+      await waitForUpdate();
+
+      setTokens({ bgSecondary: '200 200 200' });
+      await waitForUpdate();
+
+      const state = useDesignSystem.getState();
+
+      // Brand color should not have been affected by unrelated token updates
+      expect(state.tokens.brand).toBe(initialBrand);
+    });
+
+    it('should keep teal color and not revert to blue on state changes', async () => {
+      const { setTheme, setDarkMode, setScale } = useDesignSystem.getState();
+
+      // Set turquoise (teal) theme
+      setTheme('turquoise');
+      await waitForUpdate();
+
+      const tealBrand = useDesignSystem.getState().tokens.brand;
+
+      // Make various state changes that used to trigger color reversion
+      setDarkMode(true);
+      await waitForUpdate();
+
+      setScale('large');
+      await waitForUpdate();
+
+      setDarkMode(false);
+      await waitForUpdate();
+
+      const state = useDesignSystem.getState();
+
+      // Should still be teal, not blue
+      expect(state.tokens.brand).toBe(tealBrand);
+      expect(state.selectedTheme).toBe('turquoise');
+
+      // Verify it's NOT blue (221 83% 53% HSL = ~66 141 238 RGB)
+      expect(state.tokens.brand).not.toBe('66 141 238');
+    });
+  });
+
+  describe('Regression Tests - Border Color Consistency', () => {
+    it('should have soft gray borders in light mode, not black', async () => {
+      const { setDarkMode } = useDesignSystem.getState();
+
+      setDarkMode(false);
+      await waitForUpdate();
+
+      const state = useDesignSystem.getState();
+
+      // Light mode border should be soft gray (229 231 235)
+      expect(state.tokens.border).toBe('229 231 235');
+
+      // Should NOT be black (0 0 0)
+      expect(state.tokens.border).not.toBe('0 0 0');
+
+      // Verify it's actually gray, not dark
+      const [r, g, b] = state.tokens.border.split(' ').map(Number);
+      expect(r).toBeGreaterThan(200);
+      expect(g).toBeGreaterThan(200);
+      expect(b).toBeGreaterThan(200);
+    });
+
+    it('should have dark gray borders in dark mode, not black', async () => {
+      const { setDarkMode } = useDesignSystem.getState();
+
+      setDarkMode(true);
+      await waitForUpdate();
+
+      const state = useDesignSystem.getState();
+
+      // Dark mode border should be dark gray (44 44 44)
+      expect(state.tokens.border).toBe('44 44 44');
+
+      // Should NOT be black (0 0 0)
+      expect(state.tokens.border).not.toBe('0 0 0');
+
+      // Verify it's not too dark
+      const [r, g, b] = state.tokens.border.split(' ').map(Number);
+      expect(r).toBeGreaterThan(0);
+      expect(g).toBeGreaterThan(0);
+      expect(b).toBeGreaterThan(0);
+    });
+
+    it('should maintain border color across theme changes', async () => {
+      const { setTheme, setDarkMode } = useDesignSystem.getState();
+
+      setDarkMode(false);
+      await waitForUpdate();
+
+      const lightBorder = useDesignSystem.getState().tokens.border;
+
+      // Change theme colors
+      setTheme('emerald');
+      await waitForUpdate();
+
+      setTheme('amethyst');
+      await waitForUpdate();
+
+      const state = useDesignSystem.getState();
+
+      // Border should remain the same soft gray
+      expect(state.tokens.border).toBe(lightBorder);
+      expect(state.tokens.border).toBe('229 231 235');
+    });
+
+    it('should not use OKLCH conversion that produces black borders', async () => {
+      const { setTheme, setDarkMode } = useDesignSystem.getState();
+
+      // Test various theme and mode combinations
+      const combinations = [
+        { theme: 'turquoise', dark: false },
+        { theme: 'emerald', dark: false },
+        { theme: 'amethyst', dark: true },
+        { theme: 'peter-river', dark: true }
+      ];
+
+      for (const { theme, dark } of combinations) {
+        setTheme(theme);
+        setDarkMode(dark);
+        await waitForUpdate();
+
+        const state = useDesignSystem.getState();
+
+        // Border should NEVER be black regardless of theme
+        expect(state.tokens.border).not.toBe('0 0 0');
+
+        // Verify RGB values are reasonable
+        const [r, g, b] = state.tokens.border.split(' ').map(Number);
+        expect(r + g + b).toBeGreaterThan(0); // Not all zeros
+      }
+    });
+  });
+
+  describe('Regression Tests - Accent Color Independence', () => {
+    it('should update accent color without affecting primary', async () => {
+      const { setTheme, setAccentColor } = useDesignSystem.getState();
+
+      setTheme('turquoise');
+      await waitForUpdate();
+
+      const primaryBrand = useDesignSystem.getState().tokens.brand;
+
+      // Change accent color
+      setAccentColor('amethyst');
+      await waitForUpdate();
+
+      const state = useDesignSystem.getState();
+
+      // Primary brand should be unchanged
+      expect(state.tokens.brand).toBe(primaryBrand);
+
+      // Accent (brandWeak) should be different
+      expect(state.tokens.brandWeak).not.toBe(state.tokens.brand);
+    });
+
+    it('should update primary color without affecting accent', async () => {
+      const { setTheme, setAccentColor } = useDesignSystem.getState();
+
+      setAccentColor('emerald');
+      await waitForUpdate();
+
+      const accentColor = useDesignSystem.getState().tokens.brandWeak;
+
+      // Change primary theme
+      setTheme('amethyst');
+      await waitForUpdate();
+
+      const state = useDesignSystem.getState();
+
+      // Accent should be unchanged
+      expect(state.tokens.brandWeak).toBe(accentColor);
+
+      // Primary should be different
+      expect(state.tokens.brand).not.toBe(state.tokens.brandWeak);
+    });
+  });
+
+  describe('State Subscription Performance', () => {
+    it('should not trigger infinite update loops', async () => {
+      let updateCount = 0;
+      const maxUpdates = 10;
+
+      const unsubscribe = useDesignSystem.subscribe(() => {
+        updateCount++;
+        if (updateCount > maxUpdates) {
+          throw new Error('Infinite loop detected in store subscriptions');
+        }
+      });
+
+      try {
+        const { setTheme } = useDesignSystem.getState();
+        setTheme('emerald');
+        await waitForUpdate();
+
+        // Should have triggered a few updates (theme change + token update)
+        // but definitely not an infinite loop
+        expect(updateCount).toBeLessThanOrEqual(maxUpdates);
+        expect(updateCount).toBeGreaterThan(0);
+      } finally {
+        unsubscribe();
+      }
+    });
+
+    it('should batch updates efficiently', async () => {
+      let updateCount = 0;
+
+      const unsubscribe = useDesignSystem.subscribe(() => {
+        updateCount++;
+      });
+
+      try {
+        const { setTheme, setDarkMode, setScale } = useDesignSystem.getState();
+
+        // Make multiple changes
+        setTheme('emerald');
+        setDarkMode(true);
+        setScale('large');
+
+        await waitForUpdate();
+
+        // Should not trigger excessive updates (each setter + one subscriber update)
+        expect(updateCount).toBeLessThan(20);
+      } finally {
+        unsubscribe();
+      }
     });
   });
 });

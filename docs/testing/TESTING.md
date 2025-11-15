@@ -34,24 +34,42 @@ This document outlines the comprehensive testing strategy for the Design System 
 
 ### 1. Unit Tests
 
-#### State Management (src/state/designSystem.ts)
+#### State Management (src/state/designSystem.ts) ✅ COMPLETED
 ```typescript
 // Test cases for Zustand store
-- [ ] Store initialization with default values
-- [ ] Token setters update state correctly
-- [ ] Options setters update state correctly
-- [ ] Haptics configuration updates
-- [ ] Theme switching logic
-- [ ] Color system updates (primary, accent, custom)
-- [ ] Typography scale changes
-- [ ] Spacing mode transitions
-- [ ] Style preset applications
+- [x] Store initialization with default values
+- [x] Token setters update state correctly
+- [x] Options setters update state correctly
+- [x] Haptics configuration updates
+- [x] Theme switching logic
+- [x] Color system updates (primary, accent, custom)
+- [x] Typography scale changes
+- [x] Spacing mode transitions
+- [x] Style preset applications
+- [x] Dark mode text and background color updates
+- [x] Font family changes
+- [x] Corner radius updates
+```
+
+#### Regression Tests ✅ COMPLETED
+```typescript
+// Critical bug prevention tests
+- [x] Tab switching does not change colors (fix for blue reversion bug)
+- [x] Colors remain consistent across re-renders
+- [x] Teal theme does not revert to blue on state changes
+- [x] Borders are soft gray, not black (fix for OKLCH conversion bug)
+- [x] Border colors maintain across theme changes
+- [x] OKLCH conversion does not produce black borders
+- [x] Accent color changes independently from primary
+- [x] Primary color changes independently from accent
+- [x] No infinite update loops in subscriptions
+- [x] Efficient batching of multiple updates
 ```
 
 #### Utility Functions
 ```typescript
 // Helper function tests
-- [ ] hexToRgb conversion accuracy
+- [x] hexToRgb conversion accuracy
 - [ ] Color mapping functions
 - [ ] Typography scale calculations
 - [ ] Spacing scale mappings
@@ -119,6 +137,47 @@ This document outlines the comprehensive testing strategy for the Design System 
 ```
 
 ### 3. Integration Tests
+
+#### CSS Variable Binding (src/__tests__/integration/cssVariableBinding.test.tsx) ✅ COMPLETED
+```typescript
+// Tests for Zustand → CSS variable synchronization
+- [x] useTokenCSS hook binds tokens to CSS variables on mount
+- [x] CSS variables update when brand color changes
+- [x] CSS variables update when dark mode toggles
+- [x] Dark mode class applied/removed from document root
+- [x] Font family CSS variable updates
+- [x] Typography scale CSS variables update
+- [x] All typography levels update when scale changes
+- [x] Spacing scale CSS variables update
+- [x] Comfortable spacing is larger than normal
+- [x] Corner radius CSS variables update
+- [x] Zero radius supported correctly
+```
+
+#### Regression Tests - CSS Conflicts ✅ COMPLETED
+```typescript
+// Ensures CSS variables from Zustand are not overridden
+- [x] CSS variables not overridden by index.css
+- [x] Colors maintain across re-renders (tab switches)
+- [x] Soft gray borders, not black
+- [x] Border colors maintain across theme changes
+```
+
+#### Class Name Management ✅ COMPLETED
+```typescript
+// Tests for CSS class application
+- [x] Font class applied to root element
+- [x] Scale class applied to root element
+- [x] Theme class applied to root element
+- [x] Old classes cleaned up when switching
+```
+
+#### Performance Tests ✅ COMPLETED
+```typescript
+// Ensures efficient CSS variable updates
+- [x] No excessive CSS variable updates
+- [x] Efficient batch updates
+```
 
 #### Auto-Sync Flow
 ```typescript
@@ -611,6 +670,55 @@ npm run test:ui
 
 ---
 
-**Last Updated**: 2025-01-16
-**Version**: 1.0.0
+## 📋 Recent Test Additions (2025-01-15)
+
+### State Management & Styling Consistency Tests
+
+**Context**: After fixing critical bugs with color management (blue reversion on tab switching) and border colors (black borders from OKLCH conversion), comprehensive tests were added to prevent regression.
+
+#### Unit Tests Added
+- **File**: `src/__tests__/unit/state/designSystem.test.ts`
+- **Coverage**: 103 test cases covering all Zustand store functionality
+- **Key Focus Areas**:
+  - Tab switching color consistency (regression prevention)
+  - Border color validation (no black borders)
+  - Accent color independence
+  - State subscription performance
+  - Dark mode transitions
+  - Typography and spacing updates
+
+#### Integration Tests Added
+- **File**: `src/__tests__/integration/cssVariableBinding.test.tsx`
+- **Coverage**: 29 test cases for CSS variable synchronization
+- **Key Focus Areas**:
+  - Zustand → CSS variable binding
+  - CSS variable updates on state changes
+  - Class name management (dark mode, fonts, scales)
+  - CSS conflicts (ensures Zustand overrides index.css)
+  - Performance (no excessive updates)
+
+### Test Execution
+```bash
+# Run all tests
+npm test
+
+# Run with coverage
+npm run test:coverage
+
+# Run specific test suites
+npm test -- designSystem.test
+npm test -- cssVariableBinding.test
+```
+
+### Known Issues Fixed by Tests
+1. ✅ Tab switching no longer reverts teal to blue
+2. ✅ Borders are soft gray, not black (OKLCH conversion fixed)
+3. ✅ CSS variables from Zustand properly override index.css
+4. ✅ Accent and primary colors update independently
+5. ✅ No infinite loops in state subscriptions
+
+---
+
+**Last Updated**: 2025-01-15
+**Version**: 1.1.0
 **Status**: Active Development
