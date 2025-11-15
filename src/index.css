@@ -136,16 +136,8 @@
     --space-12: 48px;
     --space-16: 64px;
 
-    /* Brand color */
-    --color-brand: hsl(var(--primary));
-    --color-brand-weak: hsl(var(--primary) / 0.1);
-    --color-danger: hsl(var(--destructive));
-    --color-focus: hsl(var(--ring));
-    --color-bg-primary: hsl(var(--background));
-    --color-bg-secondary: hsl(var(--card));
-    --color-text-primary: hsl(var(--foreground));
-    --color-text-secondary: hsl(var(--muted-foreground));
-    --color-border: hsl(var(--border));
+    /* Color tokens are managed dynamically by Zustand store */
+    /* Do not define --color-* variables here - they will be set by useTokenCSS hook */
   }
 
   .dark {
@@ -183,16 +175,7 @@
     --button-bg-hover: 207 90% 70%;
     --button-bg-pressed: 207 90% 65%;
 
-    /* Keep the same style preset tokens in dark mode - they'll adjust as needed */
-    --color-brand: hsl(var(--primary));
-    --color-brand-weak: hsl(var(--primary) / 0.1);
-    --color-danger: hsl(var(--destructive));
-    --color-focus: hsl(var(--ring));
-    --color-bg-primary: hsl(var(--background));
-    --color-bg-secondary: hsl(var(--card));
-    --color-text-primary: hsl(var(--foreground));
-    --color-text-secondary: hsl(var(--muted-foreground));
-    --color-border: hsl(var(--border));
+    /* Color tokens in dark mode are also managed dynamically by Zustand store */
   }
 
   /* Blue Theme */
