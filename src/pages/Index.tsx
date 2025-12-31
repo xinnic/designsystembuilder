@@ -795,9 +795,9 @@ Primary Font: ${primaryFontName} | Display Font: ${displayFontName}
           key={isDarkMode ? 'dark' : 'light'}
         >
           <div className="flex-1 flex min-w-0">
-            {/* Mobile App Preview */}
-            <div className="flex-1 min-w-[400px]" style={{ boxShadow: '1px 0 3px rgba(0,0,0,0.04)' }}>
-              <PreviewPhoneTamagui />
+            {/* Mobile App Preview - Fixed width to prevent resize on tab switch */}
+            <div className="w-[420px] flex-shrink-0" style={{ boxShadow: '1px 0 3px rgba(0,0,0,0.04)' }}>
+              <PreviewPhoneTamagui key={selectedStylePreset} />
             </div>
 
             {/* Right Panel - Tailwind Components or Design Tokens */}

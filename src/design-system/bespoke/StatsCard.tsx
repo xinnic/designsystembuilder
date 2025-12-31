@@ -27,8 +27,11 @@ export const StatsCard = ({ icon, value, label }: StatsCardProps) => {
       padding="$3"
       backgroundColor="$bgSecondary"
       borderRadius="$2"
-      borderWidth={1}
-      borderColor="$border"
+      shadowColor="#000"
+      shadowOffset={{ width: 0, height: 2 }}
+      shadowOpacity={0.05}
+      shadowRadius={8}
+      elevation={2}
       flex={1}
     >
       {icon && <YStack color="$brand">{icon}</YStack>}

@@ -63,7 +63,7 @@ export default function TamaguiShowcase() {
 
           <YStack gap="$3">
             <H2>Typography</H2>
-            <Card variant="default" padding="$4">
+            <Card variant="elevated" padding="$4">
               <YStack gap="$3">
                 <Display>Display Text</Display>
                 <H1>Heading 1</H1>
@@ -82,7 +82,7 @@ export default function TamaguiShowcase() {
         {/* Buttons Section */}
         <YStack gap="$3">
           <H2>Buttons</H2>
-          <Card variant="default" padding="large">
+          <Card variant="elevated" padding="large">
             <YStack gap="$4">
               {/* Button Variants */}
               <YStack gap="$2">
@@ -148,7 +148,7 @@ export default function TamaguiShowcase() {
         {/* Form Controls Section */}
         <YStack gap="$3">
           <H2>Form Controls</H2>
-          <Card variant="default" padding="large">
+          <Card variant="elevated" padding="large">
             <YStack gap="$4">
               {/* Text Input */}
               <YStack gap="$2">
@@ -328,7 +328,7 @@ export default function TamaguiShowcase() {
         {/* Tabs Section */}
         <YStack gap="$3">
           <H2>Tabs</H2>
-          <Card variant="default" padding="none">
+          <Card variant="elevated" padding="none">
             <Tabs
               defaultValue="tab1"
               orientation="horizontal"
@@ -365,7 +365,7 @@ export default function TamaguiShowcase() {
         {/* Progress Section */}
         <YStack gap="$3">
           <H2>Progress Indicators</H2>
-          <Card variant="default" padding="large">
+          <Card variant="elevated" padding="large">
             <YStack gap="$4">
               <YStack gap="$2">
                 <Caption fontWeight="600">Progress Bar (60%)</Caption>
@@ -394,7 +394,7 @@ export default function TamaguiShowcase() {
         {/* Dialogs & Sheets */}
         <YStack gap="$3">
           <H2>Overlays</H2>
-          <Card variant="default" padding="large">
+          <Card variant="elevated" padding="large">
             <XStack gap="$3" flexWrap="wrap">
               <Button variant="primary" onPress={() => setSheetOpen(true)}>
                 Open Sheet
@@ -464,7 +464,7 @@ export default function TamaguiShowcase() {
         {/* Shapes Section */}
         <YStack gap="$3">
           <H2>Shapes & Primitives</H2>
-          <Card variant="default" padding="large">
+          <Card variant="elevated" padding="large">
             <YStack gap="$3">
               <Caption fontWeight="600">Basic Shapes</Caption>
               <XStack gap="$3" flexWrap="wrap" alignItems="center">

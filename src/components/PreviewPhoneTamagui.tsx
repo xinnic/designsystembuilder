@@ -47,17 +47,13 @@ export const PreviewPhoneTamagui = () => {
       <YStack
         className={selectedPrimaryFont}
         backgroundColor="$bgPrimary"
-        borderRadius={40}
         width={320}
         height={640}
         overflow="hidden"
-        shadowColor="#000"
-        shadowOffset={{ width: 0, height: 20 }}
-        shadowOpacity={0.08}
-        shadowRadius={40}
-        elevation={8}
         style={{
-          boxShadow: '0 10px 40px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)'
+          boxShadow: 'var(--shadow-xl)',
+          borderRadius: 'var(--radius-xl, 32px)',
+          border: 'var(--border-width, 1px) solid var(--border-color)', // Ensure borders applied if needed
         }}
       >
         {/* Status Bar */}
@@ -96,12 +92,11 @@ export const PreviewPhoneTamagui = () => {
           backgroundColor="$bgSecondary"
           paddingHorizontal="$4"
           paddingVertical="$3"
-          shadowColor="#000"
-          shadowOffset={{ width: 0, height: 2 }}
-          shadowOpacity={0.05}
-          shadowRadius={8}
           zIndex={10}
           tag="header"
+          style={{
+            boxShadow: 'var(--shadow-sm)'
+          }}
         >
           <YStack flex={1} gap="$3">
             {/* Logo and Title */}
@@ -158,7 +153,15 @@ export const PreviewPhoneTamagui = () => {
         <ScrollView flex={1}>
           <YStack padding="$4" gap="$4">
             {/* Hero Card with Gradient */}
-            <Card variant="elevated" padding="none">
+            <Card
+              variant="elevated"
+              padding="none"
+              style={{
+                boxShadow: 'var(--card-shadow)',
+                borderRadius: 'var(--card-radius)',
+                border: 'var(--card-border-width, 1px) solid var(--border-color)'
+              }}
+            >
               <YStack
                 height={128}
                 backgroundColor="linear-gradient(135deg, #a78bfa 0%, #ec4899 100%)"
@@ -197,7 +200,16 @@ export const PreviewPhoneTamagui = () => {
             </XStack>
 
             {/* List Items */}
-            <Card variant="elevated" padding="none" overflow="hidden">
+            <Card
+              variant="elevated"
+              padding="none"
+              overflow="hidden"
+              style={{
+                boxShadow: 'var(--card-shadow)',
+                borderRadius: 'var(--card-radius)',
+                border: 'var(--card-border-width, 1px) solid var(--border-color)'
+              }}
+            >
               {[
                 {
                   icon: <MapPin size={18} />,
@@ -270,7 +282,15 @@ export const PreviewPhoneTamagui = () => {
             </XStack>
 
             {/* Review Card */}
-            <Card variant="elevated" padding="$4">
+            <Card
+              variant="elevated"
+              padding="$4"
+              style={{
+                boxShadow: 'var(--card-shadow)',
+                borderRadius: 'var(--card-radius)',
+                border: 'var(--card-border-width, 1px) solid var(--border-color)'
+              }}
+            >
               <YStack gap="$3">
                 <XStack justifyContent="space-between" alignItems="flex-start">
                   <YStack gap="$1">
