@@ -1,6 +1,6 @@
 # Design System Builder - Task Priority Matrix
 
-> **Last Updated:** 2025-11-04
+> **Last Updated:** 2025-12-31
 > **Current Sprint:** Foundation & Token System
 > **Critical Path:** Token System → Component Migration → B2C Components → Megaprompt
 
@@ -43,12 +43,12 @@ The current implementation is **backwards** - we're building components without 
 
 | Task | Why Important | Model | Status | Time |
 |------|--------------|-------|--------|------|
-| **2.1 Migrate Existing Components to Token System** | Current components use hardcoded values | Sonnet | Not Started | 2 days |
-| - Button component | Most used component, sets pattern | Sonnet | Partial | 2h |
-| - Card component | Base for FeedCard | Sonnet | Partial | 2h |
+| **2.1 Migrate Existing Components to Token System** | Current components use hardcoded values | Sonnet | ✅ COMPLETED | 2 days |
+| - Button component | Most used component, sets pattern | Sonnet | ✅ Completed | 2h |
+| - Card component | Base for FeedCard | Sonnet | ✅ Completed | 2h |
 | - Input/Select/Checkbox | Form foundation | Sonnet | Partial | 3h |
-| - Text component | Typography tokens | Sonnet | Partial | 2h |
-| - Stack component | Spacing tokens | Sonnet | Partial | 1h |
+| - Text component | Typography tokens | Sonnet | ✅ Completed | 2h |
+| - Stack component | Spacing tokens | Sonnet | ✅ Completed | 1h |
 | **2.2 Add CVA Variant Structure** | Consistent variant API across components | Opus | Not Started | 1 day |
 | - Define variant types | Size/variant/state patterns | Opus | Not Started | 3h |
 | - Implement compound variants | Complex state combinations | Opus | Not Started | 3h |
@@ -208,6 +208,8 @@ The current implementation is **backwards** - we're building components without 
 5. ✅ **OKLCH tokens INTEGRATED** - Connected to Zustand store!
 6. ✅ **Semantic color mappings ACTIVE** - Proper dark mode via OKLCH!
 7. ✅ **Token migration DOCUMENTED** - See docs/architecture/TOKEN_MIGRATION.md
+8. ✅ **UI Polish & Refinement** - Fixed padding, borders, and spacing consistency!
+9. ✅ **Dark Mode System** - Fixed top bar and sidebar theming!
 
 ---
 
