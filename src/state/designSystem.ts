@@ -501,18 +501,9 @@ export const useTokenCSS = () => {
     themeClasses.forEach(tc => root.classList.remove(tc));
     root.classList.add(`theme-${selectedTheme}`);
 
-    // Apply style preset CSS variables
-    const preset = getStylePreset(stylePresetId as StylePresetId);
-    if (preset) {
-      const cssVariables = getStylePresetCSSVariables(preset, isDarkMode);
-      Object.entries(cssVariables).forEach(([key, value]) => {
-        root.style.setProperty(key, value);
-      });
-
-      // Add style preset class for CSS-based styling
-      root.classList.remove('preset-modern-flat', 'preset-soft-dreamy', 'preset-minimalist', 'preset-neo-brutalism');
-      root.classList.add(`preset-${stylePresetId}`);
-    }
+    // Add style preset class for CSS-based styling (do this early for CSS class-based styles)
+    root.classList.remove('preset-modern-flat', 'preset-soft-dreamy', 'preset-minimalist', 'preset-neo-brutalism');
+    root.classList.add(`preset-${stylePresetId}`);
 
     // Bind all tokens to CSS variables
     root.style.setProperty('--color-brand', tokens.brand);
@@ -571,22 +562,20 @@ export const useTokenCSS = () => {
       root.style.setProperty(`--space-${index + 1}`, `${space}px`);
     });
 
-    // Radii
-    root.style.setProperty('--radius-sm', tokens.radius.sm);
-    root.style.setProperty('--radius-md', tokens.radius.md);
-    root.style.setProperty('--radius-lg', tokens.radius.lg);
-    root.style.setProperty('--radius-full', tokens.radius.full);
-
-    // Shadows
-    root.style.setProperty('--shadow-1', tokens.shadow['1']);
-    root.style.setProperty('--shadow-2', tokens.shadow['2']);
-    root.style.setProperty('--shadow-3', tokens.shadow['3']);
-
-    // Motion
-    root.style.setProperty('--motion-fast', tokens.motion.fast);
-    root.style.setProperty('--motion-base', tokens.motion.base);
-    root.style.setProperty('--motion-slow', tokens.motion.slow);
-    root.style.setProperty('--ease-standard', tokens.motion.easeStandard);
+    // NOTE: Radii, shadows, and motion are now set by the style preset system
+    // Only set these if no preset is active (fallback to store tokens)
+    // Commenting out to let preset values take precedence:
+    // root.style.setProperty('--radius-sm', tokens.radius.sm);
+    // root.style.setProperty('--radius-md', tokens.radius.md);
+    // root.style.setProperty('--radius-lg', tokens.radius.lg);
+    // root.style.setProperty('--radius-full', tokens.radius.full);
+    // root.style.setProperty('--shadow-1', tokens.shadow['1']);
+    // root.style.setProperty('--shadow-2', tokens.shadow['2']);
+    // root.style.setProperty('--shadow-3', tokens.shadow['3']);
+    // root.style.setProperty('--motion-fast', tokens.motion.fast);
+    // root.style.setProperty('--motion-base', tokens.motion.base);
+    // root.style.setProperty('--motion-slow', tokens.motion.slow);
+    // root.style.setProperty('--ease-standard', tokens.motion.easeStandard);
 
     // Styling options as CSS vars
     if (opts.inputBorderWeight === 'none') root.style.setProperty('--inputBorder', '0px');
@@ -600,6 +589,15 @@ export const useTokenCSS = () => {
     if (opts.cardBorderWeight === 'thick') root.style.setProperty('--cardBorder', '2px');
 
     root.style.setProperty('--cardBorderAlpha', opts.cardBorderTone === 'light' ? '.18' : '.10');
+
+    // Apply style preset CSS variables LAST so they take precedence
+    const preset = getStylePreset(stylePresetId as StylePresetId);
+    if (preset) {
+      const cssVariables = getStylePresetCSSVariables(preset, isDarkMode);
+      Object.entries(cssVariables).forEach(([key, value]) => {
+        root.style.setProperty(key, value);
+      });
+    }
 
   }, [tokens, opts, isDarkMode, selectedPrimaryFont, selectedDisplayFont, selectedScale, selectedTheme, stylePresetId, cornerRadius]);
 };
