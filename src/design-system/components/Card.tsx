@@ -32,12 +32,15 @@ export const Card = styled(YStack, {
       },
       elevated: {
         backgroundColor: '$bgSecondary',
-        borderWidth: 0,
-        shadowColor: '#000',
+        borderWidth: 'var(--card-border-width, 0px)',
+        borderColor: '$border',
+        shadowColor: '$shadowColor',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 8,
-        elevation: 2, // Android shadow
+        elevation: 2,
+        // Web override for semantic shadows
+        boxShadow: 'var(--card-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1))',
       },
       branded: {
         backgroundColor: '$bgSecondary',

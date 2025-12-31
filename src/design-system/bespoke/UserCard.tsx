@@ -42,7 +42,15 @@ export const UserCard = ({
 
   if (layout === 'vertical') {
     return (
-      <Card variant="default" padding="medium">
+      <Card
+        variant="default"
+        padding="medium"
+        style={{
+          borderRadius: 'var(--card-radius)',
+          boxShadow: 'var(--card-shadow)',
+          border: 'var(--card-border-width, 1px) solid var(--border-color)'
+        }}
+      >
         <YStack alignItems="center" gap="$3">
           <Circle
             size={48}
@@ -65,7 +73,6 @@ export const UserCard = ({
           {actionText && (
             <Button
               variant="secondary"
-              size="small"
               onPress={onActionPress}
               fullWidth
             >
@@ -78,7 +85,15 @@ export const UserCard = ({
   }
 
   return (
-    <Card variant="default" padding="medium">
+    <Card
+      variant="default"
+      padding="medium"
+      style={{
+        borderRadius: 'var(--card-radius)',
+        boxShadow: 'var(--card-shadow)',
+        border: 'var(--card-border-width, 1px) solid var(--border-color)'
+      }}
+    >
       <XStack alignItems="center" justifyContent="space-between" gap="$3">
         {/* Left side - Avatar + Info */}
         <XStack alignItems="center" gap="$3" flex={1}>
@@ -107,7 +122,6 @@ export const UserCard = ({
         {actionText && (
           <Button
             variant="secondary"
-            size="small"
             onPress={onActionPress}
             paddingHorizontal="$3"
           >

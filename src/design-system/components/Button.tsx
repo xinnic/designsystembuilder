@@ -58,15 +58,19 @@ export const Button = styled(TamaguiButton, {
       primary: {
         backgroundColor: '$brand',
         color: 'white',
+        borderWidth: 'var(--button-border-width, 0px)',
+        borderColor: 'var(--border-color)',
+        boxShadow: 'var(--button-shadow, none)',
         hoverStyle: {
           opacity: 0.9,
         },
       },
       secondary: {
         backgroundColor: 'transparent',
-        borderWidth: 1,
+        borderWidth: 'var(--button-border-width, 1px)',
         borderColor: '$brand',
         color: '$brand',
+        boxShadow: 'var(--button-shadow, none)',
         hoverStyle: {
           backgroundColor: '$brandWeak',
         },
