@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useTokenCSS } from '../state/designSystem';
+import { useTokenCSS, useDesignSystem } from '../state/designSystem';
 import {
   ShoppingBag,
   Star,
@@ -36,6 +36,9 @@ export default function TailwindShowcase() {
   // Initialize token CSS binding to ensure theme updates
   useTokenCSS();
 
+  // Get stylePresetId from design system state
+  const { stylePresetId } = useDesignSystem();
+
   const [activeTab, setActiveTab] = useState<'components' | 'patterns'>('components');
   const [accordionOpen, setAccordionOpen] = useState<number[]>([0]);
 
@@ -48,7 +51,7 @@ export default function TailwindShowcase() {
   };
 
   return (
-    <div className="h-full overflow-y-auto bg-background">
+    <div className={`h-full overflow-y-auto bg-background preset-${stylePresetId}`}>
       <div className="p-6 space-y-6">
         {/* Header */}
         <div className="border-b border-border pb-4">

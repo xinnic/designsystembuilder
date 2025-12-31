@@ -24,12 +24,17 @@ export const PreviewPhone = () => {
   // Initialize token CSS binding to ensure theme updates
   useTokenCSS();
 
-  // Get everything from store
-  const { opts, selectedPrimaryFont, selectedDisplayFont } = useDesignSystem();
+  // Get everything from store including stylePresetId
+  const { opts, selectedPrimaryFont, selectedDisplayFont, stylePresetId } = useDesignSystem();
   return (
-    <div className="h-full flex items-start justify-center p-8 bg-[rgb(var(--color-bg-secondary))]/20 min-h-[600px]">
+    <div className={`h-full flex items-start justify-center p-8 bg-[rgb(var(--color-bg-secondary))]/20 min-h-[600px] preset-${stylePresetId}`}>
       {/* Phone Frame */}
-      <div className={`w-80 h-[640px] bg-[rgb(var(--color-bg-primary))] border-8 border-[rgb(var(--color-border))] rounded-[2.5rem] shadow-[var(--shadow-level-3)] overflow-hidden flex flex-col ${selectedPrimaryFont}`}>
+      <div className={`w-80 h-[640px] bg-[rgb(var(--color-bg-primary))] border-8 border-[rgb(var(--color-border))] overflow-hidden flex flex-col ${selectedPrimaryFont}`}
+        style={{
+          borderRadius: 'var(--radius-xl, 2.5rem)',
+          boxShadow: 'var(--shadow-lg, 0 25px 50px -12px rgb(0 0 0 / 0.25))'
+        }}
+      >
 
         {/* Status Bar */}
         <div className="bg-[rgb(var(--color-bg-primary))] px-4 py-1 flex justify-between items-center text-xs">
@@ -82,11 +87,10 @@ export const PreviewPhone = () => {
             {['For You', 'Trending', 'News', 'Sports', 'Tech'].map((cat, idx) => (
               <button
                 key={cat}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
-                  idx === 0
-                    ? 'bg-[rgb(var(--color-brand))] text-white'
-                    : 'bg-[rgb(var(--color-bg-primary))] text-[rgb(var(--color-text-secondary))]'
-                }`}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all whitespace-nowrap ${idx === 0
+                  ? 'bg-[rgb(var(--color-brand))] text-white'
+                  : 'bg-[rgb(var(--color-bg-primary))] text-[rgb(var(--color-text-secondary))]'
+                  }`}
                 style={{
                   borderRadius: 'var(--radius-full)',
                   boxShadow: idx === 0 ? 'var(--shadow-sm)' : 'none'
@@ -104,15 +108,16 @@ export const PreviewPhone = () => {
 
             {/* Hero Card */}
             <div
-              className="rounded-lg overflow-hidden"
+              className="card rounded-lg overflow-hidden"
               style={{
                 backgroundColor: 'rgb(var(--color-bg-secondary))',
-                boxShadow: 'var(--shadow-md)',
-                borderRadius: 'var(--radius-lg)'
+                boxShadow: 'var(--card-shadow, var(--shadow-md))',
+                borderRadius: 'var(--card-radius, var(--radius-lg))',
+                border: 'var(--card-border-width, 0px) solid rgb(var(--color-border))'
               }}
             >
               <div className="h-32 bg-gradient-to-br from-purple-400 to-pink-400"></div>
-              <div className="p-4">
+              <div style={{ padding: 'var(--card-padding, 16px)' }}>
                 <h3 className="font-bold mb-2 text-[rgb(var(--color-text-primary))]">
                   Featured Today
                 </h3>
@@ -120,10 +125,12 @@ export const PreviewPhone = () => {
                   Discover what's trending in your community
                 </p>
                 <button
-                  className="w-full py-2 rounded-full text-white font-medium text-sm"
+                  className="btn w-full py-2 text-white font-medium text-sm"
                   style={{
                     backgroundColor: 'rgb(var(--color-brand))',
-                    borderRadius: 'var(--radius-full)'
+                    borderRadius: 'var(--button-radius, var(--radius-full))',
+                    boxShadow: 'var(--button-shadow, none)',
+                    border: 'var(--button-border-width, 0px) solid currentColor'
                   }}
                 >
                   Explore Now
@@ -140,11 +147,12 @@ export const PreviewPhone = () => {
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="p-3 rounded-lg text-center"
+                  className="card p-3 text-center"
                   style={{
                     backgroundColor: 'rgb(var(--color-bg-secondary))',
-                    border: '1px solid rgb(var(--color-border))',
-                    borderRadius: 'var(--radius-md)'
+                    border: 'var(--card-border-width, 1px) solid rgb(var(--color-border))',
+                    borderRadius: 'var(--radius-md)',
+                    boxShadow: 'var(--card-shadow, var(--shadow-sm))'
                   }}
                 >
                   <div className="flex justify-center mb-1" style={{ color: `rgb(${stat.color})` }}>
@@ -162,11 +170,12 @@ export const PreviewPhone = () => {
 
             {/* List Items */}
             <div
-              className="rounded-lg overflow-hidden"
+              className="card overflow-hidden"
               style={{
                 backgroundColor: 'rgb(var(--color-bg-secondary))',
-                border: '1px solid rgb(var(--color-border))',
-                borderRadius: 'var(--radius-lg)'
+                border: 'var(--card-border-width, 1px) solid rgb(var(--color-border))',
+                borderRadius: 'var(--card-radius, var(--radius-lg))',
+                boxShadow: 'var(--card-shadow, var(--shadow-sm))'
               }}
             >
               {[
@@ -176,9 +185,8 @@ export const PreviewPhone = () => {
               ].map((item, idx) => (
                 <div
                   key={item.title}
-                  className={`flex items-center p-4 ${
-                    idx !== 2 ? 'border-b border-[rgb(var(--color-border))]' : ''
-                  }`}
+                  className={`flex items-center p-4 ${idx !== 2 ? 'border-b border-[rgb(var(--color-border))]' : ''
+                    }`}
                 >
                   <div className="mr-3 text-[rgb(var(--color-text-secondary))]">
                     {item.icon}
@@ -201,12 +209,12 @@ export const PreviewPhone = () => {
               {['Sarah J.', 'Mike D.'].map((name, idx) => (
                 <div
                   key={name}
-                  className="p-3 rounded-lg"
+                  className="card p-3"
                   style={{
                     backgroundColor: 'rgb(var(--color-bg-secondary))',
-                    border: '1px solid rgb(var(--color-border))',
-                    borderRadius: 'var(--radius-md)',
-                    boxShadow: 'var(--shadow-sm)'
+                    border: 'var(--card-border-width, 1px) solid rgb(var(--color-border))',
+                    borderRadius: 'var(--card-radius, var(--radius-md))',
+                    boxShadow: 'var(--card-shadow, var(--shadow-sm))'
                   }}
                 >
                   <div
@@ -220,11 +228,14 @@ export const PreviewPhone = () => {
                     <div className="text-xs text-[rgb(var(--color-text-secondary))]">Active now</div>
                   </div>
                   <button
-                    className="w-full mt-2 py-1 rounded-full text-xs font-medium border"
+                    className="btn w-full mt-2 py-1 text-xs font-medium"
                     style={{
                       borderColor: 'rgb(var(--color-brand))',
                       color: 'rgb(var(--color-brand))',
-                      borderRadius: 'var(--radius-full)'
+                      borderRadius: 'var(--button-radius, var(--radius-full))',
+                      border: 'var(--button-border-width, 1px) solid rgb(var(--color-brand))',
+                      boxShadow: 'var(--button-shadow, none)',
+                      backgroundColor: 'transparent'
                     }}
                   >
                     Follow
@@ -236,22 +247,25 @@ export const PreviewPhone = () => {
             {/* Action Buttons */}
             <div className="flex gap-2">
               <button
-                className="flex-1 py-3 rounded-lg font-medium text-white"
+                className="btn flex-1 py-3 font-medium text-white"
                 style={{
                   backgroundColor: 'rgb(var(--color-brand))',
-                  borderRadius: 'var(--radius-md)',
-                  boxShadow: 'var(--shadow-md)'
+                  borderRadius: 'var(--button-radius, var(--radius-md))',
+                  boxShadow: 'var(--button-shadow, var(--shadow-md))',
+                  border: 'var(--button-border-width, 0px) solid currentColor'
                 }}
               >
                 Get Started
               </button>
               <button
-                className="flex-1 py-3 rounded-lg font-medium border"
+                className="btn flex-1 py-3 font-medium"
                 style={{
                   borderColor: 'rgb(var(--color-border))',
                   color: 'rgb(var(--color-text-secondary))',
                   backgroundColor: 'rgb(var(--color-bg-secondary))',
-                  borderRadius: 'var(--radius-md)'
+                  borderRadius: 'var(--button-radius, var(--radius-md))',
+                  border: 'var(--button-border-width, 1px) solid rgb(var(--color-border))',
+                  boxShadow: 'var(--button-shadow, none)'
                 }}
               >
                 Learn More
@@ -260,11 +274,13 @@ export const PreviewPhone = () => {
 
             {/* Review Card */}
             <div
-              className="p-4 rounded-lg"
+              className="card"
               style={{
                 backgroundColor: 'rgb(var(--color-bg-secondary))',
-                borderRadius: 'var(--radius-lg)',
-                boxShadow: 'var(--shadow-md)'
+                borderRadius: 'var(--card-radius, var(--radius-lg))',
+                boxShadow: 'var(--card-shadow, var(--shadow-md))',
+                border: 'var(--card-border-width, 0px) solid rgb(var(--color-border))',
+                padding: 'var(--card-padding, 16px)'
               }}
             >
               <div className="flex items-start justify-between mb-2">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronDown, Settings, Layers, Sliders, Square, Minus, Cloud, Gamepad2 } from 'lucide-react';
+import { ChevronDown, Settings, Layers, Sliders, Navigation, Menu } from 'lucide-react';
 import StylingControls from '../left/StylingControls';
 import { useDesignSystem } from '../state/designSystem';
 import { generateSecondaryColor } from '../utils/colorGeneration';
@@ -10,6 +10,7 @@ import {
   DEFAULT_PRIMARY,
   DEFAULT_ACCENT,
 } from '../config/colorThemes';
+import { stylePresets, getStylePreset, getStylePresetCSSVariables, type StylePresetId } from '../config/stylePresets';
 import {
   Collapsible,
   CollapsibleContent,
@@ -25,7 +26,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 
-interface SidebarProps {}
+interface SidebarProps { }
 
 // Primary fonts (Sans-serif only - for body text)
 const primaryFonts = [
@@ -82,7 +83,7 @@ const displayFonts = [
   { name: 'Source Serif 4', class: 'font-source-serif' },
 ];
 
-export function Sidebar({}: SidebarProps) {
+export function Sidebar({ }: SidebarProps) {
   const {
     selectedPrimaryFont,
     setPrimaryFont,
@@ -148,94 +149,51 @@ export function Sidebar({}: SidebarProps) {
     setIsSecondaryManual(true);
   };
 
-  // Style presets (using existing presets)
-  const stylePresets = [
-    {
-      id: 'modern',
-      name: 'Modern Flat',
-      icon: Square,
-      description: 'Clean, minimal shadows',
-      styles: {
-        shadows: { sm: '0 1px 3px rgba(0,0,0,0.05)', md: '0 4px 6px rgba(0,0,0,0.07)', lg: '0 10px 20px rgba(0,0,0,0.1)' },
-        radii: { sm: '4px', md: '8px', lg: '12px' },
-        borders: { width: '0px' }
-      }
-    },
-    {
-      id: 'glass',
-      name: 'Glassmorphism',
-      icon: Layers,
-      description: 'Frosted glass effects',
-      styles: {
-        shadows: { sm: '0 4px 6px rgba(0,0,0,0.1)', md: '0 8px 16px rgba(0,0,0,0.15)', lg: '0 20px 40px rgba(0,0,0,0.2)' },
-        radii: { sm: '8px', md: '12px', lg: '20px' },
-        borders: { width: '1px' },
-        effects: { backdropBlur: '8px', opacity: '0.9' }
-      }
-    },
-    {
-      id: 'playful',
-      name: 'Playful',
-      icon: Gamepad2,
-      description: 'Bold, colorful shadows',
-      styles: {
-        shadows: { sm: '2px 2px 0 #000', md: '4px 4px 0 #000', lg: '8px 8px 0 #000' },
-        radii: { sm: '12px', md: '20px', lg: '32px' },
-        borders: { width: '3px' }
-      }
-    },
-    {
-      id: 'dreamy',
-      name: 'Soft & Dreamy',
-      icon: Cloud,
-      description: 'Gentle, diffused look',
-      styles: {
-        shadows: { sm: '0 4px 12px rgba(0,0,0,0.08)', md: '0 8px 24px rgba(0,0,0,0.12)', lg: '0 16px 48px rgba(0,0,0,0.16)' },
-        radii: { sm: '16px', md: '24px', lg: '32px' },
-        borders: { width: '0px' }
-      }
-    },
-    {
-      id: 'minimalist',
-      name: 'Minimalist',
-      icon: Minus,
-      description: 'No shadows, thin borders',
-      styles: {
-        shadows: { sm: 'none', md: 'none', lg: 'none' },
-        radii: { sm: '0px', md: '0px', lg: '0px' },
-        borders: { width: '1px' }
-      }
-    }
-  ];
-
-  const handleStylePresetChange = (presetId: string) => {
+  // handleStylePresetChange now uses the imported stylePresets config
+  const handleStylePresetChange = (presetId: StylePresetId) => {
     setStylePreset(presetId);
-    const preset = stylePresets.find(p => p.id === presetId);
+    const preset = getStylePreset(presetId);
     if (preset) {
+      // Get all CSS variables for this preset
+      const cssVariables = getStylePresetCSSVariables(preset, isDarkMode);
+
+      // Apply CSS variables to document root
+      const root = document.documentElement;
+      Object.entries(cssVariables).forEach(([key, value]) => {
+        root.style.setProperty(key, value);
+      });
+
       // Update tokens through the store
+      const { tokens: presetTokens } = preset;
       setTokens({
         shadow: {
-          '1': preset.styles.shadows.sm,
-          '2': preset.styles.shadows.md,
-          '3': preset.styles.shadows.lg
+          '1': presetTokens.shadows.sm,
+          '2': presetTokens.shadows.md,
+          '3': presetTokens.shadows.lg
         },
         radius: {
-          sm: preset.styles.radii.sm,
-          md: preset.styles.radii.md,
-          lg: preset.styles.radii.lg,
-          full: '9999px'
+          sm: `${presetTokens.radius.sm}px`,
+          md: `${presetTokens.radius.md}px`,
+          lg: `${presetTokens.radius.lg}px`,
+          full: `${presetTokens.radius.full}px`
+        },
+        motion: {
+          fast: `${presetTokens.animations.quick}ms`,
+          base: `${presetTokens.animations.normal}ms`,
+          slow: `${presetTokens.animations.slow}ms`,
+          easeStandard: presetTokens.animations.curve
         }
       });
 
-      // Update border weight if specified
-      if (preset.styles.borders?.width) {
-        const borderWeight = preset.styles.borders.width === '0px' ? 'none' :
-                            preset.styles.borders.width === '1px' ? 'thin' : 'thick';
-        setOpts({
-          cardBorderWeight: borderWeight,
-          inputBorderWeight: borderWeight
-        });
-      }
+      // Update border weight based on preset
+      const borderWidthKey = presetTokens.card.borderWidthKey;
+      const borderWeight = borderWidthKey === 'none' ? 'none' :
+        borderWidthKey === 'thin' || presetTokens.borderWidths[borderWidthKey] <= 1 ? 'thin' : 'thick';
+
+      setOpts({
+        cardBorderWeight: borderWeight,
+        inputBorderWeight: borderWeight
+      });
 
       toast({
         title: `Applied ${preset.name}`,
@@ -245,7 +203,7 @@ export function Sidebar({}: SidebarProps) {
   };
 
   return (
-    <div className="w-80 bg-background h-screen overflow-y-auto p-6" style={{ boxShadow: '1px 0 3px rgba(0,0,0,0.04)' }}>
+    <div className="w-80 h-screen overflow-y-auto p-6" style={{ boxShadow: '1px 0 3px rgba(0,0,0,0.04)', backgroundColor: 'rgb(var(--color-bg-primary))' }}>
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-2">Design System Builder</h1>
         <p className="text-sm text-muted-foreground">
@@ -308,9 +266,8 @@ export function Sidebar({}: SidebarProps) {
                           title={theme.label}
                         />
                         <div
-                          className={`w-7 h-7 rounded-full border ${
-                            selectedTheme === theme.name ? 'border-foreground border-2' : 'border-border'
-                          } cursor-pointer`}
+                          className={`w-7 h-7 rounded-full border ${selectedTheme === theme.name ? 'border-foreground shadow-sm ring-1 ring-background' : 'border-border'
+                            } cursor-pointer`}
                           style={{
                             background: RAINBOW_GRADIENT
                           }}
@@ -326,9 +283,8 @@ export function Sidebar({}: SidebarProps) {
                       </div>
                     ) : (
                       <button
-                        className={`w-7 h-7 rounded-md border ${
-                          selectedTheme === theme.name ? 'border-foreground border-2' : 'border-border'
-                        }`}
+                        className={`w-7 h-7 rounded-md border ${selectedTheme === theme.name ? 'border-foreground shadow-sm ring-1 ring-background' : 'border-border'
+                          }`}
                         style={{ backgroundColor: theme.color }}
                         onClick={() => handlePrimaryColorChange(theme.name)}
                         title={theme.label}
@@ -354,11 +310,10 @@ export function Sidebar({}: SidebarProps) {
                   return (
                     <button
                       key={preset.id}
-                      className={`p-3 text-sm rounded border flex flex-col items-center gap-2 transition-all ${
-                        stylePresetId === preset.id
-                          ? 'border-primary bg-primary/5 text-primary'
-                          : 'border-border hover:bg-muted'
-                      }`}
+                      className={`p-3 text-sm rounded border flex flex-col items-center gap-2 transition-all ${stylePresetId === preset.id
+                        ? 'border-primary bg-primary/5 text-primary'
+                        : 'border-border hover:bg-muted'
+                        }`}
                       onClick={() => handleStylePresetChange(preset.id)}
                     >
                       <Icon className="h-5 w-5" />
@@ -374,11 +329,10 @@ export function Sidebar({}: SidebarProps) {
               <label className="text-sm font-medium mb-2 block">Menu Type</label>
               <div className="grid grid-cols-2 gap-2">
                 <button
-                  className={`flex items-center gap-2 p-3 rounded-lg border-2 transition-colors ${
-                    opts.menuLayout === 'hamburger'
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:bg-muted'
-                  }`}
+                  className={`flex items-center gap-2 p-3 rounded-lg border transition-all shadow-sm ${opts.menuLayout === 'hamburger'
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border hover:bg-muted'
+                    }`}
                   onClick={() => setOpts({ menuLayout: 'hamburger' })}
                 >
                   <svg className="h-4 w-4" viewBox="0 0 20 14" fill="none">
@@ -389,11 +343,10 @@ export function Sidebar({}: SidebarProps) {
                   <span className="text-sm">Hamburger</span>
                 </button>
                 <button
-                  className={`flex items-center gap-2 p-3 rounded-lg border-2 transition-colors ${
-                    opts.menuLayout === 'bottomBar'
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:bg-muted'
-                  }`}
+                  className={`flex items-center gap-2 p-3 rounded-lg border transition-all shadow-sm ${opts.menuLayout === 'bottomBar'
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border hover:bg-muted'
+                    }`}
                   onClick={() => setOpts({ menuLayout: 'bottomBar' })}
                 >
                   <svg className="h-4 w-4" viewBox="0 0 20 16" fill="none">
@@ -426,11 +379,10 @@ export function Sidebar({}: SidebarProps) {
               <label className="text-sm font-medium mb-2 block">Corner Radius</label>
               <div className="grid grid-cols-4 gap-2">
                 <button
-                  className={`p-3 border-2 transition-colors flex items-center justify-center ${
-                    cornerRadius === 'none'
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:bg-muted'
-                  }`}
+                  className={`p-3 border transition-all shadow-sm flex items-center justify-center ${cornerRadius === 'none'
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border hover:bg-muted'
+                    }`}
                   style={{ borderRadius: '8px' }}
                   onClick={() => setCornerRadius('none')}
                   title="None"
@@ -438,11 +390,10 @@ export function Sidebar({}: SidebarProps) {
                   <div className="w-8 h-8 border-2 border-foreground" style={{ borderRadius: '0px' }} />
                 </button>
                 <button
-                  className={`p-3 border-2 transition-colors flex items-center justify-center ${
-                    cornerRadius === 'small'
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:bg-muted'
-                  }`}
+                  className={`p-3 border transition-all shadow-sm flex items-center justify-center ${cornerRadius === 'small'
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border hover:bg-muted'
+                    }`}
                   style={{ borderRadius: '8px' }}
                   onClick={() => setCornerRadius('small')}
                   title="Small"
@@ -450,11 +401,10 @@ export function Sidebar({}: SidebarProps) {
                   <div className="w-8 h-8 border-2 border-foreground" style={{ borderRadius: '4px' }} />
                 </button>
                 <button
-                  className={`p-3 border-2 transition-colors flex items-center justify-center ${
-                    cornerRadius === 'medium'
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:bg-muted'
-                  }`}
+                  className={`p-3 border transition-all shadow-sm flex items-center justify-center ${cornerRadius === 'medium'
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border hover:bg-muted'
+                    }`}
                   style={{ borderRadius: '8px' }}
                   onClick={() => setCornerRadius('medium')}
                   title="Medium"
@@ -462,11 +412,10 @@ export function Sidebar({}: SidebarProps) {
                   <div className="w-8 h-8 border-2 border-foreground" style={{ borderRadius: '10px' }} />
                 </button>
                 <button
-                  className={`p-3 border-2 transition-colors flex items-center justify-center ${
-                    cornerRadius === 'large'
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:bg-muted'
-                  }`}
+                  className={`p-3 border transition-all shadow-sm flex items-center justify-center ${cornerRadius === 'large'
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border hover:bg-muted'
+                    }`}
                   style={{ borderRadius: '8px' }}
                   onClick={() => setCornerRadius('large')}
                   title="Large"
@@ -519,9 +468,8 @@ export function Sidebar({}: SidebarProps) {
                           title={accent.label}
                         />
                         <div
-                          className={`w-7 h-7 rounded-full border ${
-                            selectedAccentColor === accent.name ? 'border-foreground border-2' : 'border-border'
-                          } cursor-pointer`}
+                          className={`w-7 h-7 rounded-full border ${selectedAccentColor === accent.name ? 'border-foreground shadow-sm ring-1 ring-background' : 'border-border'
+                            } cursor-pointer`}
                           style={{
                             background: RAINBOW_GRADIENT
                           }}
@@ -537,9 +485,8 @@ export function Sidebar({}: SidebarProps) {
                       </div>
                     ) : (
                       <button
-                        className={`w-7 h-7 rounded-md border ${
-                          selectedAccentColor === accent.name ? 'border-foreground border-2' : 'border-border'
-                        }`}
+                        className={`w-7 h-7 rounded-md border ${selectedAccentColor === accent.name ? 'border-foreground shadow-sm ring-1 ring-background' : 'border-border'
+                          }`}
                         style={{ backgroundColor: accent.color }}
                         onClick={() => handleSecondaryColorChange(accent.name)}
                         title={accent.label}
@@ -555,31 +502,28 @@ export function Sidebar({}: SidebarProps) {
               <label className="text-sm font-medium mb-2 block">Spacing</label>
               <div className="grid grid-cols-3 gap-2">
                 <button
-                  className={`p-3 rounded-lg border-2 transition-colors ${
-                    spacingMode === 'compact'
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:bg-muted'
-                  }`}
+                  className={`p-3 rounded-lg border transition-all shadow-sm ${spacingMode === 'compact'
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border hover:bg-muted'
+                    }`}
                   onClick={() => setSpacingMode('compact')}
                 >
                   <span className="text-xs">Compact</span>
                 </button>
                 <button
-                  className={`p-3 rounded-lg border-2 transition-colors ${
-                    spacingMode === 'normal'
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:bg-muted'
-                  }`}
+                  className={`p-3 rounded-lg border transition-all shadow-sm ${spacingMode === 'normal'
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border hover:bg-muted'
+                    }`}
                   onClick={() => setSpacingMode('normal')}
                 >
                   <span className="text-xs">Normal</span>
                 </button>
                 <button
-                  className={`p-3 rounded-lg border-2 transition-colors ${
-                    spacingMode === 'comfortable'
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:bg-muted'
-                  }`}
+                  className={`p-3 rounded-lg border transition-all shadow-sm ${spacingMode === 'comfortable'
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border hover:bg-muted'
+                    }`}
                   onClick={() => setSpacingMode('comfortable')}
                 >
                   <span className="text-xs">Comfortable</span>
@@ -592,37 +536,61 @@ export function Sidebar({}: SidebarProps) {
               <label className="text-sm font-medium mb-2 block">Type Scale</label>
               <div className="flex gap-2">
                 <button
-                  className={`flex-1 p-3 rounded-lg border-2 transition-colors flex items-center justify-center ${
-                    selectedScale === 'small'
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:bg-muted'
-                  }`}
+                  className={`flex-1 p-3 rounded-lg border transition-all shadow-sm flex items-center justify-center ${selectedScale === 'small'
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border hover:bg-muted'
+                    }`}
                   onClick={() => setScale('small')}
                   title="Small Scale"
                 >
                   <span className="text-sm font-bold text-foreground">Aa</span>
                 </button>
                 <button
-                  className={`flex-1 p-3 rounded-lg border-2 transition-colors flex items-center justify-center ${
-                    selectedScale === 'regular'
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:bg-muted'
-                  }`}
+                  className={`flex-1 p-3 rounded-lg border transition-all shadow-sm flex items-center justify-center ${selectedScale === 'regular'
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border hover:bg-muted'
+                    }`}
                   onClick={() => setScale('regular')}
                   title="Regular Scale"
                 >
                   <span className="text-base font-bold text-foreground">Aa</span>
                 </button>
                 <button
-                  className={`flex-1 p-3 rounded-lg border-2 transition-colors flex items-center justify-center ${
-                    selectedScale === 'large'
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:bg-muted'
-                  }`}
+                  className={`flex-1 p-3 rounded-lg border transition-all shadow-sm flex items-center justify-center ${selectedScale === 'large'
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border hover:bg-muted'
+                    }`}
                   onClick={() => setScale('large')}
                   title="Large Scale"
                 >
                   <span className="text-lg font-bold text-foreground">Aa</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Menu Layout */}
+            <div>
+              <label className="text-sm font-medium mb-2 block">Menu Layout</label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  className={`p-3 text-sm rounded border flex flex-col items-center gap-2 ${opts.menuLayout === 'bottomBar'
+                    ? 'border-primary bg-primary/5 text-primary'
+                    : 'border-border hover:bg-muted'
+                    }`}
+                  onClick={() => setOpts({ menuLayout: 'bottomBar' })}
+                >
+                  <Navigation size={16} />
+                  <span>Bottom Bar</span>
+                </button>
+                <button
+                  className={`p-3 text-sm rounded border flex flex-col items-center gap-2 ${opts.menuLayout === 'hamburger'
+                    ? 'border-primary bg-primary/5 text-primary'
+                    : 'border-border hover:bg-muted'
+                    }`}
+                  onClick={() => setOpts({ menuLayout: 'hamburger' })}
+                >
+                  <Menu size={16} />
+                  <span>Hamburger</span>
                 </button>
               </div>
             </div>

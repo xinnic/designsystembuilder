@@ -599,3 +599,170 @@
     font-family: 'Montserrat', ui-sans-serif, system-ui, -apple-system, sans-serif;
   }
 }
+
+/* =================================
+   STYLE PRESET SPECIFIC STYLES
+   ================================= */
+
+/* Modern Flat Preset - Linear/Stripe Aesthetic */
+.preset-modern-flat {
+  --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --button-shadow: none;
+  --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.preset-modern-flat .card,
+.preset-modern-flat [class*="card"] {
+  border-radius: var(--radius-lg, 8px);
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.preset-modern-flat .btn,
+.preset-modern-flat button.btn,
+.preset-modern-flat [class*="btn-primary"] {
+  border-radius: var(--radius-md, 6px);
+  font-weight: 500;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Soft & Dreamy Preset - Calm/Headspace Aesthetic */
+.preset-soft-dreamy {
+  --card-shadow: 0 8px 24px rgba(98, 130, 227, 0.12);
+  --button-shadow: 0 4px 12px rgba(98, 130, 227, 0.08);
+  --transition-timing: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.preset-soft-dreamy .card,
+.preset-soft-dreamy [class*="card"] {
+  border-radius: var(--radius-lg, 24px);
+  box-shadow: var(--shadow-md, 0 8px 24px rgba(98, 130, 227, 0.12));
+  border: none;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.preset-soft-dreamy .btn,
+.preset-soft-dreamy button.btn,
+.preset-soft-dreamy [class*="btn-primary"] {
+  border-radius: 9999px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm, 0 4px 12px rgba(98, 130, 227, 0.08));
+  transition: all 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: none;
+}
+
+.preset-soft-dreamy input,
+.preset-soft-dreamy [class*="input"] {
+  border-radius: var(--radius-md, 16px);
+  border: none;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 8px rgba(98, 130, 227, 0.06);
+}
+
+/* Minimalist Preset - Swiss/Apple/Claude.ai Aesthetic */
+.preset-minimalist {
+  --card-shadow: none;
+  --button-shadow: none;
+  --transition-timing: linear;
+}
+
+.preset-minimalist .card,
+.preset-minimalist [class*="card"] {
+  border-radius: 0;
+  box-shadow: none;
+  border: 1px solid #E5E5E5;
+}
+
+.preset-minimalist .btn,
+.preset-minimalist button.btn,
+.preset-minimalist [class*="btn-primary"] {
+  border-radius: var(--radius-sm, 2px);
+  font-weight: 600;
+  box-shadow: none;
+  transition: all 150ms linear;
+  border: 1px solid currentColor;
+}
+
+.preset-minimalist input,
+.preset-minimalist [class*="input"] {
+  border-radius: var(--radius-sm, 2px);
+  border: 1px solid #E5E5E5;
+}
+
+/* Neo-Brutalism Preset - Gumroad/CRED Aesthetic */
+.preset-neo-brutalism {
+  --card-shadow: 4px 4px 0px #000000;
+  --button-shadow: 2px 2px 0px #000000;
+  --transition-timing: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.preset-neo-brutalism .card,
+.preset-neo-brutalism [class*="card"] {
+  border-radius: 0;
+  box-shadow: var(--shadow-md, 4px 4px 0px #000000);
+  border: 2px solid #000000;
+}
+
+.preset-neo-brutalism .btn,
+.preset-neo-brutalism button.btn,
+.preset-neo-brutalism [class*="btn-primary"] {
+  border-radius: var(--radius-md, 4px);
+  font-weight: 700;
+  box-shadow: var(--shadow-sm, 2px 2px 0px #000000);
+  transition: all 150ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border: 3px solid #000000;
+}
+
+.preset-neo-brutalism .btn:active,
+.preset-neo-brutalism button.btn:active,
+.preset-neo-brutalism [class*="btn-primary"]:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 #000000;
+}
+
+.preset-neo-brutalism input,
+.preset-neo-brutalism [class*="input"] {
+  border-radius: var(--radius-md, 4px);
+  border: 2px solid #000000;
+}
+
+/* Dark mode adjustments for presets */
+.dark.preset-soft-dreamy .card,
+.dark.preset-soft-dreamy [class*="card"] {
+  background-color: rgba(30, 30, 40, 0.9);
+  box-shadow: 0 8px 24px rgba(98, 130, 227, 0.15);
+}
+
+.dark.preset-minimalist .card,
+.dark.preset-minimalist [class*="card"] {
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.dark.preset-minimalist input,
+.dark.preset-minimalist [class*="input"] {
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.dark.preset-neo-brutalism .card,
+.dark.preset-neo-brutalism [class*="card"] {
+  box-shadow: 4px 4px 0px #FFFFFF;
+  border-color: #FFFFFF;
+}
+
+.dark.preset-neo-brutalism .btn,
+.dark.preset-neo-brutalism button.btn,
+.dark.preset-neo-brutalism [class*="btn-primary"] {
+  box-shadow: 2px 2px 0px #FFFFFF;
+  border-color: #FFFFFF;
+}
+
+.dark.preset-neo-brutalism .btn:active,
+.dark.preset-neo-brutalism button.btn:active,
+.dark.preset-neo-brutalism [class*="btn-primary"]:active {
+  box-shadow: 0 0 0 #FFFFFF;
+}
+
+.dark.preset-neo-brutalism input,
+.dark.preset-neo-brutalism [class*="input"] {
+  border-color: #FFFFFF;
+}

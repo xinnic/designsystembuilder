@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDesignSystem } from '../state/designSystem';
-import type { MenuLayout, BorderWeight, BorderTone, InputStyle, CardWidth, TechStack } from '../state/designSystem';
+import type { TechStack } from '../state/designSystem';
 import {
   Collapsible,
   CollapsibleContent,
@@ -8,35 +8,14 @@ import {
 } from '@/components/ui/collapsible';
 import {
   ChevronDown,
-  Paintbrush,
-  Navigation,
-  Menu,
-  Smartphone,
-  Square,
-  RectangleHorizontal,
-  Circle,
-  MoreHorizontal,
-  Minus,
-  CreditCard,
-  Maximize,
-  AlignLeft,
-  Underline,
-  Edit3,
-  Vibrate,
   Upload,
   Sparkles,
-  Layers,
-  Cloud,
-  Gamepad2,
-  Flower2,
-  Zap
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 export default function StylingControls() {
-  const { opts, setOpts, haptics, setHaptics, tokens, setTokens, stylePresetId, setStylePreset, spacingMode, setSpacingMode } = useDesignSystem();
-  const [open, setOpen] = React.useState(true);
+  const { opts, setOpts, tokens, setTokens } = useDesignSystem();
   const [logoDescription, setLogoDescription] = React.useState('');
   const [isGenerating, setIsGenerating] = React.useState(false);
   const { toast } = useToast();
@@ -91,12 +70,12 @@ export default function StylingControls() {
         const [r, g, b] = rgb.split(' ').map(n => parseInt(n));
         return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
       };
-      
+
       const primaryColor = rgbToHex(tokens.brand);
       const accentColor = rgbToHex(tokens.info);
-      
+
       const { data, error } = await supabase.functions.invoke('generate-logo', {
-        body: { 
+        body: {
           description: logoDescription,
           primaryColor,
           accentColor
@@ -127,212 +106,9 @@ export default function StylingControls() {
 
   const [logoOpen, setLogoOpen] = React.useState(true);
 
-  const stylePresets = [
-    {
-      id: 'modern',
-      name: 'Modern Flat',
-      icon: Square,
-      description: 'Clean, minimal shadows',
-      styles: {
-        shadows: { sm: '0 1px 3px rgba(0,0,0,0.05)', md: '0 4px 6px rgba(0,0,0,0.07)', lg: '0 10px 20px rgba(0,0,0,0.1)' },
-        radii: { sm: '4px', md: '8px', lg: '12px' },
-        borders: { width: '0px' }
-      }
-    },
-    {
-      id: 'glass',
-      name: 'Glassmorphism',
-      icon: Layers,
-      description: 'Frosted glass effects',
-      styles: {
-        shadows: { sm: '0 4px 6px rgba(0,0,0,0.1)', md: '0 8px 16px rgba(0,0,0,0.15)', lg: '0 20px 40px rgba(0,0,0,0.2)' },
-        radii: { sm: '8px', md: '12px', lg: '20px' },
-        borders: { width: '1px' },
-        effects: { backdropBlur: '8px', opacity: '0.9' }
-      }
-    },
-    {
-      id: 'playful',
-      name: 'Playful',
-      icon: Gamepad2,
-      description: 'Bold, colorful shadows',
-      styles: {
-        shadows: { sm: '2px 2px 0 #000', md: '4px 4px 0 #000', lg: '8px 8px 0 #000' },
-        radii: { sm: '12px', md: '20px', lg: '32px' },
-        borders: { width: '3px' }
-      }
-    },
-    {
-      id: 'dreamy',
-      name: 'Soft & Dreamy',
-      icon: Cloud,
-      description: 'Gentle, diffused look',
-      styles: {
-        shadows: { sm: '0 4px 12px rgba(0,0,0,0.08)', md: '0 8px 24px rgba(0,0,0,0.12)', lg: '0 16px 48px rgba(0,0,0,0.16)' },
-        radii: { sm: '16px', md: '24px', lg: '32px' },
-        borders: { width: '0px' }
-      }
-    },
-    {
-      id: 'minimalist',
-      name: 'Minimalist',
-      icon: Minus,
-      description: 'No shadows, thin borders',
-      styles: {
-        shadows: { sm: 'none', md: 'none', lg: 'none' },
-        radii: { sm: '0px', md: '0px', lg: '0px' },
-        borders: { width: '1px' }
-      }
-    }
-  ];
-
-  const handleStylePresetChange = (presetId: string) => {
-    setStylePreset(presetId);
-    const preset = stylePresets.find(p => p.id === presetId);
-    if (preset) {
-      // Update tokens through the store
-      setTokens({
-        shadow: {
-          '1': preset.styles.shadows.sm,
-          '2': preset.styles.shadows.md,
-          '3': preset.styles.shadows.lg
-        },
-        radius: {
-          sm: preset.styles.radii.sm,
-          md: preset.styles.radii.md,
-          lg: preset.styles.radii.lg,
-          full: '9999px'
-        }
-      });
-
-      // Update border weight if specified
-      if (preset.styles.borders?.width) {
-        const borderWeight = preset.styles.borders.width === '0px' ? 'none' :
-                            preset.styles.borders.width === '1px' ? 'thin' : 'thick';
-        setOpts({
-          cardBorderWeight: borderWeight,
-          inputBorderWeight: borderWeight
-        });
-      }
-
-      toast({
-        title: `Applied ${preset.name}`,
-        description: preset.description,
-      });
-    }
-  };
-
   return (
     <>
-      <Collapsible open={open} onOpenChange={setOpen}>
-        <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted">
-          <div className="flex items-center gap-3">
-            <Paintbrush className="h-5 w-5" />
-            <span className="font-medium">Component Styling</span>
-          </div>
-          <ChevronDown className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`} />
-        </CollapsibleTrigger>
-      <CollapsibleContent className="space-y-4 p-3">
 
-        {/* Style Presets */}
-        <div>
-          <label className="text-sm font-medium mb-2 block">Style Preset</label>
-          <div className="grid grid-cols-3 gap-2">
-            {stylePresets.map((preset) => {
-              const Icon = preset.icon;
-              return (
-                <button
-                  key={preset.id}
-                  className={`p-3 text-sm rounded border flex flex-col items-center gap-2 transition-all ${
-                    stylePresetId === preset.id
-                      ? 'border-primary bg-primary/5 text-primary'
-                      : 'border-border hover:bg-muted'
-                  }`}
-                  onClick={() => handleStylePresetChange(preset.id)}
-                  title={preset.description}
-                >
-                  <Icon size={20} />
-                  <span className="text-xs text-center leading-tight">{preset.name}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Menu Layout */}
-        <div>
-          <label className="text-sm font-medium mb-2 block">Menu Layout</label>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              className={`p-3 text-sm rounded border flex flex-col items-center gap-2 ${
-                opts.menuLayout === 'bottomBar'
-                  ? 'border-primary bg-primary/5 text-primary'
-                  : 'border-border hover:bg-muted'
-              }`}
-              onClick={() => setOpts({ menuLayout: 'bottomBar' })}
-            >
-              <Navigation size={16} />
-              <span>Bottom Bar</span>
-            </button>
-            <button
-              className={`p-3 text-sm rounded border flex flex-col items-center gap-2 ${
-                opts.menuLayout === 'hamburger'
-                  ? 'border-primary bg-primary/5 text-primary'
-                  : 'border-border hover:bg-muted'
-              }`}
-              onClick={() => setOpts({ menuLayout: 'hamburger' })}
-            >
-              <Menu size={16} />
-              <span>Hamburger</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Spacing Scale */}
-        <div>
-          <label className="text-sm font-medium mb-2 block">Spacing Scale</label>
-          <div className="grid grid-cols-3 gap-2">
-            <button
-              className={`p-3 text-sm rounded border flex flex-col items-center gap-2 ${
-                spacingMode === 'compact'
-                  ? 'border-primary bg-primary/5 text-primary'
-                  : 'border-border hover:bg-muted'
-              }`}
-              onClick={() => setSpacingMode('compact')}
-              title="Compact spacing (4, 8, 12, 16...)"
-            >
-              <Maximize size={16} className="rotate-45" />
-              <span>Compact</span>
-            </button>
-            <button
-              className={`p-3 text-sm rounded border flex flex-col items-center gap-2 ${
-                spacingMode === 'normal'
-                  ? 'border-primary bg-primary/5 text-primary'
-                  : 'border-border hover:bg-muted'
-              }`}
-              onClick={() => setSpacingMode('normal')}
-              title="Normal spacing (8, 16, 24, 32...)"
-            >
-              <RectangleHorizontal size={16} />
-              <span>Normal</span>
-            </button>
-            <button
-              className={`p-3 text-sm rounded border flex flex-col items-center gap-2 ${
-                spacingMode === 'comfortable'
-                  ? 'border-primary bg-primary/5 text-primary'
-                  : 'border-border hover:bg-muted'
-              }`}
-              onClick={() => setSpacingMode('comfortable')}
-              title="Comfortable spacing (12, 24, 36, 48...)"
-            >
-              <Maximize size={16} />
-              <span>Comfortable</span>
-            </button>
-          </div>
-        </div>
-
-      </CollapsibleContent>
-      </Collapsible>
 
       <Collapsible open={logoOpen} onOpenChange={setLogoOpen} className="mt-2">
         <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted">
@@ -343,12 +119,12 @@ export default function StylingControls() {
           <ChevronDown className={`h-4 w-4 transition-transform ${logoOpen ? 'rotate-180' : ''}`} />
         </CollapsibleTrigger>
         <CollapsibleContent className="space-y-2 p-3">
-          <label className="flex items-center justify-center gap-2 p-3 rounded border border-border hover:bg-muted cursor-pointer text-sm">
+          <label className="flex items-center justify-center gap-2 p-3 rounded border border-border hover:bg-muted cursor-pointer text-sm shadow-sm transition-all">
             <Upload className="h-4 w-4" />
             <span>Upload Logo</span>
-            <input 
-              type="file" 
-              accept="image/*" 
+            <input
+              type="file"
+              accept="image/*"
               onChange={handleLogoUpload}
               className="hidden"
             />
@@ -360,12 +136,12 @@ export default function StylingControls() {
               placeholder="Describe your app..."
               value={logoDescription}
               onChange={(e) => setLogoDescription(e.target.value)}
-              className="w-full p-2 text-sm rounded border border-border bg-background text-foreground placeholder:text-muted-foreground"
+              className="w-full p-2 text-sm rounded border border-border bg-background text-foreground placeholder:text-muted-foreground shadow-sm focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none"
             />
             <button
               onClick={handleGenerateLogo}
               disabled={isGenerating}
-              className="w-full flex items-center justify-center gap-2 p-2 text-sm rounded border border-primary bg-primary/5 text-primary hover:bg-primary/10 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 p-2 text-sm rounded border border-primary bg-primary/5 text-primary hover:bg-primary/10 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm transition-all"
             >
               <Sparkles className="h-4 w-4" />
               <span>{isGenerating ? 'Generating...' : 'Generate Logo'}</span>
@@ -375,9 +151,9 @@ export default function StylingControls() {
           {opts.logo && (
             <div className="flex justify-center p-4 border border-border rounded-lg bg-muted/30">
               <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center overflow-hidden shadow-sm">
-                <img 
-                  src={opts.logo} 
-                  alt="App logo" 
+                <img
+                  src={opts.logo}
+                  alt="App logo"
                   className="w-16 h-16 object-contain"
                 />
               </div>

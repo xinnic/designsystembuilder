@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { useEffect } from 'react';
 import { generateSecondaryColor } from '../utils/colorGeneration';
 import { COLOR_VALUES } from '../config/colorThemes';
+import { getStylePreset, getStylePresetCSSVariables, type StylePresetId } from '../config/stylePresets';
 
 export type MenuLayout = 'bottomBar' | 'hamburger';
 export type BorderWeight = 'none' | 'thin' | 'thick';
@@ -39,13 +40,13 @@ export interface Tokens {
   // Typography (atomic)
   fontFamily: string; // e.g., "Plus Jakarta Sans, ui-sans-serif, system-ui"
   displayLg: { size: string; line: string; weight: number };
-  h1:        { size: string; line: string; weight: number };
-  h2:        { size: string; line: string; weight: number };
-  subhead:   { size: string; line: string; weight: number };
-  body:      { size: string; line: string; weight: number };
-  caption:   { size: string; line: string; weight: number };
-  button:    { size: string; line: string; weight: number; track: string };
-  eyebrow:   { size: string; line: string; weight: number; track: string; uppercase: boolean };
+  h1: { size: string; line: string; weight: number };
+  h2: { size: string; line: string; weight: number };
+  subhead: { size: string; line: string; weight: number };
+  body: { size: string; line: string; weight: number };
+  caption: { size: string; line: string; weight: number };
+  button: { size: string; line: string; weight: number; track: string };
+  eyebrow: { size: string; line: string; weight: number; track: string; uppercase: boolean };
 
   // Spacing (8-pt basis)
   space: number[]; // e.g., [8,16,24,32,40,48]
@@ -187,7 +188,7 @@ export const useDesignSystem = create<DesignSystemState>((set) => ({
   selectedScale: 'regular',
   selectedPrimaryFont: 'font-jakarta',
   selectedDisplayFont: 'font-jakarta',
-  stylePresetId: 'modern',
+  stylePresetId: 'modern-flat',
   spacingMode: 'normal',
   cornerRadius: 'medium',
 
@@ -437,8 +438,37 @@ export const useTokenCSS = () => {
     // Handle dark mode
     if (isDarkMode) {
       root.classList.add('dark');
+      // Ensure Tailwind variables are set correctly
+      root.style.setProperty('--background', '222.2 84% 4.9%');
+      root.style.setProperty('--foreground', '210 40% 98%');
+      root.style.setProperty('--card', '222.2 84% 4.9%');
+      root.style.setProperty('--card-foreground', '210 40% 98%');
+      root.style.setProperty('--popover', '222.2 84% 4.9%');
+      root.style.setProperty('--popover-foreground', '210 40% 98%');
+      root.style.setProperty('--muted', '217.2 32.6% 17.5%');
+      root.style.setProperty('--muted-foreground', '215 20.2% 65.1%');
+      root.style.setProperty('--accent', '217.2 32.6% 17.5%');
+      root.style.setProperty('--accent-foreground', '210 40% 98%');
+      root.style.setProperty('--border', '217.2 32.6% 17.5%');
+      root.style.setProperty('--input', '217.2 32.6% 17.5%');
+      root.style.setProperty('--text-primary', '210 40% 98%');
+      root.style.setProperty('--text-secondary', '215 20.2% 65.1%');
     } else {
       root.classList.remove('dark');
+      root.style.setProperty('--background', '0 0% 100%');
+      root.style.setProperty('--foreground', '222.2 84% 4.9%');
+      root.style.setProperty('--card', '0 0% 100%');
+      root.style.setProperty('--card-foreground', '222.2 84% 4.9%');
+      root.style.setProperty('--popover', '0 0% 100%');
+      root.style.setProperty('--popover-foreground', '222.2 84% 4.9%');
+      root.style.setProperty('--muted', '210 40% 96.1%');
+      root.style.setProperty('--muted-foreground', '215.4 16.3% 46.9%');
+      root.style.setProperty('--accent', '210 40% 96.1%');
+      root.style.setProperty('--accent-foreground', '222.2 47.4% 11.2%');
+      root.style.setProperty('--border', '214.3 31.8% 91.4%');
+      root.style.setProperty('--input', '214.3 31.8% 91.4%');
+      root.style.setProperty('--text-primary', '222.2 84% 4.9%');
+      root.style.setProperty('--text-secondary', '215.4 16.3% 46.9%');
     }
 
     // Handle primary font class (for body text)
@@ -462,14 +492,27 @@ export const useTokenCSS = () => {
 
     // Handle theme class
     const themeClasses = ['theme-blue', 'theme-purple', 'theme-pink', 'theme-red', 'theme-yellow',
-                         'theme-orange', 'theme-teal', 'theme-turquoise', 'theme-emerald',
-                         'theme-peter-river', 'theme-amethyst', 'theme-wet-asphalt',
-                         'theme-sun-flower', 'theme-carrot', 'theme-alizarin',
-                         'theme-concrete', 'theme-pumpkin', 'theme-pomegranate',
-                         'theme-nephritis', 'theme-belize-hole', 'theme-wisteria',
-                         'theme-midnight-blue', 'theme-asbestos', 'theme-custom'];
+      'theme-orange', 'theme-teal', 'theme-turquoise', 'theme-emerald',
+      'theme-peter-river', 'theme-amethyst', 'theme-wet-asphalt',
+      'theme-sun-flower', 'theme-carrot', 'theme-alizarin',
+      'theme-concrete', 'theme-pumpkin', 'theme-pomegranate',
+      'theme-nephritis', 'theme-belize-hole', 'theme-wisteria',
+      'theme-midnight-blue', 'theme-asbestos', 'theme-custom'];
     themeClasses.forEach(tc => root.classList.remove(tc));
     root.classList.add(`theme-${selectedTheme}`);
+
+    // Apply style preset CSS variables
+    const preset = getStylePreset(stylePresetId as StylePresetId);
+    if (preset) {
+      const cssVariables = getStylePresetCSSVariables(preset, isDarkMode);
+      Object.entries(cssVariables).forEach(([key, value]) => {
+        root.style.setProperty(key, value);
+      });
+
+      // Add style preset class for CSS-based styling
+      root.classList.remove('preset-modern-flat', 'preset-soft-dreamy', 'preset-minimalist', 'preset-neo-brutalism');
+      root.classList.add(`preset-${stylePresetId}`);
+    }
 
     // Bind all tokens to CSS variables
     root.style.setProperty('--color-brand', tokens.brand);

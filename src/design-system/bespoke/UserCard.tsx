@@ -9,6 +9,7 @@ interface UserCardProps {
   avatarColor?: string;
   onActionPress?: () => void;
   actionText?: string;
+  layout?: 'horizontal' | 'vertical';
 }
 
 /**
@@ -29,6 +30,7 @@ export const UserCard = ({
   avatarColor = '#3498db',
   onActionPress,
   actionText = 'Follow',
+  layout = 'horizontal',
 }: UserCardProps) => {
   // Get initials from name
   const initials = name
@@ -37,6 +39,43 @@ export const UserCard = ({
     .join('')
     .toUpperCase()
     .slice(0, 2);
+
+  if (layout === 'vertical') {
+    return (
+      <Card variant="default" padding="medium">
+        <YStack alignItems="center" gap="$3">
+          <Circle
+            size={48}
+            backgroundColor={avatarColor}
+            alignItems="center"
+            justifyContent="center"
+          >
+            <H3 color="white" margin={0} fontSize="$3">
+              {initials}
+            </H3>
+          </Circle>
+
+          <YStack alignItems="center" gap="$1">
+            <H3 margin={0} fontSize="$3">
+              {name}
+            </H3>
+            {status && <Caption color="$textSecondary">{status}</Caption>}
+          </YStack>
+
+          {actionText && (
+            <Button
+              variant="secondary"
+              size="small"
+              onPress={onActionPress}
+              fullWidth
+            >
+              {actionText}
+            </Button>
+          )}
+        </YStack>
+      </Card>
+    );
+  }
 
   return (
     <Card variant="default" padding="medium">

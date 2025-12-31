@@ -29,6 +29,20 @@ const fonts = [
   { name: 'Satoshi', class: 'font-satoshi' },
 ];
 
+const getContrastColor = (hexColor: string) => {
+  // Default to white text if color is invalid
+  if (!hexColor || !hexColor.startsWith('#')) return '#FFFFFF';
+
+  const r = parseInt(hexColor.slice(1, 3), 16);
+  const g = parseInt(hexColor.slice(3, 5), 16);
+  const b = parseInt(hexColor.slice(5, 7), 16);
+
+  if (isNaN(r) || isNaN(g) || isNaN(b)) return '#FFFFFF';
+
+  const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+  return (yiq >= 128) ? '#000000' : '#FFFFFF';
+};
+
 const Index = () => {
   const {
     isDarkMode,
@@ -57,6 +71,31 @@ const Index = () => {
   const { toast } = useToast();
 
   // Theme and style classes are now handled by useTokenCSS in the store
+
+  const colorThemes = {
+    custom: customPrimaryColor,
+    turquoise: '#1abc9c',
+    emerald: '#2ecc71',
+    'peter-river': '#3498db',
+    amethyst: '#9b59b6',
+    'wet-asphalt': '#34495e',
+    'sun-flower': '#f1c40f',
+    carrot: '#e67e22',
+    alizarin: '#e74c3c',
+    concrete: '#95a5a6',
+    orange: '#f39c12',
+    pumpkin: '#d35400',
+    pomegranate: '#c0392b',
+    nephritis: '#27ae60',
+    'belize-hole': '#2980b9',
+    wisteria: '#8e44ad',
+    'midnight-blue': '#2c3e50',
+    asbestos: '#7f8c8d'
+  };
+
+  const activePrimaryColor = selectedTheme === 'custom'
+    ? customPrimaryColor || '#3498db'
+    : colorThemes[selectedTheme as keyof typeof colorThemes] || '#3498db';
 
   const parseTypographyValue = (value: string) => {
     // Parse strings like "700 28px/38px" into { weight: 700, size: "28px", line: "38px" }
@@ -186,18 +225,18 @@ export const colors = {
 \`\`\`typescript
 export const space = {
   ${spacingScale.split(', ').map(s => {
-    const [key, value] = s.split(': ');
-    const num = key.replace('space-', '');
-    return `${num}: ${value}`;
-  }).join(',\n  ')},
+      const [key, value] = s.split(': ');
+      const num = key.replace('space-', '');
+      return `${num}: ${value}`;
+    }).join(',\n  ')},
 };
 
 export const radius = {
   ${radii.split(', ').map(r => {
-    const [key, value] = r.split(': ');
-    const num = key === 'sm' ? '1' : key === 'md' ? '2' : key === 'lg' ? '3' : '4';
-    return `${num}: ${value}`;
-  }).join(',\n  ')},
+      const [key, value] = r.split(': ');
+      const num = key === 'sm' ? '1' : key === 'md' ? '2' : key === 'lg' ? '3' : '4';
+      return `${num}: ${value}`;
+    }).join(',\n  ')},
 };
 \`\`\`
 
@@ -563,26 +602,6 @@ Primary Font: ${primaryFontName} | Display Font: ${displayFontName}
   const generatePrompt = () => {
     const primaryFontName = fonts.find(f => f.class === selectedPrimaryFont)?.name || 'Plus Jakarta Sans';
     const displayFontName = fonts.find(f => f.class === selectedDisplayFont)?.name || 'Plus Jakarta Sans';
-    const colorThemes = {
-      custom: customPrimaryColor,
-      turquoise: '#1abc9c',
-      emerald: '#2ecc71',
-      'peter-river': '#3498db',
-      amethyst: '#9b59b6',
-      'wet-asphalt': '#34495e',
-      'sun-flower': '#f1c40f',
-      carrot: '#e67e22',
-      alizarin: '#e74c3c',
-      concrete: '#95a5a6',
-      orange: '#f39c12',
-      pumpkin: '#d35400',
-      pomegranate: '#c0392b',
-      nephritis: '#27ae60',
-      'belize-hole': '#2980b9',
-      wisteria: '#8e44ad',
-      'midnight-blue': '#2c3e50',
-      asbestos: '#7f8c8d'
-    };
 
     const scaleSpecs = {
       small: {
@@ -734,11 +753,11 @@ Primary Font: ${primaryFontName} | Display Font: ${displayFontName}
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
         {/* Header with Copy Prompt Button */}
-        <header className="p-4 flex justify-end shadow-sm" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+        <header className="p-4 flex justify-end shadow-sm bg-background" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button 
-                onClick={handleCopyPromptClick} 
+              <Button
+                onClick={handleCopyPromptClick}
                 className="gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0"
               >
                 <Copy className="h-4 w-4" />
@@ -784,25 +803,31 @@ Primary Font: ${primaryFontName} | Display Font: ${displayFontName}
             {/* Right Panel - Tailwind Components or Design Tokens */}
             <div className="flex-1 min-w-[300px] flex flex-col">
               {/* Toggle Buttons */}
-              <div className="p-4 flex gap-2" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+              <div className="p-4 flex gap-2 bg-background" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                 <button
                   onClick={() => setRightPanelView('tokens')}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
-                    rightPanelView === 'tokens'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                  }`}
+                  style={{
+                    backgroundColor: rightPanelView === 'tokens' ? activePrimaryColor : undefined,
+                    color: rightPanelView === 'tokens' ? getContrastColor(activePrimaryColor) : undefined
+                  }}
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${rightPanelView === 'tokens'
+                    ? ''
+                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                    }`}
                 >
                   <Layers3 size={16} />
                   Design Tokens
                 </button>
                 <button
                   onClick={() => setRightPanelView('tamagui')}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
-                    rightPanelView === 'tamagui'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                  }`}
+                  style={{
+                    backgroundColor: rightPanelView === 'tamagui' ? activePrimaryColor : undefined,
+                    color: rightPanelView === 'tamagui' ? getContrastColor(activePrimaryColor) : undefined
+                  }}
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${rightPanelView === 'tamagui'
+                    ? ''
+                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                    }`}
                 >
                   <Palette size={16} />
                   React Native Components

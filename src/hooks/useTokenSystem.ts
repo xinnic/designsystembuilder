@@ -294,12 +294,12 @@ export function useTokenSystem(theme: Theme = 'light') {
     root.style.setProperty('--color-danger', oklchToRGBValues(getSemanticValue(semanticColors.danger.default, theme)));
 
     // Old spacing variables for compatibility
-    root.style.setProperty('--space-1', '8px');
-    root.style.setProperty('--space-2', '16px');
-    root.style.setProperty('--space-3', '24px');
-    root.style.setProperty('--space-4', '32px');
-    root.style.setProperty('--space-5', '40px');
-    root.style.setProperty('--space-6', '48px');
+    root.style.setProperty('--space-1', '4px');
+    root.style.setProperty('--space-2', '8px');
+    root.style.setProperty('--space-3', '12px');
+    root.style.setProperty('--space-4', '16px');
+    root.style.setProperty('--space-5', '20px');
+    root.style.setProperty('--space-6', '24px');
 
     // Old radius variables for compatibility
     root.style.setProperty('--radius-sm', `${4 * roundness}px`);
@@ -311,36 +311,38 @@ export function useTokenSystem(theme: Theme = 'light') {
     // These override the static CSS values when theme changes
     // Note: Tailwind expects HSL values WITHOUT the hsl() wrapper
     // Update Tailwind variables based on current theme
+    // Tailwind CSS variable mappings
+    // Ensure these match standard HSL format: Hue Saturation% Lightness%
     if (theme === 'dark') {
-      root.style.setProperty('--background', '0 0% 7%');
-      root.style.setProperty('--foreground', '0 0% 88%');
-      root.style.setProperty('--card', '0 0% 12%');
-      root.style.setProperty('--card-foreground', '0 0% 88%');
-      root.style.setProperty('--popover', '0 0% 12%');
-      root.style.setProperty('--popover-foreground', '0 0% 88%');
-      root.style.setProperty('--muted', '0 0% 17%');
-      root.style.setProperty('--muted-foreground', '0 0% 66%');
-      root.style.setProperty('--accent', '0 0% 17%');
-      root.style.setProperty('--accent-foreground', '0 0% 88%');
-      root.style.setProperty('--border', '0 0% 17%');
-      root.style.setProperty('--input', '0 0% 17%');
-      root.style.setProperty('--text-primary', '0 0% 88%');
-      root.style.setProperty('--text-secondary', '0 0% 66%');
+      root.style.setProperty('--background', '222.2 84% 4.9%', 'important'); // Dark background
+      root.style.setProperty('--foreground', '210 40% 98%', 'important');
+      root.style.setProperty('--card', '222.2 84% 4.9%', 'important');
+      root.style.setProperty('--card-foreground', '210 40% 98%', 'important');
+      root.style.setProperty('--popover', '222.2 84% 4.9%', 'important');
+      root.style.setProperty('--popover-foreground', '210 40% 98%', 'important');
+      root.style.setProperty('--muted', '217.2 32.6% 17.5%', 'important');
+      root.style.setProperty('--muted-foreground', '215 20.2% 65.1%', 'important');
+      root.style.setProperty('--accent', '217.2 32.6% 17.5%', 'important');
+      root.style.setProperty('--accent-foreground', '210 40% 98%', 'important');
+      root.style.setProperty('--border', '217.2 32.6% 17.5%', 'important');
+      root.style.setProperty('--input', '217.2 32.6% 17.5%', 'important');
+      root.style.setProperty('--text-primary', '210 40% 98%', 'important');
+      root.style.setProperty('--text-secondary', '215 20.2% 65.1%', 'important');
     } else {
-      root.style.setProperty('--background', '0 0% 100%');
-      root.style.setProperty('--foreground', '240 10% 3.9%');
-      root.style.setProperty('--card', '0 0% 100%');
-      root.style.setProperty('--card-foreground', '240 10% 3.9%');
-      root.style.setProperty('--popover', '0 0% 100%');
-      root.style.setProperty('--popover-foreground', '240 10% 3.9%');
-      root.style.setProperty('--muted', '210 40% 96%');
-      root.style.setProperty('--muted-foreground', '215.4 16.3% 46.9%');
-      root.style.setProperty('--accent', '210 40% 96%');
-      root.style.setProperty('--accent-foreground', '222.2 84% 4.9%');
-      root.style.setProperty('--border', '214.3 31.8% 91.4%');
-      root.style.setProperty('--input', '214.3 31.8% 91.4%');
-      root.style.setProperty('--text-primary', '210 11% 11%');
-      root.style.setProperty('--text-secondary', '210 6% 39%');
+      root.style.setProperty('--background', '0 0% 100%', 'important');
+      root.style.setProperty('--foreground', '222.2 84% 4.9%', 'important');
+      root.style.setProperty('--card', '0 0% 100%', 'important');
+      root.style.setProperty('--card-foreground', '222.2 84% 4.9%', 'important');
+      root.style.setProperty('--popover', '0 0% 100%', 'important');
+      root.style.setProperty('--popover-foreground', '222.2 84% 4.9%', 'important');
+      root.style.setProperty('--muted', '210 40% 96.1%', 'important');
+      root.style.setProperty('--muted-foreground', '215.4 16.3% 46.9%', 'important');
+      root.style.setProperty('--accent', '210 40% 96.1%', 'important');
+      root.style.setProperty('--accent-foreground', '222.2 47.4% 11.2%', 'important');
+      root.style.setProperty('--border', '214.3 31.8% 91.4%', 'important');
+      root.style.setProperty('--input', '214.3 31.8% 91.4%', 'important');
+      root.style.setProperty('--text-primary', '222.2 84% 4.9%', 'important');
+      root.style.setProperty('--text-secondary', '215.4 16.3% 46.9%', 'important');
     }
 
   }, [theme, primaryColor, selectedPrimaryFont, selectedDisplayFont, roundness, inputBorderWidth, cardBorderWidth, brandPalette]);

@@ -96,19 +96,19 @@ export const Button = styled(TamaguiButton, {
 
     size: {
       small: {
-        fontSize: '$2',
+        fontSize: '$1',
         paddingHorizontal: '$3',
         paddingVertical: '$2',
         borderRadius: '$1',
       },
       medium: {
-        fontSize: '$3',
+        fontSize: '$2',
         paddingHorizontal: '$4',
         paddingVertical: '$3',
         borderRadius: '$2',
       },
       large: {
-        fontSize: '$4',
+        fontSize: '$3',
         paddingHorizontal: '$5',
         paddingVertical: '$4',
         borderRadius: '$2',
