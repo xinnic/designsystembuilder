@@ -26,7 +26,6 @@ export const StatsCard = ({ icon, value, label }: StatsCardProps) => {
       gap="$1"
       padding="$3"
       backgroundColor="$bgSecondary"
-      backgroundColor="$bgSecondary"
       style={{
         borderRadius: 'var(--card-radius)',
         boxShadow: 'var(--card-shadow)',
