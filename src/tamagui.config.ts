@@ -1,5 +1,6 @@
 import { createTamagui, createTokens, createFont } from '@tamagui/core';
 import { createAnimations } from '@tamagui/animations-react-native';
+import type { StylePresetId } from './config/stylePresets';
 
 // Bridge our CSS variables to Tamagui tokens
 // This makes Tamagui reactive - when CSS variables change, components update automatically
@@ -71,6 +72,23 @@ export const createDynamicConfig = () => {
       3: 300,
       4: 400,
       5: 500,
+    },
+
+    borderWidth: {
+      0: '0px',
+      1: '1px',
+      2: '2px',
+      3: '3px',
+      4: '4px',
+      true: '1px',
+    },
+
+    shadow: {
+      none: 'none',
+      sm: 'var(--shadow-sm)',
+      md: 'var(--shadow-md)',
+      lg: 'var(--shadow-lg)',
+      true: 'var(--shadow-sm)',
     },
   });
 
@@ -196,7 +214,60 @@ export const createDynamicConfig = () => {
         placeholderColor: tokens.color.textDisabled,
         brand: tokens.color.brand,
         brandHover: tokens.color.brandWeak,
-      }
+      },
+      // Preset-specific themes
+      modernFlat: {
+        background: 'oklch(1.000 0.000 0)', // Pure white
+        backgroundHover: tokens.color.bgSecondary,
+        backgroundStrong: tokens.color.bgSecondary,
+        color: tokens.color.textPrimary,
+        colorHover: tokens.color.textSecondary,
+        borderColor: 'oklch(0.925 0.004 210)', // Soft grey border
+        borderWidth: tokens.borderWidth[1],
+        placeholderColor: tokens.color.textDisabled,
+        brand: tokens.color.brand,
+        brandHover: tokens.color.brandWeak,
+        shadow: tokens.shadow.sm,
+      },
+      softDreamy: {
+        background: 'oklch(0.975 0.002 210)', // Off-white for shadow visibility
+        backgroundHover: tokens.color.bgSecondary,
+        backgroundStrong: tokens.color.bgSecondary,
+        color: tokens.color.textPrimary,
+        colorHover: tokens.color.textSecondary,
+        borderColor: 'transparent', // No borders
+        borderWidth: tokens.borderWidth[0],
+        placeholderColor: tokens.color.textDisabled,
+        brand: tokens.color.brand,
+        brandHover: tokens.color.brandWeak,
+        shadow: tokens.shadow.md,
+      },
+      minimalist: {
+        background: 'oklch(1.000 0.000 0)', // Pure white
+        backgroundHover: tokens.color.bgSecondary,
+        backgroundStrong: tokens.color.bgSecondary,
+        color: tokens.color.textPrimary,
+        colorHover: tokens.color.textSecondary,
+        borderColor: 'oklch(0.925 0.004 210)', // Very light gray
+        borderWidth: tokens.borderWidth[1],
+        placeholderColor: tokens.color.textDisabled,
+        brand: tokens.color.brand,
+        brandHover: tokens.color.brandWeak,
+        shadow: tokens.shadow.none,
+      },
+      neoBrutalism: {
+        background: 'oklch(1.000 0.000 0)', // Pure white
+        backgroundHover: tokens.color.bgSecondary,
+        backgroundStrong: tokens.color.bgSecondary,
+        color: tokens.color.textPrimary,
+        colorHover: tokens.color.textSecondary,
+        borderColor: 'oklch(0.000 0.000 0)', // Pure black
+        borderWidth: tokens.borderWidth[3], // 3px thick borders
+        placeholderColor: tokens.color.textDisabled,
+        brand: tokens.color.brand,
+        brandHover: tokens.color.brandWeak,
+        shadow: tokens.shadow.md,
+      },
     },
     media: {
       xs: { maxWidth: 660 },
@@ -220,3 +291,17 @@ export const createDynamicConfig = () => {
 };
 
 export const config = createDynamicConfig();
+
+/**
+ * Map style preset IDs to Tamagui theme names
+ */
+export const getThemeNameFromPreset = (presetId: StylePresetId): string => {
+  const themeMap: Record<StylePresetId, string> = {
+    'modern-flat': 'modernFlat',
+    'soft-dreamy': 'softDreamy',
+    'minimalist': 'minimalist',
+    'neo-brutalism': 'neoBrutalism',
+  };
+
+  return themeMap[presetId];
+};
