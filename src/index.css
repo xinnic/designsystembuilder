@@ -20,18 +20,13 @@
   font-style: normal;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
   * {
-    border-color: hsl(var(--border));
+    border-color: var(--border);
   }
 
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    background-color: var(--background);
+    color: var(--foreground);
     font-family: 'Satoshi', system-ui, -apple-system, sans-serif;
   }
 
@@ -65,40 +60,40 @@
     --shadow-2: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --shadow-3: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
-    --primary-hover: 221 83% 45%;
-    --primary-pressed: 221 83% 40%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --secondary-hover: 210 40% 90%;
-    --secondary-pressed: 210 40% 85%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-    --destructive-hover: 0 84% 50%;
-    --destructive-pressed: 0 84% 45%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221 83% 53%;
+    --background: oklch(1.000 0.000 0);
+    --foreground: oklch(0.150 0.002 210);
+    --card: oklch(1.000 0.000 0);
+    --card-foreground: oklch(0.150 0.002 210);
+    --popover: oklch(1.000 0.000 0);
+    --popover-foreground: oklch(0.150 0.002 210);
+    --primary: hsl(221 83% 53%);
+    --primary-foreground: hsl(210 40% 98%);
+    --primary-hover: hsl(221 83% 45%);
+    --primary-pressed: hsl(221 83% 40%);
+    --secondary: hsl(210 40% 96%);
+    --secondary-foreground: hsl(222.2 84% 4.9%);
+    --secondary-hover: hsl(210 40% 90%);
+    --secondary-pressed: hsl(210 40% 85%);
+    --muted: hsl(210 40% 96%);
+    --muted-foreground: hsl(215.4 16.3% 46.9%);
+    --accent: hsl(210 40% 96%);
+    --accent-foreground: hsl(222.2 84% 4.9%);
+    --destructive: hsl(0 84% 60%);
+    --destructive-foreground: hsl(210 40% 98%);
+    --destructive-hover: hsl(0 84% 50%);
+    --destructive-pressed: hsl(0 84% 45%);
+    --border: oklch(0.925 0.004 210);
+    --input: oklch(0.925 0.004 210);
+    --ring: hsl(221 83% 53%);
     --radius: 0.5rem;
-    --text-primary: 210 11% 11%;
-    --text-secondary: 210 6% 39%;
+    --text-primary: oklch(0.150 0.002 210);
+    --text-secondary: hsl(210 6% 39%);
 
     /* Button tokens - Blue theme default */
-    --button-bg: 210 79% 46%;
-    --button-text: 0 0% 100%;
-    --button-bg-hover: 210 79% 40%;
-    --button-bg-pressed: 210 79% 35%;
+    --button-bg: hsl(210 79% 46%);
+    --button-text: hsl(0 0% 100%);
+    --button-bg-hover: hsl(210 79% 40%);
+    --button-bg-pressed: hsl(210 79% 35%);
 
     /* Style Preset Tokens - Default to Modern Flat */
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -140,39 +135,39 @@
   }
 
   .dark {
-    --background: 0 0% 7%;
-    --foreground: 0 0% 88%;
-    --card: 0 0% 12%;
-    --card-foreground: 0 0% 88%;
-    --popover: 0 0% 12%;
-    --popover-foreground: 0 0% 88%;
-    --primary: 207 90% 77%;
-    --primary-foreground: 0 0% 0%;
-    --primary-hover: 207 90% 70%;
-    --primary-pressed: 207 90% 65%;
-    --secondary: 0 0% 17%;
-    --secondary-foreground: 0 0% 88%;
-    --secondary-hover: 0 0% 22%;
-    --secondary-pressed: 0 0% 27%;
-    --muted: 0 0% 17%;
-    --muted-foreground: 0 0% 66%;
-    --accent: 0 0% 17%;
-    --accent-foreground: 0 0% 88%;
-    --destructive: 0 69% 77%;
-    --destructive-foreground: 0 0% 0%;
-    --destructive-hover: 0 69% 70%;
-    --destructive-pressed: 0 69% 65%;
-    --border: 0 0% 17%;
-    --input: 0 0% 17%;
-    --ring: 207 90% 77%;
-    --text-primary: 0 0% 88%;
-    --text-secondary: 0 0% 66%;
+    --background: hsl(0 0% 7%);
+    --foreground: hsl(0 0% 88%);
+    --card: hsl(0 0% 12%);
+    --card-foreground: hsl(0 0% 88%);
+    --popover: hsl(0 0% 12%);
+    --popover-foreground: hsl(0 0% 88%);
+    --primary: hsl(207 90% 77%);
+    --primary-foreground: hsl(0 0% 0%);
+    --primary-hover: hsl(207 90% 70%);
+    --primary-pressed: hsl(207 90% 65%);
+    --secondary: hsl(0 0% 17%);
+    --secondary-foreground: hsl(0 0% 88%);
+    --secondary-hover: hsl(0 0% 22%);
+    --secondary-pressed: hsl(0 0% 27%);
+    --muted: hsl(0 0% 17%);
+    --muted-foreground: hsl(0 0% 66%);
+    --accent: hsl(0 0% 17%);
+    --accent-foreground: hsl(0 0% 88%);
+    --destructive: hsl(0 69% 77%);
+    --destructive-foreground: hsl(0 0% 0%);
+    --destructive-hover: hsl(0 69% 70%);
+    --destructive-pressed: hsl(0 69% 65%);
+    --border: hsl(0 0% 17%);
+    --input: hsl(0 0% 17%);
+    --ring: hsl(207 90% 77%);
+    --text-primary: hsl(0 0% 88%);
+    --text-secondary: hsl(0 0% 66%);
 
     /* Button tokens - Blue theme dark default */
-    --button-bg: 207 90% 77%;
-    --button-text: 0 0% 0%;
-    --button-bg-hover: 207 90% 70%;
-    --button-bg-pressed: 207 90% 65%;
+    --button-bg: hsl(207 90% 77%);
+    --button-text: hsl(0 0% 0%);
+    --button-bg-hover: hsl(207 90% 70%);
+    --button-bg-pressed: hsl(207 90% 65%);
 
     /* Color tokens in dark mode are also managed dynamically by Zustand store */
   }
@@ -295,11 +290,8 @@
     --button-bg-hover: 174 42% 58%;
     --button-bg-pressed: 174 42% 53%;
   }
-}
 
-@layer components {
-
-  /* Apply display font to headings, titles, and display text */
+/* Apply display font to headings, titles, and display text */
   h1,
   h2,
   h3,
@@ -606,7 +598,6 @@
   .font-montserrat {
     font-family: 'Montserrat', ui-sans-serif, system-ui, -apple-system, sans-serif;
   }
-}
 
 /* =================================
    STYLE PRESET SPECIFIC STYLES
