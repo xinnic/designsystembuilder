@@ -213,6 +213,25 @@ The current implementation is **backwards** - we're building components without 
 
 ---
 
+### CATEGORY 6: UI Restructure 🔵 **UX IMPROVEMENT - IN PROGRESS**
+
+| Task | Why Important | Model | Status | Time |
+|------|--------------|-------|--------|------|
+| **6.1 Tab Restructure** | Current 2-tab system confusing | Sonnet | Not Started | 2h |
+| - Update `Index.tsx` to 3-tab structure | Atoms / Components / Patterns | Sonnet | Not Started | 1h |
+| - Create `PatternsShowcase.tsx` panel | Third tab content | Sonnet | Not Started | 1h |
+| **6.2 Typography Consolidation** | Duplicate typography displays | Sonnet | Not Started | 1h |
+| - Remove typography from TamaguiShowcase | Typography is an Atom, not Component | Sonnet | Not Started | 30m |
+| - Improve TypeScaleTable display | Show rendered text first | Sonnet | Not Started | 30m |
+| **6.3 Component Badges** | Future-proof for custom components | Sonnet | Not Started | 1h |
+| - Create ComponentBadge component | TAMAGUI / CUSTOM variants | Sonnet | Not Started | 30m |
+| - Add badges to component sections | Visual origin indicators | Sonnet | Not Started | 30m |
+| **6.4 Documentation Updates** | Align docs with new UI | Sonnet | Partial | 1h |
+| - Update architecture.md | Document 3-tier hierarchy | Sonnet | ✅ Completed | 30m |
+| - Update product-plan.md | Information architecture | Sonnet | Not Started | 30m |
+
+---
+
 ## 🎯 Definition of Done
 
 ### Token System Complete When:
@@ -258,3 +277,243 @@ Without the token foundation, all other work will need to be redone.
 ---
 
 **Note:** This prioritization fixes the fundamental sequencing issue. The token system MUST come first, then migrate existing components, then build new B2C components properly.
+
+---
+
+## 🔥 CATEGORY 7: Full Tamagui Migration (Remove Tailwind) 🔴 **URGENT - PARALLEL EXECUTION**
+
+> **Goal:** Remove ALL Tailwind CSS and convert the builder UI to use Tamagui exclusively
+> **Why:** Builder UI has harsh black borders because Tailwind CSS variables aren't being resolved correctly. Presets don't update the builder UI dynamically.
+> **Success Criteria:** Soft grey borders on Modern Flat, NO borders on Soft & Dreamy, thick black borders on Neo-Brutalism
+
+### 🎯 Key Reference Values (From Lovable UI)
+- **Soft Grey Border:** `oklch(0.925 0.004 210)` - already defined in `stylePresets.ts`
+- **White Background:** `oklch(1.000 0.000 0)`
+- **Text Color:** `oklch(0.150 0.002 210)`
+
+---
+
+### STREAM A: Infrastructure (Do First - Blocks Others)
+
+| Task ID | Task | File(s) | Can Parallelize? | Status |
+|---------|------|---------|------------------|--------|
+| **7.A.1** | Remove @tailwind directives from index.css | `src/index.css` lines 23-25 | ❌ DO FIRST | ✅ Completed |
+| **7.A.2** | Remove @layer base wrapper, keep :root variables | `src/index.css` lines 27-298 | After 7.A.1 | ✅ Completed |
+| **7.A.3** | Update Tamagui config to add preset-specific themes | `src/tamagui.config.ts` | ✅ Yes | Not Started |
+| **7.A.4** | Create TamaguiThemeProvider component | `src/providers/TamaguiThemeProvider.tsx` (new) | ✅ Yes | Not Started |
+
+**7.A.1 Prompt:**
+```
+Remove Tailwind from index.css. In /Users/mushy/Documents/Repositories/designsystembuilder/src/index.css:
+1. Delete lines 23-25 (@tailwind base/components/utilities)
+2. Remove "@layer base {" wrapper (line 27) and its closing "}" (around line 298)
+3. Keep all :root CSS variables and other styles
+4. Verify the app still loads (run `npm run dev`)
+```
+
+**7.A.3 Prompt:**
+```
+Update Tamagui config to support style presets. In /Users/mushy/Documents/Repositories/designsystembuilder/src/tamagui.config.ts:
+1. Add 4 theme variants: 'modernFlat', 'softDreamy', 'minimalist', 'neoBrutalism'
+2. Each theme should define: borderColor, borderWidth, background, shadow tokens
+3. modernFlat: borderColor=oklch(0.925 0.004 210), borderWidth=1
+4. softDreamy: borderColor=transparent, borderWidth=0
+5. minimalist: borderColor=oklch(0.925 0.004 210), borderWidth=1
+6. neoBrutalism: borderColor=oklch(0 0 0), borderWidth=2-4
+7. Export a function to get theme by preset ID
+```
+
+---
+
+### STREAM B: Convert Sidebar Component (Most Complex)
+
+| Task ID | Task | File(s) | Can Parallelize? | Status |
+|---------|------|---------|------------------|--------|
+| **7.B.1** | Replace Sidebar container div with Tamagui YStack | `src/components/Sidebar.tsx` line 219 | ✅ Yes | Not Started |
+| **7.B.2** | Convert Sidebar header section to Tamagui | `src/components/Sidebar.tsx` lines 220-225 | ✅ Yes | Not Started |
+| **7.B.3** | Replace Collapsible with Tamagui Accordion | `src/components/Sidebar.tsx` lines 229-386 | ✅ Yes | Not Started |
+| **7.B.4** | Convert color picker grid to Tamagui XStack/YStack | `src/components/Sidebar.tsx` lines 264-315 | ✅ Yes | Not Started |
+| **7.B.5** | Convert style preset buttons to Tamagui | `src/components/Sidebar.tsx` lines 324-347 | ✅ Yes | Not Started |
+| **7.B.6** | Convert all remaining buttons to Tamagui Button | `src/components/Sidebar.tsx` | After B.1-B.5 | Not Started |
+| **7.B.7** | Replace shadcn Switch with Tamagui Switch | `src/components/Sidebar.tsx` line 320 | ✅ Yes | Not Started |
+| **7.B.8** | Replace shadcn DropdownMenu with Tamagui Select | `src/components/Sidebar.tsx` lines 242-260 | ✅ Yes | Not Started |
+
+**7.B.1 Prompt:**
+```
+Convert Sidebar container to Tamagui. In /Users/mushy/Documents/Repositories/designsystembuilder/src/components/Sidebar.tsx:
+1. Import { YStack, ScrollView } from 'tamagui'
+2. Replace line 219's <div className="w-80 h-screen overflow-y-auto p-6 border-r border-border bg-background">
+   With: <YStack width={320} height="100vh" padding="$6" borderRightWidth="$borderWidth" borderRightColor="$borderColor" backgroundColor="$background">
+   Wrap content in <ScrollView>
+3. The $borderWidth and $borderColor should come from the Tamagui theme (set by preset)
+4. Remove className attribute entirely
+```
+
+**7.B.3 Prompt:**
+```
+Replace Collapsible with Tamagui Accordion in Sidebar. In /Users/mushy/Documents/Repositories/designsystembuilder/src/components/Sidebar.tsx:
+1. Remove imports for Collapsible, CollapsibleContent, CollapsibleTrigger from @/components/ui/collapsible
+2. Create a simple accordion using Tamagui:
+   - Use YStack with pressable header
+   - Use AnimatePresence for content visibility
+   - Use state to track open/closed
+3. Convert Basic Options section (lines 229-386)
+4. Convert Advanced Styling section (lines 388-621)
+5. Use Tamagui's XStack for flex row layouts, YStack for columns
+6. Replace all className props with Tamagui style props
+```
+
+---
+
+### STREAM C: Convert Main Layout (Index.tsx)
+
+| Task ID | Task | File(s) | Can Parallelize? | Status |
+|---------|------|---------|------------------|--------|
+| **7.C.1** | Replace main layout div with Tamagui XStack | `src/pages/Index.tsx` | ✅ Yes | Not Started |
+| **7.C.2** | Convert right panel container to YStack | `src/pages/Index.tsx` lines 175-190 | ✅ Yes | Not Started |
+| **7.C.3** | Convert tab buttons to Tamagui | `src/pages/Index.tsx` lines 181-196 | ✅ Yes | Not Started |
+| **7.C.4** | Add preset class to root element dynamically | `src/pages/Index.tsx` | ✅ Yes | Not Started |
+
+**7.C.1 Prompt:**
+```
+Convert Index.tsx layout to Tamagui. In /Users/mushy/Documents/Repositories/designsystembuilder/src/pages/Index.tsx:
+1. Import { XStack, YStack } from 'tamagui'
+2. Replace the main container div with XStack:
+   <XStack flex={1} height="100vh">
+3. Replace all className="flex" with Tamagui flex props
+4. Replace background color classes with backgroundColor="$background"
+5. Replace border classes with borderWidth and borderColor props
+6. Ensure the 3-panel layout (Sidebar | Preview | Right Panel) is preserved
+```
+
+---
+
+### STREAM D: Convert Right Panel Components
+
+| Task ID | Task | File(s) | Can Parallelize? | Status |
+|---------|------|---------|------------------|--------|
+| **7.D.1** | Convert DesignSystemOverview to Tamagui | `src/panels/DesignSystemOverview.tsx` | ✅ Yes | Not Started |
+| **7.D.2** | Remove DesignSystemOverview.css (use Tamagui styles) | `src/panels/DesignSystemOverview.css` | After 7.D.1 | Not Started |
+| **7.D.3** | Verify TamaguiShowcase uses only Tamagui | `src/panels/TamaguiShowcase.tsx` | ✅ Yes | Not Started |
+| **7.D.4** | Convert PatternsShowcase to Tamagui | `src/panels/PatternsShowcase.tsx` | ✅ Yes | Not Started |
+| **7.D.5** | Remove PatternsShowcase.css | `src/panels/PatternsShowcase.css` | After 7.D.4 | Not Started |
+
+**7.D.1 Prompt:**
+```
+Convert DesignSystemOverview to Tamagui. In /Users/mushy/Documents/Repositories/designsystembuilder/src/panels/DesignSystemOverview.tsx:
+1. Remove import of DesignSystemOverview.css
+2. Import { YStack, XStack, Text, Heading, ScrollView } from 'tamagui'
+3. Replace all <div className="..."> with appropriate Tamagui components:
+   - div with flex-col → YStack
+   - div with flex-row → XStack
+   - p/span → Text
+   - h1/h2/h3 → Heading
+4. Replace all className props with Tamagui style props:
+   - p-4 → padding="$4"
+   - gap-2 → space="$2"
+   - bg-white → backgroundColor="$background"
+   - border → borderWidth={1} borderColor="$borderColor"
+5. Ensure colors use theme tokens ($textPrimary, $borderColor, etc.)
+```
+
+---
+
+### STREAM E: Dynamic Theming Integration
+
+| Task ID | Task | File(s) | Can Parallelize? | Status |
+|---------|------|---------|------------------|--------|
+| **7.E.1** | Update handleStylePresetChange to set Tamagui theme | `src/components/Sidebar.tsx` lines 153-208 | After B.1 | Not Started |
+| **7.E.2** | Create usePresetTheme hook | `src/hooks/usePresetTheme.ts` (new) | ✅ Yes | Not Started |
+| **7.E.3** | Wrap App in TamaguiProvider with dynamic theme | `src/App.tsx` | After 7.A.4 | Not Started |
+
+**7.E.1 Prompt:**
+```
+Update preset switching to use Tamagui themes. In /Users/mushy/Documents/Repositories/designsystembuilder/src/components/Sidebar.tsx:
+1. In handleStylePresetChange function (lines 153-208):
+   - Instead of setting CSS variables on document.documentElement
+   - Call a function to switch the Tamagui theme
+2. Map preset IDs to Tamagui theme names:
+   - 'modern-flat' → 'modernFlat'
+   - 'soft-dreamy' → 'softDreamy'
+   - 'minimalist' → 'minimalist'
+   - 'neo-brutalism' → 'neoBrutalism'
+3. Use Tamagui's useTheme hook or context to change theme
+4. Ensure the theme change propagates to all Tamagui components
+```
+
+**7.E.2 Prompt:**
+```
+Create usePresetTheme hook. Create new file /Users/mushy/Documents/Repositories/designsystembuilder/src/hooks/usePresetTheme.ts:
+1. Import preset definitions from src/config/stylePresets.ts
+2. Create hook that returns:
+   - currentTheme: the Tamagui theme object for current preset
+   - setPreset(presetId): function to switch presets
+   - presetTokens: the raw tokens for current preset
+3. Use Zustand or React context to manage state
+4. When preset changes, update:
+   - Tamagui theme
+   - CSS variables for non-Tamagui elements
+   - Border widths based on preset (0 for Soft & Dreamy, 2-4 for Neo-Brutalism)
+```
+
+---
+
+### STREAM F: Cleanup
+
+| Task ID | Task | File(s) | Can Parallelize? | Status |
+|---------|------|---------|------------------|--------|
+| **7.F.1** | Remove tailwind.config.ts | `tailwind.config.ts` | After all streams | Not Started |
+| **7.F.2** | Remove tailwindcss from package.json | `package.json` | After 7.F.1 | Not Started |
+| **7.F.3** | Remove postcss tailwind plugin | `postcss.config.js` | After 7.F.2 | Not Started |
+| **7.F.4** | Remove all remaining className attributes | All .tsx files | After all streams | Not Started |
+| **7.F.5** | Verify all presets work correctly | Browser testing | LAST | Not Started |
+
+**7.F.4 Prompt:**
+```
+Find and remove all remaining Tailwind className usage. Run this search and fix all results:
+1. Search: grep -r "className=" src/
+2. For each file with className:
+   - If it's a Tamagui component: convert to style props
+   - If it's HTML element: wrap with Tamagui component
+   - Remove all Tailwind utility classes
+3. Exception: Keep className for third-party libraries that require it
+4. Run `npm run dev` and verify no build errors
+```
+
+---
+
+## 🚀 Parallel Execution Strategy
+
+### Phase 1 (Sequential - Unblocks Everything)
+Run these FIRST, in order:
+1. **7.A.1** - Remove @tailwind directives
+2. **7.A.2** - Clean up @layer wrapper
+
+### Phase 2 (Parallel - Run Simultaneously)
+After Phase 1, run these in parallel:
+- **Agent 1:** Stream B (Sidebar) - Tasks 7.B.1 through 7.B.8
+- **Agent 2:** Stream C (Index.tsx) - Tasks 7.C.1 through 7.C.4
+- **Agent 3:** Stream D (Right Panels) - Tasks 7.D.1 through 7.D.5
+- **Agent 4:** Stream A.3 + A.4 (Tamagui themes)
+
+### Phase 3 (Integration)
+After Phase 2:
+- **7.E.1, 7.E.2, 7.E.3** - Dynamic theming
+
+### Phase 4 (Cleanup)
+After Phase 3:
+- **7.F.1 through 7.F.5** - Remove Tailwind completely
+
+---
+
+## ✅ Verification Checklist
+
+After migration, verify:
+- [ ] Modern Flat: Soft grey borders (`oklch(0.925 0.004 210)`), 1px width
+- [ ] Soft & Dreamy: NO visible borders, larger shadows
+- [ ] Minimalist: Very subtle borders, minimal shadows
+- [ ] Neo-Brutalism: Thick black borders (2-4px), hard shadows
+- [ ] Dark mode works for all presets
+- [ ] No Tailwind classes remain
+- [ ] `npm run build` succeeds
+- [ ] All panels respond to preset changes
