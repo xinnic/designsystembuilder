@@ -15,6 +15,7 @@ import {
   Circle,
   Square,
   Label as TamaguiLabel,
+  Text,
 } from 'tamagui';
 import { useDesignSystem } from '../state/designSystem';
 import { ChevronDown, Check } from 'lucide-react';
@@ -320,19 +321,19 @@ export default function TamaguiShowcase() {
                 <XStack gap="$3" alignItems="center">
                   <Avatar size="small">
                     <AvatarImage src="https://i.pravatar.cc/150?img=1" />
-                    <AvatarFallback>SM</AvatarFallback>
+                    <AvatarFallback><Text color="white">SM</Text></AvatarFallback>
                   </Avatar>
                   <Avatar size="medium">
                     <AvatarImage src="https://i.pravatar.cc/150?img=2" />
-                    <AvatarFallback>MD</AvatarFallback>
+                    <AvatarFallback><Text color="white">MD</Text></AvatarFallback>
                   </Avatar>
                   <Avatar size="large">
                     <AvatarImage src="https://i.pravatar.cc/150?img=3" />
-                    <AvatarFallback>LG</AvatarFallback>
+                    <AvatarFallback><Text color="white">LG</Text></AvatarFallback>
                   </Avatar>
                   <Avatar size="xlarge">
                     <AvatarImage src="https://i.pravatar.cc/150?img=4" />
-                    <AvatarFallback>XL</AvatarFallback>
+                    <AvatarFallback><Text color="white">XL</Text></AvatarFallback>
                   </Avatar>
                 </XStack>
               </YStack>
@@ -341,13 +342,13 @@ export default function TamaguiShowcase() {
                 <Caption fontWeight="600">With Fallback (No Image)</Caption>
                 <XStack gap="$3" alignItems="center">
                   <Avatar size="medium">
-                    <AvatarFallback>JD</AvatarFallback>
+                    <AvatarFallback><Text color="white">JD</Text></AvatarFallback>
                   </Avatar>
                   <Avatar size="medium">
-                    <AvatarFallback>AB</AvatarFallback>
+                    <AvatarFallback><Text color="white">AB</Text></AvatarFallback>
                   </Avatar>
                   <Avatar size="medium">
-                    <AvatarFallback>XY</AvatarFallback>
+                    <AvatarFallback><Text color="white">XY</Text></AvatarFallback>
                   </Avatar>
                 </XStack>
               </YStack>
