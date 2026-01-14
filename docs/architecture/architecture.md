@@ -13,6 +13,66 @@ This document defines the technical architecture for a **B2C-focused, cross-plat
 3. **Cross-Platform Native** - Tamagui enables true iOS/Android/Web support
 4. **Megaprompt as Product** - The export is a comprehensive instruction set, not config files
 5. **Visual-to-Code Bridge** - Live preview directly maps to generated code
+6. **Atomic Design Hierarchy** - UI organized as Atoms → Components → Patterns
+
+---
+
+## 🎨 UI Architecture: 3-Tier Hierarchy
+
+The builder's interface uses an **Atomic Design-inspired** organization that makes the design system intuitive for end users:
+
+```
+┌─────────┐   ┌────────────┐   ┌──────────┐
+│  Atoms  │ → │ Components │ → │ Patterns │
+└─────────┘   └────────────┘   └──────────┘
+```
+
+### Tier 1: Atoms (Foundational Tokens)
+Fundamental design decisions that establish the visual language:
+
+| Atom Category | What It Controls | Example Values |
+|---------------|------------------|----------------|
+| Typography | Font scales, weights, line heights | Display: 48px/56px @ 700 |
+| Colors | Brand, semantic, status colors | Primary: oklch(0.55 0.22 160) |
+| Spacing | Layout rhythm (8-pt grid) | $1=8px, $2=16px, $3=24px |
+| Radii | Corner roundness | sm=4px, md=8px, lg=12px |
+| Shadows | Elevation/depth cues | Level 1, 2, 3 |
+| Motion | Duration, easing curves | base=300ms, ease-standard |
+| Haptics | Tactile feedback types | light, medium, success |
+
+### Tier 2: Components
+Individual UI elements built with Tamagui, consuming atom tokens:
+
+- **Buttons** - Primary, secondary, outline variants
+- **Cards** - Elevated, flat, gradient
+- **Form Controls** - Input, TextArea, Switch, Checkbox
+- **Typography** - Display, H1-H3, Body, Caption (demos only in Components)
+- **Tabs** - Navigation within sections
+- **Progress** - Bars, indicators
+- **Overlays** - Dialog, Sheet, Modal
+
+Each component section shows a subtle `TAMAGUI` badge indicating it's a pre-built component. Future custom components will show a `CUSTOM` badge.
+
+### Tier 3: Patterns
+Composed layouts combining multiple components for common use cases:
+
+- **App Header** - Logo + title + action buttons
+- **Navigation Bar** - Tab bar / bottom navigation
+- **Form Layout** - Label + input + validation message
+- **Card Grid** - Responsive grid of content cards
+- **Modal Pattern** - Dialog header + content + action buttons
+
+### Why This Structure?
+
+| Previous (Confusing) | New (Intuitive) |
+|---------------------|------------------|
+| "Design Tokens" | → **Atoms** |
+| "React Native Components" | → **Components** |
+| *(missing)* | → **Patterns** |
+
+- **Atoms** = "What are my design values?"
+- **Components** = "What UI pieces can I use?"
+- **Patterns** = "How do I compose them?"
 
 ---
 

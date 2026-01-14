@@ -156,6 +156,22 @@ We're not competing with dashboards tools (they can use MUI). We're building for
 3. **Native Feel** - Platform conventions respected
 4. **Token Purity** - No hardcoded values ever
 5. **Instant Gratification** - See changes immediately
+6. **Atomic Design Hierarchy** - Atoms → Components → Patterns
+
+### Information Architecture
+
+The builder uses a 3-tier hierarchy that makes the design system intuitive:
+
+| Tab | Contains | User Question Answered |
+|-----|----------|------------------------|
+| **Atoms** | Typography, Colors, Spacing, Radii, Shadows, Motion, Haptics | "What are my design values?" |
+| **Components** | Buttons, Cards, Inputs, Tabs, etc. | "What UI pieces can I use?" |
+| **Patterns** | Headers, Navigation, Form Layouts, Card Grids | "How do I compose them together?" |
+
+**Key UX Decisions:**
+- Tamagui is infrastructure, not user-facing → Components show subtle `TAMAGUI` badge
+- Typography appears only in Atoms tab (not duplicated in Components)
+- Patterns showcase real compositions, not abstract concepts
 
 ### Component Priorities
 
