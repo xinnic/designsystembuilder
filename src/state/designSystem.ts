@@ -42,6 +42,7 @@ export interface Tokens {
   displayLg: { size: string; line: string; weight: number };
   h1: { size: string; line: string; weight: number };
   h2: { size: string; line: string; weight: number };
+  h3: { size: string; line: string; weight: number };
   subhead: { size: string; line: string; weight: number };
   body: { size: string; line: string; weight: number };
   caption: { size: string; line: string; weight: number };
@@ -119,7 +120,7 @@ const defaultTokens: Tokens = {
   textDisabled: "161 161 161",
   bgPrimary: "248 249 250",
   bgSecondary: "255 255 255",
-  border: "229 231 235",
+  border: "240 240 242",  // Very light grey for subtle borders
   focus: "0 102 204",
   success: "34 197 94",
   warning: "245 158 11",
@@ -130,6 +131,7 @@ const defaultTokens: Tokens = {
   displayLg: { size: "48px", line: "56px", weight: 700 },
   h1: { size: "28px", line: "38px", weight: 700 },
   h2: { size: "22px", line: "30px", weight: 600 },
+  h3: { size: "20px", line: "28px", weight: 600 },
   subhead: { size: "18px", line: "26px", weight: 600 },
   body: { size: "16px", line: "24px", weight: 400 },
   caption: { size: "14px", line: "20px", weight: 400 },
@@ -180,8 +182,8 @@ export const useDesignSystem = create<DesignSystemState>((set) => ({
 
   // UI Settings defaults
   isDarkMode: false,
-  selectedTheme: 'turquoise',
-  customPrimaryColor: '#3498db',
+  selectedTheme: 'custom',  // Select rainbow picker by default
+  customPrimaryColor: '#1abc9c',  // Turquoise/green - first color swatch
   selectedAccentColor: 'turquoise',
   customAccentColor: '#1abc9c',
   isSecondaryManual: false, // Default to auto-generated
@@ -232,6 +234,7 @@ const typographyScales = {
     displayLg: { size: '48px', line: '56px', weight: 700 },
     h1: { size: '24px', line: '30px', weight: 700 },
     h2: { size: '20px', line: '26px', weight: 600 },
+    h3: { size: '18px', line: '26px', weight: 600 },
     subhead: { size: '16px', line: '22px', weight: 600 },
     body: { size: '14px', line: '20px', weight: 400 },
     caption: { size: '12px', line: '16px', weight: 400 },
@@ -242,6 +245,7 @@ const typographyScales = {
     displayLg: { size: '48px', line: '56px', weight: 700 },
     h1: { size: '28px', line: '38px', weight: 700 },
     h2: { size: '22px', line: '30px', weight: 600 },
+    h3: { size: '20px', line: '28px', weight: 600 },
     subhead: { size: '18px', line: '26px', weight: 600 },
     body: { size: '16px', line: '24px', weight: 400 },
     caption: { size: '14px', line: '20px', weight: 400 },
@@ -252,6 +256,7 @@ const typographyScales = {
     displayLg: { size: '48px', line: '56px', weight: 700 },
     h1: { size: '36px', line: '44px', weight: 700 },
     h2: { size: '24px', line: '32px', weight: 600 },
+    h3: { size: '22px', line: '30px', weight: 600 },
     subhead: { size: '21px', line: '30px', weight: 600 },
     body: { size: '18px', line: '26px', weight: 400 },
     caption: { size: '15px', line: '22px', weight: 400 },
@@ -427,177 +432,3 @@ setTimeout(() => {
     brandWeak: hexToRgb(accentColor),
   });
 }, 0);
-
-// Hook to bind tokens to CSS variables
-export const useTokenCSS = () => {
-  const { tokens, opts, isDarkMode, selectedPrimaryFont, selectedDisplayFont, selectedScale, selectedTheme, stylePresetId, cornerRadius } = useDesignSystem();
-
-  useEffect(() => {
-    const root = document.documentElement;
-
-    // Handle dark mode
-    if (isDarkMode) {
-      root.classList.add('dark');
-      // Ensure Tailwind variables are set correctly
-      root.style.setProperty('--background', '222.2 84% 4.9%');
-      root.style.setProperty('--foreground', '210 40% 98%');
-      root.style.setProperty('--card', '222.2 84% 4.9%');
-      root.style.setProperty('--card-foreground', '210 40% 98%');
-      root.style.setProperty('--popover', '222.2 84% 4.9%');
-      root.style.setProperty('--popover-foreground', '210 40% 98%');
-      root.style.setProperty('--muted', '217.2 32.6% 17.5%');
-      root.style.setProperty('--muted-foreground', '215 20.2% 65.1%');
-      root.style.setProperty('--accent', '217.2 32.6% 17.5%');
-      root.style.setProperty('--accent-foreground', '210 40% 98%');
-      root.style.setProperty('--border', '217.2 32.6% 17.5%');
-      root.style.setProperty('--input', '217.2 32.6% 17.5%');
-      root.style.setProperty('--text-primary', '210 40% 98%');
-      root.style.setProperty('--text-secondary', '215 20.2% 65.1%');
-    } else {
-      root.classList.remove('dark');
-      root.style.setProperty('--background', '0 0% 100%');
-      root.style.setProperty('--foreground', '222.2 84% 4.9%');
-      root.style.setProperty('--card', '0 0% 100%');
-      root.style.setProperty('--card-foreground', '222.2 84% 4.9%');
-      root.style.setProperty('--popover', '0 0% 100%');
-      root.style.setProperty('--popover-foreground', '222.2 84% 4.9%');
-      root.style.setProperty('--muted', '210 40% 96.1%');
-      root.style.setProperty('--muted-foreground', '215.4 16.3% 46.9%');
-      root.style.setProperty('--accent', '210 40% 96.1%');
-      root.style.setProperty('--accent-foreground', '222.2 47.4% 11.2%');
-      root.style.setProperty('--border', '214.3 31.8% 91.4%');
-      root.style.setProperty('--input', '214.3 31.8% 91.4%');
-      root.style.setProperty('--text-primary', '222.2 84% 4.9%');
-      root.style.setProperty('--text-secondary', '215.4 16.3% 46.9%');
-    }
-
-    // Handle primary font class (for body text)
-    const fontClasses = [
-      'font-jakarta', 'font-vietnam', 'font-wix', 'font-figtree', 'font-albert', 'font-satoshi',
-      'font-epilogue', 'font-manrope', 'font-public', 'font-space', 'font-work', 'font-source-sans',
-      'font-nunito', 'font-arimo', 'font-hanken', 'font-rubik', 'font-dm', 'font-ibm', 'font-sora',
-      'font-newsreader', 'font-noto', 'font-domine', 'font-libre', 'font-garamond', 'font-literata',
-      'font-source-serif', 'font-montserrat'
-    ];
-    fontClasses.forEach(fc => root.classList.remove(fc));
-    root.classList.add(selectedPrimaryFont);
-
-    // Set display font CSS variable for headings
-    const displayFontFamily = fontFamilyMap[selectedDisplayFont] || fontFamilyMap['font-jakarta'];
-    root.style.setProperty('--font-display', displayFontFamily);
-
-    // Handle scale class
-    root.classList.remove('scale-small', 'scale-regular', 'scale-large');
-    root.classList.add(`scale-${selectedScale}`);
-
-    // Handle theme class
-    const themeClasses = ['theme-blue', 'theme-purple', 'theme-pink', 'theme-red', 'theme-yellow',
-      'theme-orange', 'theme-teal', 'theme-turquoise', 'theme-emerald',
-      'theme-peter-river', 'theme-amethyst', 'theme-wet-asphalt',
-      'theme-sun-flower', 'theme-carrot', 'theme-alizarin',
-      'theme-concrete', 'theme-pumpkin', 'theme-pomegranate',
-      'theme-nephritis', 'theme-belize-hole', 'theme-wisteria',
-      'theme-midnight-blue', 'theme-asbestos', 'theme-custom'];
-    themeClasses.forEach(tc => root.classList.remove(tc));
-    root.classList.add(`theme-${selectedTheme}`);
-
-    // Add style preset class for CSS-based styling (do this early for CSS class-based styles)
-    root.classList.remove('preset-modern-flat', 'preset-soft-dreamy', 'preset-minimalist', 'preset-neo-brutalism');
-    root.classList.add(`preset-${stylePresetId}`);
-
-    // Bind all tokens to CSS variables
-    root.style.setProperty('--color-brand', tokens.brand);
-    root.style.setProperty('--color-brand-weak', tokens.brandWeak);
-    root.style.setProperty('--color-text-primary', tokens.textPrimary);
-    root.style.setProperty('--color-text-secondary', tokens.textSecondary);
-    root.style.setProperty('--color-text-disabled', tokens.textDisabled);
-    root.style.setProperty('--color-bg-primary', tokens.bgPrimary);
-    root.style.setProperty('--color-bg-secondary', tokens.bgSecondary);
-    root.style.setProperty('--color-border', tokens.border);
-    root.style.setProperty('--color-focus', tokens.focus);
-    root.style.setProperty('--color-success', tokens.success);
-    root.style.setProperty('--color-warning', tokens.warning);
-    root.style.setProperty('--color-info', tokens.info);
-    root.style.setProperty('--color-danger', tokens.danger);
-
-    root.style.setProperty('--font-family', tokens.fontFamily);
-
-    // Typography
-    root.style.setProperty('--font-display-size', tokens.displayLg.size);
-    root.style.setProperty('--font-display-line', tokens.displayLg.line);
-    root.style.setProperty('--font-display-weight', tokens.displayLg.weight.toString());
-
-    root.style.setProperty('--font-h1-size', tokens.h1.size);
-    root.style.setProperty('--font-h1-line', tokens.h1.line);
-    root.style.setProperty('--font-h1-weight', tokens.h1.weight.toString());
-
-    root.style.setProperty('--font-h2-size', tokens.h2.size);
-    root.style.setProperty('--font-h2-line', tokens.h2.line);
-    root.style.setProperty('--font-h2-weight', tokens.h2.weight.toString());
-
-    root.style.setProperty('--font-subhead-size', tokens.subhead.size);
-    root.style.setProperty('--font-subhead-line', tokens.subhead.line);
-    root.style.setProperty('--font-subhead-weight', tokens.subhead.weight.toString());
-
-    root.style.setProperty('--font-body-size', tokens.body.size);
-    root.style.setProperty('--font-body-line', tokens.body.line);
-    root.style.setProperty('--font-body-weight', tokens.body.weight.toString());
-
-    root.style.setProperty('--font-caption-size', tokens.caption.size);
-    root.style.setProperty('--font-caption-line', tokens.caption.line);
-    root.style.setProperty('--font-caption-weight', tokens.caption.weight.toString());
-
-    root.style.setProperty('--font-button-size', tokens.button.size);
-    root.style.setProperty('--font-button-line', tokens.button.line);
-    root.style.setProperty('--font-button-weight', tokens.button.weight.toString());
-    root.style.setProperty('--font-button-track', tokens.button.track);
-
-    root.style.setProperty('--font-eyebrow-size', tokens.eyebrow.size);
-    root.style.setProperty('--font-eyebrow-line', tokens.eyebrow.line);
-    root.style.setProperty('--font-eyebrow-weight', tokens.eyebrow.weight.toString());
-    root.style.setProperty('--font-eyebrow-track', tokens.eyebrow.track);
-
-    // Spacing
-    tokens.space.forEach((space: number, index: number) => {
-      root.style.setProperty(`--space-${index + 1}`, `${space}px`);
-    });
-
-    // NOTE: Radii, shadows, and motion are now set by the style preset system
-    // Only set these if no preset is active (fallback to store tokens)
-    // Commenting out to let preset values take precedence:
-    // root.style.setProperty('--radius-sm', tokens.radius.sm);
-    // root.style.setProperty('--radius-md', tokens.radius.md);
-    // root.style.setProperty('--radius-lg', tokens.radius.lg);
-    // root.style.setProperty('--radius-full', tokens.radius.full);
-    // root.style.setProperty('--shadow-1', tokens.shadow['1']);
-    // root.style.setProperty('--shadow-2', tokens.shadow['2']);
-    // root.style.setProperty('--shadow-3', tokens.shadow['3']);
-    // root.style.setProperty('--motion-fast', tokens.motion.fast);
-    // root.style.setProperty('--motion-base', tokens.motion.base);
-    // root.style.setProperty('--motion-slow', tokens.motion.slow);
-    // root.style.setProperty('--ease-standard', tokens.motion.easeStandard);
-
-    // Styling options as CSS vars
-    if (opts.inputBorderWeight === 'none') root.style.setProperty('--inputBorder', '0px');
-    if (opts.inputBorderWeight === 'thin') root.style.setProperty('--inputBorder', '1px');
-    if (opts.inputBorderWeight === 'thick') root.style.setProperty('--inputBorder', '2px');
-
-    root.style.setProperty('--inputBorderAlpha', opts.inputBorderTone === 'light' ? '.25' : '.12');
-
-    if (opts.cardBorderWeight === 'none') root.style.setProperty('--cardBorder', '0px');
-    if (opts.cardBorderWeight === 'thin') root.style.setProperty('--cardBorder', '1px');
-    if (opts.cardBorderWeight === 'thick') root.style.setProperty('--cardBorder', '2px');
-
-    root.style.setProperty('--cardBorderAlpha', opts.cardBorderTone === 'light' ? '.18' : '.10');
-
-    // Apply style preset CSS variables LAST so they take precedence
-    const preset = getStylePreset(stylePresetId as StylePresetId);
-    if (preset) {
-      const cssVariables = getStylePresetCSSVariables(preset, isDarkMode);
-      Object.entries(cssVariables).forEach(([key, value]) => {
-        root.style.setProperty(key, value);
-      });
-    }
-
-  }, [tokens, opts, isDarkMode, selectedPrimaryFont, selectedDisplayFont, selectedScale, selectedTheme, stylePresetId, cornerRadius]);
-};

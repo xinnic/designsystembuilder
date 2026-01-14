@@ -125,9 +125,10 @@ const modernFlatTokens: StylePresetTokens = {
         curve: 'cubic-bezier(0.4, 0, 0.2, 1)'  // Standard ease
     },
     colors: {
-        borderColor: 'rgba(0, 0, 0, 0.08)',
-        borderColorDark: 'rgba(255, 255, 255, 0.08)',
-        saturation: 55
+        borderColor: 'oklch(0.925 0.004 210)',  // Gray-200 - soft grey border matching Lovable UI
+        borderColorDark: 'oklch(0.250 0.004 210)',  // Gray-800 for dark mode
+        saturation: 55,
+        background: 'oklch(1.000 0.000 0)'  // Pure white
     },
     button: {
         height: 40,
@@ -194,7 +195,7 @@ const softDreamyTokens: StylePresetTokens = {
         borderColor: 'transparent',
         borderColorDark: 'transparent',
         saturation: 35,
-        background: '#F5F7FA'  // Off-white required for shadow visibility
+        background: 'oklch(0.975 0.002 210)'  // Gray-100 - off-white for shadow visibility
     },
     button: {
         height: 48,
@@ -258,8 +259,8 @@ const minimalistTokens: StylePresetTokens = {
         curve: 'linear'  // No easing, mechanical
     },
     colors: {
-        borderColor: '#E5E5E5',  // Very light gray
-        borderColorDark: 'rgba(255, 255, 255, 0.06)',
+        borderColor: 'oklch(0.925 0.004 210)',  // Gray-200 - very light gray
+        borderColorDark: 'oklch(0.250 0.004 210)',  // Gray-800 for dark mode
         saturation: 40  // 30-50% muted colors
     },
     button: {
@@ -324,8 +325,8 @@ const neoBrutalismTokens: StylePresetTokens = {
         curve: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'  // Bounce
     },
     colors: {
-        borderColor: '#000000',  // Pure black
-        borderColorDark: '#FFFFFF',  // Pure white in dark mode
+        borderColor: 'oklch(0.000 0.000 0)',  // Pure black
+        borderColorDark: 'oklch(1.000 0.000 0)',  // Pure white in dark mode
         saturation: 95  // 90-100% ultra saturated
     },
     button: {
@@ -460,6 +461,12 @@ export function getStylePresetCSSVariables(preset: StylePreset, isDarkMode: bool
         '--input-padding': `${tokens.input.padding}px`,
         '--input-radius': `${tokens.radius[tokens.input.radiusKey]}px`,
         '--input-border-width': `${tokens.borderWidths[tokens.input.borderWidthKey]}px`,
+
+        // Global Layout Mappings (The "Builder UI" itself)
+        '--border': tokens.colors.borderColor,
+        '--background': tokens.colors.background || '#FFFFFF',
+        '--sidebar-background': tokens.colors.background || '#FFFFFF',
+        '--sidebar-border': tokens.colors.borderColor,
     };
 }
 
