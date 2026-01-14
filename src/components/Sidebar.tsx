@@ -112,6 +112,7 @@ export function Sidebar({ }: SidebarProps) {
 
   // Helper function to handle primary color changes
   const handlePrimaryColorChange = (theme: string, customColor?: string) => {
+    // Update Zustand store - this triggers useTokenSystem which handles CSS variable updates
     setTheme(theme);
 
     // Only auto-generate secondary if it wasn't manually selected
@@ -190,7 +191,43 @@ export function Sidebar({ }: SidebarProps) {
   // Apply style preset on mount to ensure CSS variables are set
   React.useEffect(() => {
     if (stylePresetId) {
-      handleStylePresetChange(stylePresetId as StylePresetId);
+      const preset = getStylePreset(stylePresetId as StylePresetId);
+      if (preset) {
+        // Apply preset tokens without showing toast on initial load
+        setStylePreset(stylePresetId as StylePresetId);
+        
+        const { tokens } = preset;
+
+        setTokens({
+          shadow: {
+            '1': tokens.shadows.sm,
+            '2': tokens.shadows.md,
+            '3': tokens.shadows.lg
+          },
+          radius: {
+            sm: `${tokens.radius.sm}px`,
+            md: `${tokens.radius.md}px`,
+            lg: `${tokens.radius.lg}px`,
+            full: `${tokens.radius.full}px`
+          },
+          motion: {
+            fast: `${tokens.animations.quick}ms`,
+            base: `${tokens.animations.normal}ms`,
+            slow: `${tokens.animations.slow}ms`,
+            easeStandard: tokens.animations.curve
+          }
+        });
+        
+        // Update border weight based on preset
+        const borderWidthKey = tokens.card.borderWidthKey;
+        const borderWeight = borderWidthKey === 'none' ? 'none' :
+          borderWidthKey === 'thin' || tokens.borderWidths[borderWidthKey] <= 1 ? 'thin' : 'thick';
+
+        setOpts({
+          cardBorderWeight: borderWeight,
+          inputBorderWeight: borderWeight
+        });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Run once on mount
@@ -199,8 +236,8 @@ export function Sidebar({ }: SidebarProps) {
     <YStack width={320} height="100vh" borderRightWidth={1} borderRightColor="$borderColor" backgroundColor="$background">
       <ScrollView padding="$6">
         <YStack marginBottom="$8">
-          <Heading size="$8" fontWeight="bold" marginBottom="$2">Design System Builder</Heading>
-          <Text size="$3" color="$gray10">
+          <Heading size="$6" fontWeight="bold" marginBottom="$2">Design System Builder</Heading>
+          <Text size="$3" color="$colorHover">
             Customize your design system and generate AI-ready prompts
           </Text>
         </YStack>
@@ -211,10 +248,11 @@ export function Sidebar({ }: SidebarProps) {
           <XStack
             onPress={() => setBasicOptionsOpen(!basicOptionsOpen)}
             padding="$3"
-            borderRadius="$4"
-            hoverStyle={{ backgroundColor: '$gray3' }}
-            backgroundColor="$primary"
-            opacity={0.05}
+            borderRadius="$3"
+            borderWidth={1}
+            borderColor="$borderColor"
+            backgroundColor="transparent"
+            hoverStyle={{ backgroundColor: '$gray4' }}
             alignItems="center"
             justifyContent="space-between"
             pressStyle={{ opacity: 0.7 }}
@@ -222,10 +260,11 @@ export function Sidebar({ }: SidebarProps) {
           >
             <XStack space="$3" alignItems="center">
               <Layers size={20} color="var(--color-primary)" />
-              <Text fontWeight="500">Basic Options</Text>
+              <Text size="$3" fontWeight="500" color="$color">Basic Options</Text>
             </XStack>
             <ChevronDown
               size={16}
+              color="$color"
               style={{
                 transition: 'transform 0.2s',
                 transform: basicOptionsOpen ? 'rotate(180deg)' : 'rotate(0deg)'
@@ -237,9 +276,17 @@ export function Sidebar({ }: SidebarProps) {
 
             {/* Primary Font */}
             <YStack>
-              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Primary Font</Text>
+              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Primary Font</Text>
               <Select value={selectedPrimaryFont} onValueChange={setPrimaryFont}>
-                <Select.Trigger width="100%" iconAfter={ChevronDown}>
+                <Select.Trigger 
+                  width="100%" 
+                  iconAfter={ChevronDown}
+                  borderWidth={1}
+                  borderColor="$borderColor"
+                  borderRadius="$3"
+                  backgroundColor="$background"
+                  padding="$3"
+                >
                   <Select.Value placeholder="Select Font">
                     {primaryFonts.find(f => f.class === selectedPrimaryFont)?.name || 'Select Font'}
                   </Select.Value>
@@ -256,7 +303,7 @@ export function Sidebar({ }: SidebarProps) {
                   </Sheet>
                 </Adapt>
 
-                <Select.Content zIndex={200000}>
+                <Select.Content zIndex={200000} backgroundColor="$background" borderRadius="$3" borderWidth={1} borderColor="$borderColor">
                   <Select.ScrollUpButton alignItems="center" justifyContent="center" position="relative" width="100%" height="$3">
                     <YStack zIndex={10}>
                       <ChevronDown size={20} />
@@ -266,7 +313,7 @@ export function Sidebar({ }: SidebarProps) {
                   <Select.Viewport minWidth={200}>
                     <Select.Group>
                       {primaryFonts.map((font, i) => (
-                        <Select.Item index={i} key={font.class} value={font.class}>
+                        <Select.Item index={i} key={font.class} value={font.class} hoverStyle={{ backgroundColor: '$gray4' }}>
                           <Select.ItemText>{font.name}</Select.ItemText>
                           <Select.ItemIndicator marginLeft="auto">
                             <Check size={16} />
@@ -287,12 +334,29 @@ export function Sidebar({ }: SidebarProps) {
 
             {/* Primary Color */}
             <YStack>
-              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Primary Color</Text>
-              <XStack flexWrap="wrap" gap="$1">
+              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Primary Color</Text>
+              <XStack flexWrap="wrap" gap={8}>
                 {colorThemes.map((theme) => (
-                  <div key={theme.name} className="relative">
+                  <YStack key={theme.name} position="relative">
                     {theme.isCustom ? (
-                      <div className="relative">
+                      <YStack
+                        width={28}
+                        height={28}
+                        borderRadius="$2"
+                        overflow="hidden"
+                        borderWidth={selectedTheme === 'custom' ? 2 : 1}
+                        borderColor={selectedTheme === 'custom' ? '$blue9' : '$borderColor'}
+                        position="relative"
+                        hoverStyle={{ opacity: 0.8 }}
+                      >
+                         <YStack
+                          position="absolute"
+                          top={0}
+                          left={0}
+                          right={0}
+                          bottom={0}
+                          style={{ background: RAINBOW_GRADIENT }}
+                        />
                         <input
                           type="color"
                           value={customPrimaryColor || DEFAULT_PRIMARY}
@@ -300,75 +364,76 @@ export function Sidebar({ }: SidebarProps) {
                             setCustomPrimaryColor(e.target.value);
                             handlePrimaryColorChange('custom', e.target.value);
                           }}
-                          className="w-7 h-7 rounded-full border cursor-pointer opacity-0 absolute inset-0"
-                          title={theme.label}
-                        />
-                        <div
-                          className="w-7 h-7 rounded-full cursor-pointer"
-                          style={{
-                            background: RAINBOW_GRADIENT,
-                            border: selectedTheme === theme.name
-                              ? '2px solid rgb(var(--color-focus))'
-                              : '1px solid rgb(var(--color-border))'
-                          }}
                           onClick={() => {
-                            const color = customPrimaryColor || DEFAULT_PRIMARY;
-                            if (!customPrimaryColor) {
-                              setCustomPrimaryColor(color);
-                            }
-                            handlePrimaryColorChange('custom', color);
+                            handlePrimaryColorChange('custom', customPrimaryColor || DEFAULT_PRIMARY);
+                          }}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            opacity: 0,
+                            cursor: 'pointer',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            zIndex: 10
                           }}
                           title={theme.label}
                         />
-                      </div>
+                      </YStack>
                     ) : (
-                      <button
-                        className="w-7 h-7 rounded-md"
-                        style={{
-                          backgroundColor: theme.color,
-                          border: selectedTheme === theme.name
-                            ? '2px solid rgb(var(--color-focus))'
-                            : '1px solid rgb(var(--color-border))'
-                        }}
-                        onClick={() => handlePrimaryColorChange(theme.name)}
+                      <YStack
+                        width={28}
+                        height={28}
+                        borderRadius="$2"
+                        backgroundColor={theme.color}
+                        borderWidth={selectedTheme === theme.name ? 2 : 1}
+                        borderColor={selectedTheme === theme.name ? '$blue9' : '$borderColor'}
+                        onPress={() => handlePrimaryColorChange(theme.name)}
+                        cursor="pointer"
+                        hoverStyle={{ opacity: 0.8 }}
+                        pressStyle={{ scale: 0.95 }}
+                        // @ts-ignore
                         title={theme.label}
                       />
                     )}
-                  </div>
+                  </YStack>
                 ))}
               </XStack>
             </YStack>
 
             {/* Dark Mode Toggle */}
             <XStack alignItems="center" justifyContent="space-between">
-              <Text fontSize="$3" fontWeight="500">Dark Mode</Text>
+              <Text size="$3" fontWeight="500" color="$color">Dark Mode</Text>
               <TamaguiSwitch checked={isDarkMode} onCheckedChange={setDarkMode} size="$3" />
             </XStack>
 
             {/* Style Preset */}
             <YStack>
               <Text fontSize="$3" fontWeight="500" marginBottom="$2">Style Preset</Text>
-              <XStack flexWrap="wrap" gap="$2">
+              <XStack flexWrap="wrap" gap="$2" justifyContent="space-between">
                 {stylePresets.map((preset) => {
                   const Icon = preset.icon;
                   const isSelected = stylePresetId === preset.id;
                   return (
                     <YStack
                       key={preset.id}
-                      width="48%"
+                      width={128}
+                      height={80}
                       padding="$3"
-                      borderRadius="$2"
+                      borderRadius="$3"
                       borderWidth={isSelected ? 2 : 1}
                       borderColor={isSelected ? '$blue9' : '$gray6'}
+                      backgroundColor={isSelected ? '$blue2' : '$background'}
                       alignItems="center"
+                      justifyContent="center"
                       space="$2"
                       hoverStyle={{ backgroundColor: '$gray3' }}
                       pressStyle={{ opacity: 0.7 }}
                       onPress={() => handleStylePresetChange(preset.id)}
                       cursor="pointer"
                     >
-                      <Icon size={20} color={isSelected ? 'var(--color-focus)' : 'currentColor'} />
-                      <Text fontSize="$2">{preset.name}</Text>
+                      <Icon size={24} color={isSelected ? 'var(--color-focus)' : '$gray11'} />
+                      <Text fontSize="$2" textAlign="center" color={isSelected ? '$blue11' : '$gray11'}>{preset.name}</Text>
                     </YStack>
                   );
                 })}
@@ -377,7 +442,7 @@ export function Sidebar({ }: SidebarProps) {
 
             {/* Menu Type */}
             <YStack>
-              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Menu Type</Text>
+              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Menu Type</Text>
               <XStack gap="$2">
                 <XStack
                   flex={1}
@@ -398,7 +463,7 @@ export function Sidebar({ }: SidebarProps) {
                     <rect y="6" width="20" height="2" fill="currentColor" />
                     <rect y="12" width="20" height="2" fill="currentColor" />
                   </svg>
-                  <Text fontSize="$3">Hamburger</Text>
+                  <Text size="$3" color="$color">Hamburger</Text>
                 </XStack>
                 <XStack
                   flex={1}
@@ -420,7 +485,7 @@ export function Sidebar({ }: SidebarProps) {
                     <rect x="8.5" y="10" width="3" height="2" fill="currentColor" />
                     <rect x="15" y="10" width="3" height="2" fill="currentColor" />
                   </svg>
-                  <Text fontSize="$3">Bottom Bar</Text>
+                  <Text size="$3" color="$color">Bottom Bar</Text>
                 </XStack>
               </XStack>
             </YStack>
@@ -434,8 +499,11 @@ export function Sidebar({ }: SidebarProps) {
           <XStack
             onPress={() => setAdvancedStylingOpen(!advancedStylingOpen)}
             padding="$3"
-            borderRadius="$4"
-            hoverStyle={{ backgroundColor: '$gray3' }}
+            borderRadius="$3"
+            borderWidth={1}
+            borderColor="$borderColor"
+            backgroundColor="transparent"
+            hoverStyle={{ backgroundColor: '$gray4' }}
             alignItems="center"
             justifyContent="space-between"
             pressStyle={{ opacity: 0.7 }}
@@ -443,10 +511,11 @@ export function Sidebar({ }: SidebarProps) {
           >
             <XStack space="$3" alignItems="center">
               <Sliders size={20} />
-              <Text fontWeight="500">Advanced Styling</Text>
+              <Text size="$3" fontWeight="500" color="$color">Advanced Styling</Text>
             </XStack>
             <ChevronDown
               size={16}
+              color="$color"
               style={{
                 transition: 'transform 0.2s',
                 transform: advancedStylingOpen ? 'rotate(180deg)' : 'rotate(0deg)'
@@ -458,7 +527,7 @@ export function Sidebar({ }: SidebarProps) {
 
             {/* Corner Radius */}
             <YStack>
-              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Corner Radius</Text>
+              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Corner Radius</Text>
               <XStack gap="$2">
                 <YStack
                   flex={1}
@@ -529,10 +598,18 @@ export function Sidebar({ }: SidebarProps) {
 
             {/* Display Font (for headings) */}
             <YStack>
-              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Display Font</Text>
-              <Text fontSize="$2" color="$gray10" marginBottom="$2">For headings and titles</Text>
+              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Display Font</Text>
+              <Text size="$2" color="$colorHover" marginBottom="$2">For headings and titles</Text>
               <Select value={selectedDisplayFont} onValueChange={setDisplayFont}>
-                <Select.Trigger width="100%" iconAfter={ChevronDown}>
+                <Select.Trigger 
+                  width="100%" 
+                  iconAfter={ChevronDown}
+                  borderWidth={1}
+                  borderColor="$borderColor"
+                  borderRadius="$3"
+                  backgroundColor="$background"
+                  padding="$3"
+                >
                   <Select.Value placeholder="Select Font">
                     {displayFonts.find(f => f.class === selectedDisplayFont)?.name || 'Select Font'}
                   </Select.Value>
@@ -549,7 +626,7 @@ export function Sidebar({ }: SidebarProps) {
                   </Sheet>
                 </Adapt>
 
-                <Select.Content zIndex={200000}>
+                <Select.Content zIndex={200000} backgroundColor="$background" borderRadius="$3" borderWidth={1} borderColor="$borderColor">
                   <Select.ScrollUpButton alignItems="center" justifyContent="center" position="relative" width="100%" height="$3">
                     <YStack zIndex={10}>
                       <ChevronDown size={20} />
@@ -559,7 +636,7 @@ export function Sidebar({ }: SidebarProps) {
                   <Select.Viewport minWidth={200}>
                     <Select.Group>
                       {displayFonts.map((font, i) => (
-                        <Select.Item index={i} key={font.class} value={font.class}>
+                        <Select.Item index={i} key={font.class} value={font.class} hoverStyle={{ backgroundColor: '$gray4' }}>
                           <Select.ItemText>{font.name}</Select.ItemText>
                           <Select.ItemIndicator marginLeft="auto">
                             <Check size={16} />
@@ -580,54 +657,75 @@ export function Sidebar({ }: SidebarProps) {
 
             {/* Secondary Color */}
             <YStack>
-              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Secondary Color</Text>
-              <XStack flexWrap="wrap" gap="$1">
+              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Secondary Color</Text>
+              <XStack flexWrap="wrap" gap={8}>
                 {accentColors.map((accent) => (
-                  <div key={accent.name} className="relative">
+                  <YStack key={accent.name} position="relative">
                     {accent.isCustom ? (
-                      <div className="relative">
+                      <YStack
+                        width={28}
+                        height={28}
+                        borderRadius="$2"
+                        overflow="hidden"
+                        borderWidth={selectedAccentColor === 'custom' ? 2 : 1}
+                        borderColor={selectedAccentColor === 'custom' ? '$blue9' : '$borderColor'}
+                        position="relative"
+                        hoverStyle={{ opacity: 0.8 }}
+                      >
+                         <YStack
+                          position="absolute"
+                          top={0}
+                          left={0}
+                          right={0}
+                          bottom={0}
+                          style={{ background: RAINBOW_GRADIENT }}
+                        />
                         <input
                           type="color"
                           value={customAccentColor || DEFAULT_ACCENT}
                           onChange={(e) => {
                             handleSecondaryColorChange('custom', e.target.value);
                           }}
-                          className="w-7 h-7 rounded-full border cursor-pointer opacity-0 absolute inset-0"
-                          title={accent.label}
-                        />
-                        <div
-                          className={`w-7 h-7 rounded-full border ${selectedAccentColor === accent.name ? 'border-foreground shadow-sm ring-1 ring-background' : 'border-border'
-                            } cursor-pointer`}
-                          style={{
-                            background: RAINBOW_GRADIENT
-                          }}
                           onClick={() => {
-                            const color = customAccentColor || DEFAULT_ACCENT;
-                            if (!customAccentColor) {
-                              setCustomAccentColor(color);
-                            }
-                            handleSecondaryColorChange('custom', color);
+                            handleSecondaryColorChange('custom', customAccentColor || DEFAULT_ACCENT);
+                          }}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            opacity: 0,
+                            cursor: 'pointer',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            zIndex: 10
                           }}
                           title={accent.label}
                         />
-                      </div>
+                      </YStack>
                     ) : (
-                      <button
-                        className={`w-7 h-7 rounded-md border ${selectedAccentColor === accent.name ? 'border-foreground shadow-sm ring-1 ring-background' : 'border-border'
-                          }`}
-                        style={{ backgroundColor: accent.color }}
-                        onClick={() => handleSecondaryColorChange(accent.name)}
+                      <YStack
+                        width={28}
+                        height={28}
+                        borderRadius="$2"
+                        backgroundColor={accent.color}
+                        borderWidth={selectedAccentColor === accent.name ? 2 : 1}
+                        borderColor={selectedAccentColor === accent.name ? '$blue9' : '$borderColor'}
+                        onPress={() => handleSecondaryColorChange(accent.name)}
+                        cursor="pointer"
+                        hoverStyle={{ opacity: 0.8 }}
+                        pressStyle={{ scale: 0.95 }}
+                        // @ts-ignore
                         title={accent.label}
                       />
                     )}
-                  </div>
+                  </YStack>
                 ))}
               </XStack>
             </YStack>
 
             {/* Spacing */}
             <YStack>
-              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Spacing</Text>
+              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Spacing</Text>
               <XStack gap="$2">
                 <YStack
                   flex={1}
@@ -642,7 +740,7 @@ export function Sidebar({ }: SidebarProps) {
                   onPress={() => setSpacingMode('compact')}
                   cursor="pointer"
                 >
-                  <Text fontSize="$2">Compact</Text>
+                  <Text size="$2" color="$color">Compact</Text>
                 </YStack>
                 <YStack
                   flex={1}
@@ -657,7 +755,7 @@ export function Sidebar({ }: SidebarProps) {
                   onPress={() => setSpacingMode('normal')}
                   cursor="pointer"
                 >
-                  <Text fontSize="$2">Normal</Text>
+                  <Text size="$2" color="$color">Normal</Text>
                 </YStack>
                 <YStack
                   flex={1}
@@ -672,14 +770,14 @@ export function Sidebar({ }: SidebarProps) {
                   onPress={() => setSpacingMode('comfortable')}
                   cursor="pointer"
                 >
-                  <Text fontSize="$2">Comfortable</Text>
+                  <Text size="$2" color="$color">Comfortable</Text>
                 </YStack>
               </XStack>
             </YStack>
 
             {/* Type Scale */}
             <YStack>
-              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Type Scale</Text>
+              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Type Scale</Text>
               <XStack gap="$2">
                 <YStack
                   flex={1}
@@ -695,7 +793,7 @@ export function Sidebar({ }: SidebarProps) {
                   onPress={() => setScale('small')}
                   cursor="pointer"
                 >
-                  <Text fontSize="$3" fontWeight="bold">Aa</Text>
+                  <Text size="$3" fontWeight="bold" color="$color">Aa</Text>
                 </YStack>
                 <YStack
                   flex={1}
@@ -711,7 +809,7 @@ export function Sidebar({ }: SidebarProps) {
                   onPress={() => setScale('regular')}
                   cursor="pointer"
                 >
-                  <Text fontSize="$4" fontWeight="bold">Aa</Text>
+                  <Text size="$4" fontWeight="bold" color="$color">Aa</Text>
                 </YStack>
                 <YStack
                   flex={1}
@@ -727,14 +825,14 @@ export function Sidebar({ }: SidebarProps) {
                   onPress={() => setScale('large')}
                   cursor="pointer"
                 >
-                  <Text fontSize="$5" fontWeight="bold">Aa</Text>
+                  <Text size="$5" fontWeight="bold" color="$color">Aa</Text>
                 </YStack>
               </XStack>
             </YStack>
 
             {/* Menu Layout */}
             <YStack>
-              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Menu Layout</Text>
+              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Menu Layout</Text>
               <XStack gap="$2">
                 <YStack
                   flex={1}
@@ -751,7 +849,7 @@ export function Sidebar({ }: SidebarProps) {
                   cursor="pointer"
                 >
                   <Navigation size={16} color={opts.menuLayout === 'bottomBar' ? 'var(--color-primary)' : 'currentColor'} />
-                  <Text fontSize="$3">Bottom Bar</Text>
+                  <Text size="$3" color="$color">Bottom Bar</Text>
                 </YStack>
                 <YStack
                   flex={1}
@@ -768,7 +866,7 @@ export function Sidebar({ }: SidebarProps) {
                   cursor="pointer"
                 >
                   <Menu size={16} color={opts.menuLayout === 'hamburger' ? 'var(--color-primary)' : 'currentColor'} />
-                  <Text fontSize="$3">Hamburger</Text>
+                  <Text size="$3" color="$color">Hamburger</Text>
                 </YStack>
               </XStack>
             </YStack>

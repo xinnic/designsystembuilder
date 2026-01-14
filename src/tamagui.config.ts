@@ -2,13 +2,13 @@ import { createTamagui, createTokens, createFont } from '@tamagui/core';
 import { createAnimations } from '@tamagui/animations-react-native';
 import type { StylePresetId } from './config/stylePresets';
 
-// Bridge our CSS variables to Tamagui tokens
-// This makes Tamagui reactive - when CSS variables change, components update automatically
+// Static Tamagui configuration
+// Dynamic theming happens through CSS variables, not through Tamagui tokens
 export const createDynamicConfig = () => {
-  // Map our CSS variables to Tamagui tokens
+  // Use static token values - CSS variables will be applied at the component level
   const tokens = createTokens({
     color: {
-      // Brand colors
+      // Brand colors - mapped to CSS variables
       brand: 'rgb(var(--color-brand))',
       brandWeak: 'rgb(var(--color-brand-weak))',
 
@@ -33,36 +33,36 @@ export const createDynamicConfig = () => {
     },
 
     space: {
-      1: 'var(--space-1)',
-      2: 'var(--space-2)',
-      3: 'var(--space-3)',
-      4: 'var(--space-4)',
-      5: 'var(--space-5)',
-      6: 'var(--space-6)',
-      7: 'var(--space-7, 64px)',
-      8: 'var(--space-8, 80px)',
-      true: 'var(--space-2)',
+      1: 4,
+      2: 8,
+      3: 12,
+      4: 16,
+      5: 20,
+      6: 24,
+      7: 32,
+      8: 40,
+      true: 8,
     },
 
     size: {
-      1: 'var(--space-1)',
-      2: 'var(--space-2)',
-      3: 'var(--space-3)',
-      4: 'var(--space-4)',
-      5: 'var(--space-5)',
-      6: 'var(--space-6)',
-      7: 'var(--space-7, 64px)',
-      8: 'var(--space-8, 80px)',
-      true: 'var(--space-4)',
+      1: 4,
+      2: 8,
+      3: 12,
+      4: 16,
+      5: 20,
+      6: 24,
+      7: 32,
+      8: 40,
+      true: 16,
     },
 
     radius: {
-      0: '0px',
-      1: 'var(--radius-sm)',
-      2: 'var(--radius-md)',
-      3: 'var(--radius-lg)',
-      4: 'var(--radius-full)',
-      true: 'var(--radius-md)',
+      0: 0,
+      1: 4,
+      2: 8,
+      3: 12,
+      4: 9999,
+      true: 8,
     },
 
     zIndex: {
@@ -75,20 +75,20 @@ export const createDynamicConfig = () => {
     },
 
     borderWidth: {
-      0: '0px',
-      1: '1px',
-      2: '2px',
-      3: '3px',
-      4: '4px',
-      true: '1px',
+      0: 0,
+      1: 1,
+      2: 2,
+      3: 3,
+      4: 4,
+      true: 1,
     },
 
     shadow: {
       none: 'none',
-      sm: 'var(--shadow-sm)',
-      md: 'var(--shadow-md)',
-      lg: 'var(--shadow-lg)',
-      true: 'var(--shadow-sm)',
+      sm: '0 1px 3px 0 rgb(0 0 0 / 0.1)',
+      md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+      lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+      true: '0 1px 3px 0 rgb(0 0 0 / 0.1)',
     },
   });
 
@@ -112,26 +112,26 @@ export const createDynamicConfig = () => {
     },
   });
 
-  // Map our typography CSS variables to Tamagui fonts
+  // Static font definitions - dynamic theming happens through CSS
   const bodyFont = createFont({
-    family: 'var(--font-family)',
+    family: 'var(--font-family), "Plus Jakarta Sans", ui-sans-serif, system-ui',
     size: {
-      1: 'var(--font-caption-size)',
-      2: 'var(--font-body-size)',
-      3: 'var(--font-subhead-size)',
-      4: 'var(--font-h2-size)',
-      5: 'var(--font-h1-size)',
-      6: 'var(--font-display-size)',
-      true: 'var(--font-body-size)',
+      1: 14,
+      2: 16,
+      3: 18,
+      4: 22,
+      5: 28,
+      6: 48,
+      true: 16,
     },
     lineHeight: {
-      1: 'var(--font-caption-line)',
-      2: 'var(--font-body-line)',
-      3: 'var(--font-subhead-line)',
-      4: 'var(--font-h2-line)',
-      5: 'var(--font-h1-line)',
-      6: 'var(--font-display-line)',
-      true: 'var(--font-body-line)',
+      1: 20,
+      2: 24,
+      3: 26,
+      4: 30,
+      5: 38,
+      6: 56,
+      true: 24,
     },
     weight: {
       4: '400',
@@ -141,33 +141,33 @@ export const createDynamicConfig = () => {
       true: '400',
     },
     letterSpacing: {
-      4: '0',
-      5: '0',
-      6: '0',
-      7: '0',
-      true: '0',
+      4: 0,
+      5: 0,
+      6: 0,
+      7: 0,
+      true: 0,
     },
   });
 
   const headingFont = createFont({
-    family: 'var(--font-display)',
+    family: 'var(--font-display), "Plus Jakarta Sans", ui-sans-serif, system-ui',
     size: {
-      1: 'var(--font-caption-size)',
-      2: 'var(--font-body-size)',
-      3: 'var(--font-subhead-size)',
-      4: 'var(--font-h2-size)',
-      5: 'var(--font-h1-size)',
-      6: 'var(--font-display-size)',
-      true: 'var(--font-h1-size)',
+      1: 14,
+      2: 16,
+      3: 18,
+      4: 22,
+      5: 28,
+      6: 48,
+      true: 28,
     },
     lineHeight: {
-      1: 'var(--font-caption-line)',
-      2: 'var(--font-body-line)',
-      3: 'var(--font-subhead-line)',
-      4: 'var(--font-h2-line)',
-      5: 'var(--font-h1-line)',
-      6: 'var(--font-display-line)',
-      true: 'var(--font-h1-line)',
+      1: 20,
+      2: 24,
+      3: 26,
+      4: 30,
+      5: 38,
+      6: 56,
+      true: 38,
     },
     weight: {
       4: '400',
@@ -177,11 +177,11 @@ export const createDynamicConfig = () => {
       true: '700',
     },
     letterSpacing: {
-      4: '0',
-      5: '0',
-      6: '0',
-      7: '0',
-      true: '0',
+      4: 0,
+      5: 0,
+      6: 0,
+      7: 0,
+      true: 0,
     },
   });
 

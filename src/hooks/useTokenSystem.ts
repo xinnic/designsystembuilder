@@ -156,7 +156,32 @@ export function useTokenSystem(theme: Theme = 'light') {
     Object.entries(semanticColors).forEach(([category, tokens]) => {
       Object.entries(tokens).forEach(([name, token]) => {
         if (token && typeof token === 'object' && 'light' in token && 'dark' in token) {
-          const value = getSemanticValue(token, theme);
+          let value = getSemanticValue(token, theme);
+
+          // Override primary colors with dynamic brand palette
+          if (category === 'primary') {
+            const lightMap: Record<string, number | string> = {
+              default: 500, hover: 600, active: 700,
+              subtle: 50, subtleHover: 100, subtleActive: 200,
+              text: 600, textHover: 700, border: 200, borderHover: 300,
+              foreground: 'white'
+            };
+            const darkMap: Record<string, number | string> = {
+              default: 400, hover: 300, active: 500,
+              subtle: 950, subtleHover: 900, subtleActive: 800,
+              text: 400, textHover: 300, border: 800, borderHover: 700,
+              foreground: 'white'
+            };
+
+            const map = theme === 'dark' ? darkMap : lightMap;
+            if (name in map) {
+              const step = map[name];
+              if (step !== 'white') {
+                value = brandPalette.brand[step as number];
+              }
+            }
+          }
+
           root.style.setProperty(`--color-${category}-${name}`, value);
 
           // Also set RGB values for alpha support
@@ -270,22 +295,30 @@ export function useTokenSystem(theme: Theme = 'light') {
       root.style.setProperty(`--z-${key}`, String(value));
     });
 
-    // Backwards compatibility - map to old variable names
-    // These can be removed once all components are migrated
-    const primaryDefault = getSemanticValue(semanticColors.primary.default, theme);
+    // Backwards compatibility - map to old variable names used by Tamagui config
+    // These bridge the token system to Tamagui's rgb(var(--color-*)) pattern
+    const primaryDefault = theme === 'dark' ? brandPalette.brand[400] : brandPalette.brand[500];
+    const primaryRgb = oklchToRGBValues(primaryDefault);
     const textPrimary = getSemanticValue(semanticColors.text.primary, theme);
     const textSecondary = getSemanticValue(semanticColors.text.secondary, theme);
     const canvasDefault = getSemanticValue(semanticColors.canvas.default, theme);
     const surfaceDefault = getSemanticValue(semanticColors.surface.default, theme);
     const borderDefault = getSemanticValue(semanticColors.border.default, theme);
 
-    root.style.setProperty('--color-brand', oklchToRGBValues(primaryDefault));
+    // Brand colors - RGB triplets for use with rgb() wrapper in Tamagui config
+    root.style.setProperty('--color-brand', primaryRgb);
     root.style.setProperty('--color-brand-weak', oklchToRGBValues(brandPalette.brand[100]));
+    
+    // Text colors
     root.style.setProperty('--color-text-primary', oklchToRGBValues(textPrimary));
     root.style.setProperty('--color-text-secondary', oklchToRGBValues(textSecondary));
     root.style.setProperty('--color-text-disabled', oklchToRGBValues(getSemanticValue(semanticColors.text.disabled, theme)));
+    
+    // Background colors
     root.style.setProperty('--color-bg-primary', oklchToRGBValues(canvasDefault));
     root.style.setProperty('--color-bg-secondary', oklchToRGBValues(surfaceDefault));
+    
+    // Border and semantic colors
     root.style.setProperty('--color-border', oklchToRGBValues(borderDefault));
     root.style.setProperty('--color-focus', oklchToRGBValues(getSemanticValue(semanticColors.focus.ring, theme)));
     root.style.setProperty('--color-success', oklchToRGBValues(getSemanticValue(semanticColors.success.default, theme)));
