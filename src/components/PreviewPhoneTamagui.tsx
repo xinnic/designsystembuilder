@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { YStack, XStack, ScrollView, Circle, Image } from 'tamagui';
-import { useDesignSystem, useTokenCSS } from '../state/designSystem';
+import { useDesignSystem } from '../state/designSystem';
 import {
   Home,
   Search,
@@ -36,9 +36,8 @@ import {
   BottomNav,
 } from '../design-system/bespoke';
 
-export const PreviewPhoneTamagui = () => {
-  // Initialize token CSS binding to ensure theme updates
-  useTokenCSS();
+const PreviewPhoneTamaguiComponent = () => {
+  // useTokenCSS() removed - handled by TamaguiProvider in Index.tsx
 
   const { opts, selectedPrimaryFont, isDarkMode } = useDesignSystem();
 
@@ -51,310 +50,191 @@ export const PreviewPhoneTamagui = () => {
         height={640}
         overflow="hidden"
         style={{
-          boxShadow: 'var(--shadow-xl)',
-          borderRadius: 'var(--radius-xl, 32px)',
-          border: 'var(--border-width, 1px) solid var(--border-color)', // Ensure borders applied if needed
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', // Fixed shadow instead of var
+          borderRadius: 32,
+          borderWidth: 1,
+          borderColor: isDarkMode ? '#333' : '#e5e5e5',
         }}
       >
         {/* Status Bar */}
         <XStack
-          backgroundColor="$bgPrimary"
+          height={44}
           paddingHorizontal="$4"
-          paddingVertical="$1"
-          justifyContent="space-between"
           alignItems="center"
+          justifyContent="space-between"
+          backgroundColor="$bgPrimary"
         >
-          <Caption fontSize={12} fontWeight="500" color="$textPrimary">
-            9:41
-          </Caption>
-          <XStack gap="$1">
-            <YStack
-              width={16}
-              height={12}
-              borderColor="$textPrimary"
-              borderWidth={1}
-              borderRadius="$1"
-            >
-              <YStack
-                width={8}
-                height={6}
-                backgroundColor="$textPrimary"
-                marginLeft={2}
-                marginTop={2}
-                borderRadius={1}
-              />
-            </YStack>
+          <Caption fontSize={12} fontWeight="600">9:41</Caption>
+          <XStack space="$1">
+            <SignalIcon />
+            <WifiIcon />
+            <BatteryIcon />
           </XStack>
         </XStack>
 
-        {/* App Header */}
-        <XStack
-          backgroundColor="$bgSecondary"
-          paddingHorizontal="$4"
-          paddingVertical="$3"
-          zIndex={10}
-          tag="header"
-          style={{
-            boxShadow: 'var(--shadow-sm)'
-          }}
-        >
-          <YStack flex={1} gap="$3">
-            {/* Logo and Title */}
-            <XStack justifyContent="space-between" alignItems="center">
-              <XStack alignItems="center" gap="$3">
-                {opts.logo && (
-                  <Image
-                    source={{ uri: opts.logo }}
-                    width={32}
-                    height={32}
-                    borderRadius="$1"
-                    alt="App logo"
-                  />
-                )}
-                <H2 color="$brand" fontSize={20} margin={0}>
-                  Discover
-                </H2>
+        {/* Content */}
+        <ScrollView flex={1} backgroundColor="$bgPrimary">
+          <YStack space="$4" paddingBottom={80}>
+            {/* App Bar */}
+            <AppBar />
+
+            {/* Stories / Highlights */}
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} paddingHorizontal="$4">
+              <XStack space="$3">
+                <StoryItem image="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" name="Your Story" isUser />
+                <StoryItem image="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop" name="Sarah" hasStory />
+                <StoryItem image="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&h=100&fit=crop" name="Mike" hasStory />
+                <StoryItem image="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" name="Anna" />
+                <StoryItem image="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" name="James" />
               </XStack>
-              <XStack gap="$2">
-                <Button variant="ghost" size="small" padding="$2">
-                  <Search size={20} color="rgb(var(--color-text-secondary))" />
-                </Button>
-                <Button variant="ghost" size="small" padding="$2">
-                  <Bell size={20} color="rgb(var(--color-text-secondary))" />
-                </Button>
+            </ScrollView>
+
+            {/* Featured Section */}
+            <YStack paddingHorizontal="$4" space="$3">
+              <XStack justifyContent="space-between" alignItems="center">
+                <H2 size="$5">Trending Now</H2>
+                <Button variant="ghost" size="small" icon={<ChevronRight size={16} />}>See All</Button>
               </XStack>
-            </XStack>
+              <HeroCard />
+            </YStack>
 
-            {/* Category Pills */}
-            <XStack gap="$2" overflow="hidden">
-              {['For You', 'Trending', 'News', 'Sports', 'Tech'].map((cat, idx) => (
-                <Button
-                  key={cat}
-                  variant={idx === 0 ? 'primary' : 'secondary'}
-                  size="small"
-                  paddingHorizontal="$4"
-                  paddingVertical="$1"
-                  borderRadius="$4"
-                >
-                  <Caption
-                    color={idx === 0 ? 'white' : '$brand'}
-                    fontSize={14}
-                    fontWeight="600"
-                  >
-                    {cat}
-                  </Caption>
-                </Button>
-              ))}
-            </XStack>
-          </YStack>
-        </XStack>
-
-        {/* Scrollable Content */}
-        <ScrollView flex={1}>
-          <YStack padding="$4" gap="$4">
-            {/* Hero Card with Gradient */}
-            <Card
-              variant="elevated"
-              padding="none"
-              style={{
-                boxShadow: 'var(--card-shadow)',
-                borderRadius: 'var(--card-radius)',
-                border: 'var(--card-border-width, 1px) solid var(--border-color)'
-              }}
-            >
-              <YStack
-                height={128}
-                backgroundColor="linear-gradient(135deg, #a78bfa 0%, #ec4899 100%)"
-                style={{
-                  background: 'linear-gradient(135deg, #a78bfa 0%, #ec4899 100%)',
-                }}
+            {/* Categories */}
+            <YStack paddingHorizontal="$4" space="$2">
+              <H3>Categories</H3>
+              <CategoryPills
+                categories={[
+                  { id: '1', label: 'For You' },
+                  { id: '2', label: 'Trending' },
+                  { id: '3', label: 'Design' },
+                  { id: '4', label: 'Tech' },
+                  { id: '5', label: 'Lifestyle' },
+                ]}
+                activeId="1"
               />
-              <YStack padding="$4" gap="$3">
-                <H3 margin={0}>Featured Today</H3>
-                <Body color="$textSecondary">
-                  Discover what's trending in your community
-                </Body>
-                <Button variant="primary" fullWidth>
-                  Explore Now
-                </Button>
-              </YStack>
-            </Card>
+            </YStack>
 
-            {/* Stats Row */}
-            <XStack gap="$2">
-              <StatsCard
-                icon={<TrendingUp size={14} color="rgb(var(--color-success))" />}
-                value="124"
-                label="Posts"
-              />
-              <StatsCard
-                icon={<Heart size={14} color="rgb(var(--color-danger))" />}
-                value="2.3k"
-                label="Likes"
-              />
-              <StatsCard
-                icon={<Clock size={14} color="rgb(var(--color-info))" />}
-                value="3.5h"
-                label="Time"
-              />
-            </XStack>
-
-            {/* List Items */}
-            <Card
-              variant="elevated"
-              padding="none"
-              overflow="hidden"
-              style={{
-                boxShadow: 'var(--card-shadow)',
-                borderRadius: 'var(--card-radius)',
-                border: 'var(--card-border-width, 1px) solid var(--border-color)'
-              }}
-            >
-              {[
-                {
-                  icon: <MapPin size={18} />,
-                  title: 'Location Services',
-                  subtitle: 'While using app',
-                },
-                {
-                  icon: <Bell size={18} />,
-                  title: 'Notifications',
-                  subtitle: 'Push, Email',
-                },
-                {
-                  icon: <Settings size={18} />,
-                  title: 'Preferences',
-                  subtitle: 'Customize your experience',
-                },
-              ].map((item, idx) => (
-                <XStack
-                  key={item.title}
-                  padding="$4"
-                  alignItems="center"
-                  gap="$3"
-                  borderBottomWidth={idx !== 2 ? 1 : 0}
-                  borderBottomColor="$bgPrimary"
-                >
-                  <YStack color="$textSecondary">{item.icon}</YStack>
-                  <YStack flex={1}>
-                    <Body fontWeight="600">{item.title}</Body>
-                    <Caption color="$textSecondary">{item.subtitle}</Caption>
-                  </YStack>
-                  <ChevronRight size={16} color="rgb(var(--color-text-secondary))" />
-                </XStack>
-              ))}
-            </Card>
-
-            {/* User Cards */}
-            <XStack gap="$3">
-              <YStack flex={1}>
-                <UserCard
-                  name="Sarah J."
-                  status="Active now"
-                  avatarColor="rgb(var(--color-brand))"
-                  actionText="Follow"
-                  layout="vertical"
+            {/* Stats Overview */}
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} paddingHorizontal="$4">
+              <XStack space="$3">
+                <StatsCard
+                  title="Total Views"
+                  value="24.5k"
+                  change="+12%"
+                  icon={<TrendingUp size={16} color="white" />}
+                  accent="primary"
                 />
-              </YStack>
-              <YStack flex={1}>
-                <UserCard
-                  name="Mike D."
-                  status="Active now"
-                  avatarColor="rgb(var(--color-info))"
-                  actionText="Follow"
-                  layout="vertical"
+                <StatsCard
+                  title="Likes"
+                  value="8.2k"
+                  change="+5%"
+                  icon={<Heart size={16} color="white" />}
+                  accent="secondary"
                 />
-              </YStack>
-            </XStack>
+                <StatsCard
+                  title="Time"
+                  value="14h"
+                  change="-2%"
+                  icon={<Clock size={16} color="white" />}
+                  accent="tertiary"
+                />
+              </XStack>
+            </ScrollView>
 
-            {/* Action Buttons */}
-            <XStack gap="$2">
-              <YStack flex={1}>
-                <Button variant="primary" fullWidth>
-                  Get Started
-                </Button>
-              </YStack>
-              <YStack flex={1}>
-                <Button variant="secondary" fullWidth>
-                  Learn More
-                </Button>
-              </YStack>
-            </XStack>
-
-            {/* Review Card */}
-            <Card
-              variant="elevated"
-              padding="$4"
-              style={{
-                boxShadow: 'var(--card-shadow)',
-                borderRadius: 'var(--card-radius)',
-                border: 'var(--card-border-width, 1px) solid var(--border-color)'
-              }}
-            >
-              <YStack gap="$3">
-                <XStack justifyContent="space-between" alignItems="flex-start">
-                  <YStack gap="$1">
-                    <H3 fontSize={16} margin={0}>
-                      Great Experience
-                    </H3>
-                    <XStack gap="$1">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          size={12}
-                          fill="#facc15"
-                          color="#facc15"
-                        />
-                      ))}
-                    </XStack>
-                  </YStack>
-                  <Caption fontSize={12}>2h ago</Caption>
-                </XStack>
-
-                <Body color="$textSecondary" fontSize={14}>
-                  "Amazing app with beautiful design and smooth performance. Highly
-                  recommended!"
-                </Body>
-
-                <XStack gap="$3">
-                  <Button variant="ghost" size="small" padding="$2">
-                    <XStack gap="$1" alignItems="center">
-                      <Heart size={14} color="rgb(var(--color-text-secondary))" />
-                      <Caption>24</Caption>
-                    </XStack>
-                  </Button>
-                  <Button variant="ghost" size="small" padding="$2">
-                    <XStack gap="$1" alignItems="center">
-                      <MessageCircle
-                        size={14}
-                        color="rgb(var(--color-text-secondary))"
-                      />
-                      <Caption>5</Caption>
-                    </XStack>
-                  </Button>
-                  <Button variant="ghost" size="small" padding="$2">
-                    <Share2 size={14} color="rgb(var(--color-text-secondary))" />
-                  </Button>
-                </XStack>
-              </YStack>
-            </Card>
+            {/* Feed Section */}
+            <YStack paddingHorizontal="$4" space="$3">
+              <H3>Your Feed</H3>
+              <UserCard
+                name="Alex Morgan"
+                handle="@alexm"
+                avatar="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop"
+                image="https://images.unsplash.com/photo-1621600411688-4be93cd68504?w=400&h=300&fit=crop"
+                content="Just explored the new design district! The architecture is absolutely stunning. 🏙️✨ #design #architecture"
+                likes={124}
+                comments={18}
+                time="2h ago"
+              />
+              <UserCard
+                name="Jessica Lee"
+                handle="@jesslee"
+                avatar="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop"
+                image="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=300&fit=crop"
+                content="Minimalism is not about having less. It's about making room for more of what matters. 🤍"
+                likes={89}
+                comments={12}
+                time="5h ago"
+              />
+            </YStack>
           </YStack>
         </ScrollView>
 
         {/* Bottom Navigation */}
-        {opts.menuLayout === 'bottomBar' && (
-          <BottomNav
-            items={[
-              { id: 'home', label: 'Home', icon: <Home size={22} /> },
-              { id: 'search', label: 'Search', icon: <Search size={22} /> },
-              { id: 'create', label: 'Create', icon: <PlusCircle size={22} /> },
-              { id: 'activity', label: 'Activity', icon: <Heart size={22} /> },
-              { id: 'profile', label: 'Profile', icon: <User size={22} /> },
-            ]}
-            activeId="home"
-          />
-        )}
+        <BottomNav
+          items={[
+            { id: 'home', label: 'Home', icon: <Home size={20} /> },
+            { id: 'search', label: 'Search', icon: <Search size={20} /> },
+            { id: 'add', label: 'Create', icon: <PlusCircle size={20} /> },
+            { id: 'activity', label: 'Activity', icon: <Heart size={20} /> },
+            { id: 'profile', label: 'Profile', icon: <User size={20} /> },
+          ]}
+          activeId="home"
+        />
       </YStack>
     </div>
   );
 };
+
+// UI Helpers (kept local for preview wrapper)
+const SignalIcon = () => (
+  <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor" style={{ opacity: 0.8 }}>
+    <path d="M1 10H3V12H1V10ZM5 7H7V12H5V7ZM9 4H11V12H9V4ZM13 1H15V12H13V1Z" />
+  </svg>
+);
+
+const WifiIcon = () => (
+  <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor" style={{ opacity: 0.8 }}>
+    <path d="M8 12L1.5 4.5C3.5 2.5 5.5 1.5 8 1.5C10.5 1.5 12.5 2.5 14.5 4.5L8 12Z" />
+  </svg>
+);
+
+const BatteryIcon = () => (
+  <svg width="20" height="12" viewBox="0 0 20 12" fill="currentColor" style={{ opacity: 0.8 }}>
+    <path d="M2 3H16V9H2V3ZM0 1V11H18V1H0ZM19 4V8H20V4H19Z" />
+  </svg>
+);
+
+const StoryItem = ({ image, name, isUser, hasStory }: { image: string; name: string; isUser?: boolean; hasStory?: boolean }) => (
+  <YStack alignItems="center" space="$2">
+    <Circle
+      size={64}
+      borderWidth={hasStory ? 2 : 0}
+      borderColor="$brand"
+      padding={hasStory ? 2 : 0}
+    >
+      <Image
+        source={{ uri: image }}
+        width="100%"
+        height="100%"
+        borderRadius={32}
+        style={{ width: '100%', height: '100%' }}
+      />
+      {isUser && (
+        <Circle
+          size={20}
+          backgroundColor="$brand"
+          position="absolute"
+          bottom={0}
+          right={0}
+          borderWidth={2}
+          borderColor="$bgPrimary"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <PlusCircle size={12} color="white" />
+        </Circle>
+      )}
+    </Circle>
+    <Caption fontSize={11}>{name}</Caption>
+  </YStack>
+);
+
+export const PreviewPhoneTamagui = memo(PreviewPhoneTamaguiComponent);

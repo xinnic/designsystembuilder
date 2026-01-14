@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTokenCSS } from '../state/designSystem';
+import { YStack, XStack, Text, Heading, ScrollView } from 'tamagui';
 import {
   Type,
   Palette,
@@ -7,11 +7,6 @@ import {
   CornerUpRight,
   Layers,
   Play,
-  MousePointer,
-  SquareCheck,
-  CreditCard,
-  Menu,
-  Sliders,
   Smartphone
 } from 'lucide-react';
 
@@ -26,174 +21,294 @@ import './TokenDemos/motion/motion-demos.css';
 import TypeScaleTable from './TokenDemos/TypeScaleTable';
 import HapticsPreview from './TokenDemos/HapticsPreview';
 
-// Primitive demos
-import ButtonMatrix from './PrimitiveDemos/ButtonMatrix';
-import InputGallery from './PrimitiveDemos/InputGallery';
-import CardGallery from './PrimitiveDemos/CardGallery';
-import NavPreview from './PrimitiveDemos/NavPreview';
-import FormControls from './PrimitiveDemos/FormControls';
-
-import './DesignSystemOverview.css';
-
 export default function DesignSystemOverview() {
-  // Initialize token CSS binding
-  useTokenCSS();
+  // Note: useTokenCSS is called in PreviewPhoneTamagui, no need to duplicate here
 
   return (
-    <div className="design-system-overview">
+    <ScrollView maxHeight="100vh">
+      <YStack
+        padding="$6"
+        backgroundColor="$background"
+        color="$color"
+      >
+        {/* TOKENS SECTION */}
+        <YStack marginBottom="$6">
+          <YStack
+            marginBottom="$5"
+            paddingBottom="$3"
+            borderBottomWidth={1}
+            borderBottomColor="$borderColor"
+            opacity={0.2}
+          >
+            <Heading
+              marginBottom="$2"
+              fontSize="$8"
+              lineHeight="$8"
+              fontWeight="600"
+              color="$color"
+            >
+              Tokens
+            </Heading>
+            <Text
+              fontSize="$4"
+              lineHeight="$4"
+              fontWeight="400"
+              color="$color"
+              opacity={0.7}
+            >
+              Foundational design elements that define your system's visual language
+            </Text>
+          </YStack>
 
-      {/* TOKENS SECTION */}
-      <section className="tokens-section">
-        <div className="section-header">
-          <h2>Tokens</h2>
-          <p>Foundational design elements that define your system's visual language</p>
-        </div>
+          {/* Typography Scale */}
+          <YStack
+            marginBottom="$5"
+            padding="$4"
+            backgroundColor="$background"
+            borderRadius="$4"
+            borderWidth={1}
+            borderColor="$borderColor"
+            opacity={0.1}
+          >
+            <YStack marginBottom="$4">
+              <XStack marginBottom="$2" space="$2" alignItems="center">
+                <Type size={20} color="currentColor" />
+                <Heading
+                  fontSize="$6"
+                  lineHeight="$6"
+                  fontWeight="600"
+                  color="$color"
+                >
+                  Typography Scale
+                </Heading>
+              </XStack>
+              <Text
+                fontSize="$3"
+                lineHeight="$3"
+                fontWeight="400"
+                color="$color"
+                opacity={0.7}
+              >
+                Type styles that set hierarchy—headlines, body, captions. Change these to give your product a distinct voice.
+              </Text>
+            </YStack>
+            <TypeScaleTable />
+          </YStack>
 
-        <div className="token-subsection">
-          <div className="subsection-header">
-            <div className="subsection-title">
-              <Type className="subsection-icon" />
-              <h3>Typography Scale</h3>
-            </div>
-            <p>Type styles that set hierarchy—headlines, body, captions. Change these to give your product a distinct voice.</p>
-          </div>
-          <TypeScaleTable />
-        </div>
+          {/* Color Roles */}
+          <YStack
+            marginBottom="$5"
+            padding="$4"
+            backgroundColor="$background"
+            borderRadius="$4"
+            borderWidth={1}
+            borderColor="$borderColor"
+            opacity={0.1}
+          >
+            <YStack marginBottom="$4">
+              <XStack marginBottom="$2" space="$2" alignItems="center">
+                <Palette size={20} color="currentColor" />
+                <Heading
+                  fontSize="$6"
+                  lineHeight="$6"
+                  fontWeight="600"
+                  color="$color"
+                >
+                  Color Roles
+                </Heading>
+              </XStack>
+              <Text
+                fontSize="$3"
+                lineHeight="$3"
+                fontWeight="400"
+                color="$color"
+                opacity={0.7}
+              >
+                Brand and UI colors used across components. These are semantic—change the role, and the whole system updates.
+              </Text>
+            </YStack>
+            <ColorSwatch />
+          </YStack>
 
-        <div className="token-subsection">
-          <div className="subsection-header">
-            <div className="subsection-title">
-              <Palette className="subsection-icon" />
-              <h3>Color Roles</h3>
-            </div>
-            <p>Brand and UI colors used across components. These are semantic—change the role, and the whole system updates.</p>
-          </div>
-          <ColorSwatch />
-        </div>
+          {/* Spacing Ladder */}
+          <YStack
+            marginBottom="$5"
+            padding="$4"
+            backgroundColor="$background"
+            borderRadius="$4"
+            borderWidth={1}
+            borderColor="$borderColor"
+            opacity={0.1}
+          >
+            <YStack marginBottom="$4">
+              <XStack marginBottom="$2" space="$2" alignItems="center">
+                <Grid size={20} color="currentColor" />
+                <Heading
+                  fontSize="$6"
+                  lineHeight="$6"
+                  fontWeight="600"
+                  color="$color"
+                >
+                  Spacing Ladder
+                </Heading>
+              </XStack>
+              <Text
+                fontSize="$3"
+                lineHeight="$3"
+                fontWeight="400"
+                color="$color"
+                opacity={0.7}
+              >
+                Consistent rhythm so screens feel intentional. Based on an 8-pt scale.
+              </Text>
+            </YStack>
+            <SpacingLadder />
+          </YStack>
 
-        <div className="token-subsection">
-          <div className="subsection-header">
-            <div className="subsection-title">
-              <Grid className="subsection-icon" />
-              <h3>Spacing Ladder</h3>
-            </div>
-            <p>Consistent rhythm so screens feel intentional. Based on an 8-pt scale.</p>
-          </div>
-          <SpacingLadder />
-        </div>
+          {/* Corner Radii */}
+          <YStack
+            marginBottom="$5"
+            padding="$4"
+            backgroundColor="$background"
+            borderRadius="$4"
+            borderWidth={1}
+            borderColor="$borderColor"
+            opacity={0.1}
+          >
+            <YStack marginBottom="$4">
+              <XStack marginBottom="$2" space="$2" alignItems="center">
+                <CornerUpRight size={20} color="currentColor" />
+                <Heading
+                  fontSize="$6"
+                  lineHeight="$6"
+                  fontWeight="600"
+                  color="$color"
+                >
+                  Corner Radii
+                </Heading>
+              </XStack>
+              <Text
+                fontSize="$3"
+                lineHeight="$3"
+                fontWeight="400"
+                color="$color"
+                opacity={0.7}
+              >
+                How rounded surfaces are. Small for dense controls, medium for cards, large for modals, full for pills.
+              </Text>
+            </YStack>
+            <RadiiChips />
+          </YStack>
 
-        <div className="token-subsection">
-          <div className="subsection-header">
-            <div className="subsection-title">
-              <CornerUpRight className="subsection-icon" />
-              <h3>Corner Radii</h3>
-            </div>
-            <p>How rounded surfaces are. Small for dense controls, medium for cards, large for modals, full for pills.</p>
-          </div>
-          <RadiiChips />
-        </div>
+          {/* Elevation (Shadows) */}
+          <YStack
+            marginBottom="$5"
+            padding="$4"
+            backgroundColor="$background"
+            borderRadius="$4"
+            borderWidth={1}
+            borderColor="$borderColor"
+            opacity={0.1}
+          >
+            <YStack marginBottom="$4">
+              <XStack marginBottom="$2" space="$2" alignItems="center">
+                <Layers size={20} color="currentColor" />
+                <Heading
+                  fontSize="$6"
+                  lineHeight="$6"
+                  fontWeight="600"
+                  color="$color"
+                >
+                  Elevation (Shadows)
+                </Heading>
+              </XStack>
+              <Text
+                fontSize="$3"
+                lineHeight="$3"
+                fontWeight="400"
+                color="$color"
+                opacity={0.7}
+              >
+                Depth cues. Use subtle for resting cards, medium for interactive popovers, strong for modals.
+              </Text>
+            </YStack>
+            <ElevationTiles />
+          </YStack>
 
-        <div className="token-subsection">
-          <div className="subsection-header">
-            <div className="subsection-title">
-              <Layers className="subsection-icon" />
-              <h3>Elevation (Shadows)</h3>
-            </div>
-            <p>Depth cues. Use subtle for resting cards, medium for interactive popovers, strong for modals.</p>
-          </div>
-          <ElevationTiles />
-        </div>
+          {/* Motion */}
+          <YStack
+            marginBottom="$5"
+            padding="$4"
+            backgroundColor="$background"
+            borderRadius="$4"
+            borderWidth={1}
+            borderColor="$borderColor"
+            opacity={0.1}
+          >
+            <YStack marginBottom="$4">
+              <XStack marginBottom="$2" space="$2" alignItems="center">
+                <Play size={20} color="currentColor" />
+                <Heading
+                  fontSize="$6"
+                  lineHeight="$6"
+                  fontWeight="600"
+                  color="$color"
+                >
+                  Motion
+                </Heading>
+              </XStack>
+              <Text
+                fontSize="$3"
+                lineHeight="$3"
+                fontWeight="400"
+                color="$color"
+                opacity={0.7}
+              >
+                How fast and smooth UI moves. All demos use your duration and easing tokens and respect reduced motion.
+              </Text>
+            </YStack>
+            <XStack space="$4" flexWrap="wrap">
+              <EasingCurve />
+              <CardEntrances />
+            </XStack>
+          </YStack>
 
-        <div className="token-subsection">
-          <div className="subsection-header">
-            <div className="subsection-title">
-              <Play className="subsection-icon" />
-              <h3>Motion</h3>
-            </div>
-            <p>How fast and smooth UI moves. All demos use your duration and easing tokens and respect reduced motion.</p>
-          </div>
-          <div className="motion-demos-grid">
-            <EasingCurve />
-            <CardEntrances />
-          </div>
-        </div>
-
-
-        <div className="token-subsection">
-          <div className="subsection-header">
-            <div className="subsection-title">
-              <Smartphone className="subsection-icon" />
-              <h3>Haptics</h3>
-            </div>
-            <p>Short tactile vibrations that reinforce interactions. Use <strong>light</strong> feedback for low-risk taps (like menu tabs) and <strong>medium</strong> feedback for primary actions (like cards or main buttons). Use <strong>success/error</strong> notifications for confirmations.</p>
-          </div>
-          <HapticsPreview />
-        </div>
-      </section>
-
-      {/* PRIMITIVES SECTION */}
-      <section className="tokens-section">
-        <div className="section-header">
-          <h2>Primitives</h2>
-          <p>Interactive components built with your tokens—buttons, inputs, cards, and more</p>
-        </div>
-
-        <div className="token-subsection">
-          <div className="subsection-header">
-            <div className="subsection-title">
-              <MousePointer className="subsection-icon" />
-              <h3>Buttons</h3>
-            </div>
-            <p>Primary, secondary, and destructive variants with hover and focus states.</p>
-          </div>
-          <ButtonMatrix />
-        </div>
-
-        <div className="token-subsection">
-          <div className="subsection-header">
-            <div className="subsection-title">
-              <SquareCheck className="subsection-icon" />
-              <h3>Form Inputs</h3>
-            </div>
-            <p>Text fields, checkboxes, and selects using your border and spacing tokens.</p>
-          </div>
-          <InputGallery />
-        </div>
-
-        <div className="token-subsection">
-          <div className="subsection-header">
-            <div className="subsection-title">
-              <CreditCard className="subsection-icon" />
-              <h3>Cards</h3>
-            </div>
-            <p>Content containers with consistent radius and elevation patterns.</p>
-          </div>
-          <CardGallery />
-        </div>
-
-        <div className="token-subsection">
-          <div className="subsection-header">
-            <div className="subsection-title">
-              <Menu className="subsection-icon" />
-              <h3>Navigation</h3>
-            </div>
-            <p>Menu and navigation components that adapt to your layout choices.</p>
-          </div>
-          <NavPreview />
-        </div>
-
-        <div className="token-subsection">
-          <div className="subsection-header">
-            <div className="subsection-title">
-              <Sliders className="subsection-icon" />
-              <h3>Form Controls</h3>
-            </div>
-            <p>Switches, sliders, and other interactive form elements.</p>
-          </div>
-          <FormControls />
-        </div>
-      </section>
-
-    </div>
+          {/* Haptics */}
+          <YStack
+            marginBottom="$5"
+            padding="$4"
+            backgroundColor="$background"
+            borderRadius="$4"
+            borderWidth={1}
+            borderColor="$borderColor"
+            opacity={0.1}
+          >
+            <YStack marginBottom="$4">
+              <XStack marginBottom="$2" space="$2" alignItems="center">
+                <Smartphone size={20} color="currentColor" />
+                <Heading
+                  fontSize="$6"
+                  lineHeight="$6"
+                  fontWeight="600"
+                  color="$color"
+                >
+                  Haptics
+                </Heading>
+              </XStack>
+              <Text
+                fontSize="$3"
+                lineHeight="$3"
+                fontWeight="400"
+                color="$color"
+                opacity={0.7}
+              >
+                Short tactile vibrations that reinforce interactions. Use <Text fontWeight="600">light</Text> feedback for low-risk taps (like menu tabs) and <Text fontWeight="600">medium</Text> feedback for primary actions (like cards or main buttons). Use <Text fontWeight="600">success/error</Text> notifications for confirmations.
+              </Text>
+            </YStack>
+            <HapticsPreview />
+          </YStack>
+        </YStack>
+      </YStack>
+    </ScrollView>
   );
 }

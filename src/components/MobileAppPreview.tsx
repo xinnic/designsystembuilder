@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDesignSystem, useTokenCSS } from '../state/designSystem';
+import { useDesignSystem } from '../state/designSystem';
 import { playHaptic } from '../platform/haptics';
 import {
   Bell,
@@ -82,8 +82,8 @@ const useComponentLibrary = (baseLib: string) => {
 
         case 'daisyui':
           const daisyClass = variant === 'destructive' ? 'btn-error' :
-                            variant === 'secondary' ? 'btn-outline' :
-                            variant === 'ghost' ? 'btn-ghost' : 'btn-primary';
+            variant === 'secondary' ? 'btn-outline' :
+              variant === 'ghost' ? 'btn-ghost' : 'btn-primary';
           return (
             <button
               className={`btn ${daisyClass} rounded-[var(--radius-full)] ${className}`}
@@ -162,15 +162,13 @@ const useComponentLibrary = (baseLib: string) => {
           return (
             <button
               type="button"
-              className={`peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-[var(--radius-full)] border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 ${
-                checked ? 'bg-primary' : 'bg-input'
-              } ${className}`}
+              className={`peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-[var(--radius-full)] border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 ${checked ? 'bg-primary' : 'bg-input'
+                } ${className}`}
               onClick={() => onCheckedChange?.(!checked)}
             >
               <span
-                className={`pointer-events-none block h-5 w-5 rounded-[var(--radius-full)] bg-background shadow-lg ring-0 transition-transform ${
-                  checked ? 'translate-x-5' : 'translate-x-0'
-                }`}
+                className={`pointer-events-none block h-5 w-5 rounded-[var(--radius-full)] bg-background shadow-lg ring-0 transition-transform ${checked ? 'translate-x-5' : 'translate-x-0'
+                  }`}
               />
             </button>
           );
@@ -262,11 +260,10 @@ const BottomTabBar = () => {
                 playHaptic('light');
                 setActiveTab(index);
               }}
-              className={`flex flex-col items-center justify-center p-2 text-xs transition-colors min-w-[44px] min-h-[44px] rounded-md ${
-                activeTab === index
-                  ? 'text-primary'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
+              className={`flex flex-col items-center justify-center p-2 text-xs transition-colors min-w-[44px] min-h-[44px] rounded-md ${activeTab === index
+                ? 'text-primary'
+                : 'text-muted-foreground hover:text-foreground'
+                }`}
             >
               <Icon size={20} className="mb-1" />
               <span>{tab.label}</span>
@@ -286,7 +283,7 @@ export const MobileAppPreview = ({
   baseLib = 'tailwind'
 }: MobileAppPreviewProps) => {
   // Initialize token CSS binding
-  useTokenCSS();
+
   const { opts } = useDesignSystem();
 
   const components = useComponentLibrary(baseLib);
@@ -337,6 +334,24 @@ export const MobileAppPreview = ({
         <div className={`flex-1 overflow-y-auto ${opts.menuLayout === 'hamburger' ? 'pt-16' : ''}`}>
           <PhoneScaffold>
 
+            {/* Mood Section */}
+            <Section title="How are you feeling today?">
+              <div className="flex gap-3">
+                {moods.map((mood, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedMood(index)}
+                    className={`w-12 h-12 rounded-full border-2 flex items-center justify-center text-xl transition-all hover:scale-105 ${selectedMood === index
+                        ? 'border-primary bg-primary/10'
+                        : 'border-border hover:border-primary/50'
+                      }`}
+                  >
+                    {mood}
+                  </button>
+                ))}
+              </div>
+            </Section>
+
             {/* Filter Chips */}
             <Section gap="var(--tile-gap)">
               <div className="flex gap-2 overflow-x-auto pb-2">
@@ -347,11 +362,10 @@ export const MobileAppPreview = ({
                       playHaptic('light');
                       setActiveFilter(index);
                     }}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
-                      activeFilter === index
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                    }`}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${activeFilter === index
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                      }`}
                   >
                     {filter}
                   </button>
@@ -359,6 +373,36 @@ export const MobileAppPreview = ({
               </div>
             </Section>
 
+
+
+            {/* Metric Cards */}
+            <Section gap="var(--tile-gap)">
+              <div className="grid grid-cols-2 gap-[var(--tile-gap)]">
+                <CardTile>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Clock size={20} className="text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Focus Time</p>
+                      <p className="font-semibold text-foreground">2h 15m</p>
+                    </div>
+                  </div>
+                </CardTile>
+
+                <CardTile>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Smile size={20} className="text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Mood Level</p>
+                      <p className="font-semibold text-foreground">7/10 avg</p>
+                    </div>
+                  </div>
+                </CardTile>
+              </div>
+            </Section>
 
             {/* Post Card */}
             <Section>

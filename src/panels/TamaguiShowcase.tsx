@@ -16,7 +16,7 @@ import {
   Square,
   Label as TamaguiLabel,
 } from 'tamagui';
-import { useDesignSystem, useTokenCSS } from '../state/designSystem';
+import { useDesignSystem } from '../state/designSystem';
 import { ChevronDown, Check } from 'lucide-react';
 
 // Import our design system components
@@ -33,12 +33,15 @@ import {
   Body,
   Caption,
   Label,
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+  Image,
+  ListItem,
 } from '../design-system/components';
 
 export default function TamaguiShowcase() {
-  // Initialize token CSS binding to ensure theme updates
-  useTokenCSS();
-
+  // Note: useTokenCSS is called in PreviewPhoneTamagui, no need to duplicate here
   const { isDarkMode, selectedPrimaryFont } = useDesignSystem();
   const [checked, setChecked] = useState(false);
   const [radioValue, setRadioValue] = useState('option1');
@@ -50,33 +53,15 @@ export default function TamaguiShowcase() {
 
   return (
     <ScrollView
-      className={selectedPrimaryFont}
       backgroundColor="$bgPrimary"
       flex={1}
       padding="$4"
     >
       <YStack gap="$6">
-        {/* Typography Section */}
+        {/* Components Section Header */}
         <YStack gap="$4">
-          <H1>React Native Components</H1>
+          <H1>Components</H1>
           <Separator borderColor="$border" />
-
-          <YStack gap="$3">
-            <H2>Typography</H2>
-            <Card variant="elevated" padding="$4">
-              <YStack gap="$3">
-                <Display>Display Text</Display>
-                <H1>Heading 1</H1>
-                <H2>Heading 2</H2>
-                <H3>Heading 3</H3>
-                <Body>Regular body text using primary font family</Body>
-                <Caption color="$textSecondary">
-                  Small caption text with secondary color
-                </Caption>
-                <Label>Form Label Text</Label>
-              </YStack>
-            </Card>
-          </YStack>
         </YStack>
 
         {/* Buttons Section */}
@@ -282,7 +267,7 @@ export default function TamaguiShowcase() {
         <YStack gap="$3">
           <H2>Cards</H2>
           <YStack gap="$3">
-            <Card variant="default" padding="$4">
+            <Card variant="default" padding="large">
               <YStack gap="$2">
                 <H3>Default Card</H3>
                 <Body color="$textSecondary">
@@ -323,6 +308,149 @@ export default function TamaguiShowcase() {
               </YStack>
             </Card>
           </YStack>
+        </YStack>
+
+        {/* Avatar Section */}
+        <YStack gap="$3">
+          <H2>Avatars</H2>
+          <Card variant="elevated" padding="large">
+            <YStack gap="$4">
+              <YStack gap="$2">
+                <Caption fontWeight="600">Sizes</Caption>
+                <XStack gap="$3" alignItems="center">
+                  <Avatar size="small">
+                    <AvatarImage src="https://i.pravatar.cc/150?img=1" />
+                    <AvatarFallback>SM</AvatarFallback>
+                  </Avatar>
+                  <Avatar size="medium">
+                    <AvatarImage src="https://i.pravatar.cc/150?img=2" />
+                    <AvatarFallback>MD</AvatarFallback>
+                  </Avatar>
+                  <Avatar size="large">
+                    <AvatarImage src="https://i.pravatar.cc/150?img=3" />
+                    <AvatarFallback>LG</AvatarFallback>
+                  </Avatar>
+                  <Avatar size="xlarge">
+                    <AvatarImage src="https://i.pravatar.cc/150?img=4" />
+                    <AvatarFallback>XL</AvatarFallback>
+                  </Avatar>
+                </XStack>
+              </YStack>
+
+              <YStack gap="$2">
+                <Caption fontWeight="600">With Fallback (No Image)</Caption>
+                <XStack gap="$3" alignItems="center">
+                  <Avatar size="medium">
+                    <AvatarFallback>JD</AvatarFallback>
+                  </Avatar>
+                  <Avatar size="medium">
+                    <AvatarFallback>AB</AvatarFallback>
+                  </Avatar>
+                  <Avatar size="medium">
+                    <AvatarFallback>XY</AvatarFallback>
+                  </Avatar>
+                </XStack>
+              </YStack>
+            </YStack>
+          </Card>
+        </YStack>
+
+        {/* Image Section */}
+        <YStack gap="$3">
+          <H2>Images</H2>
+          <Card variant="elevated" padding="large">
+            <YStack gap="$4">
+              <YStack gap="$2">
+                <Caption fontWeight="600">Border Radius Variants</Caption>
+                <XStack gap="$3" flexWrap="wrap">
+                  <Image
+                    source={{ uri: 'https://picsum.photos/200/200?random=1' }}
+                    width={100}
+                    height={100}
+                    rounded="none"
+                  />
+                  <Image
+                    source={{ uri: 'https://picsum.photos/200/200?random=2' }}
+                    width={100}
+                    height={100}
+                    rounded="small"
+                  />
+                  <Image
+                    source={{ uri: 'https://picsum.photos/200/200?random=3' }}
+                    width={100}
+                    height={100}
+                    rounded="medium"
+                  />
+                  <Image
+                    source={{ uri: 'https://picsum.photos/200/200?random=4' }}
+                    width={100}
+                    height={100}
+                    rounded="large"
+                  />
+                  <Image
+                    source={{ uri: 'https://picsum.photos/200/200?random=5' }}
+                    width={100}
+                    height={100}
+                    rounded="full"
+                  />
+                </XStack>
+              </YStack>
+
+              <YStack gap="$2">
+                <Caption fontWeight="600">Aspect Ratios</Caption>
+                <YStack gap="$3">
+                  <Image
+                    source={{ uri: 'https://picsum.photos/400/400?random=6' }}
+                    width="100%"
+                    aspectRatio="square"
+                    rounded="medium"
+                  />
+                  <Image
+                    source={{ uri: 'https://picsum.photos/800/450?random=7' }}
+                    width="100%"
+                    aspectRatio="video"
+                    rounded="medium"
+                  />
+                </YStack>
+              </YStack>
+            </YStack>
+          </Card>
+        </YStack>
+
+        {/* ListItem Section */}
+        <YStack gap="$3">
+          <H2>List Items</H2>
+          <Card variant="elevated" padding="none">
+            <YStack>
+              <ListItem
+                title="Profile Settings"
+                subTitle="Manage your account"
+                icon={<Body>👤</Body>}
+                iconAfter={ChevronDown}
+              />
+              <Separator borderColor="$border" />
+              <ListItem
+                title="Notifications"
+                subTitle="Push notifications and alerts"
+                icon={<Body>🔔</Body>}
+                iconAfter={ChevronDown}
+              />
+              <Separator borderColor="$border" />
+              <ListItem
+                title="Privacy"
+                subTitle="Control your data"
+                icon={<Body>🔒</Body>}
+                iconAfter={ChevronDown}
+              />
+              <Separator borderColor="$border" />
+              <ListItem
+                title="Help & Support"
+                subTitle="Get help when you need it"
+                icon={<Body>❓</Body>}
+                iconAfter={ChevronDown}
+              />
+            </YStack>
+          </Card>
         </YStack>
 
         {/* Tabs Section */}
