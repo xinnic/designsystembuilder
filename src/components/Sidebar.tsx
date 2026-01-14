@@ -1,5 +1,6 @@
 import React from 'react';
-import { ChevronDown, Settings, Layers, Sliders, Navigation, Menu } from 'lucide-react';
+import { ChevronDown, Check, Settings, Layers, Sliders, Navigation, Menu } from 'lucide-react';
+import { YStack, XStack, ScrollView, Text, Heading, Separator, Button as TamaguiButton, Switch as TamaguiSwitch, Select, Adapt, Sheet } from 'tamagui';
 import StylingControls from '../left/StylingControls';
 import { useDesignSystem } from '../state/designSystem';
 import { generateSecondaryColor } from '../utils/colorGeneration';
@@ -10,21 +11,9 @@ import {
   DEFAULT_PRIMARY,
   DEFAULT_ACCENT,
 } from '../config/colorThemes';
-import { stylePresets, getStylePreset, getStylePresetCSSVariables, type StylePresetId } from '../config/stylePresets';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
+import { stylePresets, getStylePreset, type StylePresetId } from '../config/stylePresets';
 import { useToast } from '@/hooks/use-toast';
+import { usePresetTheme } from '../hooks/usePresetTheme';
 
 interface SidebarProps { }
 
@@ -115,6 +104,7 @@ export function Sidebar({ }: SidebarProps) {
   } = useDesignSystem();
 
   const { toast } = useToast();
+  const { presetTokens } = usePresetTheme();
 
   // Section states
   const [basicOptionsOpen, setBasicOptionsOpen] = React.useState(true);
@@ -149,46 +139,41 @@ export function Sidebar({ }: SidebarProps) {
     setIsSecondaryManual(true);
   };
 
-  // handleStylePresetChange now uses the imported stylePresets config
+  // handleStylePresetChange now uses the Tamagui theme system
   const handleStylePresetChange = (presetId: StylePresetId) => {
+    // Update the preset in Zustand store - this triggers the usePresetTheme hook
+    // which handles CSS variable updates automatically
     setStylePreset(presetId);
+
     const preset = getStylePreset(presetId);
     if (preset) {
-      // Get all CSS variables for this preset
-      const cssVariables = getStylePresetCSSVariables(preset, isDarkMode);
-
-      // Apply CSS variables to document root
-      const root = document.documentElement;
-      Object.entries(cssVariables).forEach(([key, value]) => {
-        root.style.setProperty(key, value);
-      });
+      const { tokens: tokens } = preset;
 
       // Update tokens through the store
-      const { tokens: presetTokens } = preset;
       setTokens({
         shadow: {
-          '1': presetTokens.shadows.sm,
-          '2': presetTokens.shadows.md,
-          '3': presetTokens.shadows.lg
+          '1': tokens.shadows.sm,
+          '2': tokens.shadows.md,
+          '3': tokens.shadows.lg
         },
         radius: {
-          sm: `${presetTokens.radius.sm}px`,
-          md: `${presetTokens.radius.md}px`,
-          lg: `${presetTokens.radius.lg}px`,
-          full: `${presetTokens.radius.full}px`
+          sm: `${tokens.radius.sm}px`,
+          md: `${tokens.radius.md}px`,
+          lg: `${tokens.radius.lg}px`,
+          full: `${tokens.radius.full}px`
         },
         motion: {
-          fast: `${presetTokens.animations.quick}ms`,
-          base: `${presetTokens.animations.normal}ms`,
-          slow: `${presetTokens.animations.slow}ms`,
-          easeStandard: presetTokens.animations.curve
+          fast: `${tokens.animations.quick}ms`,
+          base: `${tokens.animations.normal}ms`,
+          slow: `${tokens.animations.slow}ms`,
+          easeStandard: tokens.animations.curve
         }
       });
 
       // Update border weight based on preset
-      const borderWidthKey = presetTokens.card.borderWidthKey;
+      const borderWidthKey = tokens.card.borderWidthKey;
       const borderWeight = borderWidthKey === 'none' ? 'none' :
-        borderWidthKey === 'thin' || presetTokens.borderWidths[borderWidthKey] <= 1 ? 'thin' : 'thick';
+        borderWidthKey === 'thin' || tokens.borderWidths[borderWidthKey] <= 1 ? 'thin' : 'thick';
 
       setOpts({
         cardBorderWeight: borderWeight,
@@ -202,55 +187,108 @@ export function Sidebar({ }: SidebarProps) {
     }
   };
 
-  return (
-    <div className="w-80 h-screen overflow-y-auto p-6" style={{ boxShadow: '1px 0 3px rgba(0,0,0,0.04)', backgroundColor: 'rgb(var(--color-bg-primary))' }}>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-2">Design System Builder</h1>
-        <p className="text-sm text-muted-foreground">
-          Customize your design system and generate AI-ready prompts
-        </p>
-      </div>
+  // Apply style preset on mount to ensure CSS variables are set
+  React.useEffect(() => {
+    if (stylePresetId) {
+      handleStylePresetChange(stylePresetId as StylePresetId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run once on mount
 
-      <div className="space-y-4">
+  return (
+    <YStack width={320} height="100vh" borderRightWidth={1} borderRightColor="$borderColor" backgroundColor="$background">
+      <ScrollView padding="$6">
+        <YStack marginBottom="$8">
+          <Heading size="$8" fontWeight="bold" marginBottom="$2">Design System Builder</Heading>
+          <Text size="$3" color="$gray10">
+            Customize your design system and generate AI-ready prompts
+          </Text>
+        </YStack>
+
+      <YStack space="$4">
         {/* Basic Options Section - For Design Beginners */}
-        <Collapsible open={basicOptionsOpen} onOpenChange={setBasicOptionsOpen}>
-          <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted bg-primary/5">
-            <div className="flex items-center gap-3">
-              <Layers className="h-5 w-5 text-primary" />
-              <span className="font-medium">Basic Options</span>
-            </div>
-            <ChevronDown className={`h-4 w-4 transition-transform ${basicOptionsOpen ? 'rotate-180' : ''}`} />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="space-y-4 p-3">
+        <YStack>
+          <XStack
+            onPress={() => setBasicOptionsOpen(!basicOptionsOpen)}
+            padding="$3"
+            borderRadius="$4"
+            hoverStyle={{ backgroundColor: '$gray3' }}
+            backgroundColor="$primary"
+            opacity={0.05}
+            alignItems="center"
+            justifyContent="space-between"
+            pressStyle={{ opacity: 0.7 }}
+            cursor="pointer"
+          >
+            <XStack space="$3" alignItems="center">
+              <Layers size={20} color="var(--color-primary)" />
+              <Text fontWeight="500">Basic Options</Text>
+            </XStack>
+            <ChevronDown
+              size={16}
+              style={{
+                transition: 'transform 0.2s',
+                transform: basicOptionsOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+              }}
+            />
+          </XStack>
+          {basicOptionsOpen && (
+            <YStack space="$4" padding="$3">
 
             {/* Primary Font */}
-            <div>
-              <label className="text-sm font-medium mb-2 block">Primary Font</label>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className={`w-full justify-between ${selectedPrimaryFont}`}>
+            <YStack>
+              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Primary Font</Text>
+              <Select value={selectedPrimaryFont} onValueChange={setPrimaryFont}>
+                <Select.Trigger width="100%" iconAfter={ChevronDown}>
+                  <Select.Value placeholder="Select Font">
                     {primaryFonts.find(f => f.class === selectedPrimaryFont)?.name || 'Select Font'}
-                    <ChevronDown className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width] text-base max-h-[300px] overflow-y-auto" align="start">
-                  {primaryFonts.map((font) => (
-                    <DropdownMenuItem
-                      key={font.class}
-                      onClick={() => setPrimaryFont(font.class)}
-                      className={`${font.class} text-base`}
-                    >
-                      {font.name}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+                  </Select.Value>
+                </Select.Trigger>
+
+                <Adapt when="sm" platform="touch">
+                  <Sheet modal dismissOnSnapToBottom>
+                    <Sheet.Frame>
+                      <Sheet.ScrollView>
+                        <Adapt.Contents />
+                      </Sheet.ScrollView>
+                    </Sheet.Frame>
+                    <Sheet.Overlay />
+                  </Sheet>
+                </Adapt>
+
+                <Select.Content zIndex={200000}>
+                  <Select.ScrollUpButton alignItems="center" justifyContent="center" position="relative" width="100%" height="$3">
+                    <YStack zIndex={10}>
+                      <ChevronDown size={20} />
+                    </YStack>
+                  </Select.ScrollUpButton>
+
+                  <Select.Viewport minWidth={200}>
+                    <Select.Group>
+                      {primaryFonts.map((font, i) => (
+                        <Select.Item index={i} key={font.class} value={font.class}>
+                          <Select.ItemText>{font.name}</Select.ItemText>
+                          <Select.ItemIndicator marginLeft="auto">
+                            <Check size={16} />
+                          </Select.ItemIndicator>
+                        </Select.Item>
+                      ))}
+                    </Select.Group>
+                  </Select.Viewport>
+
+                  <Select.ScrollDownButton alignItems="center" justifyContent="center" position="relative" width="100%" height="$3">
+                    <YStack zIndex={10}>
+                      <ChevronDown size={20} />
+                    </YStack>
+                  </Select.ScrollDownButton>
+                </Select.Content>
+              </Select>
+            </YStack>
 
             {/* Primary Color */}
-            <div>
-              <label className="text-sm font-medium mb-2 block">Primary Color</label>
-              <div className="grid grid-cols-6 gap-1">
+            <YStack>
+              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Primary Color</Text>
+              <XStack flexWrap="wrap" gap="$1">
                 {colorThemes.map((theme) => (
                   <div key={theme.name} className="relative">
                     {theme.isCustom ? (
@@ -266,10 +304,12 @@ export function Sidebar({ }: SidebarProps) {
                           title={theme.label}
                         />
                         <div
-                          className={`w-7 h-7 rounded-full border ${selectedTheme === theme.name ? 'border-foreground shadow-sm ring-1 ring-background' : 'border-border'
-                            } cursor-pointer`}
+                          className="w-7 h-7 rounded-full cursor-pointer"
                           style={{
-                            background: RAINBOW_GRADIENT
+                            background: RAINBOW_GRADIENT,
+                            border: selectedTheme === theme.name
+                              ? '2px solid rgb(var(--color-focus))'
+                              : '1px solid rgb(var(--color-border))'
                           }}
                           onClick={() => {
                             const color = customPrimaryColor || DEFAULT_PRIMARY;
@@ -283,177 +323,265 @@ export function Sidebar({ }: SidebarProps) {
                       </div>
                     ) : (
                       <button
-                        className={`w-7 h-7 rounded-md border ${selectedTheme === theme.name ? 'border-foreground shadow-sm ring-1 ring-background' : 'border-border'
-                          }`}
-                        style={{ backgroundColor: theme.color }}
+                        className="w-7 h-7 rounded-md"
+                        style={{
+                          backgroundColor: theme.color,
+                          border: selectedTheme === theme.name
+                            ? '2px solid rgb(var(--color-focus))'
+                            : '1px solid rgb(var(--color-border))'
+                        }}
                         onClick={() => handlePrimaryColorChange(theme.name)}
                         title={theme.label}
                       />
                     )}
                   </div>
                 ))}
-              </div>
-            </div>
+              </XStack>
+            </YStack>
 
             {/* Dark Mode Toggle */}
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Dark Mode</label>
-              <Switch checked={isDarkMode} onCheckedChange={setDarkMode} />
-            </div>
+            <XStack alignItems="center" justifyContent="space-between">
+              <Text fontSize="$3" fontWeight="500">Dark Mode</Text>
+              <TamaguiSwitch checked={isDarkMode} onCheckedChange={setDarkMode} size="$3" />
+            </XStack>
 
             {/* Style Preset */}
-            <div>
-              <label className="text-sm font-medium mb-2 block">Style Preset</label>
-              <div className="grid grid-cols-2 gap-2">
+            <YStack>
+              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Style Preset</Text>
+              <XStack flexWrap="wrap" gap="$2">
                 {stylePresets.map((preset) => {
                   const Icon = preset.icon;
+                  const isSelected = stylePresetId === preset.id;
                   return (
-                    <button
+                    <YStack
                       key={preset.id}
-                      className={`p-3 text-sm rounded border flex flex-col items-center gap-2 transition-all ${stylePresetId === preset.id
-                        ? 'border-primary bg-primary/5 text-primary'
-                        : 'border-border hover:bg-muted'
-                        }`}
-                      onClick={() => handleStylePresetChange(preset.id)}
+                      width="48%"
+                      padding="$3"
+                      borderRadius="$2"
+                      borderWidth={isSelected ? 2 : 1}
+                      borderColor={isSelected ? '$blue9' : '$gray6'}
+                      alignItems="center"
+                      space="$2"
+                      hoverStyle={{ backgroundColor: '$gray3' }}
+                      pressStyle={{ opacity: 0.7 }}
+                      onPress={() => handleStylePresetChange(preset.id)}
+                      cursor="pointer"
                     >
-                      <Icon className="h-5 w-5" />
-                      <span className="text-xs">{preset.name}</span>
-                    </button>
+                      <Icon size={20} color={isSelected ? 'var(--color-focus)' : 'currentColor'} />
+                      <Text fontSize="$2">{preset.name}</Text>
+                    </YStack>
                   );
                 })}
-              </div>
-            </div>
+              </XStack>
+            </YStack>
 
             {/* Menu Type */}
-            <div>
-              <label className="text-sm font-medium mb-2 block">Menu Type</label>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  className={`flex items-center gap-2 p-3 rounded-lg border transition-all shadow-sm ${opts.menuLayout === 'hamburger'
-                    ? 'border-primary bg-primary/5'
-                    : 'border-border hover:bg-muted'
-                    }`}
-                  onClick={() => setOpts({ menuLayout: 'hamburger' })}
+            <YStack>
+              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Menu Type</Text>
+              <XStack gap="$2">
+                <XStack
+                  flex={1}
+                  space="$2"
+                  padding="$3"
+                  borderRadius="$4"
+                  borderWidth={1}
+                  borderColor={opts.menuLayout === 'hamburger' ? '$blue9' : '$gray6'}
+                  backgroundColor={opts.menuLayout === 'hamburger' ? '$blue2' : 'transparent'}
+                  alignItems="center"
+                  hoverStyle={{ backgroundColor: '$gray3' }}
+                  pressStyle={{ opacity: 0.7 }}
+                  onPress={() => setOpts({ menuLayout: 'hamburger' })}
+                  cursor="pointer"
                 >
-                  <svg className="h-4 w-4" viewBox="0 0 20 14" fill="none">
+                  <svg width="16" height="14" viewBox="0 0 20 14" fill="none">
                     <rect width="20" height="2" fill="currentColor" />
                     <rect y="6" width="20" height="2" fill="currentColor" />
                     <rect y="12" width="20" height="2" fill="currentColor" />
                   </svg>
-                  <span className="text-sm">Hamburger</span>
-                </button>
-                <button
-                  className={`flex items-center gap-2 p-3 rounded-lg border transition-all shadow-sm ${opts.menuLayout === 'bottomBar'
-                    ? 'border-primary bg-primary/5'
-                    : 'border-border hover:bg-muted'
-                    }`}
-                  onClick={() => setOpts({ menuLayout: 'bottomBar' })}
+                  <Text fontSize="$3">Hamburger</Text>
+                </XStack>
+                <XStack
+                  flex={1}
+                  space="$2"
+                  padding="$3"
+                  borderRadius="$4"
+                  borderWidth={1}
+                  borderColor={opts.menuLayout === 'bottomBar' ? '$blue9' : '$gray6'}
+                  backgroundColor={opts.menuLayout === 'bottomBar' ? '$blue2' : 'transparent'}
+                  alignItems="center"
+                  hoverStyle={{ backgroundColor: '$gray3' }}
+                  pressStyle={{ opacity: 0.7 }}
+                  onPress={() => setOpts({ menuLayout: 'bottomBar' })}
+                  cursor="pointer"
                 >
-                  <svg className="h-4 w-4" viewBox="0 0 20 16" fill="none">
+                  <svg width="16" height="16" viewBox="0 0 20 16" fill="none">
                     <rect y="14" width="20" height="2" fill="currentColor" />
                     <rect x="2" y="10" width="3" height="2" fill="currentColor" />
                     <rect x="8.5" y="10" width="3" height="2" fill="currentColor" />
                     <rect x="15" y="10" width="3" height="2" fill="currentColor" />
                   </svg>
-                  <span className="text-sm">Bottom Bar</span>
-                </button>
-              </div>
-            </div>
+                  <Text fontSize="$3">Bottom Bar</Text>
+                </XStack>
+              </XStack>
+            </YStack>
 
-          </CollapsibleContent>
-        </Collapsible>
+            </YStack>
+          )}
+        </YStack>
 
         {/* Advanced Styling Section - For More Control */}
-        <Collapsible open={advancedStylingOpen} onOpenChange={setAdvancedStylingOpen}>
-          <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted">
-            <div className="flex items-center gap-3">
-              <Sliders className="h-5 w-5" />
-              <span className="font-medium">Advanced Styling</span>
-            </div>
-            <ChevronDown className={`h-4 w-4 transition-transform ${advancedStylingOpen ? 'rotate-180' : ''}`} />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="space-y-4 p-3">
+        <YStack>
+          <XStack
+            onPress={() => setAdvancedStylingOpen(!advancedStylingOpen)}
+            padding="$3"
+            borderRadius="$4"
+            hoverStyle={{ backgroundColor: '$gray3' }}
+            alignItems="center"
+            justifyContent="space-between"
+            pressStyle={{ opacity: 0.7 }}
+            cursor="pointer"
+          >
+            <XStack space="$3" alignItems="center">
+              <Sliders size={20} />
+              <Text fontWeight="500">Advanced Styling</Text>
+            </XStack>
+            <ChevronDown
+              size={16}
+              style={{
+                transition: 'transform 0.2s',
+                transform: advancedStylingOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+              }}
+            />
+          </XStack>
+          {advancedStylingOpen && (
+            <YStack space="$4" padding="$3">
 
             {/* Corner Radius */}
-            <div>
-              <label className="text-sm font-medium mb-2 block">Corner Radius</label>
-              <div className="grid grid-cols-4 gap-2">
-                <button
-                  className={`p-3 border transition-all shadow-sm flex items-center justify-center ${cornerRadius === 'none'
-                    ? 'border-primary bg-primary/5'
-                    : 'border-border hover:bg-muted'
-                    }`}
-                  style={{ borderRadius: '8px' }}
-                  onClick={() => setCornerRadius('none')}
-                  title="None"
+            <YStack>
+              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Corner Radius</Text>
+              <XStack gap="$2">
+                <YStack
+                  flex={1}
+                  padding="$3"
+                  borderWidth={1}
+                  borderRadius="$3"
+                  borderColor={cornerRadius === 'none' ? '$blue9' : '$gray6'}
+                  backgroundColor={cornerRadius === 'none' ? '$blue2' : 'transparent'}
+                  alignItems="center"
+                  justifyContent="center"
+                  hoverStyle={{ backgroundColor: '$gray3' }}
+                  pressStyle={{ opacity: 0.7 }}
+                  onPress={() => setCornerRadius('none')}
+                  cursor="pointer"
                 >
-                  <div className="w-8 h-8 border-2 border-foreground" style={{ borderRadius: '0px' }} />
-                </button>
-                <button
-                  className={`p-3 border transition-all shadow-sm flex items-center justify-center ${cornerRadius === 'small'
-                    ? 'border-primary bg-primary/5'
-                    : 'border-border hover:bg-muted'
-                    }`}
-                  style={{ borderRadius: '8px' }}
-                  onClick={() => setCornerRadius('small')}
-                  title="Small"
+                  <YStack width={32} height={32} borderWidth={2} borderColor="$gray11" borderRadius={0} />
+                </YStack>
+                <YStack
+                  flex={1}
+                  padding="$3"
+                  borderWidth={1}
+                  borderRadius="$3"
+                  borderColor={cornerRadius === 'small' ? '$blue9' : '$gray6'}
+                  backgroundColor={cornerRadius === 'small' ? '$blue2' : 'transparent'}
+                  alignItems="center"
+                  justifyContent="center"
+                  hoverStyle={{ backgroundColor: '$gray3' }}
+                  pressStyle={{ opacity: 0.7 }}
+                  onPress={() => setCornerRadius('small')}
+                  cursor="pointer"
                 >
-                  <div className="w-8 h-8 border-2 border-foreground" style={{ borderRadius: '4px' }} />
-                </button>
-                <button
-                  className={`p-3 border transition-all shadow-sm flex items-center justify-center ${cornerRadius === 'medium'
-                    ? 'border-primary bg-primary/5'
-                    : 'border-border hover:bg-muted'
-                    }`}
-                  style={{ borderRadius: '8px' }}
-                  onClick={() => setCornerRadius('medium')}
-                  title="Medium"
+                  <YStack width={32} height={32} borderWidth={2} borderColor="$gray11" borderRadius={4} />
+                </YStack>
+                <YStack
+                  flex={1}
+                  padding="$3"
+                  borderWidth={1}
+                  borderRadius="$3"
+                  borderColor={cornerRadius === 'medium' ? '$blue9' : '$gray6'}
+                  backgroundColor={cornerRadius === 'medium' ? '$blue2' : 'transparent'}
+                  alignItems="center"
+                  justifyContent="center"
+                  hoverStyle={{ backgroundColor: '$gray3' }}
+                  pressStyle={{ opacity: 0.7 }}
+                  onPress={() => setCornerRadius('medium')}
+                  cursor="pointer"
                 >
-                  <div className="w-8 h-8 border-2 border-foreground" style={{ borderRadius: '10px' }} />
-                </button>
-                <button
-                  className={`p-3 border transition-all shadow-sm flex items-center justify-center ${cornerRadius === 'large'
-                    ? 'border-primary bg-primary/5'
-                    : 'border-border hover:bg-muted'
-                    }`}
-                  style={{ borderRadius: '8px' }}
-                  onClick={() => setCornerRadius('large')}
-                  title="Large"
+                  <YStack width={32} height={32} borderWidth={2} borderColor="$gray11" borderRadius={10} />
+                </YStack>
+                <YStack
+                  flex={1}
+                  padding="$3"
+                  borderWidth={1}
+                  borderRadius="$3"
+                  borderColor={cornerRadius === 'large' ? '$blue9' : '$gray6'}
+                  backgroundColor={cornerRadius === 'large' ? '$blue2' : 'transparent'}
+                  alignItems="center"
+                  justifyContent="center"
+                  hoverStyle={{ backgroundColor: '$gray3' }}
+                  pressStyle={{ opacity: 0.7 }}
+                  onPress={() => setCornerRadius('large')}
+                  cursor="pointer"
                 >
-                  <div className="w-8 h-8 border-2 border-foreground" style={{ borderRadius: '20px' }} />
-                </button>
-              </div>
-            </div>
+                  <YStack width={32} height={32} borderWidth={2} borderColor="$gray11" borderRadius={20} />
+                </YStack>
+              </XStack>
+            </YStack>
 
             {/* Display Font (for headings) */}
-            <div>
-              <label className="text-sm font-medium mb-2 block">Display Font</label>
-              <p className="text-xs text-muted-foreground mb-2">For headings and titles</p>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className={`w-full justify-between ${selectedDisplayFont}`}>
+            <YStack>
+              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Display Font</Text>
+              <Text fontSize="$2" color="$gray10" marginBottom="$2">For headings and titles</Text>
+              <Select value={selectedDisplayFont} onValueChange={setDisplayFont}>
+                <Select.Trigger width="100%" iconAfter={ChevronDown}>
+                  <Select.Value placeholder="Select Font">
                     {displayFonts.find(f => f.class === selectedDisplayFont)?.name || 'Select Font'}
-                    <ChevronDown className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width] text-base max-h-[300px] overflow-y-auto" align="start">
-                  {displayFonts.map((font) => (
-                    <DropdownMenuItem
-                      key={font.class}
-                      onClick={() => setDisplayFont(font.class)}
-                      className={`${font.class} text-base`}
-                    >
-                      {font.name}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+                  </Select.Value>
+                </Select.Trigger>
+
+                <Adapt when="sm" platform="touch">
+                  <Sheet modal dismissOnSnapToBottom>
+                    <Sheet.Frame>
+                      <Sheet.ScrollView>
+                        <Adapt.Contents />
+                      </Sheet.ScrollView>
+                    </Sheet.Frame>
+                    <Sheet.Overlay />
+                  </Sheet>
+                </Adapt>
+
+                <Select.Content zIndex={200000}>
+                  <Select.ScrollUpButton alignItems="center" justifyContent="center" position="relative" width="100%" height="$3">
+                    <YStack zIndex={10}>
+                      <ChevronDown size={20} />
+                    </YStack>
+                  </Select.ScrollUpButton>
+
+                  <Select.Viewport minWidth={200}>
+                    <Select.Group>
+                      {displayFonts.map((font, i) => (
+                        <Select.Item index={i} key={font.class} value={font.class}>
+                          <Select.ItemText>{font.name}</Select.ItemText>
+                          <Select.ItemIndicator marginLeft="auto">
+                            <Check size={16} />
+                          </Select.ItemIndicator>
+                        </Select.Item>
+                      ))}
+                    </Select.Group>
+                  </Select.Viewport>
+
+                  <Select.ScrollDownButton alignItems="center" justifyContent="center" position="relative" width="100%" height="$3">
+                    <YStack zIndex={10}>
+                      <ChevronDown size={20} />
+                    </YStack>
+                  </Select.ScrollDownButton>
+                </Select.Content>
+              </Select>
+            </YStack>
 
             {/* Secondary Color */}
-            <div>
-              <label className="text-sm font-medium mb-2 block">Secondary Color</label>
-              <div className="grid grid-cols-6 gap-1">
+            <YStack>
+              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Secondary Color</Text>
+              <XStack flexWrap="wrap" gap="$1">
                 {accentColors.map((accent) => (
                   <div key={accent.name} className="relative">
                     {accent.isCustom ? (
@@ -494,122 +622,180 @@ export function Sidebar({ }: SidebarProps) {
                     )}
                   </div>
                 ))}
-              </div>
-            </div>
+              </XStack>
+            </YStack>
 
             {/* Spacing */}
-            <div>
-              <label className="text-sm font-medium mb-2 block">Spacing</label>
-              <div className="grid grid-cols-3 gap-2">
-                <button
-                  className={`p-3 rounded-lg border transition-all shadow-sm ${spacingMode === 'compact'
-                    ? 'border-primary bg-primary/5'
-                    : 'border-border hover:bg-muted'
-                    }`}
-                  onClick={() => setSpacingMode('compact')}
+            <YStack>
+              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Spacing</Text>
+              <XStack gap="$2">
+                <YStack
+                  flex={1}
+                  padding="$3"
+                  borderRadius="$4"
+                  borderWidth={1}
+                  borderColor={spacingMode === 'compact' ? '$blue9' : '$gray6'}
+                  backgroundColor={spacingMode === 'compact' ? '$blue2' : 'transparent'}
+                  alignItems="center"
+                  hoverStyle={{ backgroundColor: '$gray3' }}
+                  pressStyle={{ opacity: 0.7 }}
+                  onPress={() => setSpacingMode('compact')}
+                  cursor="pointer"
                 >
-                  <span className="text-xs">Compact</span>
-                </button>
-                <button
-                  className={`p-3 rounded-lg border transition-all shadow-sm ${spacingMode === 'normal'
-                    ? 'border-primary bg-primary/5'
-                    : 'border-border hover:bg-muted'
-                    }`}
-                  onClick={() => setSpacingMode('normal')}
+                  <Text fontSize="$2">Compact</Text>
+                </YStack>
+                <YStack
+                  flex={1}
+                  padding="$3"
+                  borderRadius="$4"
+                  borderWidth={1}
+                  borderColor={spacingMode === 'normal' ? '$blue9' : '$gray6'}
+                  backgroundColor={spacingMode === 'normal' ? '$blue2' : 'transparent'}
+                  alignItems="center"
+                  hoverStyle={{ backgroundColor: '$gray3' }}
+                  pressStyle={{ opacity: 0.7 }}
+                  onPress={() => setSpacingMode('normal')}
+                  cursor="pointer"
                 >
-                  <span className="text-xs">Normal</span>
-                </button>
-                <button
-                  className={`p-3 rounded-lg border transition-all shadow-sm ${spacingMode === 'comfortable'
-                    ? 'border-primary bg-primary/5'
-                    : 'border-border hover:bg-muted'
-                    }`}
-                  onClick={() => setSpacingMode('comfortable')}
+                  <Text fontSize="$2">Normal</Text>
+                </YStack>
+                <YStack
+                  flex={1}
+                  padding="$3"
+                  borderRadius="$4"
+                  borderWidth={1}
+                  borderColor={spacingMode === 'comfortable' ? '$blue9' : '$gray6'}
+                  backgroundColor={spacingMode === 'comfortable' ? '$blue2' : 'transparent'}
+                  alignItems="center"
+                  hoverStyle={{ backgroundColor: '$gray3' }}
+                  pressStyle={{ opacity: 0.7 }}
+                  onPress={() => setSpacingMode('comfortable')}
+                  cursor="pointer"
                 >
-                  <span className="text-xs">Comfortable</span>
-                </button>
-              </div>
-            </div>
+                  <Text fontSize="$2">Comfortable</Text>
+                </YStack>
+              </XStack>
+            </YStack>
 
             {/* Type Scale */}
-            <div>
-              <label className="text-sm font-medium mb-2 block">Type Scale</label>
-              <div className="flex gap-2">
-                <button
-                  className={`flex-1 p-3 rounded-lg border transition-all shadow-sm flex items-center justify-center ${selectedScale === 'small'
-                    ? 'border-primary bg-primary/5'
-                    : 'border-border hover:bg-muted'
-                    }`}
-                  onClick={() => setScale('small')}
-                  title="Small Scale"
+            <YStack>
+              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Type Scale</Text>
+              <XStack gap="$2">
+                <YStack
+                  flex={1}
+                  padding="$3"
+                  borderRadius="$4"
+                  borderWidth={1}
+                  borderColor={selectedScale === 'small' ? '$blue9' : '$gray6'}
+                  backgroundColor={selectedScale === 'small' ? '$blue2' : 'transparent'}
+                  alignItems="center"
+                  justifyContent="center"
+                  hoverStyle={{ backgroundColor: '$gray3' }}
+                  pressStyle={{ opacity: 0.7 }}
+                  onPress={() => setScale('small')}
+                  cursor="pointer"
                 >
-                  <span className="text-sm font-bold text-foreground">Aa</span>
-                </button>
-                <button
-                  className={`flex-1 p-3 rounded-lg border transition-all shadow-sm flex items-center justify-center ${selectedScale === 'regular'
-                    ? 'border-primary bg-primary/5'
-                    : 'border-border hover:bg-muted'
-                    }`}
-                  onClick={() => setScale('regular')}
-                  title="Regular Scale"
+                  <Text fontSize="$3" fontWeight="bold">Aa</Text>
+                </YStack>
+                <YStack
+                  flex={1}
+                  padding="$3"
+                  borderRadius="$4"
+                  borderWidth={1}
+                  borderColor={selectedScale === 'regular' ? '$blue9' : '$gray6'}
+                  backgroundColor={selectedScale === 'regular' ? '$blue2' : 'transparent'}
+                  alignItems="center"
+                  justifyContent="center"
+                  hoverStyle={{ backgroundColor: '$gray3' }}
+                  pressStyle={{ opacity: 0.7 }}
+                  onPress={() => setScale('regular')}
+                  cursor="pointer"
                 >
-                  <span className="text-base font-bold text-foreground">Aa</span>
-                </button>
-                <button
-                  className={`flex-1 p-3 rounded-lg border transition-all shadow-sm flex items-center justify-center ${selectedScale === 'large'
-                    ? 'border-primary bg-primary/5'
-                    : 'border-border hover:bg-muted'
-                    }`}
-                  onClick={() => setScale('large')}
-                  title="Large Scale"
+                  <Text fontSize="$4" fontWeight="bold">Aa</Text>
+                </YStack>
+                <YStack
+                  flex={1}
+                  padding="$3"
+                  borderRadius="$4"
+                  borderWidth={1}
+                  borderColor={selectedScale === 'large' ? '$blue9' : '$gray6'}
+                  backgroundColor={selectedScale === 'large' ? '$blue2' : 'transparent'}
+                  alignItems="center"
+                  justifyContent="center"
+                  hoverStyle={{ backgroundColor: '$gray3' }}
+                  pressStyle={{ opacity: 0.7 }}
+                  onPress={() => setScale('large')}
+                  cursor="pointer"
                 >
-                  <span className="text-lg font-bold text-foreground">Aa</span>
-                </button>
-              </div>
-            </div>
+                  <Text fontSize="$5" fontWeight="bold">Aa</Text>
+                </YStack>
+              </XStack>
+            </YStack>
 
             {/* Menu Layout */}
-            <div>
-              <label className="text-sm font-medium mb-2 block">Menu Layout</label>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  className={`p-3 text-sm rounded border flex flex-col items-center gap-2 ${opts.menuLayout === 'bottomBar'
-                    ? 'border-primary bg-primary/5 text-primary'
-                    : 'border-border hover:bg-muted'
-                    }`}
-                  onClick={() => setOpts({ menuLayout: 'bottomBar' })}
+            <YStack>
+              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Menu Layout</Text>
+              <XStack gap="$2">
+                <YStack
+                  flex={1}
+                  padding="$3"
+                  borderRadius="$2"
+                  borderWidth={1}
+                  borderColor={opts.menuLayout === 'bottomBar' ? '$blue9' : '$gray6'}
+                  backgroundColor={opts.menuLayout === 'bottomBar' ? '$blue2' : 'transparent'}
+                  alignItems="center"
+                  space="$2"
+                  hoverStyle={{ backgroundColor: '$gray3' }}
+                  pressStyle={{ opacity: 0.7 }}
+                  onPress={() => setOpts({ menuLayout: 'bottomBar' })}
+                  cursor="pointer"
                 >
-                  <Navigation size={16} />
-                  <span>Bottom Bar</span>
-                </button>
-                <button
-                  className={`p-3 text-sm rounded border flex flex-col items-center gap-2 ${opts.menuLayout === 'hamburger'
-                    ? 'border-primary bg-primary/5 text-primary'
-                    : 'border-border hover:bg-muted'
-                    }`}
-                  onClick={() => setOpts({ menuLayout: 'hamburger' })}
+                  <Navigation size={16} color={opts.menuLayout === 'bottomBar' ? 'var(--color-primary)' : 'currentColor'} />
+                  <Text fontSize="$3">Bottom Bar</Text>
+                </YStack>
+                <YStack
+                  flex={1}
+                  padding="$3"
+                  borderRadius="$2"
+                  borderWidth={1}
+                  borderColor={opts.menuLayout === 'hamburger' ? '$blue9' : '$gray6'}
+                  backgroundColor={opts.menuLayout === 'hamburger' ? '$blue2' : 'transparent'}
+                  alignItems="center"
+                  space="$2"
+                  hoverStyle={{ backgroundColor: '$gray3' }}
+                  pressStyle={{ opacity: 0.7 }}
+                  onPress={() => setOpts({ menuLayout: 'hamburger' })}
+                  cursor="pointer"
                 >
-                  <Menu size={16} />
-                  <span>Hamburger</span>
-                </button>
-              </div>
-            </div>
+                  <Menu size={16} color={opts.menuLayout === 'hamburger' ? 'var(--color-primary)' : 'currentColor'} />
+                  <Text fontSize="$3">Hamburger</Text>
+                </YStack>
+              </XStack>
+            </YStack>
 
-          </CollapsibleContent>
-        </Collapsible>
+            </YStack>
+          )}
+        </YStack>
 
         {/* Styling Controls Section */}
         <StylingControls />
 
-      </div>
+      </YStack>
 
       {/* Settings Button */}
-      <div className="mt-auto pt-8 border-t border-border">
-        <Button variant="ghost" className="w-full justify-start">
-          <Settings className="h-4 w-4 mr-2" />
-          Settings
-        </Button>
-      </div>
-    </div>
+        <YStack marginTop="auto" paddingTop="$6">
+          <TamaguiButton
+            chromeless
+            width="100%"
+            justifyContent="flex-start"
+            icon={<Settings size={16} />}
+            paddingHorizontal="$3"
+            paddingVertical="$2"
+          >
+            Settings
+          </TamaguiButton>
+        </YStack>
+      </ScrollView>
+    </YStack>
   );
 }
