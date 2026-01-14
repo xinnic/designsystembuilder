@@ -5,7 +5,8 @@
     }
   ],
   "settings": {
-    "workbench.colorTheme": "Palenight (Mild Contrast)",
-    "editor.fontFamily": "Sono, 'Google Sans Mono', 'Courier New', monospace"
+    "workbench.colorTheme": "Atom One Dark",
+    "editor.fontFamily": "Sono, 'Google Sans Mono', 'Courier New', monospace",
+    "editor.fontSize": 14
   }
 }
