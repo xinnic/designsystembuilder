@@ -59,8 +59,8 @@ export const CategoryPills = ({
               paddingVertical="$2"
               borderRadius="$4"
               onPress={() => onCategoryPress?.(category.id)}
-              accessibilityLabel={`Filter by ${category.label}`}
-              accessibilityState={{ selected: isActive }}
+              aria-label={`Filter by ${category.label}`}
+              aria-pressed={isActive}
             >
               <Body
                 color={isActive ? 'white' : '$brand'}

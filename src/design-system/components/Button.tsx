@@ -100,22 +100,26 @@ export const Button = styled(TamaguiButton, {
 
     size: {
       small: {
-        fontSize: '$1',
-        paddingHorizontal: '$3',
-        paddingVertical: '$2',
+        // Use Tamagui's size tokens for proper resolution
+        fontSize: '$2', // Smaller text
+        paddingHorizontal: '$2', // 16px (space token)
+        paddingVertical: 6,
         borderRadius: '$1',
+        minHeight: 36,
       },
       medium: {
-        fontSize: '$2',
-        paddingHorizontal: '$4',
-        paddingVertical: '$3',
+        fontSize: '$3', // Medium text
+        paddingHorizontal: '$3', // 24px (space token)
+        paddingVertical: 10,
         borderRadius: '$2',
+        minHeight: 44, // Standard touch target
       },
       large: {
-        fontSize: '$3',
-        paddingHorizontal: '$5',
-        paddingVertical: '$4',
+        fontSize: '$4', // Larger text
+        paddingHorizontal: '$4', // 32px (space token)
+        paddingVertical: 14,
         borderRadius: '$2',
+        minHeight: 52,
       },
     },
 

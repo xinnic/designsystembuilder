@@ -49,8 +49,8 @@ export const BottomNav = ({ items, activeId, onItemPress }: BottomNavProps) => {
             padding="$2"
             onPress={() => onItemPress?.(item.id)}
             flex={1}
-            accessibilityLabel={item.label}
-            accessibilityState={{ selected: isActive }}
+            aria-label={item.label}
+            aria-pressed={isActive}
           >
             <YStack alignItems="center" gap="$1">
               <YStack color={isActive ? '$brand' : '$textSecondary'}>
@@ -58,7 +58,7 @@ export const BottomNav = ({ items, activeId, onItemPress }: BottomNavProps) => {
               </YStack>
               <Caption
                 color={isActive ? '$brand' : '$textSecondary'}
-                fontSize={10}
+                fontSize="$1"
                 fontWeight={isActive ? '600' : '400'}
               >
                 {item.label}

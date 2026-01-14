@@ -61,7 +61,7 @@ export const AppBar = ({
             size="small"
             padding="$2"
             onPress={onMenuPress}
-            accessibilityLabel="Open menu"
+            aria-label="Open menu"
           >
             <MenuIcon size={20} />
           </Button>
@@ -88,7 +88,7 @@ export const AppBar = ({
             size="small"
             padding="$2"
             onPress={onSearchPress}
-            accessibilityLabel="Search"
+            aria-label="Search"
           >
             <Search size={20} />
           </Button>
@@ -100,7 +100,7 @@ export const AppBar = ({
             size="small"
             padding="$2"
             onPress={onNotificationPress}
-            accessibilityLabel="Notifications"
+            aria-label="Notifications"
           >
             <Bell size={20} />
           </Button>

@@ -16,8 +16,8 @@ const BaseText = styled(TamaguiText, {
 export const Display = styled(BaseText, {
   name: 'Display',
   fontFamily: '$heading',
-  fontSize: '$6',
-  lineHeight: '$6',
+  fontSize: '$display',
+  lineHeight: '$display',
   fontWeight: '700',
   color: '$textPrimary',
 });
@@ -29,8 +29,8 @@ export const Display = styled(BaseText, {
 export const H1 = styled(BaseText, {
   name: 'H1',
   fontFamily: '$heading',
-  fontSize: '$5',
-  lineHeight: '$5',
+  fontSize: '$h1',
+  lineHeight: '$h1',
   fontWeight: '700',
   color: '$textPrimary',
 });
@@ -42,8 +42,8 @@ export const H1 = styled(BaseText, {
 export const H2 = styled(BaseText, {
   name: 'H2',
   fontFamily: '$heading',
-  fontSize: '$4',
-  lineHeight: '$4',
+  fontSize: '$h2',
+  lineHeight: '$h2',
   fontWeight: '600',
   color: '$textPrimary',
 });
@@ -55,8 +55,8 @@ export const H2 = styled(BaseText, {
 export const H3 = styled(BaseText, {
   name: 'H3',
   fontFamily: '$heading',
-  fontSize: '$3',
-  lineHeight: '$3',
+  fontSize: '$h3',
+  lineHeight: '$h3',
   fontWeight: '600',
   color: '$textPrimary',
 });
@@ -67,8 +67,8 @@ export const H3 = styled(BaseText, {
  */
 export const Body = styled(BaseText, {
   name: 'Body',
-  fontSize: '$2',
-  lineHeight: '$2',
+  fontSize: '$body',
+  lineHeight: '$body',
   fontWeight: '400',
   color: '$textPrimary',
 });
@@ -79,8 +79,8 @@ export const Body = styled(BaseText, {
  */
 export const Caption = styled(BaseText, {
   name: 'Caption',
-  fontSize: '$1',
-  lineHeight: '$1',
+  fontSize: '$caption',
+  lineHeight: '$caption',
   fontWeight: '400',
   color: '$textSecondary',
 });
@@ -91,8 +91,8 @@ export const Caption = styled(BaseText, {
  */
 export const Label = styled(BaseText, {
   name: 'Label',
-  fontSize: '$2',
-  lineHeight: '$2',
+  fontSize: '$body',
+  lineHeight: '$body',
   fontWeight: '600',
   color: '$textPrimary',
 });

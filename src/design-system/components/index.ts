@@ -90,3 +90,17 @@ export {
 
 // Layout components
 export { XStack, YStack, Stack } from './Stack';
+
+// Content components
+export {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+  type AvatarProps,
+  type AvatarImageProps,
+  type AvatarFallbackProps,
+} from './Avatar';
+
+export { Image, type ImageProps } from './Image';
+
+export { ListItem, type ListItemProps } from './ListItem';
