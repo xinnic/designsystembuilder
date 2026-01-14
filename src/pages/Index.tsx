@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { Copy, Layers3, Palette, LayoutGrid } from 'lucide-react';
-import { TamaguiProvider, XStack, YStack, Button as TamaguiButton } from 'tamagui';
-// Removed static config import
-// import { config } from '../tamagui.config';
-import { createTamaguiConfig } from '@/utils/tamaguiConfigGenerator';
+import { XStack, YStack, Button as TamaguiButton, Text } from 'tamagui';
 import { Sidebar } from '@/components/Sidebar';
 import { PreviewPhoneTamagui } from '@/components/PreviewPhoneTamagui';
 import DesignSystemOverview from '@/components/DesignSystemOverview';
@@ -51,16 +48,7 @@ const Index = () => {
   const { toast } = useToast();
   const [rightPanelView, setRightPanelView] = useState<'atoms' | 'components' | 'patterns'>('atoms');
 
-  // Generate the dynamic Tamagui config based on current state
-  const tamaguiConfig = React.useMemo(() => {
-    return createTamaguiConfig({
-      isDarkMode,
-      selectedTheme,
-      customPrimaryColor,
-      stylePresetId: selectedStylePreset,
-      tokens,
-    } as any);
-  }, [isDarkMode, selectedTheme, customPrimaryColor, selectedStylePreset, tokens]);
+
 
   const colorThemes = {
     custom: customPrimaryColor,
@@ -169,69 +157,65 @@ const Index = () => {
           </Dialog>
         </header>
 
-        {/* Preview Panels - Wrapped in TamaguiProvider with dynamic config */}
-        <TamaguiProvider
-          config={tamaguiConfig}
-          defaultTheme={isDarkMode ? 'dark' : 'light'}
-        >
-          <XStack flex={1} minWidth={0}>
-            {/* Mobile App Preview */}
-            <XStack width={420} flexShrink={0} shadowColor="rgba(0,0,0,0.04)" shadowOffset={{ width: 1, height: 0 }} shadowOpacity={1} shadowRadius={3}>
-              <PreviewPhoneTamagui key={selectedStylePreset} />
+        {/* Preview Panels */}
+        <XStack flex={1} minWidth={0}>
+          {/* Mobile App Preview */}
+          <XStack width={420} flexShrink={0} shadowColor="rgba(0,0,0,0.04)" shadowOffset={{ width: 1, height: 0 }} shadowOpacity={1} shadowRadius={3}>
+            <PreviewPhoneTamagui key={selectedStylePreset} />
+          </XStack>
+
+          {/* Right Panel - Tailwind Components or Design Tokens */}
+          <YStack flex={1} borderLeftWidth={1} borderLeftColor="$borderColor" backgroundColor="$background">
+            <XStack padding="$3" borderBottomWidth={1} borderBottomColor="$borderColor" gap="$2" backgroundColor="$background">
+              <TamaguiButton
+                theme={rightPanelView === 'atoms' ? 'active' : undefined}
+                chromeless={rightPanelView !== 'atoms'}
+                onPress={() => setRightPanelView('atoms')}
+                size="$3"
+                fontSize={12}
+                height={32}
+              >
+                <XStack gap="$2" alignItems="center">
+                  <Palette size={12} />
+                  <Text fontSize={12}>Atoms</Text>
+                </XStack>
+              </TamaguiButton>
+              <TamaguiButton
+                theme={rightPanelView === 'components' ? 'active' : undefined}
+                chromeless={rightPanelView !== 'components'}
+                onPress={() => setRightPanelView('components')}
+                size="$3"
+                fontSize={12}
+                height={32}
+              >
+                <XStack gap="$2" alignItems="center">
+                  <Layers3 size={12} />
+                  <Text fontSize={12}>Components</Text>
+                </XStack>
+              </TamaguiButton>
+              <TamaguiButton
+                theme={rightPanelView === 'patterns' ? 'active' : undefined}
+                chromeless={rightPanelView !== 'patterns'}
+                onPress={() => setRightPanelView('patterns')}
+                size="$3"
+                fontSize={12}
+                height={32}
+              >
+                <XStack gap="$2" alignItems="center">
+                  <LayoutGrid size={12} />
+                  <Text fontSize={12}>Patterns</Text>
+                </XStack>
+              </TamaguiButton>
             </XStack>
 
-            {/* Right Panel - Tailwind Components or Design Tokens */}
-            <YStack flex={1} borderLeftWidth={1} borderLeftColor="$borderColor" backgroundColor="$background">
-              <XStack padding="$3" borderBottomWidth={1} borderBottomColor="$borderColor" gap="$2" backgroundColor="$background">
-                <TamaguiButton
-                  theme={rightPanelView === 'atoms' ? 'active' : undefined}
-                  chromeless={rightPanelView !== 'atoms'}
-                  onPress={() => setRightPanelView('atoms')}
-                  size="$3"
-                  fontSize={12}
-                  height={32}
-                >
-                  <XStack gap="$2" alignItems="center">
-                    <Palette size={12} />
-                    Atoms
-                  </XStack>
-                </TamaguiButton>
-                <TamaguiButton
-                  theme={rightPanelView === 'components' ? 'active' : undefined}
-                  chromeless={rightPanelView !== 'components'}
-                  onPress={() => setRightPanelView('components')}
-                  size="$3"
-                  fontSize={12}
-                  height={32}
-                >
-                  <XStack gap="$2" alignItems="center">
-                    <Layers3 size={12} />
-                    Components
-                  </XStack>
-                </TamaguiButton>
-                <TamaguiButton
-                  theme={rightPanelView === 'patterns' ? 'active' : undefined}
-                  chromeless={rightPanelView !== 'patterns'}
-                  onPress={() => setRightPanelView('patterns')}
-                  size="$3"
-                  fontSize={12}
-                  height={32}
-                >
-                  <XStack gap="$2" alignItems="center">
-                    <LayoutGrid size={12} />
-                    Patterns
-                  </XStack>
-                </TamaguiButton>
-              </XStack>
-
-              <YStack flex={1} overflow="scroll" padding="$6">
-                {rightPanelView === 'atoms' && <DesignSystemOverview />}
-                {rightPanelView === 'components' && <TamaguiShowcase />}
-                {rightPanelView === 'patterns' && <PatternsShowcase />}
-              </YStack>
+            <YStack flex={1} overflow="scroll" padding="$6">
+              {rightPanelView === 'atoms' && <DesignSystemOverview />}
+              {rightPanelView === 'components' && <TamaguiShowcase />}
+              {rightPanelView === 'patterns' && <PatternsShowcase />}
             </YStack>
-          </XStack>
-        </TamaguiProvider>
+          </YStack>
+        </XStack>
+
       </YStack>
     </XStack>
   );

@@ -4,11 +4,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
-import { TamaguiProvider, Theme } from '@tamagui/core';
+import { TamaguiProvider } from '@tamagui/core';
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { useTokenSystem, useTheme } from "./hooks/useTokenSystem";
-import { usePresetThemeName } from "./hooks/usePresetTheme";
 import { config } from "./tamagui.config";
 
 const queryClient = new QueryClient();
@@ -42,20 +41,15 @@ const AppContent = () => {
 };
 
 const App = () => {
-  // Get the current Tamagui theme name based on style preset
-  const tamaguiThemeName = usePresetThemeName();
-
   return (
     <TamaguiProvider config={config} defaultTheme="light">
-      <Theme name={tamaguiThemeName}>
-        <QueryClientProvider client={queryClient}>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <AppContent />
-          </TooltipProvider>
-        </QueryClientProvider>
-      </Theme>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <AppContent />
+        </TooltipProvider>
+      </QueryClientProvider>
     </TamaguiProvider>
   );
 };
