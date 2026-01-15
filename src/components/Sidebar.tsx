@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronDown, Check, Settings, Layers, Sliders, Navigation, Menu } from 'lucide-react';
-import { YStack, XStack, ScrollView, Text, Heading, Separator, Button as TamaguiButton, Switch as TamaguiSwitch, Select, Adapt, Sheet } from 'tamagui';
+import { YStack, XStack, ScrollView, Text, Heading, Separator, Button as TamaguiButton, Switch as TamaguiSwitch, Select, Adapt, Sheet, useTheme } from 'tamagui';
 import StylingControls from '../left/StylingControls';
 import { useDesignSystem } from '../state/designSystem';
 import { generateSecondaryColor } from '../utils/colorGeneration';
@@ -105,6 +105,7 @@ export function Sidebar({ }: SidebarProps) {
 
   const { toast } = useToast();
   const { presetTokens } = usePresetTheme();
+  const theme = useTheme();
 
   // Section states
   const [basicOptionsOpen, setBasicOptionsOpen] = React.useState(true);
@@ -174,7 +175,7 @@ export function Sidebar({ }: SidebarProps) {
       // Update border weight based on preset
       const borderWidthKey = tokens.card.borderWidthKey;
       const borderWeight = borderWidthKey === 'none' ? 'none' :
-        borderWidthKey === 'thin' || tokens.borderWidths[borderWidthKey] <= 1 ? 'thin' : 'thick';
+        borderWidthKey === 'thin' || (tokens.borderWidths[borderWidthKey] !== undefined && tokens.borderWidths[borderWidthKey] <= 1) ? 'thin' : 'thick';
 
       setOpts({
         cardBorderWeight: borderWeight,
@@ -221,7 +222,7 @@ export function Sidebar({ }: SidebarProps) {
         // Update border weight based on preset
         const borderWidthKey = tokens.card.borderWidthKey;
         const borderWeight = borderWidthKey === 'none' ? 'none' :
-          borderWidthKey === 'thin' || tokens.borderWidths[borderWidthKey] <= 1 ? 'thin' : 'thick';
+          borderWidthKey === 'thin' || (tokens.borderWidths[borderWidthKey] !== undefined && tokens.borderWidths[borderWidthKey] <= 1) ? 'thin' : 'thick';
 
         setOpts({
           cardBorderWeight: borderWeight,
@@ -237,7 +238,7 @@ export function Sidebar({ }: SidebarProps) {
       <ScrollView padding="$6">
         <YStack marginBottom="$8">
           <Heading size="$6" fontWeight="bold" marginBottom="$2">Design System Builder</Heading>
-          <Text size="$3" color="$colorHover">
+          <Text size="$3" color="$gray11">
             Customize your design system and generate AI-ready prompts
           </Text>
         </YStack>
@@ -259,12 +260,12 @@ export function Sidebar({ }: SidebarProps) {
             cursor="pointer"
           >
             <XStack space="$3" alignItems="center">
-              <Layers size={20} color="var(--color-primary)" />
+              <Layers size={20} color={theme.color.val} />
               <Text size="$3" fontWeight="500" color="$color">Basic Options</Text>
             </XStack>
             <ChevronDown
               size={16}
-              color="$color"
+              color={theme.color.val}
               style={{
                 transition: 'transform 0.2s',
                 transform: basicOptionsOpen ? 'rotate(180deg)' : 'rotate(0deg)'
@@ -335,7 +336,7 @@ export function Sidebar({ }: SidebarProps) {
             {/* Primary Color */}
             <YStack>
               <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Primary Color</Text>
-              <XStack flexWrap="wrap" gap={8}>
+              <XStack flexWrap="wrap" gap="$2" width="100%">
                 {colorThemes.map((theme) => (
                   <YStack key={theme.name} position="relative">
                     {theme.isCustom ? (
@@ -417,7 +418,7 @@ export function Sidebar({ }: SidebarProps) {
                   return (
                     <YStack
                       key={preset.id}
-                      width={128}
+                      width="48%"
                       height={80}
                       padding="$3"
                       borderRadius="$3"
@@ -432,7 +433,7 @@ export function Sidebar({ }: SidebarProps) {
                       onPress={() => handleStylePresetChange(preset.id)}
                       cursor="pointer"
                     >
-                      <Icon size={24} color={isSelected ? 'var(--color-focus)' : '$gray11'} />
+                      <Icon size={24} color={isSelected ? theme.blue9.val : theme.gray11.val} />
                       <Text fontSize="$2" textAlign="center" color={isSelected ? '$blue11' : '$gray11'}>{preset.name}</Text>
                     </YStack>
                   );
@@ -510,12 +511,12 @@ export function Sidebar({ }: SidebarProps) {
             cursor="pointer"
           >
             <XStack space="$3" alignItems="center">
-              <Sliders size={20} />
+              <Sliders size={20} color={theme.color.val} />
               <Text size="$3" fontWeight="500" color="$color">Advanced Styling</Text>
             </XStack>
             <ChevronDown
               size={16}
-              color="$color"
+              color={theme.color.val}
               style={{
                 transition: 'transform 0.2s',
                 transform: advancedStylingOpen ? 'rotate(180deg)' : 'rotate(0deg)'
@@ -599,7 +600,7 @@ export function Sidebar({ }: SidebarProps) {
             {/* Display Font (for headings) */}
             <YStack>
               <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Display Font</Text>
-              <Text size="$2" color="$colorHover" marginBottom="$2">For headings and titles</Text>
+              <Text size="$2" color="$gray11" marginBottom="$2">For headings and titles</Text>
               <Select value={selectedDisplayFont} onValueChange={setDisplayFont}>
                 <Select.Trigger 
                   width="100%" 
@@ -658,7 +659,7 @@ export function Sidebar({ }: SidebarProps) {
             {/* Secondary Color */}
             <YStack>
               <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Secondary Color</Text>
-              <XStack flexWrap="wrap" gap={8}>
+              <XStack flexWrap="wrap" gap="$2" width="100%">
                 {accentColors.map((accent) => (
                   <YStack key={accent.name} position="relative">
                     {accent.isCustom ? (
@@ -848,7 +849,7 @@ export function Sidebar({ }: SidebarProps) {
                   onPress={() => setOpts({ menuLayout: 'bottomBar' })}
                   cursor="pointer"
                 >
-                  <Navigation size={16} color={opts.menuLayout === 'bottomBar' ? 'var(--color-primary)' : 'currentColor'} />
+                  <Navigation size={16} color={opts.menuLayout === 'bottomBar' ? theme.blue9.val : theme.gray11.val} />
                   <Text size="$3" color="$color">Bottom Bar</Text>
                 </YStack>
                 <YStack
@@ -865,7 +866,7 @@ export function Sidebar({ }: SidebarProps) {
                   onPress={() => setOpts({ menuLayout: 'hamburger' })}
                   cursor="pointer"
                 >
-                  <Menu size={16} color={opts.menuLayout === 'hamburger' ? 'var(--color-primary)' : 'currentColor'} />
+                  <Menu size={16} color={opts.menuLayout === 'hamburger' ? theme.blue9.val : theme.gray11.val} />
                   <Text size="$3" color="$color">Hamburger</Text>
                 </YStack>
               </XStack>
