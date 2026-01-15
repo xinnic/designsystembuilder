@@ -6,9 +6,38 @@
  */
 
 import React, { useState } from 'react';
+import { 
+  YStack, 
+  XStack, 
+  H1, 
+  H2, 
+  H3, 
+  Paragraph, 
+  Text, 
+  ScrollView,
+  styled,
+  Separator
+} from 'tamagui';
 import { Button } from '../design-system/components/Button';
 import { ButtonNew } from '../design-system/components/ButtonNew';
+import { Card } from '../design-system/components/Card';
 import { generateComponentVariants } from '../design-system/tokens/factories';
+
+// Styled code block for better presentation
+const CodeBlock = styled(YStack, {
+  backgroundColor: '$bgSecondary',
+  padding: '$4',
+  borderRadius: '$4',
+  borderWidth: 1,
+  borderColor: '$border',
+  overflow: 'hidden',
+});
+
+const CodeText = styled(Text, {
+  fontFamily: '$mono', // Assuming mono font is available, or fallback
+  fontSize: '$1',
+  color: '$color',
+});
 
 export function FactoryDemo() {
   const [showCode, setShowCode] = useState(false);
@@ -30,40 +59,55 @@ export function FactoryDemo() {
   };
 
   return (
-    <div className="p-8 space-y-8 max-w-7xl mx-auto">
-      {/* Header */}
-      <div className="text-center">
-        <h1 className="text-3xl font-bold mb-2">Token Factory Functions</h1>
-        <p className="text-lg text-gray-600">87% Code Reduction • 10x More Variants</p>
-      </div>
+    <ScrollView backgroundColor="$background" contentContainerStyle={{ padding: '$8' }}>
+      <YStack gap="$8" maxWidth={1280} marginHorizontal="auto" width="100%">
+        {/* Header */}
+        <YStack alignItems="center" gap="$2">
+          <H1 textAlign="center">Token Factory Functions</H1>
+          <Paragraph size="$5" color="$colorHover" textAlign="center">
+            87% Code Reduction • 10x More Variants
+          </Paragraph>
+        </YStack>
 
-      {/* Statistics */}
-      <div className="grid grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg p-4 shadow-sm border">
-          <div className="text-3xl font-bold text-blue-600">{stats.sizeCount}</div>
-          <div className="text-sm text-gray-600">Size Variants</div>
-        </div>
-        <div className="bg-white rounded-lg p-4 shadow-sm border">
-          <div className="text-3xl font-bold text-green-600">{stats.colorCount}</div>
-          <div className="text-sm text-gray-600">Color Variants</div>
-        </div>
-        <div className="bg-white rounded-lg p-4 shadow-sm border">
-          <div className="text-3xl font-bold text-purple-600">{stats.stateCount}</div>
-          <div className="text-sm text-gray-600">Interactive States</div>
-        </div>
-        <div className="bg-white rounded-lg p-4 shadow-sm border">
-          <div className="text-3xl font-bold text-orange-600">{stats.totalCombinations}</div>
-          <div className="text-sm text-gray-600">Total Combinations</div>
-        </div>
-      </div>
+        {/* Statistics */}
+        <XStack gap="$4" flexWrap="wrap">
+          <Card flex={1} minWidth={200} variant="elevated" padding="large">
+            <YStack items="center" gap="$1">
+              <H1 color="$info">{stats.sizeCount}</H1>
+              <Paragraph color="$colorHover">Size Variants</Paragraph>
+            </YStack>
+          </Card>
+          
+          <Card flex={1} minWidth={200} variant="elevated" padding="large">
+            <YStack items="center" gap="$1">
+              <H1 color="$success">{stats.colorCount}</H1>
+              <Paragraph color="$colorHover">Color Variants</Paragraph>
+            </YStack>
+          </Card>
+          
+          <Card flex={1} minWidth={200} variant="elevated" padding="large">
+            <YStack items="center" gap="$1">
+              <H1 color="$brand">{stats.stateCount}</H1>
+              <Paragraph color="$colorHover">Interactive States</Paragraph>
+            </YStack>
+          </Card>
+          
+          <Card flex={1} minWidth={200} variant="elevated" padding="large">
+            <YStack items="center" gap="$1">
+              <H1 color="$warning">{stats.totalCombinations}</H1>
+              <Paragraph color="$colorHover">Total Combinations</Paragraph>
+            </YStack>
+          </Card>
+        </XStack>
 
-      {/* Code Comparison */}
-      <div className="grid grid-cols-2 gap-6">
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-red-600">❌ Manual Approach (140 lines)</h2>
-          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 max-h-96 overflow-y-auto">
-            <pre className="text-xs">
-              <code>{`// Button.tsx - Manual variant definitions
+        {/* Code Comparison */}
+        <XStack gap="$6" flexWrap="wrap">
+          {/* Manual Approach */}
+          <YStack flex={1} minWidth={350} gap="$4">
+            <H2 color="$danger" fontSize="$6">❌ Manual Approach (140 lines)</H2>
+            <CodeBlock maxHeight={400} overflow="scroll">
+              <CodeText>
+{`// Button.tsx - Manual variant definitions
 variants: {
   variant: {
     primary: {
@@ -115,25 +159,24 @@ variants: {
     }
   }
 }
-// ... and 80+ more lines for states, disabled, etc.`}</code>
-            </pre>
-          </div>
-          <div className="text-sm text-gray-600">
-            <ul className="space-y-1">
-              <li>• 5 color variants manually coded</li>
-              <li>• 3 size variants manually coded</li>
-              <li>• States repeated for each variant</li>
-              <li>• No automatic dark mode</li>
-              <li>• High maintenance burden</li>
-            </ul>
-          </div>
-        </div>
+// ... and 80+ more lines for states, disabled, etc.`}
+              </CodeText>
+            </CodeBlock>
+            <YStack gap="$1" paddingLeft="$2">
+              <Paragraph size="$2" color="$colorHover">• 5 color variants manually coded</Paragraph>
+              <Paragraph size="$2" color="$colorHover">• 3 size variants manually coded</Paragraph>
+              <Paragraph size="$2" color="$colorHover">• States repeated for each variant</Paragraph>
+              <Paragraph size="$2" color="$colorHover">• No automatic dark mode</Paragraph>
+              <Paragraph size="$2" color="$colorHover">• High maintenance burden</Paragraph>
+            </YStack>
+          </YStack>
 
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-green-600">✅ Factory Approach (4 lines)</h2>
-          <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-            <pre className="text-xs">
-              <code>{`// ButtonNew.tsx - Factory-generated variants
+          {/* Factory Approach */}
+          <YStack flex={1} minWidth={350} gap="$4">
+            <H2 color="$success" fontSize="$6">✅ Factory Approach (4 lines)</H2>
+            <CodeBlock borderColor="$success" borderWidth={1} backgroundColor="$bgSecondary">
+              <CodeText>
+{`// ButtonNew.tsx - Factory-generated variants
 const generatedVariants = generateComponentVariants({
   sizes: true,          // Generates 6 sizes automatically
   colors: ['primary', 'secondary', 'success', 'danger', 'warning', 'info'],
@@ -141,191 +184,206 @@ const generatedVariants = generateComponentVariants({
   radius: true          // Border radius variants
 });
 
-// That's it! 24 color variants, 6 sizes, all states generated`}</code>
-            </pre>
-          </div>
-          <div className="text-sm text-gray-600">
-            <ul className="space-y-1">
-              <li>✅ 24 color variants (4 styles × 6 colors)</li>
-              <li>✅ 6 size variants with proper scaling</li>
-              <li>✅ Consistent states across all variants</li>
-              <li>✅ Automatic dark mode support</li>
-              <li>✅ Zero maintenance - update tokens, get updates everywhere</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+// That's it! 24 color variants, 6 sizes, all states generated`}
+              </CodeText>
+            </CodeBlock>
+            <YStack gap="$1" paddingLeft="$2">
+              <Paragraph size="$2" color="$colorHover">• ✅ 24 color variants (4 styles × 6 colors)</Paragraph>
+              <Paragraph size="$2" color="$colorHover">• ✅ 6 size variants with proper scaling</Paragraph>
+              <Paragraph size="$2" color="$colorHover">• ✅ Consistent states across all variants</Paragraph>
+              <Paragraph size="$2" color="$colorHover">• ✅ Automatic dark mode support</Paragraph>
+              <Paragraph size="$2" color="$colorHover">• ✅ Zero maintenance - update tokens, get updates everywhere</Paragraph>
+            </YStack>
+          </YStack>
+        </XStack>
 
-      {/* Visual Examples */}
-      <div className="space-y-6">
-        <h2 className="text-xl font-semibold">Visual Comparison</h2>
+        {/* Visual Examples */}
+        <YStack gap="$6">
+          <H2>Visual Comparison</H2>
 
-        {/* Size Variants */}
-        <div>
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Size Variants</h3>
-          <div className="flex gap-3 items-center">
-            <span className="text-xs text-gray-500 w-20">Old Button:</span>
-            <Button size="small">Small</Button>
-            <Button size="medium">Medium</Button>
-            <Button size="large">Large</Button>
-            <span className="text-gray-400">(3 sizes)</span>
-          </div>
-          <div className="flex gap-3 items-center mt-2">
-            <span className="text-xs text-gray-500 w-20">New Button:</span>
-            <ButtonNew size="xs">XS</ButtonNew>
-            <ButtonNew size="sm">SM</ButtonNew>
-            <ButtonNew size="md">MD</ButtonNew>
-            <ButtonNew size="lg">LG</ButtonNew>
-            <ButtonNew size="xl">XL</ButtonNew>
-            <ButtonNew size="2xl">2XL</ButtonNew>
-            <span className="text-green-600 font-medium">(6 sizes)</span>
-          </div>
-        </div>
+          {/* Size Variants */}
+          <YStack gap="$3">
+            <H3 size="$4" color="$colorHover">Size Variants</H3>
+            <XStack gap="$3" alignItems="center" flexWrap="wrap">
+              <Text width={80} size="$2" color="$colorHover">Old Button:</Text>
+              <Button size="small">Small</Button>
+              <Button size="medium">Medium</Button>
+              <Button size="large">Large</Button>
+              <Text size="$2" color="$placeholderColor">(3 sizes)</Text>
+            </XStack>
+            <XStack gap="$3" alignItems="center" marginTop="$2" flexWrap="wrap">
+              <Text width={80} size="$2" color="$colorHover">New Button:</Text>
+              <ButtonNew size="xs">XS</ButtonNew>
+              <ButtonNew size="sm">SM</ButtonNew>
+              <ButtonNew size="md">MD</ButtonNew>
+              <ButtonNew size="lg">LG</ButtonNew>
+              <ButtonNew size="xl">XL</ButtonNew>
+              <ButtonNew size="2xl">2XL</ButtonNew>
+              <Text size="$2" color="$success" fontWeight="bold">(6 sizes)</Text>
+            </XStack>
+          </YStack>
 
-        {/* Color Variants */}
-        <div>
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Color Variants (showing solid style only)</h3>
-          <div className="space-y-2">
-            <div className="flex gap-3 items-center">
-              <span className="text-xs text-gray-500 w-20">Old Button:</span>
-              <Button variant="primary">Primary</Button>
-              <Button variant="secondary">Secondary</Button>
-              <Button variant="tertiary">Tertiary</Button>
-              <Button variant="destructive">Destructive</Button>
-              <Button variant="ghost">Ghost</Button>
-              <span className="text-gray-400">(5 variants)</span>
-            </div>
-            <div className="flex gap-3 items-center flex-wrap">
-              <span className="text-xs text-gray-500 w-20">New Solid:</span>
-              <ButtonNew variant="primary">Primary</ButtonNew>
-              <ButtonNew variant="secondary">Secondary</ButtonNew>
-              <ButtonNew variant="success">Success</ButtonNew>
-              <ButtonNew variant="warning">Warning</ButtonNew>
-              <ButtonNew variant="danger">Danger</ButtonNew>
-              <ButtonNew variant="info">Info</ButtonNew>
-              <span className="text-green-600 font-medium">(6 colors)</span>
-            </div>
-            <div className="flex gap-3 items-center flex-wrap">
-              <span className="text-xs text-gray-500 w-20">New Outline:</span>
-              <ButtonNew variant="primary-outline">Primary</ButtonNew>
-              <ButtonNew variant="secondary-outline">Secondary</ButtonNew>
-              <ButtonNew variant="success-outline">Success</ButtonNew>
-              <ButtonNew variant="warning-outline">Warning</ButtonNew>
-              <ButtonNew variant="danger-outline">Danger</ButtonNew>
-              <ButtonNew variant="info-outline">Info</ButtonNew>
-            </div>
-            <div className="flex gap-3 items-center flex-wrap">
-              <span className="text-xs text-gray-500 w-20">New Ghost:</span>
-              <ButtonNew variant="primary-ghost">Primary</ButtonNew>
-              <ButtonNew variant="secondary-ghost">Secondary</ButtonNew>
-              <ButtonNew variant="success-ghost">Success</ButtonNew>
-              <ButtonNew variant="warning-ghost">Warning</ButtonNew>
-              <ButtonNew variant="danger-ghost">Danger</ButtonNew>
-              <ButtonNew variant="info-ghost">Info</ButtonNew>
-            </div>
-            <div className="flex gap-3 items-center flex-wrap">
-              <span className="text-xs text-gray-500 w-20">New Subtle:</span>
-              <ButtonNew variant="primary-subtle">Primary</ButtonNew>
-              <ButtonNew variant="secondary-subtle">Secondary</ButtonNew>
-              <ButtonNew variant="success-subtle">Success</ButtonNew>
-              <ButtonNew variant="warning-subtle">Warning</ButtonNew>
-              <ButtonNew variant="danger-subtle">Danger</ButtonNew>
-              <ButtonNew variant="info-subtle">Info</ButtonNew>
-              <span className="text-green-600 font-medium">(24 total variants)</span>
-            </div>
-          </div>
-        </div>
+          {/* Color Variants */}
+          <YStack gap="$3">
+            <H3 size="$4" color="$colorHover">Color Variants (showing solid style only)</H3>
+            
+            <YStack gap="$2">
+              <XStack gap="$3" alignItems="center" flexWrap="wrap">
+                <Text width={80} size="$2" color="$colorHover">Old Button:</Text>
+                <Button variant="primary">Primary</Button>
+                <Button variant="secondary">Secondary</Button>
+                <Button variant="tertiary">Tertiary</Button>
+                <Button variant="destructive">Destructive</Button>
+                <Button variant="ghost">Ghost</Button>
+                <Text size="$2" color="$placeholderColor">(5 variants)</Text>
+              </XStack>
+              
+              <XStack gap="$3" alignItems="center" flexWrap="wrap">
+                <Text width={80} size="$2" color="$colorHover">New Solid:</Text>
+                <ButtonNew variant="primary">Primary</ButtonNew>
+                <ButtonNew variant="secondary">Secondary</ButtonNew>
+                <ButtonNew variant="success">Success</ButtonNew>
+                <ButtonNew variant="warning">Warning</ButtonNew>
+                <ButtonNew variant="danger">Danger</ButtonNew>
+                <ButtonNew variant="info">Info</ButtonNew>
+                <Text size="$2" color="$success" fontWeight="bold">(6 colors)</Text>
+              </XStack>
 
-        {/* States */}
-        <div>
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Interactive States</h3>
-          <div className="flex gap-3 items-center">
-            <ButtonNew variant="primary">Normal</ButtonNew>
-            <ButtonNew variant="primary" disabled>Disabled</ButtonNew>
-            <ButtonNew variant="primary" loading>Loading</ButtonNew>
-            <ButtonNew variant="primary-outline" disabled>Disabled Outline</ButtonNew>
-            <span className="text-gray-500 text-sm">
-              (Hover, Focus, Active states automatic on all variants)
-            </span>
-          </div>
-        </div>
-      </div>
+              <XStack gap="$3" alignItems="center" flexWrap="wrap">
+                <Text width={80} size="$2" color="$colorHover">New Outline:</Text>
+                <ButtonNew variant="primary-outline">Primary</ButtonNew>
+                <ButtonNew variant="secondary-outline">Secondary</ButtonNew>
+                <ButtonNew variant="success-outline">Success</ButtonNew>
+                <ButtonNew variant="warning-outline">Warning</ButtonNew>
+                <ButtonNew variant="danger-outline">Danger</ButtonNew>
+                <ButtonNew variant="info-outline">Info</ButtonNew>
+              </XStack>
 
-      {/* Benefits Summary */}
-      <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg border border-green-200">
-        <h2 className="text-xl font-semibold mb-4">🎯 Benefits of Token Factories</h2>
-        <div className="grid grid-cols-2 gap-6">
-          <div>
-            <h3 className="font-medium mb-2">Code Reduction</h3>
-            <ul className="text-sm space-y-1 text-gray-700">
-              <li>• 87% less code to write</li>
-              <li>• 4 lines instead of 140+</li>
-              <li>• Consistent patterns across components</li>
-              <li>• Less chance for errors</li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="font-medium mb-2">Feature Multiplication</h3>
-            <ul className="text-sm space-y-1 text-gray-700">
-              <li>• 10x more variants automatically</li>
-              <li>• Dark mode support built-in</li>
-              <li>• Accessibility compliance automatic</li>
-              <li>• Platform-specific styles included</li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="font-medium mb-2">Maintenance</h3>
-            <ul className="text-sm space-y-1 text-gray-700">
-              <li>• Update tokens, update everywhere</li>
-              <li>• No manual variant maintenance</li>
-              <li>• Consistent behavior guaranteed</li>
-              <li>• Easy to add new variants</li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="font-medium mb-2">Design System Benefits</h3>
-            <ul className="text-sm space-y-1 text-gray-700">
-              <li>• Brand consistency automatic</li>
-              <li>• Theme switching instant</li>
-              <li>• Responsive to design tokens</li>
-              <li>• Megaprompt generation ready</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+              <XStack gap="$3" alignItems="center" flexWrap="wrap">
+                <Text width={80} size="$2" color="$colorHover">New Ghost:</Text>
+                <ButtonNew variant="primary-ghost">Primary</ButtonNew>
+                <ButtonNew variant="secondary-ghost">Secondary</ButtonNew>
+                <ButtonNew variant="success-ghost">Success</ButtonNew>
+                <ButtonNew variant="warning-ghost">Warning</ButtonNew>
+                <ButtonNew variant="danger-ghost">Danger</ButtonNew>
+                <ButtonNew variant="info-ghost">Info</ButtonNew>
+              </XStack>
 
-      {/* Implementation Time Comparison */}
-      <div className="bg-gray-100 p-6 rounded-lg">
-        <h3 className="font-semibold mb-3">⏱️ Implementation Time Comparison</h3>
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div className="bg-white p-4 rounded">
-            <div className="text-red-600 font-medium">Manual Approach</div>
-            <ul className="mt-2 space-y-1 text-gray-700">
-              <li>• Define 5 color variants: 30 min</li>
-              <li>• Define 3 size variants: 15 min</li>
-              <li>• Add hover/active states: 20 min</li>
-              <li>• Test all combinations: 30 min</li>
-              <li>• Dark mode support: 45 min</li>
-              <li className="font-bold pt-2 border-t">Total: ~2.5 hours</li>
-            </ul>
-          </div>
-          <div className="bg-white p-4 rounded">
-            <div className="text-green-600 font-medium">Factory Approach</div>
-            <ul className="mt-2 space-y-1 text-gray-700">
-              <li>• Call factory function: 1 min</li>
-              <li>• Apply to component: 5 min</li>
-              <li>• Test (all automatic): 5 min</li>
-              <li>• Dark mode (automatic): 0 min</li>
-              <li>• 24 variants ready: 0 min</li>
-              <li className="font-bold pt-2 border-t">Total: ~10 minutes</li>
-            </ul>
-          </div>
-        </div>
-        <div className="mt-4 text-center">
-          <span className="text-2xl font-bold text-green-600">93% Time Saved</span>
-          <span className="text-gray-600 ml-2">• 10x More Features</span>
-        </div>
-      </div>
-    </div>
+              <XStack gap="$3" alignItems="center" flexWrap="wrap">
+                <Text width={80} size="$2" color="$colorHover">New Subtle:</Text>
+                <ButtonNew variant="primary-subtle">Primary</ButtonNew>
+                <ButtonNew variant="secondary-subtle">Secondary</ButtonNew>
+                <ButtonNew variant="success-subtle">Success</ButtonNew>
+                <ButtonNew variant="warning-subtle">Warning</ButtonNew>
+                <ButtonNew variant="danger-subtle">Danger</ButtonNew>
+                <ButtonNew variant="info-subtle">Info</ButtonNew>
+                <Text size="$2" color="$success" fontWeight="bold">(24 total variants)</Text>
+              </XStack>
+            </YStack>
+          </YStack>
+
+          {/* States */}
+          <YStack gap="$3">
+            <H3 size="$4" color="$colorHover">Interactive States</H3>
+            <XStack gap="$3" alignItems="center" flexWrap="wrap">
+              <ButtonNew variant="primary">Normal</ButtonNew>
+              <ButtonNew variant="primary" disabled>Disabled</ButtonNew>
+              <ButtonNew variant="primary" loading>Loading</ButtonNew>
+              <ButtonNew variant="primary-outline" disabled>Disabled Outline</ButtonNew>
+              <Text size="$2" color="$colorHover">
+                (Hover, Focus, Active states automatic on all variants)
+              </Text>
+            </XStack>
+          </YStack>
+        </YStack>
+
+        {/* Benefits Summary */}
+        <Card variant="gradient" padding="large">
+            <YStack gap="$4">
+            <H2>🎯 Benefits of Token Factories</H2>
+            <XStack gap="$6" flexWrap="wrap">
+              <YStack flex={1} minWidth={200} gap="$2">
+                <H3 size="$4">Code Reduction</H3>
+                <YStack>
+                  <Paragraph size="$2" color="$colorHover">• 87% less code to write</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• 4 lines instead of 140+</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• Consistent patterns across components</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• Less chance for errors</Paragraph>
+                </YStack>
+              </YStack>
+              
+              <YStack flex={1} minWidth={200} gap="$2">
+                <H3 size="$4">Feature Multiplication</H3>
+                <YStack>
+                  <Paragraph size="$2" color="$colorHover">• 10x more variants automatically</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• Dark mode support built-in</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• Accessibility compliance automatic</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• Platform-specific styles included</Paragraph>
+                </YStack>
+              </YStack>
+              
+              <YStack flex={1} minWidth={200} gap="$2">
+                <H3 size="$4">Maintenance</H3>
+                <YStack>
+                  <Paragraph size="$2" color="$colorHover">• Update tokens, update everywhere</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• No manual variant maintenance</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• Consistent behavior guaranteed</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• Easy to add new variants</Paragraph>
+                </YStack>
+              </YStack>
+              
+              <YStack flex={1} minWidth={200} gap="$2">
+                <H3 size="$4">Design System Benefits</H3>
+                <YStack>
+                  <Paragraph size="$2" color="$colorHover">• Brand consistency automatic</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• Theme switching instant</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• Responsive to design tokens</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• Megaprompt generation ready</Paragraph>
+                </YStack>
+              </YStack>
+            </XStack>
+            </YStack>
+        </Card>
+
+        {/* Implementation Time Comparison */}
+        <Card variant="default" backgroundColor="$bgSecondary" padding="large">
+          <YStack gap="$3">
+            <H3>⏱️ Implementation Time Comparison</H3>
+            <XStack gap="$4" flexWrap="wrap">
+              <Card flex={1} minWidth={300} variant="default" backgroundColor="$background" padding="medium">
+                <H3 color="$danger">Manual Approach</H3>
+                <YStack gap="$1" marginTop="$2">
+                  <Paragraph size="$2" color="$colorHover">• Define 5 color variants: 30 min</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• Define 3 size variants: 15 min</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• Add hover/active states: 20 min</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• Test all combinations: 30 min</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• Dark mode support: 45 min</Paragraph>
+                  <Separator marginVertical="$2" />
+                  <Paragraph fontWeight="bold" color="$color">Total: ~2.5 hours</Paragraph>
+                </YStack>
+              </Card>
+              
+              <Card flex={1} minWidth={300} variant="default" backgroundColor="$background" padding="medium">
+                <H3 color="$success">Factory Approach</H3>
+                <YStack gap="$1" marginTop="$2">
+                  <Paragraph size="$2" color="$colorHover">• Call factory function: 1 min</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• Apply to component: 5 min</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• Test (all automatic): 5 min</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• Dark mode (automatic): 0 min</Paragraph>
+                  <Paragraph size="$2" color="$colorHover">• 24 variants ready: 0 min</Paragraph>
+                  <Separator marginVertical="$2" />
+                  <Paragraph fontWeight="bold" color="$color">Total: ~10 minutes</Paragraph>
+                </YStack>
+              </Card>
+            </XStack>
+            
+            <YStack alignItems="center" marginTop="$4">
+              <H2 color="$success">93% Time Saved</H2>
+              <Paragraph color="$colorHover">• 10x More Features</Paragraph>
+            </YStack>
+          </YStack>
+        </Card>
+      </YStack>
+    </ScrollView>
   );
 }
