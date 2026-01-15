@@ -535,359 +535,175 @@ After migration, verify:
 3. Once Modern Flat works, other presets (Soft & Dreamy, Minimalist, Neo-Brutalism) should also work since they use the same Tamagui theming system
 4. Style preset changes should update: **Builder UI + Middle Phone Mock + Right Panel Showcase**
 
-**Modern Flat Characteristics (from refs/):**
-- Soft grey borders (1px)
-- White/light backgrounds
-- Minimal box shadows
-- Clean, Linear/Stripe-like aesthetic
-- Readable text with proper contrast
-
-### 🐛 Identified Issues
+### 🐛 Identified Issues (Re-Verified)
 
 | Issue # | Description | Severity |
 |---------|-------------|----------|
-| **8.1** | Text is weirdly unreadable - font sizes and colors not applying correctly | 🔴 Critical |
-| **8.2** | Controls are unstyled - spacing, borders, backgrounds missing | 🔴 Critical |
-| **8.3** | Color swatches not displayed as neat square grid cells | 🟡 High |
-| **8.4** | Color picker (input type="color") has disappeared | 🔴 Critical |
-| **8.5** | "Modern Flat Applied" toast shows on initial load (shouldn't) | 🟢 Medium |
-| **8.6** | Primary color changes don't update middle/right panel components | 🔴 Critical |
-| **8.7** | Style preset buttons look unstyled and janky | 🟡 High |
-| **8.8** | Sidebar sections (Typography, Colors) layout is broken | 🔴 Critical |
+| **8.1** | "Generate Megaprompt" button is unstyled (using Tailwind classes that are removed) | 🔴 Critical |
+| **8.2** | Style Preset buttons are wrong size/layout (should be 2x2 grid of small tiles) | 🔴 Critical |
+| **8.3** | Color Picker is not wrapping (shows as single row) | 🔴 Critical |
+| **8.4** | Text contrast is low (using light gray tokens instead of primary text color) | 🟡 High |
+| **8.5** | Accordion headers need visual refinement to match "clean box" look | 🟡 High |
 
 ---
 
-### STREAM G: Fix Typography & Text Rendering (Issue 8.1)
+### STREAM L: Fix Index & Header (Issue 8.1)
 
 | Task ID | Task | File(s) | Status |
 |---------|------|---------|--------|
-| **8.G.1** | Fix Text component color tokens | `src/components/Sidebar.tsx` | Not Started |
-| **8.G.2** | Fix Heading component sizing | `src/components/Sidebar.tsx` | Not Started |
-| **8.G.3** | Verify font-family CSS variables are applied | `src/index.css`, `src/tamagui.config.ts` | Not Started |
+| **8.L.1** | Convert Index.tsx header to Tamagui XStack | `src/pages/Index.tsx` | Not Started |
+| **8.L.2** | Convert "Generate Megaprompt" button to TamaguiButton | `src/pages/Index.tsx` | Not Started |
 
-**8.G.1 Prompt:**
+**8.L.1 & 8.L.2 Prompt:**
 ```
-Fix unreadable text in Sidebar. In /Users/mushy/Documents/Repositories/designsystembuilder/src/components/Sidebar.tsx:
+Fix the "Generate Megaprompt" header in src/pages/Index.tsx.
+Currently it uses Tailwind classes (p-4, flex, etc) which are broken.
 
-The text is currently unreadable. Issues to fix:
+1. Replace the <header> with:
+   <XStack padding="$4" justifyContent="space-end" borderBottomWidth={1} borderBottomColor="$borderColor" backgroundColor="$background">
 
-1. Line 203-205: The description Text uses color="$gray10" which may not exist.
-   Change to: color="$colorHover" or use a proper semantic token like "$textSecondary"
+2. Replace the shadcn <Button> with:
+   <TamaguiButton
+     theme="active" // or specific gradient if needed, but semantic is better
+     icon={<Copy size={16} />}
+     onPress={() => setIsDialogOpen(true)}
+     size="$3"
+   >
+     Generate Megaprompt
+   </TamaguiButton>
 
-2. All Text components using fontSize="$3" should use size="$3" instead (Tamagui convention)
-
-3. Check line 240, 289, 344, 350, 380 and all other Text components:
-   - Replace fontSize="$3" with size="$3"
-   - Replace fontWeight="500" with fontWeight="500" (this is fine)
-   - Ensure color tokens exist: use "$color" for primary text, "$colorHover" for secondary
-
-4. Line 202: Heading uses size="$8" which may be too large. In old UI, it was "text-2xl".
-   Change to: size="$6" or fontSize={24}
-
-5. Run `npm run dev` and verify text is readable with proper contrast
+3. Ensure no `className` attributes remain in this section.
+4. Verify import of `Button as TamaguiButton` from 'tamagui' is used.
 ```
 
 ---
 
-### STREAM H: Fix Control Styling & Layout (Issues 8.2, 8.7, 8.8)
+### STREAM M: Fix Sidebar Layouts (Issues 8.2, 8.3, 8.4, 8.5)
 
 | Task ID | Task | File(s) | Status |
 |---------|------|---------|--------|
-| **8.H.1** | Fix accordion section header styling | `src/components/Sidebar.tsx` lines 210-234 | Not Started |
-| **8.H.2** | Fix style preset button grid layout | `src/components/Sidebar.tsx` lines 348-376 | Not Started |
-| **8.H.3** | Fix Select/Dropdown component styling | `src/components/Sidebar.tsx` lines 241-286 | Not Started |
-| **8.H.4** | Add proper spacing between sidebar sections | `src/components/Sidebar.tsx` | Not Started |
+| **8.M.1** | Fix Style Preset grid (2x2 layout) | `src/components/Sidebar.tsx` | Not Started |
+| **8.M.2** | Fix Color Picker wrapping | `src/components/Sidebar.tsx` | Not Started |
+| **8.M.3** | Fix Text Contrast (use $color instead of $colorHover) | `src/components/Sidebar.tsx` | Not Started |
 
-**8.H.1 Prompt:**
+**8.M.1 Prompt:**
 ```
-Fix accordion section headers in Sidebar. In /Users/mushy/Documents/Repositories/designsystembuilder/src/components/Sidebar.tsx:
+Fix Style Preset buttons in src/components/Sidebar.tsx (lines 413+).
+User wants a neat 2x2 grid of small tiles, like the "Menu Layout" section.
 
-The "Basic Options" accordion header (lines 210-234) looks broken. Fix:
+1. Constraint the width effectively.
+   Change: <XStack flexWrap="wrap" gap="$2" justifyContent="space-between">
+   To: <XStack flexWrap="wrap" gap="$2">
 
-1. Lines 216-217: Remove the conflicting opacity setting which makes it invisible:
-   REMOVE: backgroundColor="$primary" opacity={0.05}
-   REPLACE WITH: backgroundColor="transparent"
-
-2. Add proper hover state:
-   hoverStyle={{ backgroundColor: '$gray4' }}
-
-3. The ChevronDown icon should have proper color:
-   Add color="$color" prop to ChevronDown
-
-4. Ensure the XStack has proper border for visual hierarchy:
-   Add: borderWidth={1} borderColor="$borderColor" borderRadius="$3"
-
-5. Repeat for "Advanced Styling" section (find similar pattern around line 450+)
-
-6. Run `npm run dev` and verify sections are visible with proper styling
+2. Update the button YStack:
+   - Width: `width="48%"` (forces 2 columns with small gap)
+   - Height: `height={80}` (keep fixed height)
+   - Layout: Centered content
+   - Colors: Ensure `backgroundColor` defaults to `$background` (white) and `borderColor` to `$gray6`.
 ```
 
-**8.H.2 Prompt:**
+**8.M.2 Prompt:**
 ```
-Fix style preset button grid in Sidebar. In /Users/mushy/Documents/Repositories/designsystembuilder/src/components/Sidebar.tsx:
+Fix Color Picker grid in src/components/Sidebar.tsx (lines 338+).
+It is not wrapping.
 
-Style preset buttons (lines 348-376) look unstyled. Reference the OLD UI: neat 2x2 grid with icons centered.
+1. Ensure the parent container supports wrapping.
+   The `XStack` line 338 has `flexWrap="wrap"`.
+   Add `width="100%"` to ensure it knows its boundary.
 
-1. Line 351: Change from flexWrap="wrap" to proper grid:
-   <XStack flexWrap="wrap" gap="$2" justifyContent="space-between">
-
-2. Lines 356-372: Each preset button YStack needs:
-   - REMOVE: width="48%"
-   - ADD: width={140} height={80} (fixed size like old UI)
-   - ADD: backgroundColor="$background"
-   - Improve border: borderWidth={isSelected ? 2 : 1}
-   - Selected state: backgroundColor={isSelected ? '$blue2' : '$background'}
-
-3. The icon (line 370) should use proper token:
-   color={isSelected ? '$blue10' : '$gray11'}
-
-4. Text below icon should be centered:
-   <Text fontSize="$2" textAlign="center">{preset.name}</Text>
-
-5. Run `npm run dev` and verify 2x2 grid with Modern Flat, Soft & Dreamy, Minimalist, Neo-Brutalism
+2. Verify the `gap={8}` is working.
 ```
 
-**8.H.3 Prompt:**
+**8.M.3 Prompt:**
 ```
-Fix Select/Dropdown styling in Sidebar. In /Users/mushy/Documents/Repositories/designsystembuilder/src/components/Sidebar.tsx:
+Fix Text Contrast in src/components/Sidebar.tsx.
+Line 240: <Text size="$3" color="$colorHover">
+Prop `$colorHover` is likely too faint for description text.
+Change to: `color="$gray11"` or `color="$gray10"` (from Oklch scale, 11/10 are readable grays).
+Do this for all description texts.
+```
 
-The font Select dropdown (lines 241-286) needs proper styling:
+---
 
-1. Line 242: Add styling to Select.Trigger:
-   <Select.Trigger 
-     width="100%" 
-     borderWidth={1} 
+### STREAM O: Fix Toast Component (Issue 8.5)
+
+| Task ID | Task | File(s) | Status |
+|---------|------|---------|--------|
+| **8.O.1** | Rewrite components/ui/toast.tsx using Tamagui | `src/components/ui/toast.tsx` | Not Started |
+
+**8.O.1 Prompt:**
+```
+Rewrite src/components/ui/toast.tsx to use Tamagui components.
+Constraints: NO Tailwind classes. Use Tamagui tokens ($background, $borderColor).
+
+1. Implement `ToastViewport` using semantic style prop:
+   style={{ position: 'fixed', bottom: 0, right: 0, padding: 20, maxWidth: '100vw', zIndex: 9999 }}
+
+2. Wrap `Toast` root in a Tamagui styled component:
+   <XStack 
+     backgroundColor="$background" 
      borderColor="$borderColor" 
-     borderRadius="$3"
-     backgroundColor="$background"
-     padding="$3"
-     iconAfter={ChevronDown}
+     borderWidth={1} 
+     borderRadius="$4" 
+     padding="$4" 
+     elevation="$4"
+     animation="quick"
    >
+     {props.children}
+   </XStack>
 
-2. Line 259: Add portal for dropdown to appear above:
-   <Select.Content zIndex={200000} backgroundColor="$background" borderRadius="$3" borderWidth={1} borderColor="$borderColor">
-
-3. Each Select.Item should have hover style:
-   <Select.Item ... hoverStyle={{ backgroundColor: '$gray4' }}>
-
-4. Run `npm run dev` and verify dropdown looks styled and functional
+3. Implement `ToastTitle` and `ToastDescription` using Tamagui Text.
+4. Ensure NO Tailwind classes remain.
 ```
 
 ---
 
-### STREAM I: Fix Color Picker Grid (Issues 8.3, 8.4)
+### STREAM P: Visual QA & Comparison
 
 | Task ID | Task | File(s) | Status |
 |---------|------|---------|--------|
-| **8.I.1** | Convert color swatches to Tamagui styled squares | `src/components/Sidebar.tsx` lines 288-340 | Not Started |
-| **8.I.2** | Fix/restore color picker input visibility | `src/components/Sidebar.tsx` lines 294-323 | Not Started |
-| **8.I.3** | Create proper ColorSwatch component | `src/components/ColorSwatch.tsx` (new) | Not Started |
+| **8.P.1** | Browser verification of all UI elements | Browser | Not Started |
 
-**8.I.1 Prompt:**
+**8.P.1 Prompt:**
 ```
-Fix color swatch grid in Sidebar. In /Users/mushy/Documents/Repositories/designsystembuilder/src/components/Sidebar.tsx:
-
-The color swatches (lines 288-340) are broken. OLD UI showed neat 6-column grid of square color buttons.
-
-1. Line 291: Change to proper square grid:
-   <XStack flexWrap="wrap" gap="$2">
-   Should become:
-   <XStack flexWrap="wrap" gap={8}>
-
-2. Lines 293-337: Replace the className-based divs and buttons with Tamagui:
-
-   For regular color buttons (lines 324-336), replace:
-   <button className="w-7 h-7 rounded-md" ...>
-   
-   With Tamagui YStack:
-   <YStack
-     key={theme.name}
-     width={28}
-     height={28}
-     borderRadius="$2"
-     backgroundColor={theme.color}
-     borderWidth={selectedTheme === theme.name ? 2 : 1}
-     borderColor={selectedTheme === theme.name ? '$blue9' : '$borderColor'}
-     onPress={() => handlePrimaryColorChange(theme.name)}
-     cursor="pointer"
-     hoverStyle={{ opacity: 0.8 }}
-     pressStyle={{ scale: 0.95 }}
-   />
-
-3. For the custom color picker (lines 294-323), the input type="color" is hidden.
-   Make it visible by wrapping in a styled container:
-   
-   <YStack
-     width={28}
-     height={28}
-     borderRadius="$2"
-     overflow="hidden"
-     borderWidth={selectedTheme === 'custom' ? 2 : 1}
-     borderColor={selectedTheme === 'custom' ? '$blue9' : '$borderColor'}
-     position="relative"
-   >
-     <YStack
-       position="absolute"
-       top={0}
-       left={0}
-       right={0}
-       bottom={0}
-       style={{ background: RAINBOW_GRADIENT }}
-     />
-     <input
-       type="color"
-       value={customPrimaryColor || DEFAULT_PRIMARY}
-       onChange={(e) => { ... }}
-       style={{
-         width: '100%',
-         height: '100%',
-         opacity: 0,
-         cursor: 'pointer',
-         position: 'absolute',
-         top: 0,
-         left: 0
-       }}
-     />
-   </YStack>
-
-4. Run `npm run dev` and verify 6-column grid of color swatches with rainbow picker visible
-```
+Open Browser to http://localhost:5173.
+Verify against constraints:
+1. "Generate Megaprompt" button is styled (not plain text).
+2. Style Presets are nice 2x2 grid.
+3. Color Picker columns wrap correctly.
+4. Text is readable (not faint gray).
+5. Toast appears as styled white box with shadow.
 
 ---
 
-### STREAM J: Fix Toast on Load (Issue 8.5)
+### STREAM Q: Strict Audit & Fix (Validates P)
 
 | Task ID | Task | File(s) | Status |
 |---------|------|---------|--------|
-| **8.J.1** | Remove toast from initial load | `src/components/Sidebar.tsx` lines 190-196 | ✅ Completed |
+| **8.Q.1** | Audit code for hardcoded values and CSS classes, then FIX immediately | `Index.tsx`, `Sidebar.tsx`, `toast.tsx` | Not Started |
 
-**8.J.1 Prompt:**
+**8.Q.1 Prompt:**
 ```
-Fix toast appearing on initial load. In /Users/mushy/Documents/Repositories/designsystembuilder/src/components/Sidebar.tsx:
+ You are the Lead QA Engineer.
+ **Goal:** Audit `src/pages/Index.tsx`, `src/components/Sidebar.tsx`, and `src/components/ui/toast.tsx` for violations and FIX them.
 
-The "Modern Flat Applied" toast shouldn't appear when the page first loads.
+ **Strict Rules:**
+ 1. NO `className` attributes (except specific 3rd party libs if absolutely needed, but generally illegal for UI).
+ 2. NO hardcoded hex colors (e.g. `#fff`, `#000`). Use tokens: `$background`, `$color`, `$gray11`.
+ 3. NO hardcoded pixel spacings (e.g. `gap={8}`). Use tokens: `gap="$2"`.
+ 4. NO `div` or `span` for layout. Use `XStack`, `YStack`, `Text`.
 
-1. Lines 190-196: The useEffect calls handleStylePresetChange on mount, which triggers the toast.
-
-   Change from:
-   React.useEffect(() => {
-     if (stylePresetId) {
-       handleStylePresetChange(stylePresetId as StylePresetId);
-     }
-   }, []);
-
-   To (apply preset WITHOUT toast):
-   React.useEffect(() => {
-     if (stylePresetId) {
-       const preset = getStylePreset(stylePresetId as StylePresetId);
-       if (preset) {
-         // Apply preset tokens without showing toast on initial load
-         setStylePreset(stylePresetId as StylePresetId);
-         setTokens({
-           shadow: {
-             '1': preset.tokens.shadows.sm,
-             '2': preset.tokens.shadows.md,
-             '3': preset.tokens.shadows.lg
-           },
-           radius: {
-             sm: `${preset.tokens.radius.sm}px`,
-             md: `${preset.tokens.radius.md}px`,
-             lg: `${preset.tokens.radius.lg}px`,
-             full: `${preset.tokens.radius.full}px`
-           },
-           motion: {
-             fast: `${preset.tokens.animations.quick}ms`,
-             base: `${preset.tokens.animations.normal}ms`,
-             slow: `${preset.tokens.animations.slow}ms`,
-             easeStandard: preset.tokens.animations.curve
-           }
-         });
-       }
-     }
-   }, []);
-
-2. Run `npm run dev` and verify NO toast appears on page load
+ **Execution:**
+ 1. Read `src/pages/Index.tsx`.
+    - Check "Generate Megaprompt" button. Is it `<TamaguiButton>`? If not, FIX it.
+    - Check `<header>`. Is it `<XStack>`? If not, FIX it.
+ 2. Read `src/components/Sidebar.tsx`.
+    - Check Style Presets. Are they `width="48%"`? If not, FIX it.
+    - Check Text. Is it `color="$gray11"`? If not, FIX it.
+    - Check Color Picker. Is parent `width="100%"`? If not, FIX it.
+ 3. Read `src/components/ui/toast.tsx`.
+    - Is it using `className`? If yes, REWRITE it with `styled(ToastPrimitives.Root)` & Tamagui tokens.
+ 4. **Visual Check:**
+    - Run `open_browser_url("http://localhost:5173")`
+    - Verify the UI looks clean, aligned, and styled (white toast, 2x2 grid, etc).
 ```
-
----
-
-### STREAM K: Fix Color Changes Not Propagating (Issue 8.6)
-
-| Task ID | Task | File(s) | Status |
-|---------|------|---------|--------|
-| **8.K.1** | Verify CSS variables update on color change | `src/components/Sidebar.tsx` handlePrimaryColorChange | Not Started |
-| **8.K.2** | Verify Tamagui tokens are bridged to CSS vars | `src/tamagui.config.ts` | Not Started |
-| **8.K.3** | Check middle panel FactoryDemo uses tokens | `src/components/FactoryDemo.tsx` | Not Started |
-| **8.K.4** | Check right panel components use tokens | `src/panels/TamaguiShowcase.tsx` | Not Started |
-
-**8.K.1 Prompt:**
-```
-Fix color changes not propagating to middle/right panels. 
-
-The issue is that when you change Primary Color in the sidebar, the button colors in the phone mock (middle) and component showcase (right) don't update.
-
-1. First, check src/components/Sidebar.tsx function handlePrimaryColorChange (around line 120-140):
-   - Verify it calls the Zustand store to update primaryColor
-   - The store update should trigger CSS variable updates
-
-2. Check src/state/designSystem.ts:
-   - Verify the primaryColor state is properly connected
-   - There should be a subscriber or effect that updates CSS variables when primaryColor changes
-
-3. Check src/components/FactoryDemo.tsx (middle panel phone mock):
-   - Buttons should use backgroundColor="$brand" or "$primary"
-   - NOT hardcoded colors
-
-4. Check src/panels/TamaguiShowcase.tsx (right panel):
-   - Buttons should use backgroundColor="$brand" or semantic tokens
-   - Verify it reads from useDesignSystem() store or uses Tamagui tokens
-
-5. The fix likely needs to add CSS variable updates in handlePrimaryColorChange:
-   
-   const handlePrimaryColorChange = (themeName: string, customColor?: string) => {
-     // ... existing code ...
-     
-     // ADD: Update CSS variables for immediate effect
-     const color = customColor || colorThemes.find(t => t.name === themeName)?.color;
-     if (color) {
-       document.documentElement.style.setProperty('--color-brand', color);
-       document.documentElement.style.setProperty('--color-primary', color);
-       // Also update RGB version if needed
-       const rgb = hexToRgb(color);
-       if (rgb) {
-         document.documentElement.style.setProperty('--color-brand-rgb', `${rgb.r} ${rgb.g} ${rgb.b}`);
-       }
-     }
-   };
-
-6. Run `npm run dev`, change primary color, and verify buttons in ALL panels update
-```
-
----
-
-## 🚀 Parallel Execution Strategy for CATEGORY 8
-
-### Phase A (Can run in parallel immediately):
-- **Agent 1:** Stream G (Typography fixes) - Tasks 8.G.1-8.G.3
-- **Agent 2:** Stream H (Control styling) - Tasks 8.H.1-8.H.4
-- **Agent 3:** Stream I (Color picker) - Tasks 8.I.1-8.I.3
-- **Agent 4:** Stream J (Toast fix) - Task 8.J.1
-
-### Phase B (Run after Phase A):
-- **Agent 5:** Stream K (Color propagation) - Tasks 8.K.1-8.K.4
-
----
-
-## ✅ CATEGORY 8 Verification Checklist
-
-After fixes, verify:
-- [ ] Text is readable with proper font sizes and colors
-- [ ] Sidebar sections (Basic Options, Advanced Styling) have proper headers with borders
-- [ ] Color swatches display as neat 6-column grid of squares
-- [ ] Rainbow color picker input is visible and functional
-- [ ] NO toast on initial page load
-- [ ] Changing Primary Color updates buttons in middle AND right panels
-- [ ] Style preset buttons display in 2x2 grid with proper styling
-- [ ] Font dropdowns are styled with borders and proper spacing
-- [ ] Dark Mode toggle works and is styled
-- [ ] Overall UI matches the quality of the old Lovable UI (see refs/ folder)
