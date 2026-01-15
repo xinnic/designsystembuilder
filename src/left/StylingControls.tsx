@@ -1,24 +1,17 @@
 import React from 'react';
 import { useDesignSystem } from '../state/designSystem';
 import type { TechStack } from '../state/designSystem';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
-import {
-  ChevronDown,
-  Upload,
-  Sparkles,
-} from 'lucide-react';
+import { Upload, Sparkles, ChevronDown } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { YStack, XStack, Text, Input, useTheme } from 'tamagui';
 
 export default function StylingControls() {
   const { opts, setOpts, tokens, setTokens } = useDesignSystem();
   const [logoDescription, setLogoDescription] = React.useState('');
   const [isGenerating, setIsGenerating] = React.useState(false);
   const { toast } = useToast();
+  const theme = useTheme();
 
   const stackOptions: { value: TechStack; label: string }[] = [
     { value: 'web-react', label: 'Web/React' },
@@ -107,60 +100,141 @@ export default function StylingControls() {
   const [logoOpen, setLogoOpen] = React.useState(true);
 
   return (
-    <>
-
-
-      <Collapsible open={logoOpen} onOpenChange={setLogoOpen} className="mt-2">
-        <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-muted">
-          <div className="flex items-center gap-3">
-            <Sparkles className="h-5 w-5" />
-            <span className="font-medium">Logo</span>
-          </div>
-          <ChevronDown className={`h-4 w-4 transition-transform ${logoOpen ? 'rotate-180' : ''}`} />
-        </CollapsibleTrigger>
-        <CollapsibleContent className="space-y-2 p-3">
-          <label className="flex items-center justify-center gap-2 p-3 rounded border border-border hover:bg-muted cursor-pointer text-sm shadow-sm transition-all">
-            <Upload className="h-4 w-4" />
-            <span>Upload Logo</span>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleLogoUpload}
-              className="hidden"
-            />
-          </label>
-
-          <div className="space-y-2">
-            <input
-              type="text"
-              placeholder="Describe your app..."
-              value={logoDescription}
-              onChange={(e) => setLogoDescription(e.target.value)}
-              className="w-full p-2 text-sm rounded border border-border bg-background text-foreground placeholder:text-muted-foreground shadow-sm focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none"
-            />
-            <button
-              onClick={handleGenerateLogo}
-              disabled={isGenerating}
-              className="w-full flex items-center justify-center gap-2 p-2 text-sm rounded border border-primary bg-primary/5 text-primary hover:bg-primary/10 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm transition-all"
+    <YStack space="$4">
+      {/* Logo Section */}
+      <YStack>
+        <XStack
+          onPress={() => setLogoOpen(!logoOpen)}
+          padding="$3"
+          borderRadius="$3"
+          borderWidth={1}
+          borderColor="$borderColor"
+          backgroundColor="transparent"
+          hoverStyle={{ backgroundColor: '$gray4' }}
+          alignItems="center"
+          justifyContent="space-between"
+          pressStyle={{ opacity: 0.7 }}
+          cursor="pointer"
+        >
+          <XStack space="$3" alignItems="center">
+            <Sparkles size={20} color={theme.color.val} />
+            <Text size="$3" fontWeight="500" color="$color">Logo</Text>
+          </XStack>
+          <ChevronDown
+            size={16}
+            color={theme.color.val}
+            style={{
+              transition: 'transform 0.2s',
+              transform: logoOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+            }}
+          />
+        </XStack>
+        
+        {logoOpen && (
+          <YStack space="$3" padding="$3">
+            {/* Upload Logo Button */}
+            <XStack
+              position="relative"
+              alignItems="center"
+              justifyContent="center"
+              gap="$2"
+              padding="$3"
+              borderRadius="$3"
+              borderWidth={1}
+              borderColor="$borderColor"
+              backgroundColor="$background"
+              hoverStyle={{ backgroundColor: '$gray3' }}
+              cursor="pointer"
             >
-              <Sparkles className="h-4 w-4" />
-              <span>{isGenerating ? 'Generating...' : 'Generate Logo'}</span>
-            </button>
-          </div>
+              <Upload size={16} color={theme.color.val} />
+              <Text size="$3" color="$color">Upload Logo</Text>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleLogoUpload}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  opacity: 0,
+                  cursor: 'pointer'
+                }}
+              />
+            </XStack>
 
-          {opts.logo && (
-            <div className="flex justify-center p-4 border border-border rounded-lg bg-muted/30">
-              <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center overflow-hidden shadow-sm">
-                <img
-                  src={opts.logo}
-                  alt="App logo"
-                  className="w-16 h-16 object-contain"
-                />
-              </div>
-            </div>
-          )}
-        </CollapsibleContent>
-      </Collapsible>
-    </>
+            {/* Generate Logo Section */}
+            <YStack space="$2">
+              <Input
+                placeholder="Describe your app..."
+                value={logoDescription}
+                onChangeText={setLogoDescription}
+                size="$3"
+                borderWidth={1}
+                borderColor="$borderColor"
+                borderRadius="$3"
+                backgroundColor="$background"
+                color="$color"
+                placeholderTextColor="$gray10"
+              />
+              <XStack
+                alignItems="center"
+                justifyContent="center"
+                gap="$2"
+                padding="$3"
+                borderRadius="$3"
+                borderWidth={1}
+                borderColor="$blue9"
+                backgroundColor="$blue2"
+                hoverStyle={{ backgroundColor: '$blue3' }}
+                pressStyle={{ opacity: 0.7 }}
+                onPress={handleGenerateLogo}
+                cursor="pointer"
+                opacity={isGenerating ? 0.5 : 1}
+                pointerEvents={isGenerating ? 'none' : 'auto'}
+              >
+                <Sparkles size={16} color={theme.blue9.val} />
+                <Text size="$3" color="$blue11" fontWeight="500">
+                  {isGenerating ? 'Generating...' : 'Generate Logo'}
+                </Text>
+              </XStack>
+            </YStack>
+
+            {/* Logo Preview */}
+            {opts.logo && (
+              <XStack
+                justifyContent="center"
+                padding="$4"
+                borderWidth={1}
+                borderColor="$borderColor"
+                borderRadius="$3"
+                backgroundColor="$gray2"
+              >
+                <YStack
+                  width={80}
+                  height={80}
+                  borderRadius="$round"
+                  backgroundColor="$background"
+                  alignItems="center"
+                  justifyContent="center"
+                  overflow="hidden"
+                >
+                  <img
+                    src={opts.logo}
+                    alt="App logo"
+                    style={{
+                      width: '64px',
+                      height: '64px',
+                      objectFit: 'contain'
+                    }}
+                  />
+                </YStack>
+              </XStack>
+            )}
+          </YStack>
+        )}
+      </YStack>
+    </YStack>
   );
 }
