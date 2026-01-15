@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Copy, Layers3, Palette, LayoutGrid } from 'lucide-react';
-import { XStack, YStack, Button as TamaguiButton, Text } from 'tamagui';
+import { XStack, YStack, Button as TamaguiButton, Text, TextArea } from 'tamagui';
 import { Sidebar } from '@/components/Sidebar';
 import { PreviewPhoneTamagui } from '@/components/PreviewPhoneTamagui';
 import DesignSystemOverview from '@/components/DesignSystemOverview';
 import TamaguiShowcase from '@/panels/TamaguiShowcase';
 import PatternsShowcase from '@/panels/PatternsShowcase';
-import { Button } from '@/components/ui/button';
+
 import { useToast } from '@/hooks/use-toast';
 import {
   Dialog,
@@ -16,7 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
+
 import { useDesignSystem } from '@/state/designSystem';
 
 const fonts = [
@@ -111,7 +111,6 @@ const Index = () => {
     <XStack
       minHeight="100vh"
       backgroundColor="$background"
-      className={selectedStylePreset}
       data-preset={selectedStylePreset}
     >
       {/* Left Sidebar */}
@@ -122,45 +121,40 @@ const Index = () => {
       {/* Main Content Area */}
       <YStack flex={1}>
         {/* Header */}
-        <header className="p-4 flex justify-end shadow-sm bg-background" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+        <XStack padding="$4" justifyContent="flex-end" borderBottomWidth={1} borderBottomColor="$borderColor" backgroundColor="$background">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button
-                onClick={() => setIsDialogOpen(true)}
-                className="gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0"
-              >
-                <Copy className="h-4 w-4" />
-                Generate Megaprompt
-              </Button>
+              <TamaguiButton theme="active" icon={<Copy size={16} />} onPress={() => setIsDialogOpen(true)} size="$3">Generate Megaprompt</TamaguiButton>
             </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[80vh]">
+            <DialogContent style={{ maxWidth: 896, maxHeight: '80vh' }}>
               <DialogHeader>
                 <DialogTitle>React Native Design System Megaprompt</DialogTitle>
                 <DialogDescription>
                   Generate a complete React Native design system with Tamagui for cross-platform apps
                 </DialogDescription>
               </DialogHeader>
-              <div className="space-y-4">
-                <Textarea
-                  className="min-h-[400px] font-mono text-sm resize-none"
+              <YStack gap="$4">
+                <TextArea
+                  minHeight={400}
+                  fontFamily="$mono"
+                  fontSize="$3"
                   value={generatePrompt()}
                   readOnly
                 />
-                <div className="flex justify-end">
-                  <Button onClick={copyToClipboard} className="gap-2">
-                    <Copy className="h-4 w-4" />
+                <XStack justifyContent="flex-end">
+                  <TamaguiButton onPress={copyToClipboard} size="$3" icon={<Copy size={16} />}>
                     Copy to Clipboard
-                  </Button>
-                </div>
-              </div>
+                  </TamaguiButton>
+                </XStack>
+              </YStack>
             </DialogContent>
           </Dialog>
-        </header>
+        </XStack>
 
         {/* Preview Panels */}
         <XStack flex={1} minWidth={0}>
           {/* Mobile App Preview */}
-          <XStack width={420} flexShrink={0} shadowColor="rgba(0,0,0,0.04)" shadowOffset={{ width: 1, height: 0 }} shadowOpacity={1} shadowRadius={3}>
+          <XStack width={420} flexShrink={0} shadowColor="$shadowColor" shadowOffset={{ width: 1, height: 0 }} shadowOpacity={1} shadowRadius={3}>
             <PreviewPhoneTamagui key={selectedStylePreset} />
           </XStack>
 
@@ -172,12 +166,10 @@ const Index = () => {
                 chromeless={rightPanelView !== 'atoms'}
                 onPress={() => setRightPanelView('atoms')}
                 size="$3"
-                fontSize={12}
-                height={32}
               >
                 <XStack gap="$2" alignItems="center">
                   <Palette size={12} />
-                  <Text fontSize={12}>Atoms</Text>
+                  <Text size="$1">Atoms</Text>
                 </XStack>
               </TamaguiButton>
               <TamaguiButton
@@ -185,12 +177,10 @@ const Index = () => {
                 chromeless={rightPanelView !== 'components'}
                 onPress={() => setRightPanelView('components')}
                 size="$3"
-                fontSize={12}
-                height={32}
               >
                 <XStack gap="$2" alignItems="center">
                   <Layers3 size={12} />
-                  <Text fontSize={12}>Components</Text>
+                  <Text size="$1">Components</Text>
                 </XStack>
               </TamaguiButton>
               <TamaguiButton
@@ -198,12 +188,10 @@ const Index = () => {
                 chromeless={rightPanelView !== 'patterns'}
                 onPress={() => setRightPanelView('patterns')}
                 size="$3"
-                fontSize={12}
-                height={32}
               >
                 <XStack gap="$2" alignItems="center">
                   <LayoutGrid size={12} />
-                  <Text fontSize={12}>Patterns</Text>
+                  <Text size="$1">Patterns</Text>
                 </XStack>
               </TamaguiButton>
             </XStack>
