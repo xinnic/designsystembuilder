@@ -120,7 +120,7 @@ const defaultTokens: Tokens = {
   textDisabled: "161 161 161",
   bgPrimary: "248 249 250",
   bgSecondary: "255 255 255",
-  border: "240 240 242",  // Very light grey for subtle borders
+  border: "229 231 235",  // Tailwind Gray 200
   focus: "0 102 204",
   success: "34 197 94",
   warning: "245 158 11",

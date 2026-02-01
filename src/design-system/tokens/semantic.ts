@@ -67,7 +67,7 @@ export const semanticColors = {
 
   // Border Colors
   border: {
-    default: semantic(primitiveColors.gray[150], primitiveColors.gray[850]),
+    default: semantic(primitiveColors.gray[200], primitiveColors.gray[850]),
     hover: semantic(primitiveColors.gray[200], primitiveColors.gray[800]),
     active: semantic(primitiveColors.gray[300], primitiveColors.gray[750]),
     subtle: semantic(primitiveColors.gray[100], primitiveColors.gray[900]),

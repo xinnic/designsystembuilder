@@ -1,5 +1,5 @@
 import { createTamagui, createTokens, createFont } from '@tamagui/core';
-import { createAnimations } from '@tamagui/animations-react-native';
+import { createAnimations } from '@tamagui/animations-css';
 import type { StylePresetId } from './config/stylePresets';
 
 // Static Tamagui configuration
@@ -41,6 +41,14 @@ export const createDynamicConfig = () => {
       6: 24,
       7: 32,
       8: 40,
+      9: 48,
+      10: 56,
+      11: 64,
+      12: 80,
+      13: 96,
+      14: 128,
+      15: 256,
+      16: 320,
       true: 8,
     },
 
@@ -53,6 +61,14 @@ export const createDynamicConfig = () => {
       6: 24,
       7: 32,
       8: 40,
+      9: 48,
+      10: 56,
+      11: 64,
+      12: 80,
+      13: 96,
+      14: 128,
+      15: 256,
+      16: 320,
       true: 16,
     },
 
@@ -76,11 +92,11 @@ export const createDynamicConfig = () => {
 
     borderWidth: {
       0: 0,
-      1: 1,
-      2: 2,
-      3: 3,
-      4: 4,
-      true: 1,
+      1: 'var(--border-thin)',
+      2: 'var(--border-medium)',
+      3: 'var(--border-thick)',
+      4: 'var(--border-focus)',
+      true: 'var(--border-thin)',
     },
 
     shadow: {
@@ -93,23 +109,10 @@ export const createDynamicConfig = () => {
   });
 
   const animations = createAnimations({
-    bouncy: {
-      type: 'spring',
-      damping: 10,
-      mass: 0.9,
-      stiffness: 100,
-    },
-    lazy: {
-      type: 'spring',
-      damping: 20,
-      stiffness: 60,
-    },
-    quick: {
-      type: 'spring',
-      damping: 20,
-      mass: 1.2,
-      stiffness: 250,
-    },
+    bouncy: 'ease-in 200ms',
+    lazy: 'ease-out 400ms',
+    quick: 'ease-in-out 100ms',
+    fast: 'ease-in-out 150ms',
   });
 
   // Static font definitions - dynamic theming happens through CSS
@@ -185,6 +188,82 @@ export const createDynamicConfig = () => {
     },
   });
 
+  const monoFont = createFont({
+    family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+    size: {
+      1: 12,
+      2: 14,
+      3: 16,
+      4: 18,
+      5: 20,
+      6: 24,
+      true: 14,
+    },
+    lineHeight: {
+      1: 18,
+      2: 20,
+      3: 24,
+      4: 26,
+      5: 28,
+      6: 32,
+      true: 20,
+    },
+    weight: {
+      4: '400',
+      5: '500',
+      6: '600',
+      7: '700',
+      true: '400',
+    },
+    letterSpacing: {
+      4: 0,
+      5: 0,
+      6: 0,
+      7: 0,
+      true: 0,
+    },
+  });
+
+  // Base theme values for light mode
+  const lightThemeBase = {
+    background: tokens.color.bgPrimary,
+    backgroundHover: tokens.color.bgSecondary,
+    backgroundStrong: tokens.color.bgSecondary,
+    color: tokens.color.textPrimary,
+    colorHover: tokens.color.textSecondary,
+    borderColor: tokens.color.border,
+    placeholderColor: tokens.color.textDisabled,
+    brand: tokens.color.brand,
+    brandHover: tokens.color.brandWeak,
+    // Radix UI Gray scale for light mode
+    gray1: 'hsl(0, 0%, 99.0%)',
+    gray2: 'hsl(0, 0%, 97.3%)',
+    gray3: 'hsl(0, 0%, 95.1%)',
+    gray4: 'hsl(0, 0%, 93.0%)',
+    gray5: 'hsl(0, 0%, 90.9%)',
+    gray6: 'hsl(0, 0%, 88.7%)',
+    gray7: 'hsl(0, 0%, 85.8%)',
+    gray8: 'hsl(0, 0%, 78.0%)',
+    gray9: 'hsl(0, 0%, 56.1%)',
+    gray10: 'hsl(0, 0%, 52.3%)',
+    gray11: 'hsl(0, 0%, 43.5%)',
+    gray12: 'hsl(0, 0%, 9.0%)',
+    // Radix UI Blue scale for light mode
+    blue1: 'hsl(206, 100%, 99.2%)',
+    blue2: 'hsl(210, 100%, 98.0%)',
+    blue3: 'hsl(209, 100%, 96.5%)',
+    blue4: 'hsl(210, 98.8%, 94.0%)',
+    blue5: 'hsl(209, 95.0%, 90.1%)',
+    blue6: 'hsl(209, 81.2%, 84.5%)',
+    blue7: 'hsl(208, 77.5%, 76.9%)',
+    blue8: 'hsl(206, 81.9%, 65.3%)',
+    blue9: 'hsl(206, 100%, 50.0%)',
+    blue10: 'hsl(208, 100%, 47.3%)',
+    blue11: 'hsl(211, 100%, 43.2%)',
+    blue12: 'hsl(211, 100%, 15.0%)',
+    borderWidth: tokens.borderWidth[1],
+  };
+
   const config = createTamagui({
     animations,
     tokens,
@@ -193,43 +272,7 @@ export const createDynamicConfig = () => {
       heading: headingFont,
     },
     themes: {
-      light: {
-        background: tokens.color.bgPrimary,
-        backgroundHover: tokens.color.bgSecondary,
-        backgroundStrong: tokens.color.bgSecondary,
-        color: tokens.color.textPrimary,
-        colorHover: tokens.color.textSecondary,
-        borderColor: tokens.color.border,
-        placeholderColor: tokens.color.textDisabled,
-        brand: tokens.color.brand,
-        brandHover: tokens.color.brandWeak,
-        // Radix UI Gray scale for light mode
-        gray1: 'hsl(0, 0%, 99.0%)',
-        gray2: 'hsl(0, 0%, 97.3%)',
-        gray3: 'hsl(0, 0%, 95.1%)',
-        gray4: 'hsl(0, 0%, 93.0%)',
-        gray5: 'hsl(0, 0%, 90.9%)',
-        gray6: 'hsl(0, 0%, 88.7%)',
-        gray7: 'hsl(0, 0%, 85.8%)',
-        gray8: 'hsl(0, 0%, 78.0%)',
-        gray9: 'hsl(0, 0%, 56.1%)',
-        gray10: 'hsl(0, 0%, 52.3%)',
-        gray11: 'hsl(0, 0%, 43.5%)',
-        gray12: 'hsl(0, 0%, 9.0%)',
-        // Radix UI Blue scale for light mode
-        blue1: 'hsl(206, 100%, 99.2%)',
-        blue2: 'hsl(210, 100%, 98.0%)',
-        blue3: 'hsl(209, 100%, 96.5%)',
-        blue4: 'hsl(210, 98.8%, 94.0%)',
-        blue5: 'hsl(209, 95.0%, 90.1%)',
-        blue6: 'hsl(209, 81.2%, 84.5%)',
-        blue7: 'hsl(208, 77.5%, 76.9%)',
-        blue8: 'hsl(206, 81.9%, 65.3%)',
-        blue9: 'hsl(206, 100%, 50.0%)',
-        blue10: 'hsl(208, 100%, 47.3%)',
-        blue11: 'hsl(211, 100%, 43.2%)',
-        blue12: 'hsl(211, 100%, 15.0%)',
-      },
+      light: lightThemeBase,
       dark: {
         background: tokens.color.bgPrimary,
         backgroundHover: tokens.color.bgSecondary,
@@ -266,15 +309,17 @@ export const createDynamicConfig = () => {
         blue10: 'hsl(209, 100%, 60.6%)',
         blue11: 'hsl(210, 100%, 66.1%)',
         blue12: 'hsl(206, 98.0%, 95.8%)',
+        borderWidth: tokens.borderWidth[1],
       },
       // Preset-specific themes
       modernFlat: {
+        ...lightThemeBase,
         background: 'oklch(1.000 0.000 0)', // Pure white
         backgroundHover: tokens.color.bgSecondary,
         backgroundStrong: tokens.color.bgSecondary,
         color: tokens.color.textPrimary,
         colorHover: tokens.color.textSecondary,
-        borderColor: 'oklch(0.925 0.004 210)', // Soft grey border
+        borderColor: tokens.color.border,
         borderWidth: tokens.borderWidth[1],
         placeholderColor: tokens.color.textDisabled,
         brand: tokens.color.brand,
@@ -282,6 +327,7 @@ export const createDynamicConfig = () => {
         shadow: tokens.shadow.sm,
       },
       softDreamy: {
+        ...lightThemeBase,
         background: 'oklch(0.975 0.002 210)', // Off-white for shadow visibility
         backgroundHover: tokens.color.bgSecondary,
         backgroundStrong: tokens.color.bgSecondary,
@@ -295,12 +341,13 @@ export const createDynamicConfig = () => {
         shadow: tokens.shadow.md,
       },
       minimalist: {
+        ...lightThemeBase,
         background: 'oklch(1.000 0.000 0)', // Pure white
         backgroundHover: tokens.color.bgSecondary,
         backgroundStrong: tokens.color.bgSecondary,
         color: tokens.color.textPrimary,
         colorHover: tokens.color.textSecondary,
-        borderColor: 'oklch(0.925 0.004 210)', // Very light gray
+        borderColor: tokens.color.border,
         borderWidth: tokens.borderWidth[1],
         placeholderColor: tokens.color.textDisabled,
         brand: tokens.color.brand,
@@ -308,6 +355,7 @@ export const createDynamicConfig = () => {
         shadow: tokens.shadow.none,
       },
       neoBrutalism: {
+        ...lightThemeBase,
         background: 'oklch(1.000 0.000 0)', // Pure white
         backgroundHover: tokens.color.bgSecondary,
         backgroundStrong: tokens.color.bgSecondary,

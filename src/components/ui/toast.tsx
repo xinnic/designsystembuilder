@@ -18,10 +18,6 @@ const StyledViewport = styled(ToastPrimitives.Viewport, {
   maxWidth: 420,
   maxHeight: '100vh',
   pointerEvents: 'none',
-  
-  '& > *': {
-    pointerEvents: 'auto',
-  },
 })
 
 const ToastViewport = React.forwardRef<
@@ -46,17 +42,16 @@ const StyledToast = styled(ToastPrimitives.Root, {
   shadowRadius: '$4',
   shadowOffset: { width: 0, height: 2 },
   elevation: '$4',
+  pointerEvents: 'auto',
   
   animation: 'quick',
   enterStyle: { 
     opacity: 0, 
-    scale: 0.9, 
-    x: 100,
+    scale: 0.9,
   },
   exitStyle: { 
     opacity: 0, 
     scale: 0.95,
-    x: 100,
   },
   
   variants: {

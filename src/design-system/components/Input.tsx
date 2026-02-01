@@ -25,7 +25,7 @@ export const Input = styled(TamaguiInput, {
   fontSize: '$2',
   color: '$textPrimary',
   backgroundColor: '$bgSecondary',
-  borderWidth: 2, // Thicker border for better visual hierarchy
+  borderWidth: '$1',
   borderColor: '$border',
   borderRadius: '$2',
   paddingHorizontal: '$3',
@@ -51,18 +51,18 @@ export const Input = styled(TamaguiInput, {
     variant: {
       filled: {
         backgroundColor: '$bgSecondary',
-        borderWidth: 2,
+        borderWidth: '$1',
         borderColor: '$border',
       },
       outlined: {
         backgroundColor: 'transparent',
-        borderWidth: 2,
+        borderWidth: '$1',
         borderColor: '$border',
       },
       underline: {
         backgroundColor: 'transparent',
         borderWidth: 0,
-        borderBottomWidth: 2,
+        borderBottomWidth: '$1',
         borderColor: '$border',
         borderRadius: 0,
         paddingHorizontal: 0,
@@ -130,7 +130,7 @@ export const TextArea = styled(TamaguiTextArea, {
   fontSize: '$2',
   color: '$textPrimary',
   backgroundColor: '$bgSecondary',
-  borderWidth: 2, // Thicker border for better visual hierarchy
+  borderWidth: '$1',
   borderColor: '$border',
   borderRadius: '$2',
   paddingHorizontal: '$3',
@@ -156,12 +156,12 @@ export const TextArea = styled(TamaguiTextArea, {
     variant: {
       filled: {
         backgroundColor: '$bgSecondary',
-        borderWidth: 2,
+        borderWidth: '$1',
         borderColor: '$border',
       },
       outlined: {
         backgroundColor: 'transparent',
-        borderWidth: 2,
+        borderWidth: '$1',
         borderColor: '$border',
       },
     },
