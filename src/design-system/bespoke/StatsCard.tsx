@@ -23,21 +23,23 @@ export const StatsCard = ({ icon, value, label }: StatsCardProps) => {
     <YStack
       alignItems="center"
       justifyContent="center"
-      gap="$1"
-      padding="$3"
-      backgroundColor="$bgSecondary"
-      style={{
-        borderRadius: 'var(--card-radius)',
-        boxShadow: 'var(--card-shadow)',
-        border: 'var(--card-border-width, 1px) solid var(--border-color)'
+      gap="$2"
+      padding="$4"
+      backgroundColor="$bgSecondary" // Changed to bgSecondary to clearly stand out
+      borderRadius="$4"
+      borderWidth={1}
+      borderColor="$border"
+      hoverStyle={{
+        backgroundColor: '$bgPrimary',
+        borderColor: '$brand',
       }}
       flex={1}
     >
-      {icon && <YStack color="$brand">{icon}</YStack>}
-      <H2 margin={0} color="$textPrimary">
+      {icon && <YStack paddingBottom="$2">{icon}</YStack>}
+      <H2 size="$6" margin={0} color="$textPrimary">
         {value}
       </H2>
-      <Caption color="$textSecondary">{label}</Caption>
+      <Caption color="$textSecondary" fontWeight="600">{label}</Caption>
     </YStack>
   );
 };

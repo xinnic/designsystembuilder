@@ -11,7 +11,7 @@ interface HeroCardProps {
 }
 
 /**
- * HeroCard - Large featured card with title, description, and CTA
+ * HeroCard - Large featured card with gradient header image, title, description, and CTA
  *
  * @example
  * <HeroCard
@@ -30,13 +30,32 @@ export const HeroCard = ({
   gradient = false,
 }: HeroCardProps) => {
   return (
-    <Card variant={gradient ? 'gradient' : 'elevated'} padding="large">
-      <YStack gap="$3">
-        <H2 color="$textPrimary" margin={0}>
+    <Card 
+      variant="elevated" 
+      padding="none"
+      backgroundColor="$background"
+      overflow="hidden"
+    >
+      {/* Full-bleed gradient image at top */}
+      {gradient && (
+        <YStack
+          height={160}
+          width="100%"
+          style={{
+            background: 'linear-gradient(135deg, rgb(var(--color-brand)) 0%, rgb(var(--color-brand-weak)) 100%)',
+          }}
+        />
+      )}
+
+      {/* Content section with padding */}
+      <YStack gap="$3" padding="$5">
+        <H2 color="$textPrimary" margin={0} fontWeight="700">
           {title}
         </H2>
 
-        <Body color="$textSecondary">{description}</Body>
+        <Body color="$textSecondary" margin={0}>
+          {description}
+        </Body>
 
         {ctaText && (
           <Button
@@ -44,6 +63,7 @@ export const HeroCard = ({
             size="medium"
             onPress={onCtaPress}
             alignSelf="flex-start"
+            marginTop="$2"
           >
             {ctaText}
           </Button>

@@ -11,3 +11,6 @@ export { StatsCard } from './StatsCard';
 export { BottomNav } from './BottomNav';
 export { HeroCard } from './HeroCard';
 export { UserCard } from './UserCard';
+export { ReviewCard } from './ReviewCard';
+export { SettingsGroup } from './SettingsGroup';
+export { ProfileCard } from './ProfileCard';
