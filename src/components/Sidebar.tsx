@@ -1,7 +1,12 @@
 import React from 'react';
-import { ChevronDown, Check, Settings, Layers, Sliders, Navigation, Menu } from 'lucide-react';
+import { ChevronDown, Check, Settings, Layers, Sliders, Navigation, Menu, Minimize, Maximize, RectangleHorizontal, PanelBottom, GalleryVerticalEnd, MoveDiagonal, LayoutTemplate } from 'lucide-react';
 import { YStack, XStack, ScrollView, Text, Heading, Separator, Button as TamaguiButton, Switch as TamaguiSwitch, Select, Adapt, Sheet, useTheme } from 'tamagui';
 import StylingControls from '../left/StylingControls';
+import { BUILDER_LAYOUT } from '../config/builderLayout';
+import { BuilderAccordion } from './builder-ui/BuilderAccordion';
+import { BuilderColorSwatch } from './builder-ui/BuilderColorSwatch';
+import { BuilderSectionLabel } from './builder-ui/BuilderSectionLabel';
+import { BuilderOptionCard } from './builder-ui/BuilderOptionCard';
 import { useDesignSystem } from '../state/designSystem';
 import { generateSecondaryColor } from '../utils/colorGeneration';
 import {
@@ -101,6 +106,7 @@ export function Sidebar({ }: SidebarProps) {
     opts,
     setOpts,
     setTokens,
+    tokens,
   } = useDesignSystem();
 
   const { toast } = useToast();
@@ -233,12 +239,36 @@ export function Sidebar({ }: SidebarProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Run once on mount
 
+  // Map border weight to pixel values - Builder UI dogfoods its own design system
+  const borderWidthMap = {
+    none: 0,
+    thin: 1,
+    thick: 2
+  };
+
   return (
-    <YStack width={320} height="100vh" borderRightWidth={1} borderRightColor="$borderColor" backgroundColor="$background">
-      <ScrollView padding="$6">
-        <YStack marginBottom="$8">
-          <Heading size="$6" fontWeight="bold" marginBottom="$2">Design System Builder</Heading>
-          <Text size="$3" color="$gray11">
+    <YStack
+      width="$16"
+      height="100vh"
+      borderRightWidth={borderWidthMap[opts.cardBorderWeight]}
+      borderRightColor="$borderColor"
+      backgroundColor="$background"
+    >
+      <ScrollView padding={BUILDER_LAYOUT.panelPadding}>
+        <YStack marginBottom="$6">
+          <Heading
+            fontSize={tokens.h1.size}
+            lineHeight={tokens.h1.line}
+            fontWeight={tokens.h1.weight}
+            marginBottom="$2"
+          >
+            Design System Builder
+          </Heading>
+          <Text
+            fontSize={tokens.body.size}
+            lineHeight={tokens.body.line}
+            color="$gray11"
+          >
             Customize your design system and generate AI-ready prompts
           </Text>
         </YStack>
@@ -246,47 +276,29 @@ export function Sidebar({ }: SidebarProps) {
       <YStack space="$4">
         {/* Basic Options Section - For Design Beginners */}
         <YStack>
-          <XStack
-            onPress={() => setBasicOptionsOpen(!basicOptionsOpen)}
-            padding="$3"
-            borderRadius="$3"
-            borderWidth={1}
-            borderColor="$borderColor"
-            backgroundColor="transparent"
-            hoverStyle={{ backgroundColor: '$gray4' }}
-            alignItems="center"
-            justifyContent="space-between"
-            pressStyle={{ opacity: 0.7 }}
-            cursor="pointer"
+          <BuilderAccordion 
+            title="Basic Options" 
+            icon={Layers} 
+            isOpen={basicOptionsOpen} 
+            onToggle={() => setBasicOptionsOpen(!basicOptionsOpen)}
           >
-            <XStack space="$3" alignItems="center">
-              <Layers size={20} color={theme.color.val} />
-              <Text size="$3" fontWeight="500" color="$color">Basic Options</Text>
-            </XStack>
-            <ChevronDown
-              size={16}
-              color={theme.color.val}
-              style={{
-                transition: 'transform 0.2s',
-                transform: basicOptionsOpen ? 'rotate(180deg)' : 'rotate(0deg)'
-              }}
-            />
-          </XStack>
-          {basicOptionsOpen && (
-            <YStack space="$4" padding="$3">
+            <YStack space="$6">
 
             {/* Primary Font */}
+            {/* Primary Font */}
             <YStack>
-              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Primary Font</Text>
+              <BuilderSectionLabel title="Primary Font" />
               <Select value={selectedPrimaryFont} onValueChange={setPrimaryFont}>
                 <Select.Trigger 
                   width="100%" 
                   iconAfter={ChevronDown}
-                  borderWidth={1}
-                  borderColor="$borderColor"
-                  borderRadius="$3"
+                  borderWidth="$1"
+                  borderColor="$gray4"
+                  borderRadius="$10"
                   backgroundColor="$background"
-                  padding="$3"
+                  paddingHorizontal="$4"
+                  paddingVertical="$3"
+                  minHeight={44}
                 >
                   <Select.Value placeholder="Select Font">
                     {primaryFonts.find(f => f.class === selectedPrimaryFont)?.name || 'Select Font'}
@@ -304,7 +316,7 @@ export function Sidebar({ }: SidebarProps) {
                   </Sheet>
                 </Adapt>
 
-                <Select.Content zIndex={200000} backgroundColor="$background" borderRadius="$3" borderWidth={1} borderColor="$borderColor">
+                <Select.Content zIndex={200000} backgroundColor="$background" borderRadius="$3" borderWidth="$1" borderColor="$borderColor">
                   <Select.ScrollUpButton alignItems="center" justifyContent="center" position="relative" width="100%" height="$3">
                     <YStack zIndex={10}>
                       <ChevronDown size={20} />
@@ -335,29 +347,17 @@ export function Sidebar({ }: SidebarProps) {
 
             {/* Primary Color */}
             <YStack>
-              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Primary Color</Text>
-              <XStack flexWrap="wrap" gap="$2" width="100%">
+              <BuilderSectionLabel title="Primary Color" />
+              <XStack flexWrap="wrap" gap="$3" width="100%">
                 {colorThemes.map((theme) => (
                   <YStack key={theme.name} position="relative">
                     {theme.isCustom ? (
-                      <YStack
-                        width={28}
-                        height={28}
-                        borderRadius="$2"
-                        overflow="hidden"
-                        borderWidth={selectedTheme === 'custom' ? 2 : 1}
-                        borderColor={selectedTheme === 'custom' ? '$blue9' : '$borderColor'}
-                        position="relative"
-                        hoverStyle={{ opacity: 0.8 }}
+                      <BuilderColorSwatch
+                        color="transparent"
+                        isSelected={selectedTheme === 'custom'}
+                        onPress={() => handlePrimaryColorChange('custom', customPrimaryColor || DEFAULT_PRIMARY)}
+                        isCustom
                       >
-                         <YStack
-                          position="absolute"
-                          top={0}
-                          left={0}
-                          right={0}
-                          bottom={0}
-                          style={{ background: RAINBOW_GRADIENT }}
-                        />
                         <input
                           type="color"
                           value={customPrimaryColor || DEFAULT_PRIMARY}
@@ -365,7 +365,8 @@ export function Sidebar({ }: SidebarProps) {
                             setCustomPrimaryColor(e.target.value);
                             handlePrimaryColorChange('custom', e.target.value);
                           }}
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             handlePrimaryColorChange('custom', customPrimaryColor || DEFAULT_PRIMARY);
                           }}
                           style={{
@@ -380,21 +381,12 @@ export function Sidebar({ }: SidebarProps) {
                           }}
                           title={theme.label}
                         />
-                      </YStack>
+                      </BuilderColorSwatch>
                     ) : (
-                      <YStack
-                        width={28}
-                        height={28}
-                        borderRadius="$2"
-                        backgroundColor={theme.color}
-                        borderWidth={selectedTheme === theme.name ? 2 : 1}
-                        borderColor={selectedTheme === theme.name ? '$blue9' : '$borderColor'}
+                      <BuilderColorSwatch
+                        color={theme.color}
+                        isSelected={selectedTheme === theme.name}
                         onPress={() => handlePrimaryColorChange(theme.name)}
-                        cursor="pointer"
-                        hoverStyle={{ opacity: 0.8 }}
-                        pressStyle={{ scale: 0.95 }}
-                        // @ts-ignore
-                        title={theme.label}
                       />
                     )}
                   </YStack>
@@ -403,213 +395,152 @@ export function Sidebar({ }: SidebarProps) {
             </YStack>
 
             {/* Dark Mode Toggle */}
-            <XStack alignItems="center" justifyContent="space-between">
-              <Text size="$3" fontWeight="500" color="$color">Dark Mode</Text>
-              <TamaguiSwitch checked={isDarkMode} onCheckedChange={setDarkMode} size="$3" />
+            <XStack alignItems="center" justifyContent="space-between" width="100%">
+              <Text size="$3" fontWeight="500" color="$color">
+                Dark Mode
+              </Text>
+              <TamaguiSwitch checked={isDarkMode} onCheckedChange={setDarkMode} size="$4">
+                <TamaguiSwitch.Thumb animation="quick" />
+              </TamaguiSwitch>
             </XStack>
 
             {/* Style Preset */}
             <YStack>
-              <Text fontSize="$3" fontWeight="500" marginBottom="$2">Style Preset</Text>
-              <XStack flexWrap="wrap" gap="$2" justifyContent="space-between">
-                {stylePresets.map((preset) => {
-                  const Icon = preset.icon;
-                  const isSelected = stylePresetId === preset.id;
-                  return (
-                    <YStack
-                      key={preset.id}
-                      width="48%"
-                      height={80}
-                      padding="$3"
-                      borderRadius="$3"
-                      borderWidth={isSelected ? 2 : 1}
-                      borderColor={isSelected ? '$blue9' : '$gray6'}
-                      backgroundColor={isSelected ? '$blue2' : '$background'}
-                      alignItems="center"
-                      justifyContent="center"
-                      space="$2"
-                      hoverStyle={{ backgroundColor: '$gray3' }}
-                      pressStyle={{ opacity: 0.7 }}
-                      onPress={() => handleStylePresetChange(preset.id)}
-                      cursor="pointer"
-                    >
-                      <Icon size={24} color={isSelected ? theme.blue9.val : theme.gray11.val} />
-                      <Text fontSize="$2" textAlign="center" color={isSelected ? '$blue11' : '$gray11'}>{preset.name}</Text>
-                    </YStack>
-                  );
-                })}
+              <BuilderSectionLabel title="Style Preset" />
+              <XStack flexWrap="wrap" gap="$2" width="100%">
+                {stylePresets.map((preset) => (
+                  <BuilderOptionCard
+                    key={preset.id}
+                    icon={preset.icon}
+                    label={preset.name}
+                    isSelected={stylePresetId === preset.id}
+                    onPress={() => handleStylePresetChange(preset.id)}
+                    width="47%"
+                  />
+                ))}
               </XStack>
             </YStack>
 
-            {/* Menu Type */}
+            {/* Menu Layout */}
             <YStack>
-              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Menu Type</Text>
-              <XStack gap="$2">
-                <XStack
-                  flex={1}
-                  space="$2"
-                  padding="$3"
-                  borderRadius="$4"
-                  borderWidth={1}
-                  borderColor={opts.menuLayout === 'hamburger' ? '$blue9' : '$gray6'}
-                  backgroundColor={opts.menuLayout === 'hamburger' ? '$blue2' : 'transparent'}
-                  alignItems="center"
-                  hoverStyle={{ backgroundColor: '$gray3' }}
-                  pressStyle={{ opacity: 0.7 }}
-                  onPress={() => setOpts({ menuLayout: 'hamburger' })}
-                  cursor="pointer"
-                >
-                  <svg width="16" height="14" viewBox="0 0 20 14" fill="none">
-                    <rect width="20" height="2" fill="currentColor" />
-                    <rect y="6" width="20" height="2" fill="currentColor" />
-                    <rect y="12" width="20" height="2" fill="currentColor" />
-                  </svg>
-                  <Text size="$3" color="$color">Hamburger</Text>
-                </XStack>
-                <XStack
-                  flex={1}
-                  space="$2"
-                  padding="$3"
-                  borderRadius="$4"
-                  borderWidth={1}
-                  borderColor={opts.menuLayout === 'bottomBar' ? '$blue9' : '$gray6'}
-                  backgroundColor={opts.menuLayout === 'bottomBar' ? '$blue2' : 'transparent'}
-                  alignItems="center"
-                  hoverStyle={{ backgroundColor: '$gray3' }}
-                  pressStyle={{ opacity: 0.7 }}
+              <BuilderSectionLabel title="Menu Layout" />
+              <XStack gap="$2" width="100%">
+                <BuilderOptionCard
+                  icon={PanelBottom}
+                  label="Bottom Bar"
+                  isSelected={opts.menuLayout === 'bottomBar'}
                   onPress={() => setOpts({ menuLayout: 'bottomBar' })}
-                  cursor="pointer"
-                >
-                  <svg width="16" height="16" viewBox="0 0 20 16" fill="none">
-                    <rect y="14" width="20" height="2" fill="currentColor" />
-                    <rect x="2" y="10" width="3" height="2" fill="currentColor" />
-                    <rect x="8.5" y="10" width="3" height="2" fill="currentColor" />
-                    <rect x="15" y="10" width="3" height="2" fill="currentColor" />
-                  </svg>
-                  <Text size="$3" color="$color">Bottom Bar</Text>
-                </XStack>
+                  width="47%"
+                />
+                <BuilderOptionCard
+                  icon={Menu}
+                  label="Hamburger"
+                  isSelected={opts.menuLayout === 'hamburger'}
+                  onPress={() => setOpts({ menuLayout: 'hamburger' })}
+                  width="47%"
+                />
+              </XStack>
+            </YStack>
+
+            {/* Spacing Scale */}
+            <YStack>
+              <BuilderSectionLabel title="Spacing Scale" />
+              <XStack gap="$2" width="100%">
+                <BuilderOptionCard
+                  icon={Minimize}
+                  label="Compact"
+                  isSelected={spacingMode === 'compact'}
+                  onPress={() => setSpacingMode('compact')}
+                  width="31%"
+                />
+                <BuilderOptionCard
+                  icon={RectangleHorizontal}
+                  label="Normal"
+                  isSelected={spacingMode === 'normal'}
+                  onPress={() => setSpacingMode('normal')}
+                  width="31%"
+                />
+                <BuilderOptionCard
+                  icon={Maximize}
+                  label="Comfortable"
+                  isSelected={spacingMode === 'comfortable'}
+                  onPress={() => setSpacingMode('comfortable')}
+                  width="31%"
+                />
               </XStack>
             </YStack>
 
             </YStack>
-          )}
+          </BuilderAccordion>
         </YStack>
 
         {/* Advanced Styling Section - For More Control */}
         <YStack>
-          <XStack
-            onPress={() => setAdvancedStylingOpen(!advancedStylingOpen)}
-            padding="$3"
-            borderRadius="$3"
-            borderWidth={1}
-            borderColor="$borderColor"
-            backgroundColor="transparent"
-            hoverStyle={{ backgroundColor: '$gray4' }}
-            alignItems="center"
-            justifyContent="space-between"
-            pressStyle={{ opacity: 0.7 }}
-            cursor="pointer"
+          <BuilderAccordion 
+            title="Advanced Styling" 
+            icon={Sliders} 
+            isOpen={advancedStylingOpen} 
+            onToggle={() => setAdvancedStylingOpen(!advancedStylingOpen)}
           >
-            <XStack space="$3" alignItems="center">
-              <Sliders size={20} color={theme.color.val} />
-              <Text size="$3" fontWeight="500" color="$color">Advanced Styling</Text>
-            </XStack>
-            <ChevronDown
-              size={16}
-              color={theme.color.val}
-              style={{
-                transition: 'transform 0.2s',
-                transform: advancedStylingOpen ? 'rotate(180deg)' : 'rotate(0deg)'
-              }}
-            />
-          </XStack>
-          {advancedStylingOpen && (
             <YStack space="$4" padding="$3">
 
             {/* Corner Radius */}
             <YStack>
-              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Corner Radius</Text>
-              <XStack gap="$2">
-                <YStack
-                  flex={1}
-                  padding="$3"
-                  borderWidth={1}
-                  borderRadius="$3"
-                  borderColor={cornerRadius === 'none' ? '$blue9' : '$gray6'}
-                  backgroundColor={cornerRadius === 'none' ? '$blue2' : 'transparent'}
-                  alignItems="center"
-                  justifyContent="center"
-                  hoverStyle={{ backgroundColor: '$gray3' }}
-                  pressStyle={{ opacity: 0.7 }}
+              <BuilderSectionLabel title="Corner Radius" />
+              <XStack gap="$2" width="100%">
+                <BuilderOptionCard
+                  customContent={
+                    <YStack width="$5" height="$5" borderWidth={2} borderColor="$gray11" borderRadius={0} />
+                  }
+                  label="None"
+                  isSelected={cornerRadius === 'none'}
                   onPress={() => setCornerRadius('none')}
-                  cursor="pointer"
-                >
-                  <YStack width={32} height={32} borderWidth={2} borderColor="$gray11" borderRadius={0} />
-                </YStack>
-                <YStack
-                  flex={1}
-                  padding="$3"
-                  borderWidth={1}
-                  borderRadius="$3"
-                  borderColor={cornerRadius === 'small' ? '$blue9' : '$gray6'}
-                  backgroundColor={cornerRadius === 'small' ? '$blue2' : 'transparent'}
-                  alignItems="center"
-                  justifyContent="center"
-                  hoverStyle={{ backgroundColor: '$gray3' }}
-                  pressStyle={{ opacity: 0.7 }}
+                  width="23.5%"
+                />
+                <BuilderOptionCard
+                  customContent={
+                    <YStack width="$5" height="$5" borderWidth={2} borderColor="$gray11" borderRadius="$2" />
+                  }
+                  label="Small"
+                  isSelected={cornerRadius === 'small'}
                   onPress={() => setCornerRadius('small')}
-                  cursor="pointer"
-                >
-                  <YStack width={32} height={32} borderWidth={2} borderColor="$gray11" borderRadius={4} />
-                </YStack>
-                <YStack
-                  flex={1}
-                  padding="$3"
-                  borderWidth={1}
-                  borderRadius="$3"
-                  borderColor={cornerRadius === 'medium' ? '$blue9' : '$gray6'}
-                  backgroundColor={cornerRadius === 'medium' ? '$blue2' : 'transparent'}
-                  alignItems="center"
-                  justifyContent="center"
-                  hoverStyle={{ backgroundColor: '$gray3' }}
-                  pressStyle={{ opacity: 0.7 }}
+                  width="23.5%"
+                />
+                <BuilderOptionCard
+                  customContent={
+                    <YStack width="$5" height="$5" borderWidth={2} borderColor="$gray11" borderRadius="$4" />
+                  }
+                  label="Medium"
+                  isSelected={cornerRadius === 'medium'}
                   onPress={() => setCornerRadius('medium')}
-                  cursor="pointer"
-                >
-                  <YStack width={32} height={32} borderWidth={2} borderColor="$gray11" borderRadius={10} />
-                </YStack>
-                <YStack
-                  flex={1}
-                  padding="$3"
-                  borderWidth={1}
-                  borderRadius="$3"
-                  borderColor={cornerRadius === 'large' ? '$blue9' : '$gray6'}
-                  backgroundColor={cornerRadius === 'large' ? '$blue2' : 'transparent'}
-                  alignItems="center"
-                  justifyContent="center"
-                  hoverStyle={{ backgroundColor: '$gray3' }}
-                  pressStyle={{ opacity: 0.7 }}
+                  width="23.5%"
+                />
+                <BuilderOptionCard
+                  customContent={
+                    <YStack width="$5" height="$5" borderWidth={2} borderColor="$gray11" borderRadius="$8" />
+                  }
+                  label="Large"
+                  isSelected={cornerRadius === 'large'}
                   onPress={() => setCornerRadius('large')}
-                  cursor="pointer"
-                >
-                  <YStack width={32} height={32} borderWidth={2} borderColor="$gray11" borderRadius={20} />
-                </YStack>
+                  width="23.5%"
+                />
               </XStack>
             </YStack>
 
             {/* Display Font (for headings) */}
             <YStack>
-              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Display Font</Text>
-              <Text size="$2" color="$gray11" marginBottom="$2">For headings and titles</Text>
+              <BuilderSectionLabel title="Display Font" description="For headings and titles" />
               <Select value={selectedDisplayFont} onValueChange={setDisplayFont}>
                 <Select.Trigger 
                   width="100%" 
                   iconAfter={ChevronDown}
-                  borderWidth={1}
+                  borderWidth="$1"
                   borderColor="$borderColor"
-                  borderRadius="$3"
+                  borderRadius="$10"
                   backgroundColor="$background"
-                  padding="$3"
+                  paddingHorizontal="$4"
+                  paddingVertical="$3"
+                  minHeight={44}
                 >
                   <Select.Value placeholder="Select Font">
                     {displayFonts.find(f => f.class === selectedDisplayFont)?.name || 'Select Font'}
@@ -627,7 +558,7 @@ export function Sidebar({ }: SidebarProps) {
                   </Sheet>
                 </Adapt>
 
-                <Select.Content zIndex={200000} backgroundColor="$background" borderRadius="$3" borderWidth={1} borderColor="$borderColor">
+                <Select.Content zIndex={200000} backgroundColor="$background" borderRadius="$3" borderWidth="$1" borderColor="$borderColor">
                   <Select.ScrollUpButton alignItems="center" justifyContent="center" position="relative" width="100%" height="$3">
                     <YStack zIndex={10}>
                       <ChevronDown size={20} />
@@ -658,36 +589,25 @@ export function Sidebar({ }: SidebarProps) {
 
             {/* Secondary Color */}
             <YStack>
-              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Secondary Color</Text>
-              <XStack flexWrap="wrap" gap="$2" width="100%">
+              <BuilderSectionLabel title="Secondary Color" />
+              <XStack flexWrap="wrap" gap="$3" width="100%">
                 {accentColors.map((accent) => (
                   <YStack key={accent.name} position="relative">
                     {accent.isCustom ? (
-                      <YStack
-                        width={28}
-                        height={28}
-                        borderRadius="$2"
-                        overflow="hidden"
-                        borderWidth={selectedAccentColor === 'custom' ? 2 : 1}
-                        borderColor={selectedAccentColor === 'custom' ? '$blue9' : '$borderColor'}
-                        position="relative"
-                        hoverStyle={{ opacity: 0.8 }}
+                      <BuilderColorSwatch
+                        color="transparent"
+                        isSelected={selectedAccentColor === 'custom'}
+                        onPress={() => handleSecondaryColorChange('custom', customAccentColor || DEFAULT_ACCENT)}
+                        isCustom
                       >
-                         <YStack
-                          position="absolute"
-                          top={0}
-                          left={0}
-                          right={0}
-                          bottom={0}
-                          style={{ background: RAINBOW_GRADIENT }}
-                        />
-                        <input
+                         <input
                           type="color"
                           value={customAccentColor || DEFAULT_ACCENT}
                           onChange={(e) => {
                             handleSecondaryColorChange('custom', e.target.value);
                           }}
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             handleSecondaryColorChange('custom', customAccentColor || DEFAULT_ACCENT);
                           }}
                           style={{
@@ -700,23 +620,13 @@ export function Sidebar({ }: SidebarProps) {
                             left: 0,
                             zIndex: 10
                           }}
-                          title={accent.label}
                         />
-                      </YStack>
+                      </BuilderColorSwatch>
                     ) : (
-                      <YStack
-                        width={28}
-                        height={28}
-                        borderRadius="$2"
-                        backgroundColor={accent.color}
-                        borderWidth={selectedAccentColor === accent.name ? 2 : 1}
-                        borderColor={selectedAccentColor === accent.name ? '$blue9' : '$borderColor'}
+                      <BuilderColorSwatch
+                        color={accent.color}
+                        isSelected={selectedAccentColor === accent.name}
                         onPress={() => handleSecondaryColorChange(accent.name)}
-                        cursor="pointer"
-                        hoverStyle={{ opacity: 0.8 }}
-                        pressStyle={{ scale: 0.95 }}
-                        // @ts-ignore
-                        title={accent.label}
                       />
                     )}
                   </YStack>
@@ -724,160 +634,49 @@ export function Sidebar({ }: SidebarProps) {
               </XStack>
             </YStack>
 
-            {/* Spacing */}
-            <YStack>
-              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Spacing</Text>
-              <XStack gap="$2">
-                <YStack
-                  flex={1}
-                  padding="$3"
-                  borderRadius="$4"
-                  borderWidth={1}
-                  borderColor={spacingMode === 'compact' ? '$blue9' : '$gray6'}
-                  backgroundColor={spacingMode === 'compact' ? '$blue2' : 'transparent'}
-                  alignItems="center"
-                  hoverStyle={{ backgroundColor: '$gray3' }}
-                  pressStyle={{ opacity: 0.7 }}
-                  onPress={() => setSpacingMode('compact')}
-                  cursor="pointer"
-                >
-                  <Text size="$2" color="$color">Compact</Text>
-                </YStack>
-                <YStack
-                  flex={1}
-                  padding="$3"
-                  borderRadius="$4"
-                  borderWidth={1}
-                  borderColor={spacingMode === 'normal' ? '$blue9' : '$gray6'}
-                  backgroundColor={spacingMode === 'normal' ? '$blue2' : 'transparent'}
-                  alignItems="center"
-                  hoverStyle={{ backgroundColor: '$gray3' }}
-                  pressStyle={{ opacity: 0.7 }}
-                  onPress={() => setSpacingMode('normal')}
-                  cursor="pointer"
-                >
-                  <Text size="$2" color="$color">Normal</Text>
-                </YStack>
-                <YStack
-                  flex={1}
-                  padding="$3"
-                  borderRadius="$4"
-                  borderWidth={1}
-                  borderColor={spacingMode === 'comfortable' ? '$blue9' : '$gray6'}
-                  backgroundColor={spacingMode === 'comfortable' ? '$blue2' : 'transparent'}
-                  alignItems="center"
-                  hoverStyle={{ backgroundColor: '$gray3' }}
-                  pressStyle={{ opacity: 0.7 }}
-                  onPress={() => setSpacingMode('comfortable')}
-                  cursor="pointer"
-                >
-                  <Text size="$2" color="$color">Comfortable</Text>
-                </YStack>
-              </XStack>
-            </YStack>
+
 
             {/* Type Scale */}
             <YStack>
-              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Type Scale</Text>
-              <XStack gap="$2">
-                <YStack
-                  flex={1}
-                  padding="$3"
-                  borderRadius="$4"
-                  borderWidth={1}
-                  borderColor={selectedScale === 'small' ? '$blue9' : '$gray6'}
-                  backgroundColor={selectedScale === 'small' ? '$blue2' : 'transparent'}
-                  alignItems="center"
-                  justifyContent="center"
-                  hoverStyle={{ backgroundColor: '$gray3' }}
-                  pressStyle={{ opacity: 0.7 }}
+              <BuilderSectionLabel title="Type Scale" />
+              <XStack gap="$2" width="100%">
+                <BuilderOptionCard
+                  customContent={
+                    <Text fontSize="$5" fontWeight="700" color="$color">Aa</Text>
+                  }
+                  label="Small"
+                  isSelected={selectedScale === 'small'}
                   onPress={() => setScale('small')}
-                  cursor="pointer"
-                >
-                  <Text size="$3" fontWeight="bold" color="$color">Aa</Text>
-                </YStack>
-                <YStack
-                  flex={1}
-                  padding="$3"
-                  borderRadius="$4"
-                  borderWidth={1}
-                  borderColor={selectedScale === 'regular' ? '$blue9' : '$gray6'}
-                  backgroundColor={selectedScale === 'regular' ? '$blue2' : 'transparent'}
-                  alignItems="center"
-                  justifyContent="center"
-                  hoverStyle={{ backgroundColor: '$gray3' }}
-                  pressStyle={{ opacity: 0.7 }}
+                  width="31%"
+                />
+                <BuilderOptionCard
+                  customContent={
+                    <Text fontSize="$6" fontWeight="700" color="$color">Aa</Text>
+                  }
+                  label="Regular"
+                  isSelected={selectedScale === 'regular'}
                   onPress={() => setScale('regular')}
-                  cursor="pointer"
-                >
-                  <Text size="$4" fontWeight="bold" color="$color">Aa</Text>
-                </YStack>
-                <YStack
-                  flex={1}
-                  padding="$3"
-                  borderRadius="$4"
-                  borderWidth={1}
-                  borderColor={selectedScale === 'large' ? '$blue9' : '$gray6'}
-                  backgroundColor={selectedScale === 'large' ? '$blue2' : 'transparent'}
-                  alignItems="center"
-                  justifyContent="center"
-                  hoverStyle={{ backgroundColor: '$gray3' }}
-                  pressStyle={{ opacity: 0.7 }}
+                  width="31%"
+                />
+                <BuilderOptionCard
+                  customContent={
+                    <Text fontSize="$7" fontWeight="700" color="$color">Aa</Text>
+                  }
+                  label="Large"
+                  isSelected={selectedScale === 'large'}
                   onPress={() => setScale('large')}
-                  cursor="pointer"
-                >
-                  <Text size="$5" fontWeight="bold" color="$color">Aa</Text>
-                </YStack>
+                  width="31%"
+                />
               </XStack>
             </YStack>
 
-            {/* Menu Layout */}
-            <YStack>
-              <Text size="$3" fontWeight="500" color="$color" marginBottom="$2">Menu Layout</Text>
-              <XStack gap="$2">
-                <YStack
-                  flex={1}
-                  padding="$3"
-                  borderRadius="$2"
-                  borderWidth={1}
-                  borderColor={opts.menuLayout === 'bottomBar' ? '$blue9' : '$gray6'}
-                  backgroundColor={opts.menuLayout === 'bottomBar' ? '$blue2' : 'transparent'}
-                  alignItems="center"
-                  space="$2"
-                  hoverStyle={{ backgroundColor: '$gray3' }}
-                  pressStyle={{ opacity: 0.7 }}
-                  onPress={() => setOpts({ menuLayout: 'bottomBar' })}
-                  cursor="pointer"
-                >
-                  <Navigation size={16} color={opts.menuLayout === 'bottomBar' ? theme.blue9.val : theme.gray11.val} />
-                  <Text size="$3" color="$color">Bottom Bar</Text>
-                </YStack>
-                <YStack
-                  flex={1}
-                  padding="$3"
-                  borderRadius="$2"
-                  borderWidth={1}
-                  borderColor={opts.menuLayout === 'hamburger' ? '$blue9' : '$gray6'}
-                  backgroundColor={opts.menuLayout === 'hamburger' ? '$blue2' : 'transparent'}
-                  alignItems="center"
-                  space="$2"
-                  hoverStyle={{ backgroundColor: '$gray3' }}
-                  pressStyle={{ opacity: 0.7 }}
-                  onPress={() => setOpts({ menuLayout: 'hamburger' })}
-                  cursor="pointer"
-                >
-                  <Menu size={16} color={opts.menuLayout === 'hamburger' ? theme.blue9.val : theme.gray11.val} />
-                  <Text size="$3" color="$color">Hamburger</Text>
-                </YStack>
-              </XStack>
-            </YStack>
+
 
             </YStack>
-          )}
+            {/* Styling Controls Section */}
+            <StylingControls />
+          </BuilderAccordion>
         </YStack>
-
-        {/* Styling Controls Section */}
-        <StylingControls />
 
       </YStack>
 
