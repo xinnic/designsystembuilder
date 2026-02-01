@@ -69,25 +69,40 @@ We're not competing with dashboards tools (they can use MUI). We're building for
 
 ### ✅ Phase 0: Foundation (COMPLETE)
 - [x] Visual builder with live preview
-- [x] 34 Tamagui components
+- [x] Core Tamagui component library (Button, Card, Input, etc.)
 - [x] Factory pattern (87% code reduction)
-- [x] CSS variable bridge
+- [x] CSS variable bridge (useTokenSystem hook)
 - [x] Basic megaprompt export
+- [x] **Style Presets** (Modern Flat, Elegant, Playful, etc.)
+- [x] Dark mode toggle
+- [x] Font selection (Primary + Display fonts)
+- [x] Color theme selection with custom color picker
 
-### 🔴 Phase 1: B2C Component MVP (Weeks 1-2) - CURRENT
+### 🟠 Phase 0.5: Tamagui Migration & Stabilization - CURRENT
+**Goal:** Complete migration from Tailwind/Shadcn to pure Tamagui
+
+**In Progress:**
+- [x] Migrate Sidebar controls to Tamagui
+- [x] Migrate right panel showcases to Tamagui
+- [x] Token propagation (brand colors → components)
+- [ ] Final UI polish and visual regression fixes
+- [ ] Complete removal of Tailwind CSS classes
+
+**Success Criteria:**
+- No Tailwind classes remain in codebase
+- All components use Tamagui tokens exclusively
+- Live preview updates instantly on sidebar changes
+
+### 🔴 Phase 1: B2C Component MVP (Next)
 **Goal:** Ship 6 essential B2C components with megaprompt export
 
-**Week 1: Core Components**
+**Core Components:**
 - [ ] FeedCard - Content display hero
 - [ ] TabBar - Primary navigation
 - [ ] NavHeader - Top bar/branding
 - [ ] DrawerMenu - Side navigation
-
-**Week 2: Discovery & Export**
 - [ ] SegmentedControl - Content filtering
 - [ ] SearchBar - Discovery pattern
-- [ ] Megaprompt generator
-- [ ] Adherence documentation
 
 **Success Criteria:**
 - Can build Instagram-like feed
@@ -198,20 +213,26 @@ Nice-to-have:
 
 ### Architecture Decisions
 
-**Core Technology:** React Native + Tamagui
+**Builder Application:** Vite + React + Tamagui (Web)
+- Fast development with Vite HMR
+- Tamagui for consistent component styling
+- Zustand for state management
+- CSS variable bridge for real-time theming
+
+**Export Target:** Expo + React Native + Tamagui
 - True cross-platform (iOS + Android + Web)
 - Compile-time optimization
 - Headless component foundation
 - Native performance
 
 **Token System:** 3-Tier Architecture
-1. Primitive tokens (raw values)
-2. Semantic tokens (theme-aware)
+1. Primitive tokens (raw values, OKLCH colors)
+2. Semantic tokens (theme-aware, light/dark)
 3. Component tokens (overrides)
 
 **Export Strategy:** Megaprompt-First
 - Comprehensive instruction set
-- Works with any AI CLI
+- Works with any AI CLI (Claude, Cursor, etc.)
 - No config files needed (all in prompt)
 - Future: NPM package option
 
@@ -411,33 +432,6 @@ Important constraints to maintain focus:
 
 ---
 
-## ⚡ Immediate Next Steps
-
-### This Week (MVP Push)
-1. **Day 1-2:** Implement FeedCard component
-2. **Day 3-4:** Build TabBar & NavHeader
-3. **Day 5-6:** Create DrawerMenu & SegmentedControl
-4. **Day 7-8:** Add SearchBar & polish
-
-### Next Week (Launch Prep)
-1. **Monday:** Finalize megaprompt generator
-2. **Tuesday:** Create demo video
-3. **Wednesday:** Write launch blog post
-4. **Thursday:** Soft launch to community
-5. **Friday:** Iterate based on feedback
-
-### Success Criteria for MVP
-✅ When a developer can:
-1. Open the builder
-2. Customize their brand colors
-3. See live preview update
-4. Generate megaprompt
-5. Paste into Claude/Cursor
-6. Get working React Native app
-7. All in under 5 minutes
-
----
-
 ## 💡 Key Insights from Research
 
 ### What We Learned
@@ -456,7 +450,7 @@ Important constraints to maintain focus:
 
 ---
 
-**Last Updated:** 2025-11-04
-**Strategy Version:** 2.0 (B2C Pivot)
-**Status:** MVP Development - Week 1 of 2
-**Next Review:** Post-MVP Launch
+**Last Updated:** 2026-01-15
+**Strategy Version:** 2.1
+**Status:** Phase 0.5 - Tamagui Migration & Stabilization
+**Next Review:** Post-Migration Completion

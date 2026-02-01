@@ -1,5 +1,35 @@
 # Claude Instructions - Design System Builder
 
+## 🛑 Strict UI & Framework Rules (CRITICAL)
+
+### 1. Framework: Tamagui Only
+*   **Layout**: Use `XStack`, `YStack`, `ZStack` exclusively. DO NOT use `div`, `span`, or `main`.
+*   **Components**: Use Tamagui components (`Text`, `Heading`, `Button`, `Input`).
+*   **Styling**: Use strictly Tamagui props (`padding="$4"`, `backgroundColor="$background"`).
+*   **Forbidden**: `className`, Tailwind classes, standard CSS files (except for global resets).
+
+### 2. No Hardcoded Values
+*   **Layout**: NEVER use raw numbers for layout (e.g., `width={320}`, `padding={16}`).
+*   **Use Tokens**: ALWAYS use Tamagui tokens:
+    *   Sizes: `width="$16"`, `size="$4"`
+    *   Spacing: `padding="$4"`, `gap="$3"`
+    *   Colors: `color="$gray12"`, `backgroundColor="$blue9"`
+*   **Borders**: Use `borderWidth="$1"`, not `borderWidth={1}`.
+
+### 3. Component Hierarchy (Strict Priority)
+1.  **🥇 Showcase Components (Highest Priority)**: ALWAYS look for existing Atoms/Components/Patterns in `src/components/` first. The Builder UI should "dogfood" the very system it's building.
+2.  **🥈 Existing Builder Components**: If no Showcase component fits, use reusable builder components in `src/components/builder-ui/`.
+3.  **🥉 New Builder Components**: Only create a new component if absolutely necessary. Place it in `src/components/builder-ui/` and ensure it is scalable and reusable.
+
+### 4. Sync Principle
+*   **Universal Updates**: Sidebar settings MUST update:
+    1.  The Builder UI itself (Sidebar, Panels)
+    2.  The Phone Mockup
+    3.  The Showcase/Preview Panels
+*   **No Exceptions**: All these UIs share the same `useDesignSystem` items and global tokens.
+
+---
+
 ## 🎯 Primary Rule: Auto-Sync Architecture
 
 **IMPORTANT:** This project uses an automatic synchronization pattern. When adding ANY new setting to the left panel, it MUST automatically update the middle phone mockup and right panel without manual intervention.
