@@ -27,7 +27,7 @@ export const PreviewPhone = () => {
   // Get everything from store including stylePresetId
   const { opts, selectedPrimaryFont, selectedDisplayFont, stylePresetId } = useDesignSystem();
   return (
-    <div className={`h-full flex items-start justify-center p-8 bg-[rgb(var(--color-bg-secondary))]/20 min-h-[600px] preset-${stylePresetId}`}>
+    <div className={`h-full flex items-start justify-center p-12 bg-[rgb(var(--color-bg-secondary))]/20 min-h-[600px] preset-${stylePresetId}`}>
       {/* Phone Frame */}
       <div className={`w-80 h-[640px] bg-[rgb(var(--color-bg-primary))] border-8 border-[rgb(var(--color-border))] overflow-hidden flex flex-col ${selectedPrimaryFont}`}
         style={{

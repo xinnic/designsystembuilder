@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import { BUILDER_LAYOUT } from '../config/builderLayout';
 import {
   XStack,
   YStack,
   ScrollView,
-  Separator,
   Tabs,
   Sheet,
   Dialog,
@@ -16,9 +16,14 @@ import {
   Square,
   Label as TamaguiLabel,
   Text,
+  Select,
+  Adapt,
+  Sheet as TamaguiSheet,
+  Heading
 } from 'tamagui';
 import { useDesignSystem } from '../state/designSystem';
-import { ChevronDown, Check } from 'lucide-react';
+import { ChevronDown, Check, ChevronUp } from 'lucide-react';
+import { ShowcaseSection } from '../components/ShowcaseSection';
 
 // Import our design system components
 import {
@@ -27,10 +32,6 @@ import {
   Input,
   TextArea,
   Switch,
-  Display,
-  H1,
-  H2,
-  H3,
   Body,
   Caption,
   Label,
@@ -40,6 +41,14 @@ import {
   Image,
   ListItem,
 } from '../design-system/components';
+
+import {
+  HeroCard,
+  StatsCard,
+  ReviewCard,
+  SettingsGroup,
+  ProfileCard,
+} from '../design-system/bespoke';
 
 export default function TamaguiShowcase() {
   // Note: useTokenCSS is called in PreviewPhoneTamagui, no need to duplicate here
@@ -56,19 +65,21 @@ export default function TamaguiShowcase() {
     <ScrollView
       backgroundColor="$bgPrimary"
       flex={1}
-      padding="$4"
+      padding={BUILDER_LAYOUT.panelPadding}
     >
-      <YStack gap="$6">
+      <YStack gap="$8" minHeight="100%" paddingBottom="$10">
         {/* Components Section Header */}
-        <YStack gap="$4">
-          <H1>Components</H1>
-          <Separator borderColor="$border" />
+        <YStack gap="$2">
+          <Heading fontSize="$9" fontWeight="700" color="$color">
+            Components
+          </Heading>
+          <Text fontSize="$5" color="$color" opacity={0.6}>
+            Building blocks for your application UI
+          </Text>
         </YStack>
 
         {/* Buttons Section */}
-        <YStack gap="$3">
-          <H2>Buttons</H2>
-          <Card variant="elevated" padding="large">
+        <ShowcaseSection title="Buttons" borderless={false}>
             <YStack gap="$4">
               {/* Button Variants */}
               <YStack gap="$2">
@@ -128,13 +139,10 @@ export default function TamaguiShowcase() {
                 </Button>
               </YStack>
             </YStack>
-          </Card>
-        </YStack>
+        </ShowcaseSection>
 
         {/* Form Controls Section */}
-        <YStack gap="$3">
-          <H2>Form Controls</H2>
-          <Card variant="elevated" padding="large">
+        <ShowcaseSection title="Form Controls" borderless={false}>
             <YStack gap="$4">
               {/* Text Input */}
               <YStack gap="$2">
@@ -160,6 +168,73 @@ export default function TamaguiShowcase() {
                   error
                   fullWidth
                 />
+
+              </YStack>
+
+              {/* Select Dropdown */}
+              <YStack gap="$2">
+                <Label>Select Dropdown</Label>
+                <Select value="apple" defaultValue="apple">
+                  <Select.Trigger 
+                    width="100%" 
+                    iconAfter={ChevronDown}
+                    borderWidth={1}
+                    borderColor="$border"
+                    borderRadius="$3"
+                    backgroundColor="$bgPrimary"
+                    padding="$3"
+                  >
+                    <Select.Value placeholder="Select fruit" />
+                  </Select.Trigger>
+                  
+                  <Adapt when="sm" platform="touch">
+                    <TamaguiSheet modal dismissOnSnapToBottom>
+                      <TamaguiSheet.Frame>
+                        <TamaguiSheet.ScrollView>
+                          <Adapt.Contents />
+                        </TamaguiSheet.ScrollView>
+                      </TamaguiSheet.Frame>
+                      <TamaguiSheet.Overlay />
+                    </TamaguiSheet>
+                  </Adapt>
+
+                  <Select.Content zIndex={200000} backgroundColor="$bgPrimary" borderRadius="$3" borderWidth={1} borderColor="$border">
+                    <Select.ScrollUpButton alignItems="center" justifyContent="center" position="relative" width="100%" height="$3">
+                      <YStack zIndex={10}>
+                        <ChevronUp size={20} />
+                      </YStack>
+                    </Select.ScrollUpButton>
+
+                    <Select.Viewport minWidth={200}>
+                      <Select.Group>
+                        <Select.Label>Fruits</Select.Label>
+                        {[
+                          { name: 'Apple', value: 'apple' },
+                          { name: 'Pear', value: 'pear' },
+                          { name: 'Blackberry', value: 'blackberry' },
+                          { name: 'Peach', value: 'peach' },
+                          { name: 'Apricot', value: 'apricot' },
+                          { name: 'Melon', value: 'melon' },
+                          { name: 'Honeydew', value: 'honeydew' },
+                          { name: 'Starfruit', value: 'starfruit' },
+                        ].map((item, i) => (
+                          <Select.Item index={i} key={item.name} value={item.value} hoverStyle={{ backgroundColor: '$bgSecondary' }}>
+                            <Select.ItemText>{item.name}</Select.ItemText>
+                            <Select.ItemIndicator marginLeft="auto">
+                              <Check size={16} />
+                            </Select.ItemIndicator>
+                          </Select.Item>
+                        ))}
+                      </Select.Group>
+                    </Select.Viewport>
+
+                    <Select.ScrollDownButton alignItems="center" justifyContent="center" position="relative" width="100%" height="$3">
+                      <YStack zIndex={10}>
+                        <ChevronDown size={20} />
+                      </YStack>
+                    </Select.ScrollDownButton>
+                  </Select.Content>
+                </Select>
               </YStack>
 
               {/* Text Area */}
@@ -261,16 +336,17 @@ export default function TamaguiShowcase() {
                 </ToggleGroup>
               </YStack>
             </YStack>
-          </Card>
-        </YStack>
+        </ShowcaseSection>
 
         {/* Cards Section */}
-        <YStack gap="$3">
-          <H2>Cards</H2>
+        <ShowcaseSection title="Cards" borderless={true}>
+          <Text fontSize="$3" color="$color" opacity={0.6} marginBottom="$4">
+             Different card variants for various contexts.
+          </Text>
           <YStack gap="$3">
             <Card variant="default" padding="large">
               <YStack gap="$2">
-                <H3>Default Card</H3>
+                <Heading size="$4">Default Card</Heading>
                 <Body color="$textSecondary">
                   This is a basic card with background and border
                 </Body>
@@ -279,7 +355,7 @@ export default function TamaguiShowcase() {
 
             <Card variant="elevated" padding="large">
               <YStack gap="$2">
-                <H3>Elevated Card</H3>
+                <Heading size="$4">Elevated Card</Heading>
                 <Body color="$textSecondary">
                   This card has a shadow for depth
                 </Body>
@@ -288,14 +364,14 @@ export default function TamaguiShowcase() {
 
             <Card variant="branded" padding="large">
               <YStack gap="$2">
-                <H3>Branded Card</H3>
+                <Heading size="$4">Branded Card</Heading>
                 <Body color="$textSecondary">This card uses brand color accent</Body>
               </YStack>
             </Card>
 
             <Card variant="flat" padding="large">
               <YStack gap="$2">
-                <H3>Flat Card</H3>
+                <Heading size="$4">Flat Card</Heading>
                 <Body color="$textSecondary">
                   This card has no shadow or border
                 </Body>
@@ -304,17 +380,15 @@ export default function TamaguiShowcase() {
 
             <Card variant="gradient" padding="large">
               <YStack gap="$2">
-                <H3>Gradient Card</H3>
+                <Heading size="$4">Gradient Card</Heading>
                 <Body color="$textSecondary">This card has brand-themed background</Body>
               </YStack>
             </Card>
           </YStack>
-        </YStack>
+        </ShowcaseSection>
 
         {/* Avatar Section */}
-        <YStack gap="$3">
-          <H2>Avatars</H2>
-          <Card variant="elevated" padding="large">
+        <ShowcaseSection title="Avatars" borderless={false}>
             <YStack gap="$4">
               <YStack gap="$2">
                 <Caption fontWeight="600">Sizes</Caption>
@@ -353,13 +427,10 @@ export default function TamaguiShowcase() {
                 </XStack>
               </YStack>
             </YStack>
-          </Card>
-        </YStack>
+        </ShowcaseSection>
 
         {/* Image Section */}
-        <YStack gap="$3">
-          <H2>Images</H2>
-          <Card variant="elevated" padding="large">
+        <ShowcaseSection title="Images" borderless={false}>
             <YStack gap="$4">
               <YStack gap="$2">
                 <Caption fontWeight="600">Border Radius Variants</Caption>
@@ -415,35 +486,32 @@ export default function TamaguiShowcase() {
                 </YStack>
               </YStack>
             </YStack>
-          </Card>
-        </YStack>
+        </ShowcaseSection>
 
         {/* ListItem Section */}
-        <YStack gap="$3">
-          <H2>List Items</H2>
-          <Card variant="elevated" padding="none">
-            <YStack>
+        <ShowcaseSection title="List Items" borderless={true}>
+            <YStack backgroundColor="$bgSecondary" borderRadius="$3" borderWidth={1} borderColor="$border">
               <ListItem
                 title="Profile Settings"
                 subTitle="Manage your account"
                 icon={<Body>👤</Body>}
                 iconAfter={ChevronDown}
               />
-              <Separator borderColor="$border" />
+              <YStack height={1} backgroundColor="$border" />
               <ListItem
                 title="Notifications"
                 subTitle="Push notifications and alerts"
                 icon={<Body>🔔</Body>}
                 iconAfter={ChevronDown}
               />
-              <Separator borderColor="$border" />
+              <YStack height={1} backgroundColor="$border" />
               <ListItem
                 title="Privacy"
                 subTitle="Control your data"
                 icon={<Body>🔒</Body>}
                 iconAfter={ChevronDown}
               />
-              <Separator borderColor="$border" />
+              <YStack height={1} backgroundColor="$border" />
               <ListItem
                 title="Help & Support"
                 subTitle="Get help when you need it"
@@ -451,13 +519,10 @@ export default function TamaguiShowcase() {
                 iconAfter={ChevronDown}
               />
             </YStack>
-          </Card>
-        </YStack>
+        </ShowcaseSection>
 
         {/* Tabs Section */}
-        <YStack gap="$3">
-          <H2>Tabs</H2>
-          <Card variant="elevated" padding="none">
+        <ShowcaseSection title="Tabs" borderless={false}>
             <Tabs
               defaultValue="tab1"
               orientation="horizontal"
@@ -479,22 +544,19 @@ export default function TamaguiShowcase() {
               </Tabs.List>
 
               <Tabs.Content value="tab1" padding="$4">
-                <Body>Content for Tab 1. This tab demonstrates the first panel.</Body>
+                <Body>Content for Tab 1.</Body>
               </Tabs.Content>
               <Tabs.Content value="tab2" padding="$4">
-                <Body>Content for Tab 2. This tab demonstrates the second panel.</Body>
+                <Body>Content for Tab 2.</Body>
               </Tabs.Content>
               <Tabs.Content value="tab3" padding="$4">
-                <Body>Content for Tab 3. This tab demonstrates the third panel.</Body>
+                <Body>Content for Tab 3.</Body>
               </Tabs.Content>
             </Tabs>
-          </Card>
-        </YStack>
+        </ShowcaseSection>
 
         {/* Progress Section */}
-        <YStack gap="$3">
-          <H2>Progress Indicators</H2>
-          <Card variant="elevated" padding="large">
+        <ShowcaseSection title="Progress Indicators" borderless={false}>
             <YStack gap="$4">
               <YStack gap="$2">
                 <Caption fontWeight="600">Progress Bar (60%)</Caption>
@@ -517,13 +579,10 @@ export default function TamaguiShowcase() {
                 </Progress>
               </YStack>
             </YStack>
-          </Card>
-        </YStack>
+        </ShowcaseSection>
 
         {/* Dialogs & Sheets */}
-        <YStack gap="$3">
-          <H2>Overlays</H2>
-          <Card variant="elevated" padding="large">
+        <ShowcaseSection title="Overlays" borderless={false}>
             <XStack gap="$3" flexWrap="wrap">
               <Button variant="primary" onPress={() => setSheetOpen(true)}>
                 Open Sheet
@@ -532,8 +591,7 @@ export default function TamaguiShowcase() {
                 Open Dialog
               </Button>
             </XStack>
-          </Card>
-        </YStack>
+        </ShowcaseSection>
 
         {/* Sheet Component */}
         <Sheet
@@ -548,7 +606,7 @@ export default function TamaguiShowcase() {
           <Sheet.Frame padding="$4" backgroundColor="$bgPrimary">
             <Sheet.Handle backgroundColor="$border" />
             <YStack gap="$4">
-              <H2>Bottom Sheet</H2>
+              <Heading>Bottom Sheet</Heading>
               <Body>This is a modal bottom sheet component with smooth animations.</Body>
               <Button variant="primary" onPress={() => setSheetOpen(false)}>
                 Close
@@ -571,7 +629,7 @@ export default function TamaguiShowcase() {
               borderColor="$border"
             >
               <Dialog.Title asChild>
-                <H3>Dialog Title</H3>
+                <Heading>Dialog Title</Heading>
               </Dialog.Title>
               <Dialog.Description asChild>
                 <Body color="$textSecondary">
@@ -591,9 +649,7 @@ export default function TamaguiShowcase() {
         </Dialog>
 
         {/* Shapes Section */}
-        <YStack gap="$3">
-          <H2>Shapes & Primitives</H2>
-          <Card variant="elevated" padding="large">
+        <ShowcaseSection title="Shapes & Primitives" borderless={false}>
             <YStack gap="$3">
               <Caption fontWeight="600">Basic Shapes</Caption>
               <XStack gap="$3" flexWrap="wrap" alignItems="center">
@@ -604,14 +660,80 @@ export default function TamaguiShowcase() {
                 <Circle size={30} backgroundColor="$warning" />
               </XStack>
             </YStack>
-          </Card>
-        </YStack>
+        </ShowcaseSection>
+
+        {/* Bespoke Components Section */}
+        <ShowcaseSection title="App Components" borderless={false}>
+            <YStack gap="$6">
+              
+              <YStack gap="$2">
+                <Caption fontWeight="600">Hero Card</Caption>
+                <HeroCard
+                  title="Featured Today"
+                  description="Discover what's trending"
+                  ctaText="Explore Now"
+                  gradient
+                />
+              </YStack>
+
+              <YStack gap="$2">
+                <Caption fontWeight="600">Metric Cards</Caption>
+                <XStack gap="$2">
+                  <StatsCard
+                    value="124"
+                    label="Posts"
+                    icon={<Body>📊</Body>}
+                  />
+                  <StatsCard
+                    value="2.3k"
+                    label="Likes"
+                    icon={<Body>❤️</Body>}
+                  />
+                </XStack>
+              </YStack>
+
+              <YStack gap="$2">
+                <Caption fontWeight="600">Review Card</Caption>
+                <ReviewCard
+                  title="Great Experience"
+                  rating={5}
+                  time="2h ago"
+                  content="Amazing app with beautiful design."
+                  likes={24}
+                  comments={5}
+                />
+              </YStack>
+
+              <YStack gap="$2">
+                <Caption fontWeight="600">Settings Group</Caption>
+                <SettingsGroup
+                  items={[
+                    { title: 'Privacy', subTitle: 'Control your data', icon: <Body>🔒</Body> },
+                    { title: 'Notifications', subTitle: 'Manage alerts', icon: <Body>🔔</Body> },
+                  ]}
+                />
+              </YStack>
+
+               <YStack gap="$2">
+                <Caption fontWeight="600">Profile Card</Caption>
+                <XStack>
+                  <ProfileCard
+                    name="Sarah J."
+                    status="Active now"
+                    initials="SJ"
+                    avatar="https://i.pravatar.cc/150?img=5"
+                  />
+                </XStack>
+              </YStack>
+
+            </YStack>
+        </ShowcaseSection>
 
         {/* End Note */}
         <Card variant="gradient" padding="large">
           <YStack gap="$2" alignItems="center">
-            <H2 textAlign="center">Design System Complete</H2>
-            <Body color="$textSecondary" textAlign="center">
+            <Heading textAlign="center" color="white">Design System Complete</Heading>
+            <Body color="rgba(255,255,255,0.8)" textAlign="center">
               All components are built with Tamagui and use design tokens for consistency
             </Body>
           </YStack>

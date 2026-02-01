@@ -1,5 +1,5 @@
 import React from 'react';
-import { YStack, XStack, Text, Heading, ScrollView } from 'tamagui';
+import { YStack, XStack, Heading, Text, ScrollView } from 'tamagui';
 import {
     Layout,
     Navigation,
@@ -14,7 +14,7 @@ import {
     MessageCircle,
     Settings
 } from 'lucide-react';
-
+import { ShowcaseSection } from '../components/ShowcaseSection';
 import { Button, Input } from '../design-system/components';
 
 /**
@@ -24,37 +24,24 @@ import { Button, Input } from '../design-system/components';
 export default function PatternsShowcase() {
     return (
         <ScrollView maxHeight="100vh">
-            <YStack padding="$6" gap="$8">
+            <YStack padding="$6" gap="$8" minHeight="100%" paddingBottom="$10">
                 {/* Intro */}
                 <YStack gap="$2">
-                    <Heading fontSize="$8" fontWeight="600" marginBottom="$2" color="$color">
+                    <Heading fontSize="$9" fontWeight="700" color="$color">
                         Patterns
                     </Heading>
-                    <Text fontSize="$3" color="$color" opacity={0.7}>
+                    <Text fontSize="$5" color="$color" opacity={0.6}>
                         Composed layouts that combine multiple components for common use cases
                     </Text>
                 </YStack>
 
                 {/* App Header Pattern */}
-                <YStack gap="$4">
-                    <YStack gap="$1">
-                        <XStack gap="$2" alignItems="center">
-                            <Layout size={18} color="var(--color-brand)" />
-                            <Heading fontSize="$5" fontWeight="600" color="$color">
-                                App Header
-                            </Heading>
-                        </XStack>
-                        <Text fontSize="$3" color="$color" opacity={0.7}>
-                            Logo, title, and action buttons for top navigation
-                        </Text>
-                    </YStack>
-                    <YStack
-                        backgroundColor="$background"
-                        borderRadius="$4"
-                        padding="$4"
-                        borderWidth={1}
-                        borderColor="$borderColor"
-                    >
+                <ShowcaseSection
+                    title="App Header"
+                    description="Logo, title, and action buttons for top navigation"
+                    icon={Layout}
+                    borderless={false}
+                >
                         <XStack
                             justifyContent="space-between"
                             alignItems="center"
@@ -111,29 +98,15 @@ export default function PatternsShowcase() {
                                 </XStack>
                             </XStack>
                         </XStack>
-                    </YStack>
-                </YStack>
+                </ShowcaseSection>
 
                 {/* Bottom Navigation Pattern */}
-                <YStack gap="$4">
-                    <YStack gap="$1">
-                        <XStack gap="$2" alignItems="center">
-                            <Navigation size={18} color="var(--color-brand)" />
-                            <Heading fontSize="$5" fontWeight="600" color="$color">
-                                Bottom Navigation
-                            </Heading>
-                        </XStack>
-                        <Text fontSize="$3" color="$color" opacity={0.7}>
-                            Tab bar for primary mobile navigation
-                        </Text>
-                    </YStack>
-                    <YStack
-                        backgroundColor="$background"
-                        borderRadius="$4"
-                        padding="$4"
-                        borderWidth={1}
-                        borderColor="$borderColor"
-                    >
+                <ShowcaseSection
+                    title="Bottom Navigation"
+                    description="Tab bar for primary mobile navigation"
+                    icon={Navigation}
+                    borderless={false}
+                >
                         <XStack
                             justifyContent="space-around"
                             alignItems="center"
@@ -169,29 +142,15 @@ export default function PatternsShowcase() {
                                 </Text>
                             </YStack>
                         </XStack>
-                    </YStack>
-                </YStack>
+                </ShowcaseSection>
 
                 {/* Form Layout Pattern */}
-                <YStack gap="$4">
-                    <YStack gap="$1">
-                        <XStack gap="$2" alignItems="center">
-                            <FormInput size={18} color="var(--color-brand)" />
-                            <Heading fontSize="$5" fontWeight="600" color="$color">
-                                Form Layout
-                            </Heading>
-                        </XStack>
-                        <Text fontSize="$3" color="$color" opacity={0.7}>
-                            Label, input, and validation message composition
-                        </Text>
-                    </YStack>
-                    <YStack
-                        backgroundColor="$background"
-                        borderRadius="$4"
-                        padding="$4"
-                        borderWidth={1}
-                        borderColor="$borderColor"
-                    >
+                <ShowcaseSection
+                    title="Form Layout"
+                    description="Label, input, and validation message composition"
+                    icon={FormInput}
+                    borderless={false}
+                >
                         <YStack
                             gap="$4"
                             backgroundColor="$background"
@@ -228,29 +187,15 @@ export default function PatternsShowcase() {
                                 Sign In
                             </Button>
                         </YStack>
-                    </YStack>
-                </YStack>
+                </ShowcaseSection>
 
                 {/* Card Grid Pattern */}
-                <YStack gap="$4">
-                    <YStack gap="$1">
-                        <XStack gap="$2" alignItems="center">
-                            <Grid3X3 size={18} color="var(--color-brand)" />
-                            <Heading fontSize="$5" fontWeight="600" color="$color">
-                                Card Grid
-                            </Heading>
-                        </XStack>
-                        <Text fontSize="$3" color="$color" opacity={0.7}>
-                            Responsive grid layout for content cards
-                        </Text>
-                    </YStack>
-                    <YStack
-                        backgroundColor="$background"
-                        borderRadius="$4"
-                        padding="$4"
-                        borderWidth={1}
-                        borderColor="$borderColor"
-                    >
+                <ShowcaseSection
+                    title="Card Grid"
+                    description="Responsive grid layout for content cards"
+                    icon={Grid3X3}
+                    borderless={false}
+                >
                         <XStack gap="$4" flexWrap="wrap">
                             {[1, 2, 3, 4].map((i) => (
                                 <YStack
@@ -279,29 +224,15 @@ export default function PatternsShowcase() {
                                 </YStack>
                             ))}
                         </XStack>
-                    </YStack>
-                </YStack>
+                </ShowcaseSection>
 
                 {/* Drawer Menu Pattern */}
-                <YStack gap="$4">
-                    <YStack gap="$1">
-                        <XStack gap="$2" alignItems="center">
-                            <Menu size={18} color="var(--color-brand)" />
-                            <Heading fontSize="$5" fontWeight="600" color="$color">
-                                Drawer Menu
-                            </Heading>
-                        </XStack>
-                        <Text fontSize="$3" color="$color" opacity={0.7}>
-                            Side navigation with sections and user profile
-                        </Text>
-                    </YStack>
-                    <YStack
-                        backgroundColor="$background"
-                        borderRadius="$4"
-                        padding="$4"
-                        borderWidth={1}
-                        borderColor="$borderColor"
-                    >
+                <ShowcaseSection
+                    title="Drawer Menu"
+                    description="Side navigation with sections and user profile"
+                    icon={Menu}
+                    borderless={false}
+                >
                         <YStack
                             width={260}
                             backgroundColor="$background"
@@ -436,8 +367,7 @@ export default function PatternsShowcase() {
                                 </XStack>
                             </YStack>
                         </YStack>
-                    </YStack>
-                </YStack>
+                </ShowcaseSection>
             </YStack>
         </ScrollView>
     );
