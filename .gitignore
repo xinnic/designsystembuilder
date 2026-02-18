@@ -67,3 +67,8 @@ desktop.ini
 .env.test.local
 .env.production.local
 refs/
+
+.vercel
+
+# ShipStudio metadata
+.shipstudio/
