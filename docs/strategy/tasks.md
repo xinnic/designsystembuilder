@@ -1,8 +1,8 @@
 # Design System Builder - Task Priority Matrix
 
 > **Last Updated:** 2026-02-22
-> **Current Phase:** Phase 1C — Bespoke Components
-> **Critical Path:** ~~Expo Setup~~ → ~~Core Components~~ → Bespoke Components → Builder UI → Skill.md Export → Validation
+> **Current Phase:** Phase 1D — Composed B2C Preview Components
+> **Critical Path:** ~~Expo Setup~~ → ~~Core Components~~ → ~~Bespoke Components~~ → Composed Components → Builder UI → Skill.md Export → Validation
 > **Key Decision:** Full platform rebuild. Builder becomes an Expo universal app with NativeWind + gluestack-ui v2.
 > **Scope:** ~75% new code, ~25% preserved logic (Zustand, tokens, color math, presets)
 
@@ -129,40 +129,62 @@ Rebuild each component using RN primitives + NativeWind `className` + CVA.
 
 ---
 
-### Phase 1C: Bespoke / B2C Preview Components 🟡 **DO THIRD**
+### Phase 1C: Bespoke Mobile Components ✅ **COMPLETE**
 
-These compose 1B components into real B2C app screens. Sonnet handles most since patterns are established.
+Mobile-specific UI components (modals, notifications, overlays). All Sonnet since patterns established.
 
-| # | Component | Model | Description | Status | Effort |
-|---|-----------|-------|-------------|--------|--------|
-| **1C.1** | AppBar | Sonnet | Top nav: logo, title, search, notifications | ⬜ | 3h |
-| **1C.2** | BottomNav | **Opus** | Tab bar: platform-specific, badges, active animation | ⬜ | 3h |
-| **1C.3** | CategoryPills | Sonnet | Horizontal scrollable filter chips | ⬜ | 2h |
-| **1C.4** | FeedCard / HeroCard | Sonnet | Content card: image, title, meta, actions | ⬜ | 3h |
-| **1C.5** | ProfileCard | Sonnet | User profile: avatar, stats, bio | ⬜ | 2h |
-| **1C.6** | ReviewCard | Sonnet | Star rating + review text | ⬜ | 2h |
-| **1C.7** | SettingsGroup | Sonnet | Grouped settings list items | ⬜ | 2h |
-| **1C.8** | StatsCard | Sonnet | Metric display with icon | ⬜ | 1h |
-| **1C.9** | UserCard | Sonnet | User info (horizontal + vertical layouts) | ⬜ | 3h |
+| # | Component | Model | Description | Status | Notes |
+|---|-----------|-------|-------------|--------|-------|
+| **1C.1** | BottomSheet | Sonnet | Modal sliding up from bottom, snap points, handle bar | ✅ | KeyboardAvoidingView, auto/half/full snap points |
+| **1C.2** | Chip | Sonnet | Compact pill tags, deletable, pressable | ✅ | filled/outlined/light × default/brand/success/warning/error |
+| **1C.3** | Badge | Sonnet | Notification indicators (dot/numeric/icon) | ✅ | Overlay positioning, BadgeWrapper helper, bordered variant |
+| **1C.4** | Toast | Sonnet | Temporary notifications, auto-dismiss | ✅ | ToastManager for stacking, ToastIcons presets, positions |
+| **1C.5** | ActionSheet | Sonnet | Native action menu (iOS/Android pattern) | ✅ | Destructive actions, dividers, cancel button |
+
+**Build Results:**
+- 5 bespoke components built following established CVA + NativeWind pattern
+- All components include structural specs for Skill.md generation
+- Showcase page updated with interactive demos
+- Build verified: 704 modules, 1.1 MB web bundle, 22.6 kB CSS
+
+**Total Component Count:** 19 components (14 core + 5 bespoke)
 
 ---
 
-### Phase 1D: Builder UI 🔵 **DO FOURTH**
+### Phase 1D: Composed B2C Preview Components ⬜ **DO NEXT**
+
+These compose core components into real B2C app screens. Sonnet handles most since patterns are established.
+
+| # | Component | Model | Description | Status | Effort |
+|---|-----------|-------|-------------|--------|--------|
+| **1D.1** | AppBar | Sonnet | Top nav: logo, title, search, notifications | ⬜ | 3h |
+| **1D.2** | BottomNav | **Opus** | Tab bar: platform-specific, badges, active animation | ⬜ | 3h |
+| **1D.3** | CategoryPills | Sonnet | Horizontal scrollable filter chips | ⬜ | 2h |
+| **1D.4** | FeedCard / HeroCard | Sonnet | Content card: image, title, meta, actions | ⬜ | 3h |
+| **1D.5** | ProfileCard | Sonnet | User profile: avatar, stats, bio | ⬜ | 2h |
+| **1D.6** | ReviewCard | Sonnet | Star rating + review text | ⬜ | 2h |
+| **1D.7** | SettingsGroup | Sonnet | Grouped settings list items | ⬜ | 2h |
+| **1D.8** | StatsCard | Sonnet | Metric display with icon | ⬜ | 1h |
+| **1D.9** | UserCard | Sonnet | User info (horizontal + vertical layouts) | ⬜ | 3h |
+
+---
+
+### Phase 1E: Builder UI 🔵 **DO FOURTH**
 
 The builder interface — where users customize their design system.
 
 | # | Task | Model | Description | Status | Effort |
 |---|------|-------|-------------|--------|--------|
-| **1D.1** | Expo Router layout | **Opus** | 3-panel app shell: sidebar + preview + code | ⬜ | 4h |
-| **1D.2** | Sidebar / Controls panel | **Opus** | Color pickers, font selectors, spacing, presets | ⬜ | 8h |
-| **1D.3** | Preview panel | Sonnet | WYSIWYG rendering of bespoke components | ⬜ | 4h |
-| **1D.4** | Code preview panel | Sonnet | NativeWind code snippets for current component | ⬜ | 4h |
-| **1D.5** | Style preset selector | Sonnet | Grid of visual preset thumbnails | ⬜ | 3h |
-| **1D.6** | Color theme selector | **Opus** | Swatches + custom color picker (cross-platform) | ⬜ | 4h |
-| **1D.7** | Font pair selector | Sonnet | Primary + Display font with live preview | ⬜ | 3h |
-| **1D.8** | Dark mode toggle | Sonnet | Light/dark switch | ⬜ | 1h |
-| **1D.9** | Export dialog | **Opus** | Folder structure preview, ZIP download, clipboard | ⬜ | 4h |
-| **1D.10** | Accordion/collapsible | Sonnet | Expandable sections (gluestack Accordion) | ⬜ | 2h |
+| **1E.1** | Expo Router layout | **Opus** | 3-panel app shell: sidebar + preview + code | ⬜ | 4h |
+| **1E.2** | Sidebar / Controls panel | **Opus** | Color pickers, font selectors, spacing, presets | ⬜ | 8h |
+| **1E.3** | Preview panel | Sonnet | WYSIWYG rendering of bespoke components | ⬜ | 4h |
+| **1E.4** | Code preview panel | Sonnet | NativeWind code snippets for current component | ⬜ | 4h |
+| **1E.5** | Style preset selector | Sonnet | Grid of visual preset thumbnails | ⬜ | 3h |
+| **1E.6** | Color theme selector | **Opus** | Swatches + custom color picker (cross-platform) | ⬜ | 4h |
+| **1E.7** | Font pair selector | Sonnet | Primary + Display font with live preview | ⬜ | 3h |
+| **1E.8** | Dark mode toggle | Sonnet | Light/dark switch | ⬜ | 1h |
+| **1E.9** | Export dialog | **Opus** | Folder structure preview, ZIP download, clipboard | ⬜ | 4h |
+| **1E.10** | Accordion/collapsible | Sonnet | Expandable sections (gluestack Accordion) | ⬜ | 2h |
 
 **Radix → gluestack mapping:**
 
@@ -178,29 +200,29 @@ The builder interface — where users customize their design system.
 
 ---
 
-### Phase 1E: Skill.md Export System 🔵 **DO FIFTH**
+### Phase 1F: Skill.md Export System 🔵 **DO FIFTH**
 
 | # | Task | Model | Description | Status | Effort |
 |---|------|-------|-------------|--------|--------|
-| **1E.1** | SKILL.md generator | **Opus** | Structured SKILL.md with YAML frontmatter — defines the export format | ⬜ | 4h |
-| **1E.2** | tailwind.config.js generator | Sonnet | Generate complete Tailwind config from tokens | ⬜ | 3h |
-| **1E.3** | global.css generator | Sonnet | Generate CSS custom properties (light + dark) | ⬜ | 2h |
-| **1E.4** | tokens.json generator | Sonnet | DTCG format machine-readable tokens | ⬜ | 2h |
-| **1E.5** | Component spec generator | **Opus** | Structural rules: interaction, props, accessibility, nesting, animation | ⬜ | 6h |
-| **1E.6** | rules.md generator | Sonnet | Design system do's/don'ts, token enforcement | ⬜ | 2h |
-| **1E.7** | ZIP download | Sonnet | Package design-system/ folder as ZIP | ⬜ | 3h |
-| **1E.8** | Clipboard copy | Sonnet | Copy SKILL.md to clipboard | ⬜ | 1h |
+| **1F.1** | SKILL.md generator | **Opus** | Structured SKILL.md with YAML frontmatter — defines the export format | ⬜ | 4h |
+| **1F.2** | tailwind.config.js generator | Sonnet | Generate complete Tailwind config from tokens | ⬜ | 3h |
+| **1F.3** | global.css generator | Sonnet | Generate CSS custom properties (light + dark) | ⬜ | 2h |
+| **1F.4** | tokens.json generator | Sonnet | DTCG format machine-readable tokens | ⬜ | 2h |
+| **1F.5** | Component spec generator | **Opus** | Structural rules: interaction, props, accessibility, nesting, animation | ⬜ | 6h |
+| **1F.6** | rules.md generator | Sonnet | Design system do's/don'ts, token enforcement | ⬜ | 2h |
+| **1F.7** | ZIP download | Sonnet | Package design-system/ folder as ZIP | ⬜ | 3h |
+| **1F.8** | Clipboard copy | Sonnet | Copy SKILL.md to clipboard | ⬜ | 1h |
 
 ---
 
-### Phase 1F: Validation & QA 🔵 **DO SIXTH**
+### Phase 1G: Validation & QA 🔵 **DO SIXTH**
 
 | # | Task | Model | Description | Status | Effort |
 |---|------|-------|-------------|--------|--------|
-| **1F.1** | Cross-platform visual test | Sonnet | Verify all components on iOS, Android, Web | ⬜ | 4h |
-| **1F.2** | Token propagation test | Sonnet | Change every token type, verify updates | ⬜ | 3h |
-| **1F.3** | Style preset test | Sonnet | Verify all 4 presets render correctly | ⬜ | 2h |
-| **1F.4** | Dark mode test | Sonnet | Verify dark mode on all platforms | ⬜ | 2h |
+| **1G.1** | Cross-platform visual test | Sonnet | Verify all components on iOS, Android, Web | ⬜ | 4h |
+| **1G.2** | Token propagation test | Sonnet | Change every token type, verify updates | ⬜ | 3h |
+| **1G.3** | Style preset test | Sonnet | Verify all 4 presets render correctly | ⬜ | 2h |
+| **1G.4** | Dark mode test | Sonnet | Verify dark mode on all platforms | ⬜ | 2h |
 | **1F.5** | SKILL.md validation | **Opus** | Feed to Claude Code, verify output quality | ⬜ | 4h |
 | **1F.6** | Component spec validation | **Opus** | Verify structural specs are accurate/complete | ⬜ | 2h |
 | **1F.7** | Performance test | Sonnet | Verify no lag/jank on token changes | ⬜ | 2h |
