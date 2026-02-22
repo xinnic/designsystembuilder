@@ -8,7 +8,7 @@
  * - Neo-Brutalism (Gumroad/CRED Aesthetic)
  */
 
-import { Square, Cloud, Minus, Sparkles, LucideIcon } from 'lucide-react';
+// Note: Using string icons instead of lucide-react (not available in expo-app)
 
 export type StylePresetId = 'modern-flat' | 'soft-dreamy' | 'minimalist' | 'neo-brutalism';
 
@@ -82,7 +82,7 @@ export interface StylePresetTokens {
 export interface StylePreset {
     id: StylePresetId;
     name: string;
-    icon: LucideIcon;
+    icon: string;
     description: string;
     tokens: StylePresetTokens;
 }
@@ -358,28 +358,28 @@ export const stylePresets: StylePreset[] = [
     {
         id: 'modern-flat',
         name: 'Modern Flat',
-        icon: Square,
+        icon: '▢',
         description: 'Clean, minimal shadows (Linear/Stripe)',
         tokens: modernFlatTokens
     },
     {
         id: 'soft-dreamy',
         name: 'Soft & Dreamy',
-        icon: Cloud,
+        icon: '☁',
         description: 'Gentle, diffused look (Headspace)',
         tokens: softDreamyTokens
     },
     {
         id: 'minimalist',
         name: 'Minimalist',
-        icon: Minus,
+        icon: '—',
         description: 'Sharp, minimal design (Apple/Claude)',
         tokens: minimalistTokens
     },
     {
         id: 'neo-brutalism',
         name: 'Neo-Brutalism',
-        icon: Sparkles,
+        icon: '✦',
         description: 'Bold, hard shadows (Gumroad)',
         tokens: neoBrutalismTokens
     }
