@@ -92,6 +92,9 @@ export interface DesignSystemState {
   spacingMode: 'compact' | 'normal' | 'comfortable';
   cornerRadius: CornerRadius;
 
+  // Render version - incremented on every design system change to force rerenders
+  renderVersion: number;
+
   // Setters
   setTokens(partial: Partial<Tokens>): void;
   setOpts(partial: Partial<StylingOptions>): void;
@@ -193,28 +196,50 @@ export const useDesignSystem = create<DesignSystemState>((set) => ({
   stylePresetId: 'modern-flat',
   spacingMode: 'normal',
   cornerRadius: 'medium',
+  renderVersion: 0,
 
   setTokens: (partial: Partial<Tokens>) =>
-    set((state: DesignSystemState) => ({ tokens: { ...state.tokens, ...partial } })),
+    set((state: DesignSystemState) => ({
+      tokens: { ...state.tokens, ...partial },
+      renderVersion: state.renderVersion + 1
+    })),
 
   setOpts: (partial: Partial<StylingOptions>) =>
-    set((state: DesignSystemState) => ({ opts: { ...state.opts, ...partial } })),
+    set((state: DesignSystemState) => ({
+      opts: { ...state.opts, ...partial },
+      renderVersion: state.renderVersion + 1
+    })),
 
   setHaptics: (partial: Partial<HapticsConfig>) =>
-    set((state: DesignSystemState) => ({ haptics: { ...state.haptics, ...partial } })),
+    set((state: DesignSystemState) => ({
+      haptics: { ...state.haptics, ...partial },
+      renderVersion: state.renderVersion + 1
+    })),
 
-  setDarkMode: (enabled: boolean) => set({ isDarkMode: enabled }),
-  setTheme: (theme: string) => set({ selectedTheme: theme }),
-  setCustomPrimaryColor: (color: string) => set({ customPrimaryColor: color }),
-  setAccentColor: (accent: string) => set({ selectedAccentColor: accent }),
-  setCustomAccentColor: (color: string) => set({ customAccentColor: color }),
-  setIsSecondaryManual: (isManual: boolean) => set({ isSecondaryManual: isManual }),
-  setScale: (scale: 'small' | 'regular' | 'large') => set({ selectedScale: scale }),
-  setPrimaryFont: (font: string) => set({ selectedPrimaryFont: font }),
-  setDisplayFont: (font: string) => set({ selectedDisplayFont: font }),
-  setStylePreset: (presetId: string) => set({ stylePresetId: presetId }),
-  setSpacingMode: (mode: 'compact' | 'normal' | 'comfortable') => set({ spacingMode: mode }),
-  setCornerRadius: (radius: CornerRadius) => set({ cornerRadius: radius })
+  setDarkMode: (enabled: boolean) =>
+    set((state) => ({ isDarkMode: enabled, renderVersion: state.renderVersion + 1 })),
+  setTheme: (theme: string) =>
+    set((state) => ({ selectedTheme: theme, renderVersion: state.renderVersion + 1 })),
+  setCustomPrimaryColor: (color: string) =>
+    set((state) => ({ customPrimaryColor: color, renderVersion: state.renderVersion + 1 })),
+  setAccentColor: (accent: string) =>
+    set((state) => ({ selectedAccentColor: accent, renderVersion: state.renderVersion + 1 })),
+  setCustomAccentColor: (color: string) =>
+    set((state) => ({ customAccentColor: color, renderVersion: state.renderVersion + 1 })),
+  setIsSecondaryManual: (isManual: boolean) =>
+    set((state) => ({ isSecondaryManual: isManual, renderVersion: state.renderVersion + 1 })),
+  setScale: (scale: 'small' | 'regular' | 'large') =>
+    set((state) => ({ selectedScale: scale, renderVersion: state.renderVersion + 1 })),
+  setPrimaryFont: (font: string) =>
+    set((state) => ({ selectedPrimaryFont: font, renderVersion: state.renderVersion + 1 })),
+  setDisplayFont: (font: string) =>
+    set((state) => ({ selectedDisplayFont: font, renderVersion: state.renderVersion + 1 })),
+  setStylePreset: (presetId: string) =>
+    set((state) => ({ stylePresetId: presetId, renderVersion: state.renderVersion + 1 })),
+  setSpacingMode: (mode: 'compact' | 'normal' | 'comfortable') =>
+    set((state) => ({ spacingMode: mode, renderVersion: state.renderVersion + 1 })),
+  setCornerRadius: (radius: CornerRadius) =>
+    set((state) => ({ cornerRadius: radius, renderVersion: state.renderVersion + 1 }))
 }));
 
 // Helper function to convert hex to RGB triplet
