@@ -43,3 +43,20 @@ export type { ListItemProps, ListProps } from './ListItem';
 
 export { Image, SkeletonImage, imageContainerVariants } from './Image';
 export type { ImageProps, SkeletonImageProps } from './Image';
+
+// ─── Bespoke Components ────────────────────────────────────────────────────
+
+export { BottomSheet, bottomSheetVariants } from './BottomSheet';
+export type { BottomSheetProps } from './BottomSheet';
+
+export { Chip, chipVariants, chipTextVariants } from './Chip';
+export type { ChipProps } from './Chip';
+
+export { Badge, BadgeWrapper, badgeVariants, badgeTextVariants } from './Badge';
+export type { BadgeProps, BadgeWrapperProps } from './Badge';
+
+export { Toast, ToastManager, ToastIcons, toastVariants, toastTextVariants } from './Toast';
+export type { ToastProps, ToastManagerProps } from './Toast';
+
+export { ActionSheet, actionItemVariants, actionTextVariants } from './ActionSheet';
+export type { ActionSheetProps, ActionItem } from './ActionSheet';

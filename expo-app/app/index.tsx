@@ -26,6 +26,14 @@ import {
   ListItem,
   List,
   Image,
+  // Bespoke components
+  BottomSheet,
+  Chip,
+  Badge,
+  BadgeWrapper,
+  Toast,
+  ToastIcons,
+  ActionSheet,
 } from '../src/components/ui';
 
 export default function HomeScreen() {
@@ -36,6 +44,9 @@ export default function HomeScreen() {
   const [dialogMode, setDialogMode] = useState<'default' | 'fullscreen' | 'bottom-sheet'>('default');
   const [switchValue, setSwitchValue] = useState(false);
   const [checkboxValue, setCheckboxValue] = useState(false);
+  const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
+  const [actionSheetOpen, setActionSheetOpen] = useState(false);
+  const [toastVisible, setToastVisible] = useState(false);
 
   return (
     <ScrollView className="flex-1 bg-surface">
@@ -353,6 +364,126 @@ export default function HomeScreen() {
             <Input label="Your feedback" placeholder="Type something..." />
           </VStack>
         </Dialog>
+
+        {/* ─── Chip ─── */}
+        <Card header="Chip" dividers>
+          <VStack gap="md">
+            <VStack gap="sm">
+              <Label size="xs">Filled Variants</Label>
+              <HStack gap="sm" wrap>
+                <Chip variant="filled" color="default">Default</Chip>
+                <Chip variant="filled" color="brand">Brand</Chip>
+                <Chip variant="filled" color="success">Success</Chip>
+                <Chip variant="filled" color="warning">Warning</Chip>
+                <Chip variant="filled" color="error">Error</Chip>
+              </HStack>
+            </VStack>
+
+            <VStack gap="sm">
+              <Label size="xs">Outlined & Light</Label>
+              <HStack gap="sm" wrap>
+                <Chip variant="outlined" color="brand">Outlined</Chip>
+                <Chip variant="light" color="brand">Light</Chip>
+                <Chip variant="filled" color="brand" onDelete={() => {}}>With Delete</Chip>
+                <Chip variant="outlined" color="success" onPress={() => alert('Pressed!')}>
+                  Pressable
+                </Chip>
+              </HStack>
+            </VStack>
+          </VStack>
+        </Card>
+
+        {/* ─── Badge ─── */}
+        <Card header="Badge" dividers>
+          <VStack gap="md">
+            <VStack gap="sm">
+              <Label size="xs">Standalone</Label>
+              <HStack gap="md" align="center">
+                <Badge variant="dot" color="brand" />
+                <Badge variant="numeric" content={5} color="brand" />
+                <Badge variant="numeric" content={99} color="error" />
+                <Badge variant="numeric" content={150} max={99} color="success" />
+              </HStack>
+            </VStack>
+
+            <VStack gap="sm">
+              <Label size="xs">Overlay on Icons</Label>
+              <HStack gap="lg" align="center">
+                <BadgeWrapper badge={<Badge variant="dot" color="error" overlay />}>
+                  <Body className="text-3xl">🔔</Body>
+                </BadgeWrapper>
+                <BadgeWrapper badge={<Badge variant="numeric" content={3} color="brand" overlay />}>
+                  <Body className="text-3xl">💬</Body>
+                </BadgeWrapper>
+                <BadgeWrapper badge={<Badge variant="numeric" content={12} color="success" overlay bordered />}>
+                  <Avatar initials="AB" size="lg" />
+                </BadgeWrapper>
+              </HStack>
+            </VStack>
+          </VStack>
+        </Card>
+
+        {/* ─── BottomSheet & ActionSheet ─── */}
+        <Card header="BottomSheet & ActionSheet" dividers>
+          <HStack gap="sm" wrap>
+            <Button variant="outline" onPress={() => setBottomSheetOpen(true)}>
+              Open BottomSheet
+            </Button>
+            <Button variant="outline" onPress={() => setActionSheetOpen(true)}>
+              Open ActionSheet
+            </Button>
+            <Button variant="outline" onPress={() => setToastVisible(true)}>
+              Show Toast
+            </Button>
+          </HStack>
+        </Card>
+
+        <BottomSheet
+          open={bottomSheetOpen}
+          onOpenChange={setBottomSheetOpen}
+          title="Example BottomSheet"
+          description="This is a bottom sheet with auto height"
+          snapPoint="auto"
+          footer={
+            <>
+              <Button variant="ghost" onPress={() => setBottomSheetOpen(false)}>
+                Cancel
+              </Button>
+              <Button onPress={() => setBottomSheetOpen(false)}>Confirm</Button>
+            </>
+          }
+        >
+          <VStack gap="md" className="py-4">
+            <Body>BottomSheet slides up from the bottom with a handle bar for drag affordance.</Body>
+            <Input label="Name" placeholder="Enter your name" />
+            <Switch label="Enable notifications" />
+          </VStack>
+        </BottomSheet>
+
+        <ActionSheet
+          open={actionSheetOpen}
+          onOpenChange={setActionSheetOpen}
+          title="Choose an action"
+          description="Select one of the options below"
+          actions={[
+            { label: 'Share', icon: <Body>📤</Body>, onPress: () => alert('Share') },
+            { label: 'Edit', icon: <Body>✏️</Body>, onPress: () => alert('Edit') },
+            { label: 'Download', icon: <Body>⬇️</Body>, onPress: () => alert('Download') },
+            { label: 'Delete', icon: <Body>🗑️</Body>, onPress: () => alert('Delete'), destructive: true },
+          ]}
+        />
+
+        {toastVisible && (
+          <Toast
+            variant="success"
+            title="Success!"
+            description="Your changes have been saved successfully."
+            icon={ToastIcons.success}
+            duration={3000}
+            onDismiss={() => setToastVisible(false)}
+            position="top"
+          />
+        )}
 
         {/* ─── Dark Mode Toggle ─── */}
         <Button
