@@ -1,8 +1,8 @@
 # Design System Builder - Task Priority Matrix
 
 > **Last Updated:** 2026-02-22
-> **Current Phase:** Phase 1D — Composed B2C Preview Components
-> **Critical Path:** ~~Expo Setup~~ → ~~Core Components~~ → ~~Bespoke Components~~ → Composed Components → Builder UI → Skill.md Export → Validation
+> **Current Phase:** Phase 1E — Builder UI
+> **Critical Path:** ~~Expo Setup~~ → ~~Core Components~~ → ~~Bespoke Components~~ → ~~Composed Components~~ → Builder UI → Skill.md Export → Validation
 > **Key Decision:** Full platform rebuild. Builder becomes an Expo universal app with NativeWind + gluestack-ui v2.
 > **Scope:** ~75% new code, ~25% preserved logic (Zustand, tokens, color math, presets)
 
@@ -151,21 +151,29 @@ Mobile-specific UI components (modals, notifications, overlays). All Sonnet sinc
 
 ---
 
-### Phase 1D: Composed B2C Preview Components ⬜ **DO NEXT**
+### Phase 1D: Composed B2C Preview Components ✅ **COMPLETE**
 
-These compose core components into real B2C app screens. Sonnet handles most since patterns are established.
+Real-world B2C app patterns built by composing core UI primitives.
 
-| # | Component | Model | Description | Status | Effort |
-|---|-----------|-------|-------------|--------|--------|
-| **1D.1** | AppBar | Sonnet | Top nav: logo, title, search, notifications | ⬜ | 3h |
-| **1D.2** | BottomNav | **Opus** | Tab bar: platform-specific, badges, active animation | ⬜ | 3h |
-| **1D.3** | CategoryPills | Sonnet | Horizontal scrollable filter chips | ⬜ | 2h |
-| **1D.4** | FeedCard / HeroCard | Sonnet | Content card: image, title, meta, actions | ⬜ | 3h |
-| **1D.5** | ProfileCard | Sonnet | User profile: avatar, stats, bio | ⬜ | 2h |
-| **1D.6** | ReviewCard | Sonnet | Star rating + review text | ⬜ | 2h |
-| **1D.7** | SettingsGroup | Sonnet | Grouped settings list items | ⬜ | 2h |
-| **1D.8** | StatsCard | Sonnet | Metric display with icon | ⬜ | 1h |
-| **1D.9** | UserCard | Sonnet | User info (horizontal + vertical layouts) | ⬜ | 3h |
+| # | Component | Model | Description | Status | Notes |
+|---|-----------|-------|-------------|--------|-------|
+| **1D.1** | AppBar | Sonnet | Top nav: logo, title, search, notifications | ✅ | AppBarAction helper, safe area support, 3 variants |
+| **1D.2** | BottomNav | **Opus** | Tab bar: platform-specific, badges, active animation | ✅ | Platform-aware defaults, badge integration, icon-only mode |
+| **1D.3** | CategoryPills | Sonnet | Horizontal scrollable filter chips | ✅ | Single/multi-select, uses Chip component |
+| **1D.4** | FeedCard | Sonnet | Content card: image, title, meta, actions | ✅ | Vertical/horizontal/hero variants, Avatar integration |
+| **1D.5** | ProfileCard | Sonnet | User profile: avatar, stats, bio | ✅ | Default/compact variants, stats with dividers |
+| **1D.6** | ReviewCard | Sonnet | Star rating + review text | ✅ | StarRating helper, verified badge, expandable text |
+| **1D.7** | SettingsGroup | Sonnet | Grouped settings list items | ✅ | Navigation/toggle/action types, uses List + Switch |
+| **1D.8** | StatsCard | Sonnet | Metric display with icon | ✅ | Default/compact/horizontal, trend indicators |
+| **1D.9** | UserCard | Sonnet | User info (horizontal + vertical layouts) | ✅ | Status indicators, pressable navigation |
+
+**Build Results:**
+- 9 composed components (1 Opus pattern-setter + 8 Sonnet pattern-followers)
+- All components build on core UI primitives
+- Showcase page updated with BottomNav demo
+- Build verified: 1.12 MB web bundle, 24.1 kB CSS
+
+**Total Component Count:** 28 components (14 core + 5 bespoke + 9 composed)
 
 ---
 
