@@ -35,6 +35,7 @@ import {
   ToastIcons,
   ActionSheet,
 } from '../src/components/ui';
+import { BottomNav } from '../src/components/composed';
 
 export default function HomeScreen() {
   const { isDarkMode, setDarkMode } = useDesignSystem();
@@ -47,6 +48,7 @@ export default function HomeScreen() {
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const [actionSheetOpen, setActionSheetOpen] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
+  const [activeNav, setActiveNav] = useState('home');
 
   return (
     <ScrollView className="flex-1 bg-surface">
@@ -484,6 +486,45 @@ export default function HomeScreen() {
             position="top"
           />
         )}
+
+        {/* ─── BottomNav ─── */}
+        <Card header="BottomNav" dividers>
+          <VStack gap="md">
+            <VStack gap="sm">
+              <Label size="xs">Filled Variant</Label>
+              <BottomNav
+                items={[
+                  { value: 'home', label: 'Home', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>🏠</Body> },
+                  { value: 'search', label: 'Search', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>🔍</Body> },
+                  { value: 'inbox', label: 'Inbox', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>💬</Body>, badge: 3 },
+                  { value: 'notif', label: 'Alerts', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>🔔</Body>, badgeDot: true },
+                  { value: 'profile', label: 'Profile', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>👤</Body> },
+                ]}
+                value={activeNav}
+                onValueChange={setActiveNav}
+                variant="filled"
+                className="rounded-lg overflow-hidden"
+              />
+            </VStack>
+
+            <VStack gap="sm">
+              <Label size="xs">Elevated (no labels)</Label>
+              <BottomNav
+                items={[
+                  { value: 'home', label: 'Home', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>🏠</Body> },
+                  { value: 'search', label: 'Search', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>🔍</Body> },
+                  { value: 'inbox', label: 'Inbox', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>💬</Body>, badge: 12 },
+                  { value: 'profile', label: 'Profile', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>👤</Body> },
+                ]}
+                value={activeNav}
+                onValueChange={setActiveNav}
+                variant="elevated"
+                hideLabels
+                className="rounded-lg overflow-hidden"
+              />
+            </VStack>
+          </VStack>
+        </Card>
 
         {/* ─── Dark Mode Toggle ─── */}
         <Button
