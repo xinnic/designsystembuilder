@@ -31,18 +31,18 @@ export default function BuilderScreen() {
   if (isWide) {
     return (
       <SafeAreaView className="flex-1 bg-canvas" edges={['top']}>
-        {/* Top toolbar */}
-        <HStack className="h-12 px-4 items-center justify-end border-b border-border bg-surface">
+        {/* Header row with Export button (matching old builder) */}
+        <View className="px-4 py-3 flex-row justify-end items-center border-b border-border bg-surface">
           <Button variant="primary" size="sm" onPress={() => setExportOpen(true)}>
             Export
           </Button>
-        </HStack>
+        </View>
 
-        {/* 3-panel layout */}
+        {/* 3-panel layout — left 280px, middle 420px, right flex-1 */}
         <View className="flex-1 flex-row">
-          <ControlsPanel className="w-80 border-r border-border" />
-          <PreviewPanel className="flex-1" showFrame />
-          <ShowcasePanel className="w-80 border-l border-border" />
+          <ControlsPanel className="w-[280px] border-r border-border" />
+          <PreviewPanel className="w-[420px]" showFrame />
+          <ShowcasePanel className="flex-1 border-l border-border" />
         </View>
 
         <ExportDialog open={exportOpen} onOpenChange={setExportOpen} />
@@ -53,13 +53,6 @@ export default function BuilderScreen() {
   // Narrow layout: tab-based
   return (
     <SafeAreaView className="flex-1 bg-canvas" edges={['top']}>
-      {/* Top toolbar */}
-      <HStack className="h-12 px-4 items-center justify-end border-b border-border bg-surface">
-        <Button variant="primary" size="sm" onPress={() => setExportOpen(true)}>
-          Export
-        </Button>
-      </HStack>
-
       {/* Tab bar */}
       <View className="px-4 py-2 bg-surface border-b border-border">
         <Tabs

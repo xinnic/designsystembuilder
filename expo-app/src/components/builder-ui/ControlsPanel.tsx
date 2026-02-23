@@ -26,7 +26,7 @@ import { FontPairSelector } from './FontPairSelector';
 
 // Core UI components
 import { Switch } from '../ui/Switch';
-import { HStack, VStack } from '../ui/Stack';
+import { VStack, HStack } from '../ui/Stack';
 import { Body } from '../ui/Text';
 
 interface ControlsPanelProps {
@@ -158,9 +158,9 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
       contentContainerClassName="p-4"
     >
       {/* Header */}
-      <VStack gap="none" className="mb-6">
+      <VStack gap="xs" className="mb-6">
         <Text
-          className="font-bold text-on-surface mb-2"
+          className="font-bold text-on-surface"
           style={{
             fontSize: parseInt(tokens.h1.size),
             lineHeight: parseInt(tokens.h1.line),
