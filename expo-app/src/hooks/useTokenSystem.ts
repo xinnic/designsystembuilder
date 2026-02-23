@@ -1,10 +1,45 @@
 import { useEffect } from 'react';
 import { useDesignSystem } from '../state/designSystem';
 import { generateColorScale, hexToOKLCH } from '../design-system/tokens/primitives';
+import { COLOR_VALUES } from '../config/colorThemes';
+
+// Font family map — must match the one in designSystem.ts
+const fontFamilyMap: Record<string, string> = {
+  'font-jakarta': 'Plus Jakarta Sans, ui-sans-serif, system-ui',
+  'font-vietnam': 'Be Vietnam Pro, ui-sans-serif, system-ui',
+  'font-wix': 'Wix Madefor Text, ui-sans-serif, system-ui',
+  'font-figtree': 'Figtree, ui-sans-serif, system-ui',
+  'font-albert': 'Albert Sans, ui-sans-serif, system-ui',
+  'font-satoshi': 'Satoshi, ui-sans-serif, system-ui',
+  'font-epilogue': 'Epilogue, ui-sans-serif, system-ui',
+  'font-manrope': 'Manrope, ui-sans-serif, system-ui',
+  'font-public': 'Public Sans, ui-sans-serif, system-ui',
+  'font-space': 'Space Grotesk, ui-sans-serif, system-ui',
+  'font-work': 'Work Sans, ui-sans-serif, system-ui',
+  'font-source-sans': 'Source Sans 3, ui-sans-serif, system-ui',
+  'font-nunito': 'Nunito Sans, ui-sans-serif, system-ui',
+  'font-arimo': 'Arimo, ui-sans-serif, system-ui',
+  'font-hanken': 'Hanken Grotesk, ui-sans-serif, system-ui',
+  'font-rubik': 'Rubik, ui-sans-serif, system-ui',
+  'font-dm': 'DM Sans, ui-sans-serif, system-ui',
+  'font-ibm': 'IBM Plex Sans, ui-sans-serif, system-ui',
+  'font-sora': 'Sora, ui-sans-serif, system-ui',
+  'font-newsreader': 'Newsreader, ui-serif, serif',
+  'font-noto': 'Noto Serif, ui-serif, serif',
+  'font-domine': 'Domine, ui-serif, serif',
+  'font-libre': 'Libre Caslon Text, ui-serif, serif',
+  'font-garamond': 'EB Garamond, ui-serif, serif',
+  'font-literata': 'Literata, ui-serif, serif',
+  'font-source-serif': 'Source Serif 4, ui-serif, serif',
+  'font-montserrat': 'Montserrat, ui-sans-serif, system-ui',
+};
 
 /**
  * Hook that syncs Zustand design system state to CSS variables for NativeWind
  * This enables token-based styling via Tailwind utility classes
+ *
+ * IMPORTANT: Uses renderVersion as dependency to ensure CSS vars update
+ * on ANY store change (color, font, theme, preset, spacing, etc.)
  */
 export function useTokenSystem() {
   const state = useDesignSystem();
@@ -14,11 +49,24 @@ export function useTokenSystem() {
 
     const root = document.documentElement;
 
-    // Generate OKLCH color scales from current colors
-    const brandOKLCH = hexToOKLCH(state.customPrimaryColor);
+    // Resolve actual primary color from theme name + COLOR_VALUES
+    // (same logic as the Zustand subscriber in designSystem.ts)
+    const colorMap = COLOR_VALUES as Record<string, string>;
+    const resolvedPrimary =
+      state.selectedTheme === 'custom' && state.customPrimaryColor
+        ? state.customPrimaryColor
+        : colorMap[state.selectedTheme] || '#1abc9c';
+
+    const resolvedAccent =
+      state.selectedAccentColor === 'custom' && state.customAccentColor
+        ? state.customAccentColor
+        : colorMap[state.selectedAccentColor] || '#1abc9c';
+
+    // Generate OKLCH color scales from resolved colors
+    const brandOKLCH = hexToOKLCH(resolvedPrimary);
     const brandScale = generateColorScale('brand', brandOKLCH);
 
-    const accentOKLCH = hexToOKLCH(state.customAccentColor);
+    const accentOKLCH = hexToOKLCH(resolvedAccent);
     const accentScale = generateColorScale('accent', accentOKLCH);
 
     // Map brand color scale (50-950)
@@ -61,9 +109,11 @@ export function useTokenSystem() {
     root.style.setProperty('--radius-lg', radii.lg);
     root.style.setProperty('--radius-xl', radii.xl);
 
-    // Fonts
-    root.style.setProperty('--font-body', state.selectedPrimaryFont);
-    root.style.setProperty('--font-display', state.selectedDisplayFont);
+    // Fonts — resolve class name to actual font family string
+    const bodyFont = fontFamilyMap[state.selectedPrimaryFont] || fontFamilyMap['font-jakarta'];
+    const displayFont = fontFamilyMap[state.selectedDisplayFont] || fontFamilyMap['font-jakarta'];
+    root.style.setProperty('--font-body', bodyFont);
+    root.style.setProperty('--font-display', displayFont);
 
     // Dark mode class toggle
     if (state.isDarkMode) {
@@ -72,7 +122,11 @@ export function useTokenSystem() {
       root.classList.remove('dark');
     }
   }, [
+    // Use renderVersion to catch ALL store changes
+    state.renderVersion,
+    state.selectedTheme,
     state.customPrimaryColor,
+    state.selectedAccentColor,
     state.customAccentColor,
     state.isDarkMode,
     state.cornerRadius,
