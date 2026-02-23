@@ -19,6 +19,9 @@ export type { CategoryPillsProps, CategoryItem } from './CategoryPills';
 export { FeedCard, feedCardVariants } from './FeedCard';
 export type { FeedCardProps } from './FeedCard';
 
+export { HeroCard } from './HeroCard';
+export type { HeroCardProps } from './HeroCard';
+
 export { ProfileCard, profileCardVariants } from './ProfileCard';
 export type { ProfileCardProps, ProfileStat } from './ProfileCard';
 
