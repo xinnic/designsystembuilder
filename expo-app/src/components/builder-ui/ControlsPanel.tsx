@@ -184,7 +184,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
         {/* ─── Basic Options ─── */}
         <Accordion
           title="Basic Options"
-          icon={<Text className="text-on-surface">≡</Text>}
+          icon="☰"
           isOpen={basicOptionsOpen}
           onToggle={() => setBasicOptionsOpen(!basicOptionsOpen)}
         >
@@ -280,7 +280,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
         {/* ─── Advanced Styling ─── */}
         <Accordion
           title="Advanced Styling"
-          icon={<Text className="text-on-surface">⚙</Text>}
+          icon="⚙"
           isOpen={advancedStylingOpen}
           onToggle={() => setAdvancedStylingOpen(!advancedStylingOpen)}
         >

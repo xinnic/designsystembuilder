@@ -33,14 +33,14 @@ export default function BuilderScreen() {
       <SafeAreaView className="flex-1 bg-canvas" edges={['top']}>
         {/* Header row with Export button (matching old builder) */}
         <View className="px-4 py-3 flex-row justify-end items-center border-b border-border bg-surface">
-          <Button variant="primary" size="sm" onPress={() => setExportOpen(true)}>
+          <Button variant="outline" size="sm" onPress={() => setExportOpen(true)}>
             Export
           </Button>
         </View>
 
-        {/* 3-panel layout — left 280px, middle 420px, right flex-1 */}
+        {/* 3-panel layout — left 320px, middle 420px, right flex-1 */}
         <View className="flex-1 flex-row">
-          <ControlsPanel className="w-[280px] border-r border-border" />
+          <ControlsPanel className="w-[320px] border-r border-border" />
           <PreviewPanel className="w-[420px]" showFrame />
           <ShowcasePanel className="flex-1 border-l border-border" />
         </View>

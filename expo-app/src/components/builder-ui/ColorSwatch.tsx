@@ -15,12 +15,12 @@ import { cva } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const colorSwatchVariants = cva(
-  'w-8 h-8 rounded-xl items-center justify-center shadow-md',
+  'w-8 h-8 items-center justify-center',
   {
     variants: {
       selected: {
-        true: 'border-2 border-brand-500',
-        false: 'border border-on-surface-secondary/15',
+        true: 'border-2 border-brand-500 rounded-xl',
+        false: 'border border-border/40 rounded-xl',
       },
     },
     defaultVariants: {

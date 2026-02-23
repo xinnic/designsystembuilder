@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 
 interface AccordionProps {
   title: string;
-  icon?: React.ReactNode;
+  icon?: string;
   isOpen: boolean;
   onToggle: () => void;
   children: React.ReactNode;
@@ -30,7 +30,7 @@ export function Accordion({
     <View className={cn('', className)}>
       <Pressable
         className={cn(
-          'flex-row items-center justify-between py-3 px-2 active:opacity-70',
+          'flex-row items-center justify-between py-3 px-2 active:opacity-70 active:opacity-50',
           isOpen && 'mb-2',
         )}
         onPress={onToggle}
@@ -38,18 +38,18 @@ export function Accordion({
         accessibilityState={{ expanded: isOpen }}
       >
         <View className="flex-row items-center gap-3">
-          {icon}
-          <Text className="text-sm font-semibold text-on-surface">
+          {icon && <Text className="text-on-surface text-[18px]">{icon}</Text>}
+          <Text className="text-base font-semibold text-on-surface">
             {title}
           </Text>
         </View>
         <Text
-          className="text-on-surface-secondary text-xs"
+          className="text-on-surface text-sm"
           style={{
             transform: [{ rotate: isOpen ? '180deg' : '0deg' }],
           }}
         >
-          ▼
+          ˅
         </Text>
       </Pressable>
 
