@@ -58,10 +58,10 @@ export function PreviewPanel({ className, showFrame = true }: PreviewPanelProps)
         actions={
           <View className="flex-row gap-1">
             <Pressable className="w-9 h-9 items-center justify-center rounded-full active:bg-surface-secondary">
-              <Text className="text-on-surface-secondary text-base">🔍</Text>
+              <Text className="text-on-surface-secondary text-xl">⌕</Text>
             </Pressable>
             <Pressable className="w-9 h-9 items-center justify-center rounded-full active:bg-surface-secondary">
-              <Text className="text-on-surface-secondary text-base">🔔</Text>
+              <Text className="text-on-surface-secondary text-xl">○</Text>
             </Pressable>
           </View>
         }
@@ -151,19 +151,19 @@ export function PreviewPanel({ className, showFrame = true }: PreviewPanelProps)
             items={[
               {
                 label: 'Notifications',
-                icon: <Text>🔔</Text>,
+                icon: <Text className="text-base">○</Text>,
                 type: 'toggle',
                 value: true,
               },
               {
                 label: 'Dark Mode',
-                icon: <Text>🌙</Text>,
+                icon: <Text className="text-base">☽</Text>,
                 type: 'toggle',
                 value: false,
               },
               {
                 label: 'Privacy',
-                icon: <Text>🔒</Text>,
+                icon: <Text className="text-base">⚿</Text>,
                 type: 'navigation',
               },
             ]}
@@ -247,11 +247,11 @@ export function PreviewPanel({ className, showFrame = true }: PreviewPanelProps)
       {opts.menuLayout === 'bottomBar' && (
         <BottomNav
           items={[
-            { value: 'home', label: 'Home', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>🏠</Body> },
-            { value: 'search', label: 'Search', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>🔍</Body> },
-            { value: 'create', label: 'Create', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>➕</Body> },
-            { value: 'activity', label: 'Activity', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>❤️</Body>, badge: 3 },
-            { value: 'profile', label: 'Profile', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>👤</Body> },
+            { value: 'home', label: 'Home', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>⌂</Body> },
+            { value: 'search', label: 'Search', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>⌕</Body> },
+            { value: 'create', label: 'Create', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>+</Body> },
+            { value: 'activity', label: 'Activity', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>♡</Body>, badge: 0 },
+            { value: 'profile', label: 'Profile', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>⚬</Body> },
           ]}
           value={activeNav}
           onValueChange={setActiveNav}

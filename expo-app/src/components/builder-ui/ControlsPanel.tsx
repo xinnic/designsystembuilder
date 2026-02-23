@@ -154,7 +154,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
 
   return (
     <ScrollView
-      className={cn('flex-1 bg-surface', className)}
+      className={cn('flex-1 bg-gray-50', className)}
       contentContainerClassName="p-4"
     >
       {/* Header */}
@@ -231,14 +231,24 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
               <SectionLabel title="Menu Layout" />
               <HStack gap="sm">
                 <OptionCard
-                  customContent={<Text className="text-lg text-on-surface">⊥</Text>}
+                  customContent={
+                    <View className="w-6 h-6 items-center justify-end">
+                      <View className="w-full h-1 bg-on-surface-secondary rounded-full" />
+                    </View>
+                  }
                   label="Bottom Bar"
                   isSelected={opts.menuLayout === 'bottomBar'}
                   onPress={() => setOpts({ menuLayout: 'bottomBar' })}
                   className="flex-1"
                 />
                 <OptionCard
-                  customContent={<Text className="text-lg text-on-surface">☰</Text>}
+                  customContent={
+                    <View className="w-6 h-6 items-start justify-center gap-1">
+                      <View className="w-full h-0.5 bg-on-surface-secondary rounded-full" />
+                      <View className="w-full h-0.5 bg-on-surface-secondary rounded-full" />
+                      <View className="w-full h-0.5 bg-on-surface-secondary rounded-full" />
+                    </View>
+                  }
                   label="Hamburger"
                   isSelected={opts.menuLayout === 'hamburger'}
                   onPress={() => setOpts({ menuLayout: 'hamburger' })}
@@ -252,21 +262,33 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
               <SectionLabel title="Spacing Scale" />
               <HStack gap="sm">
                 <OptionCard
-                  customContent={<Text className="text-lg text-on-surface">⊟</Text>}
+                  customContent={
+                    <View className="w-6 h-6 items-center justify-center gap-0.5">
+                      <View className="w-3 h-3 border border-on-surface-secondary rounded-sm" />
+                    </View>
+                  }
                   label="Compact"
                   isSelected={spacingMode === 'compact'}
                   onPress={() => setSpacingMode('compact')}
                   className="flex-1"
                 />
                 <OptionCard
-                  customContent={<Text className="text-lg text-on-surface">▬</Text>}
+                  customContent={
+                    <View className="w-6 h-6 items-center justify-center">
+                      <View className="w-4 h-4 border border-on-surface-secondary rounded-sm" />
+                    </View>
+                  }
                   label="Normal"
                   isSelected={spacingMode === 'normal'}
                   onPress={() => setSpacingMode('normal')}
                   className="flex-1"
                 />
                 <OptionCard
-                  customContent={<Text className="text-lg text-on-surface">⊞</Text>}
+                  customContent={
+                    <View className="w-6 h-6 items-center justify-center">
+                      <View className="w-5 h-5 border border-on-surface-secondary rounded-sm" />
+                    </View>
+                  }
                   label="Comfortable"
                   isSelected={spacingMode === 'comfortable'}
                   onPress={() => setSpacingMode('comfortable')}

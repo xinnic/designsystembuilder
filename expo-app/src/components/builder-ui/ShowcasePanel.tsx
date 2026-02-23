@@ -151,7 +151,7 @@ function AtomShowcase() {
               )}
             >
               <Text
-                className="text-on-surface flex-1"
+                className="text-on-surface flex-shrink"
                 style={{
                   fontSize: Math.min(parseInt(style.token.size), 32),
                   lineHeight: Math.min(parseInt(style.token.line), 40),
@@ -160,7 +160,6 @@ function AtomShowcase() {
                   letterSpacing: 'track' in style.token ? (style.token as any).track : undefined,
                   textTransform: 'uppercase' in style.token && (style.token as any).uppercase ? 'uppercase' : undefined,
                 }}
-                numberOfLines={1}
               >
                 {style.sample}
               </Text>

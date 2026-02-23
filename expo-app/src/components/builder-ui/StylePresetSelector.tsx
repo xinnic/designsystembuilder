@@ -20,7 +20,7 @@ const presetIcons: Record<string, string> = {
   'modern-flat': '▢',
   'soft-dreamy': '☁',
   'minimalist': '—',
-  'neo-brutalism': '✦',
+  'neo-brutalism': '✧',
 };
 
 export function StylePresetSelector({
