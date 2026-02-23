@@ -1,7 +1,7 @@
 # Design System Builder - Task Priority Matrix
 
-> **Last Updated:** 2026-02-22
-> **Current Phase:** Phase 1E — Builder UI
+> **Last Updated:** 2026-02-23
+> **Current Phase:** Phase 1E.2 Complete — Builder Parity
 > **Critical Path:** ~~Expo Setup~~ → ~~Core Components~~ → ~~Bespoke Components~~ → ~~Composed Components~~ → Builder UI → Skill.md Export → Validation
 > **Key Decision:** Full platform rebuild. Builder becomes an Expo universal app with NativeWind + gluestack-ui v2.
 > **Scope:** ~75% new code, ~25% preserved logic (Zustand, tokens, color math, presets)
@@ -177,22 +177,70 @@ Real-world B2C app patterns built by composing core UI primitives.
 
 ---
 
-### Phase 1E: Builder UI 🔵 **DO FOURTH**
+### Phase 1E: Builder UI ✅ **COMPLETE**
 
 The builder interface — where users customize their design system.
 
-| # | Task | Model | Description | Status | Effort |
-|---|------|-------|-------------|--------|--------|
-| **1E.1** | Expo Router layout | **Opus** | 3-panel app shell: sidebar + preview + code | ⬜ | 4h |
-| **1E.2** | Sidebar / Controls panel | **Opus** | Color pickers, font selectors, spacing, presets | ⬜ | 8h |
-| **1E.3** | Preview panel | Sonnet | WYSIWYG rendering of bespoke components | ⬜ | 4h |
-| **1E.4** | Code preview panel | Sonnet | NativeWind code snippets for current component | ⬜ | 4h |
-| **1E.5** | Style preset selector | Sonnet | Grid of visual preset thumbnails | ⬜ | 3h |
-| **1E.6** | Color theme selector | **Opus** | Swatches + custom color picker (cross-platform) | ⬜ | 4h |
-| **1E.7** | Font pair selector | Sonnet | Primary + Display font with live preview | ⬜ | 3h |
-| **1E.8** | Dark mode toggle | Sonnet | Light/dark switch | ⬜ | 1h |
-| **1E.9** | Export dialog | **Opus** | Folder structure preview, ZIP download, clipboard | ⬜ | 4h |
-| **1E.10** | Accordion/collapsible | Sonnet | Expandable sections (gluestack Accordion) | ⬜ | 2h |
+#### Phase 1E.1: Builder Shell ✅
+
+| # | Task | Model | Description | Status | Notes |
+|---|------|-------|-------------|--------|-------|
+| **1E.1** | 3-panel layout | **Opus** | Responsive shell: Controls, Preview, Showcase | ✅ | Wide (side-by-side) + narrow (tab-based) |
+| **1E.2** | Controls panel | **Opus** | Color, font, spacing, style preset, dark mode controls | ✅ | Accordion sections, all settings in Zustand |
+| **1E.3** | Preview panel | Sonnet | Phone mockup with live-themed components | ✅ | CSS var sync via useTokenSystem |
+| **1E.4** | Showcase panel | Sonnet | Atoms/Components/Patterns tabbed showcase | ✅ | Segmented tab navigation |
+| **1E.5** | Style preset selector | Sonnet | Grid of visual preset thumbnails | ✅ | 4 presets with live application |
+| **1E.6** | Color theme selector | **Opus** | Rainbow picker + custom color + auto-secondary | ✅ | OKLCH generation |
+| **1E.7** | Font pair selector | Sonnet | Primary + Display font with live preview | ✅ | 27 fonts, serif + sans-serif |
+| **1E.8** | Dark mode toggle | Sonnet | Light/dark switch | ✅ | In basic options accordion |
+| **1E.9** | Export dialog | **Opus** | Folder structure preview, copy/download | ✅ | UI shell (actual gen is Phase 1F) |
+| **1E.10** | Accordion/collapsible | Sonnet | Expandable sections | ✅ | Custom NativeWind accordion |
+
+#### Phase 1E.2: Builder Parity ✅
+
+Closed all visual gaps between old Tamagui builder and new NativeWind builder.
+
+| Gap | Fix | Status |
+|-----|-----|--------|
+| Left panel too wide (320px) | Changed to w-[280px] | ✅ |
+| Phone mockup too large (375×812) | Changed to 320×640, 1px border, rounded-[32px] | ✅ |
+| Right panel too narrow (320px) | Changed to flex-1 (fills remaining space) | ✅ |
+| Unnecessary top toolbar | Removed, Export button moved to ControlsPanel header | ✅ |
+| Missing phone status bar | Added 9:41 + signal/wifi/battery icons | ✅ |
+| Missing HeroCard | Created new composed component | ✅ |
+| Missing StatsCards in preview | Added 3 compact StatsCards row | ✅ |
+| Missing SettingsGroup in preview | Added 3-item settings section | ✅ |
+| Missing ProfileCards in preview | Added 3 horizontal-scrolling ProfileCards | ✅ |
+| Missing ReviewCard in preview | Added ReviewCard with rating | ✅ |
+| BottomNav only 4 tabs | Expanded to 5 tabs (Home, Search, Create, Activity, Profile) | ✅ |
+| Atoms: only 4 of 7 sections | Added Color Roles, Spacing Ladder, Motion, Haptics | ✅ |
+| Atoms: typography only 4 styles | Expanded to all 8 styles with specs | ✅ |
+| Atoms: no usage labels on radii/shadows | Added usage labels | ✅ |
+| Components: missing Images | Added Image radii + aspect ratio showcase | ✅ |
+| Components: missing List Items | Added 4 ListItems with icons/subtitles | ✅ |
+| Components: missing Tabs showcase | Added underline, pill, segmented variants | ✅ |
+| Components: missing Progress | Added progress bars at 25/50/75/100% | ✅ |
+| Components: missing App Components | Added StatsCard, ReviewCard, SettingsGroup, ProfileCard | ✅ |
+| Patterns: missing BottomNav | Added full BottomNav demo | ✅ |
+| Patterns: missing Form Layout | Added email/password/sign-in composition | ✅ |
+| Patterns: missing Card Grid | Added 4-card responsive grid | ✅ |
+| Patterns: missing Drawer Menu | Added drawer with profile + menu items | ✅ |
+
+**Build Results:**
+- 1 new composed component (HeroCard)
+- 3 files modified (index.tsx, PreviewPanel.tsx, ShowcasePanel.tsx)
+- Phone preview: 10 content sections matching old builder
+- Atoms tab: 7 sections (Typography, Colors, Spacing, Radii, Shadows, Motion, Haptics)
+- Components tab: 10 sections (Buttons, Form Controls, Cards, Avatars/Chips, Images, List Items, Tabs, Progress, App Components)
+- Patterns tab: 7 patterns (App Header, Category Pills, Bottom Nav, Form Layout, Card Grid, Drawer Menu, Feed Card, User Card)
+- Build verified: compiles cleanly
+
+**Intentional differences from old builder:**
+- NativeWind segmented tabs instead of icon+label tabs in right panel
+- Ghost card variant instead of filled (Card component has elevated/outlined/ghost)
+- Emoji icons instead of Lucide icons (no lucide-react in expo-app)
+
+**Total Component Count:** 29 components (14 core + 5 bespoke + 10 composed)
 
 **Radix → gluestack mapping:**
 
@@ -320,13 +368,14 @@ The builder interface — where users customize their design system.
 ### Overall Progress
 - **Phase 0 (Vite Foundation):** 100% ✅
 - **Phase 0.5 (Tamagui Migration):** 100% ✅ (superseded)
-- **Phase 1 (NativeWind + gluestack Rebuild):** ~15% 🟡
+- **Phase 1 (NativeWind + gluestack Rebuild):** ~80% 🟡
   - 1A Setup + Tokens: 90% ✅ (gluestack + iOS/Android remain)
-  - 1B Core Components: 0% ⬜
-  - 1C Bespoke Components: 0% ⬜
-  - 1D Builder UI: 0% ⬜
-  - 1E Skill.md Export: 0% ⬜
-  - 1F Validation: 0% ⬜
+  - 1B Core Components: 100% ✅ (14 components)
+  - 1C Bespoke Components: 100% ✅ (5 components)
+  - 1D Composed Components: 100% ✅ (9 components)
+  - 1E Builder UI: 100% ✅ (1E.1 shell + 1E.2 parity)
+  - 1F Skill.md Export: 0% ⬜
+  - 1G Validation: 0% ⬜
 - **Phase 2 (B2C + Presets + Figma):** 0% ⬜
 - **Phase 3 (MCP + Extended):** 0% ⬜
 - **Phase 4 (Platform + Distribution):** 0% ⬜
