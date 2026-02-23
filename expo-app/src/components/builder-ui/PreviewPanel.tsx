@@ -266,7 +266,7 @@ export function PreviewPanel({ className, showFrame = true }: PreviewPanelProps)
       <View className={cn('flex-1 items-center justify-center bg-canvas p-8', className)}>
         {/* Phone frame */}
         <View
-          className="w-[320px] h-[640px] rounded-[32px] border border-on-surface/20 overflow-hidden shadow-lg bg-surface"
+          className="w-[320px] h-[640px] rounded-[32px] border border-on-surface/10 overflow-hidden shadow-2xl bg-surface"
           style={{ maxHeight: '90%' }}
         >
           {/* Status bar — simple text icons like old builder */}

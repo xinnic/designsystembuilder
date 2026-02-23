@@ -163,14 +163,14 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
           className="font-bold text-on-surface"
           style={{
             fontSize: parseInt(tokens.h1.size),
-            lineHeight: parseInt(tokens.h1.line),
+            lineHeight: parseInt(tokens.h1.line) * 0.9,
             fontWeight: tokens.h1.weight.toString(),
           }}
         >
-          Design System Builder
+          Design System{'\n'}Builder
         </Text>
         <Text
-          className="text-on-surface-secondary"
+          className="text-on-surface-secondary/70"
           style={{
             fontSize: parseInt(tokens.body.size),
             lineHeight: parseInt(tokens.body.line),
@@ -184,7 +184,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
         {/* ─── Basic Options ─── */}
         <Accordion
           title="Basic Options"
-          icon={<Text className="text-on-surface">☰</Text>}
+          icon={<Text className="text-on-surface">≡</Text>}
           isOpen={basicOptionsOpen}
           onToggle={() => setBasicOptionsOpen(!basicOptionsOpen)}
         >

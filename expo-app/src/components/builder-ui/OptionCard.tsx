@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 import { useDesignSystem } from '../../state/designSystem';
 
 const optionCardVariants = cva(
-  'items-center justify-center gap-2 rounded-md border p-3',
+  'items-center justify-center gap-2 rounded-md border p-3 shadow-sm',
   {
     variants: {
       selected: {

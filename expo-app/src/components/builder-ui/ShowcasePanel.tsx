@@ -40,20 +40,23 @@ interface ShowcasePanelProps {
   className?: string;
 }
 
-function SectionHeader({ title, description }: { title: string; description?: string }) {
+function SectionHeader({ title, description, icon }: { title: string; description?: string; icon?: string }) {
   const { tokens } = useDesignSystem();
 
   return (
     <VStack gap="xs" className="mb-4">
-      <Text
-        className="font-semibold text-on-surface"
-        style={{
-          fontSize: parseInt(tokens.h3.size),
-          lineHeight: parseInt(tokens.h3.line),
-        }}
-      >
-        {title}
-      </Text>
+      <HStack gap="sm" className="items-center">
+        {icon && <Text className="text-on-surface-secondary text-base">{icon}</Text>}
+        <Text
+          className="font-semibold text-on-surface"
+          style={{
+            fontSize: parseInt(tokens.h3.size),
+            lineHeight: parseInt(tokens.h3.line),
+          }}
+        >
+          {title}
+        </Text>
+      </HStack>
       {description && (
         <Caption className="text-on-surface-secondary">{description}</Caption>
       )}
@@ -134,6 +137,7 @@ function AtomShowcase() {
       {/* ── Typography Scale ── */}
       <View>
         <SectionHeader
+          icon="T"
           title="Typography Scale"
           description="Type styles that set hierarchy—headlines, body, captions. Change these to give your product a distinct voice."
         />
@@ -779,9 +783,9 @@ export function ShowcasePanel({ className }: ShowcasePanelProps) {
       <View className="px-4 pt-4 pb-2 border-b border-border">
         <Tabs
           items={[
-            { label: 'Atoms', value: 'atoms' },
-            { label: 'Components', value: 'components' },
-            { label: 'Patterns', value: 'patterns' },
+            { label: '⚛ Atoms', value: 'atoms' },
+            { label: '▦ Components', value: 'components' },
+            { label: '▦ Patterns', value: 'patterns' },
           ]}
           value={activeTab}
           onValueChange={setActiveTab}
