@@ -35,7 +35,7 @@ export function ColorThemeSelector({
   const colorInputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <View className="flex-row flex-wrap gap-2.5">
+    <View className="flex-row flex-wrap gap-3">
       {colorThemes.map((theme) => (
         <View key={theme.name} className="relative">
           {theme.isCustom ? (
