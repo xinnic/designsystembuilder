@@ -191,8 +191,8 @@ export const useDesignSystem = create<DesignSystemState>((set) => ({
   customAccentColor: '#1abc9c',
   isSecondaryManual: false, // Default to auto-generated
   selectedScale: 'regular',
-  selectedPrimaryFont: 'font-jakarta',
-  selectedDisplayFont: 'font-jakarta',
+  selectedPrimaryFont: 'font-satoshi',
+  selectedDisplayFont: 'font-satoshi',
   stylePresetId: 'modern-flat',
   spacingMode: 'normal',
   cornerRadius: 'medium',
