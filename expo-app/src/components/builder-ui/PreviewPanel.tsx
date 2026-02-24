@@ -188,7 +188,7 @@ export function PreviewPanel({ className, showFrame = true }: PreviewPanelProps)
 
   if (showFrame) {
     return (
-      <View className={cn('flex-1 items-center justify-center bg-canvas p-8', className)}>
+      <View className={cn('flex-1 items-center justify-center bg-surface p-8', className)}>
         {/* Phone frame */}
         <View
           className="w-[320px] h-[640px] rounded-[32px] overflow-hidden bg-surface"

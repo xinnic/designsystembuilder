@@ -18,6 +18,7 @@ import { ExportDialog } from '../src/components/builder-ui/ExportDialog';
 import { Tabs } from '../src/components/ui/Tabs';
 import { Button } from '../src/components/ui/Button';
 import { HStack } from '../src/components/ui/Stack';
+import { Text } from 'react-native';
 
 const BREAKPOINT = 768;
 
@@ -33,11 +34,22 @@ export default function BuilderScreen() {
       <SafeAreaView className="flex-1 bg-canvas flex-row" edges={['top']}>
         {/* 3-panel layout — left 300px, middle flex-1, right flex-[1.2] or similar */}
         <ControlsPanel className="w-[300px] border-r border-border" />
-        <PreviewPanel className="w-[400px]" showFrame />
-        <ShowcasePanel 
-          className="flex-1 border-l border-border bg-surface" 
-          onExportPress={() => setExportOpen(true)} 
-        />
+
+        {/* Middle + Right panels with shared header */}
+        <View className="flex-1 flex-col">
+          {/* Generate Megaprompt button spanning both middle and right */}
+          <View className="px-4 py-2 border-b border-border flex-row justify-end items-center bg-surface">
+            <Button variant="outline" size="sm" onPress={() => setExportOpen(true)} className="gap-2 shrink-0">
+              <Text className="font-body text-on-surface">⎘</Text> Generate Megaprompt
+            </Button>
+          </View>
+
+          {/* Middle and Right panels row */}
+          <View className="flex-1 flex-row">
+            <PreviewPanel className="w-[400px]" showFrame />
+            <ShowcasePanel className="flex-1 border-l border-border bg-surface" />
+          </View>
+        </View>
 
         <ExportDialog open={exportOpen} onOpenChange={setExportOpen} />
       </SafeAreaView>

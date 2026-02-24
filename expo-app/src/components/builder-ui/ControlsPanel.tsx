@@ -158,7 +158,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
 
   return (
     <ScrollView
-      className={cn('bg-surface-secondary', className)}
+      className={cn('bg-surface', className)}
       contentContainerClassName="p-4"
       style={{ maxWidth: 300 }}
     >
