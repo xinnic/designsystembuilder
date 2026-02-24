@@ -47,9 +47,9 @@ function SectionHeader({ title, description, icon }: { title: string; descriptio
   return (
     <VStack gap="xs" className="mb-4">
       <HStack gap="sm" className="items-center">
-        {icon && <Text className="text-on-surface-secondary text-base">{icon}</Text>}
+        {icon && <Text className="font-body text-on-surface-secondary text-base">{icon}</Text>}
         <Text
-          className="font-semibold text-on-surface"
+          className="font-body font-semibold text-on-surface"
           style={{
             fontSize: parseInt(tokens.h3.size),
             lineHeight: parseInt(tokens.h3.line),
@@ -118,17 +118,17 @@ function AtomShowcase() {
 
   return (
     <VStack gap="lg">
-      {/* ── Design Tokens Header ── */}
+      {/* ── Tokens Header ── */}
       <VStack gap="xs">
         <Text
-          className="font-semibold text-on-surface"
+          className="font-body font-bold text-on-surface"
           style={{
             fontSize: parseInt(tokens.h2.size),
             lineHeight: parseInt(tokens.h2.line),
             fontWeight: tokens.h2.weight.toString() as any,
           }}
         >
-          Design Tokens
+          Tokens
         </Text>
         <Body className="text-on-surface-secondary">
           Foundational design elements that define your system's visual language
@@ -137,22 +137,23 @@ function AtomShowcase() {
 
       {/* ── Typography Scale ── */}
       <View>
-        <SectionHeader
-          icon="T"
-          title="Typography Scale"
-          description="Type styles that set hierarchy—headlines, body, captions. Change these to give your product a distinct voice."
-        />
-        <VStack gap="none" className="bg-surface-secondary rounded-lg overflow-hidden">
+        <VStack gap="xs" className="mb-3">
+          <Text className="font-body text-2xl text-on-surface-secondary">T</Text>
+          <Text className="font-body font-bold text-on-surface text-xl">
+            Typography Scale
+          </Text>
+          <Body className="text-on-surface-secondary">
+            Type styles that set hierarchy—headlines, body, captions. Change these to give your product a distinct voice.
+          </Body>
+        </VStack>
+        <VStack gap="none" className="bg-surface rounded-lg overflow-hidden">
           {typeStyles.map((style, index) => (
             <View
               key={style.key}
-              className={cn(
-                'flex-row items-baseline justify-between px-4 py-3',
-                index < typeStyles.length - 1 && 'border-b border-border',
-              )}
+              className="flex-row items-center justify-between gap-2 px-4 py-3"
             >
               <Text
-                className="text-on-surface flex-shrink"
+                className="text-on-surface flex-1"
                 style={{
                   fontSize: Math.min(parseInt(style.token.size), 32),
                   lineHeight: Math.min(parseInt(style.token.line), 40),
@@ -164,7 +165,7 @@ function AtomShowcase() {
               >
                 {style.sample}
               </Text>
-              <VStack gap="none" className="items-end ml-3">
+              <VStack gap="none" className="items-end flex-shrink-0">
                 <Caption className="text-on-surface font-medium">{style.label}</Caption>
                 <Caption className="text-on-surface-secondary">
                   {style.token.size} / {style.token.line} @ {style.token.weight}
@@ -181,27 +182,34 @@ function AtomShowcase() {
           title="Color Roles"
           description="Brand and UI colors used across components. These are semantic—change the role, and the whole system updates."
         />
-        <View className="flex-row flex-wrap gap-3">
-          {colorRoles.map((color) => (
-            <View key={color.name} className="w-[31%] mb-2">
-              <View
-                className="h-16 rounded-md border border-border mb-1.5"
-                style={{ backgroundColor: `rgb(${color.token})` }}
-              />
-              <Text className="text-sm font-medium text-on-surface">{color.name}</Text>
-              <Caption className="text-on-surface-secondary">{color.usage}</Caption>
-            </View>
-          ))}
+        <View className="bg-surface rounded-lg p-4">
+          <View className="flex-row flex-wrap gap-3">
+            {colorRoles.map((color) => (
+              <View key={color.name} className="w-[31%] mb-2">
+                <View
+                  className="h-16 rounded-md border border-border mb-1.5"
+                  style={{ backgroundColor: `rgb(${color.token})` }}
+                />
+                <Text className="font-body text-sm font-medium text-on-surface">{color.name}</Text>
+                <Caption className="text-on-surface-secondary">{color.usage}</Caption>
+              </View>
+            ))}
+          </View>
         </View>
       </View>
 
       {/* ── Spacing Ladder ── */}
       <View>
-        <SectionHeader
-          title="Spacing Ladder"
-          description="Consistent rhythm so screens feel intentional. Based on an 8-pt scale."
-        />
-        <VStack gap="sm">
+        <VStack gap="xs" className="mb-3">
+          <Text className="font-body text-2xl text-on-surface-secondary">⊞</Text>
+          <Text className="font-body font-bold text-on-surface text-xl">
+            Spacing Ladder
+          </Text>
+          <Body className="text-on-surface-secondary">
+            Consistent rhythm so screens feel intentional. Based on an 8-pt scale.
+          </Body>
+        </VStack>
+        <VStack gap="sm" className="bg-surface rounded-lg p-4 border border-border">
           {tokens.space.map((value, index) => (
             <HStack key={index} gap="sm" className="items-center">
               <View
@@ -216,11 +224,16 @@ function AtomShowcase() {
 
       {/* ── Corner Radii ── */}
       <View>
-        <SectionHeader
-          title="Corner Radii"
-          description="How rounded surfaces are. Small for dense controls, medium for cards, large for modals, full for pills."
-        />
-        <HStack gap="md" className="items-center flex-wrap">
+        <VStack gap="xs" className="mb-3">
+          <Text className="font-body text-2xl text-on-surface-secondary">⟲</Text>
+          <Text className="font-body font-bold text-on-surface text-xl">
+            Corner Radii
+          </Text>
+          <Body className="text-on-surface-secondary">
+            How rounded surfaces are. Small for dense controls, medium for cards, large for modals, full for pills.
+          </Body>
+        </VStack>
+        <HStack gap="md" className="items-center flex-wrap bg-surface rounded-lg p-4 border border-border">
           {radii.map((r) => (
             <VStack key={r.key} gap="xs" className="items-center">
               <View
@@ -236,16 +249,21 @@ function AtomShowcase() {
 
       {/* ── Shadows ── */}
       <View>
-        <SectionHeader
-          title="Elevation (Shadows)"
-          description="Depth cues. Use subtle for resting cards, medium for interactive popovers, strong for modals."
-        />
-        <HStack gap="md" className="flex-wrap">
+        <VStack gap="xs" className="mb-3">
+          <Text className="font-body text-2xl text-on-surface-secondary">◇</Text>
+          <Text className="font-body font-bold text-on-surface text-xl">
+            Elevation (Shadows)
+          </Text>
+          <Body className="text-on-surface-secondary">
+            Depth cues. Use subtle for resting cards, medium for interactive popovers, strong for modals.
+          </Body>
+        </VStack>
+        <HStack gap="md" className="flex-wrap bg-surface rounded-lg p-4 border border-border">
           {shadows.map((s) => (
             <VStack key={s.level} gap="xs" className="items-center">
               <View
                 className={cn(
-                  'w-20 h-20 bg-surface rounded-lg',
+                  'w-20 h-20 bg-canvas rounded-lg',
                   s.level === '1' && 'shadow-sm',
                   s.level === '2' && 'shadow-md',
                   s.level === '3' && 'shadow-lg',
@@ -268,19 +286,19 @@ function AtomShowcase() {
           <HStack gap="md" className="flex-wrap">
             <VStack gap="xs" className="items-center">
               <View className="w-16 h-16 bg-brand-500 rounded-full items-center justify-center">
-                <Text className="text-white text-xs font-bold">Fast</Text>
+                <Text className="font-body text-white text-xs font-bold">Fast</Text>
               </View>
               <Caption>{tokens.motion.fast}</Caption>
             </VStack>
             <VStack gap="xs" className="items-center">
               <View className="w-16 h-16 bg-brand-500 rounded-full items-center justify-center">
-                <Text className="text-white text-xs font-bold">Base</Text>
+                <Text className="font-body text-white text-xs font-bold">Base</Text>
               </View>
               <Caption>{tokens.motion.base}</Caption>
             </VStack>
             <VStack gap="xs" className="items-center">
               <View className="w-16 h-16 bg-brand-500 rounded-full items-center justify-center">
-                <Text className="text-white text-xs font-bold">Slow</Text>
+                <Text className="font-body text-white text-xs font-bold">Slow</Text>
               </View>
               <Caption>{tokens.motion.slow}</Caption>
             </VStack>
@@ -779,13 +797,13 @@ export function ShowcasePanel({ className, onExportPress }: ShowcasePanelProps) 
   const { renderVersion } = useDesignSystem();
 
   return (
-    <View key={renderVersion} className={cn('flex-1 bg-surface', className)}>
+    <View key={renderVersion} className={cn('flex-1 bg-canvas', className)}>
       <View className="px-4 py-2 border-b border-border flex-row justify-end items-center bg-surface">
         <Button variant="outline" size="sm" onPress={onExportPress} className="gap-2 shrink-0">
-          <Text className="text-on-surface">⎘</Text> Generate Megaprompt
+          <Text className="font-body text-on-surface">⎘</Text> Generate Megaprompt
         </Button>
       </View>
-      <View className="px-4 pt-4 pb-2 border-b border-border">
+      <View className="px-4 pt-4 pb-2 border-b border-border bg-surface">
         <Tabs
           items={[
             { label: '⚛ Atoms', value: 'atoms' },
@@ -800,7 +818,7 @@ export function ShowcasePanel({ className, onExportPress }: ShowcasePanelProps) 
         />
       </View>
 
-      <ScrollView className="flex-1" contentContainerClassName="p-4">
+      <ScrollView className="flex-1 bg-canvas" contentContainerClassName="p-4">
         {activeTab === 'atoms' && <AtomShowcase />}
         {activeTab === 'components' && <ComponentShowcase />}
         {activeTab === 'patterns' && <PatternsShowcase />}

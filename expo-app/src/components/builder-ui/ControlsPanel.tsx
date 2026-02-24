@@ -15,6 +15,7 @@ import { useDesignSystem } from '../../state/designSystem';
 import { generateSecondaryColor } from '../../utils/colorGeneration';
 import { colorThemes, DEFAULT_PRIMARY, DEFAULT_ACCENT } from '../../config/colorThemes';
 import { getStylePreset, type StylePresetId } from '../../config/stylePresets';
+import { Layers, Sliders } from 'lucide-react-native';
 
 // Builder UI primitives
 import { Accordion } from './Accordion';
@@ -28,6 +29,8 @@ import { FontPairSelector } from './FontPairSelector';
 import { Switch } from '../ui/Switch';
 import { VStack, HStack } from '../ui/Stack';
 import { Body } from '../ui/Text';
+import { Input } from '../ui/Input';
+import { Button } from '../ui/Button';
 
 interface ControlsPanelProps {
   className?: string;
@@ -68,6 +71,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
   // Section states
   const [basicOptionsOpen, setBasicOptionsOpen] = useState(true);
   const [advancedStylingOpen, setAdvancedStylingOpen] = useState(false);
+  const [logoDescription, setLogoDescription] = useState('');
 
   // Handle primary color changes with auto-generated secondary
   const handlePrimaryColorChange = (theme: string, customColor?: string) => {
@@ -154,23 +158,25 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
 
   return (
     <ScrollView
-      className={cn('flex-1 bg-gray-50', className)}
+      className={cn('bg-surface-secondary', className)}
       contentContainerClassName="p-4"
+      style={{ maxWidth: 300 }}
     >
       {/* Header */}
-      <VStack gap="xs" className="mb-6">
+      <VStack className="mb-6">
         <Text
-          className="font-bold text-on-surface"
+          className="font-display text-on-surface"
           style={{
             fontSize: parseInt(tokens.h1.size),
-            lineHeight: parseInt(tokens.h1.line) * 0.9,
+            lineHeight: parseInt(tokens.h1.line),
             fontWeight: tokens.h1.weight.toString(),
+            marginBottom: 8,
           }}
         >
-          Design System{'\n'}Builder
+          Design System Builder
         </Text>
         <Text
-          className="text-on-surface-secondary/70"
+          className="font-body text-on-surface"
           style={{
             fontSize: parseInt(tokens.body.size),
             lineHeight: parseInt(tokens.body.line),
@@ -184,7 +190,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
         {/* ─── Basic Options ─── */}
         <Accordion
           title="Basic Options"
-          icon="☰"
+          icon={Layers}
           isOpen={basicOptionsOpen}
           onToggle={() => setBasicOptionsOpen(!basicOptionsOpen)}
         >
@@ -232,9 +238,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
               <HStack gap="sm">
                 <OptionCard
                   customContent={
-                    <View className="w-6 h-6 items-center justify-end">
-                      <View className="w-full h-1 bg-on-surface-secondary rounded-full" />
-                    </View>
+                    <Text className="font-body text-lg text-on-surface">▷</Text>
                   }
                   label="Bottom Bar"
                   isSelected={opts.menuLayout === 'bottomBar'}
@@ -243,11 +247,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
                 />
                 <OptionCard
                   customContent={
-                    <View className="w-6 h-6 items-start justify-center gap-1">
-                      <View className="w-full h-0.5 bg-on-surface-secondary rounded-full" />
-                      <View className="w-full h-0.5 bg-on-surface-secondary rounded-full" />
-                      <View className="w-full h-0.5 bg-on-surface-secondary rounded-full" />
-                    </View>
+                    <Text className="font-body text-lg text-on-surface">☰</Text>
                   }
                   label="Hamburger"
                   isSelected={opts.menuLayout === 'hamburger'}
@@ -263,9 +263,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
               <HStack gap="sm">
                 <OptionCard
                   customContent={
-                    <View className="w-6 h-6 items-center justify-center gap-0.5">
-                      <View className="w-3 h-3 border border-on-surface-secondary rounded-sm" />
-                    </View>
+                    <Text className="font-body text-lg text-on-surface">◱</Text>
                   }
                   label="Compact"
                   isSelected={spacingMode === 'compact'}
@@ -274,9 +272,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
                 />
                 <OptionCard
                   customContent={
-                    <View className="w-6 h-6 items-center justify-center">
-                      <View className="w-4 h-4 border border-on-surface-secondary rounded-sm" />
-                    </View>
+                    <Text className="font-body text-lg text-on-surface">▭</Text>
                   }
                   label="Normal"
                   isSelected={spacingMode === 'normal'}
@@ -285,9 +281,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
                 />
                 <OptionCard
                   customContent={
-                    <View className="w-6 h-6 items-center justify-center">
-                      <View className="w-5 h-5 border border-on-surface-secondary rounded-sm" />
-                    </View>
+                    <Text className="font-body text-lg text-on-surface">◰</Text>
                   }
                   label="Comfortable"
                   isSelected={spacingMode === 'comfortable'}
@@ -302,7 +296,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
         {/* ─── Advanced Styling ─── */}
         <Accordion
           title="Advanced Styling"
-          icon="✨"
+          icon={Sliders}
           isOpen={advancedStylingOpen}
           onToggle={() => setAdvancedStylingOpen(!advancedStylingOpen)}
         >
@@ -383,7 +377,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
                 />
                 <OptionCard
                   customContent={
-                    <Text className="text-xl font-bold text-on-surface">Aa</Text>
+                    <Text className="font-body text-xl font-bold text-on-surface">Aa</Text>
                   }
                   label="Regular"
                   isSelected={selectedScale === 'regular'}
@@ -392,7 +386,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
                 />
                 <OptionCard
                   customContent={
-                    <Text className="text-2xl font-bold text-on-surface">Aa</Text>
+                    <Text className="font-body text-2xl font-bold text-on-surface">Aa</Text>
                   }
                   label="Large"
                   isSelected={selectedScale === 'large'}
@@ -400,6 +394,40 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
                   className="flex-1"
                 />
               </HStack>
+            </View>
+
+            {/* Logo Generator */}
+            <View>
+              <SectionLabel title="Logo" />
+              <VStack gap="sm">
+                <Button
+                  variant="outline"
+                  size="md"
+                  fullWidth
+                  onPress={() => {
+                    // TODO: Implement logo upload
+                    console.log('Upload logo');
+                  }}
+                >
+                  <Text className="font-body text-on-surface">↑ Upload Logo</Text>
+                </Button>
+                <Input
+                  placeholder="Describe your app..."
+                  value={logoDescription}
+                  onChangeText={setLogoDescription}
+                />
+                <Button
+                  variant="primary"
+                  size="md"
+                  fullWidth
+                  onPress={() => {
+                    // TODO: Implement logo generation
+                    console.log('Generate logo:', logoDescription);
+                  }}
+                >
+                  <Text className="font-body text-white">✨ Generate Logo</Text>
+                </Button>
+              </VStack>
             </View>
           </VStack>
         </Accordion>

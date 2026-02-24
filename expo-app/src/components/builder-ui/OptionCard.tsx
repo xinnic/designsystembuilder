@@ -13,11 +13,11 @@ import { cn } from '@/lib/utils';
 import { useDesignSystem } from '../../state/designSystem';
 
 const optionCardVariants = cva(
-  'items-center justify-center gap-2 rounded-md border p-3 shadow-sm',
+  'items-center justify-center gap-2 rounded-md border p-3',
   {
     variants: {
       selected: {
-        true: 'border-blue-500 bg-blue-500/10',
+        true: 'border-brand bg-brand/10',
         false: 'border-border bg-surface active:bg-surface-secondary',
       },
     },
@@ -61,7 +61,7 @@ export function OptionCard({
       <Text
         className={cn(
           'text-center',
-          isSelected ? 'text-blue-500' : 'text-on-surface-secondary',
+          isSelected ? 'text-brand' : 'text-on-surface',
         )}
         style={{
           fontSize: parseInt(tokens.caption.size),

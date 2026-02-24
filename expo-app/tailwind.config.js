@@ -37,6 +37,7 @@ module.exports = {
           950: 'var(--color-accent-950)',
           DEFAULT: 'var(--color-accent-500)',
         },
+        canvas: 'var(--color-canvas)',
         surface: {
           DEFAULT: 'var(--color-surface)',
           secondary: 'var(--color-surface-secondary)',

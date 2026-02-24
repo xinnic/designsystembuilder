@@ -15,12 +15,12 @@ import { cva } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const colorSwatchVariants = cva(
-  'w-8 h-8 items-center justify-center rounded-md',
+  'w-9 h-9 items-center justify-center rounded-lg',
   {
     variants: {
       selected: {
-        true: 'border-2 border-blue-500',
-        false: 'border border-on-surface/10',
+        true: 'border-[2px] border-gray-900',
+        false: 'border-[0.5px] border-gray-300',
       },
     },
     defaultVariants: {
@@ -65,11 +65,11 @@ export function ColorSwatch({
     >
       {isCustom && Platform.OS === 'web' && (
         <View
-          className="absolute inset-0"
+          className="absolute inset-0 rounded-full"
           style={{
-            // @ts-ignore - web-only gradient (soft color mesh)
+            // @ts-ignore - web-only gradient (circular rainbow wheel)
             background:
-              'radial-gradient(circle at top left, #a18cd1, transparent 80%), radial-gradient(circle at bottom right, #fbc2eb, transparent 80%), radial-gradient(circle at bottom left, #84fab0, transparent 80%), radial-gradient(circle at top right, #8fd3f4, transparent 80%), #ffdfba',
+              'conic-gradient(from 0deg, #ff0000 0deg, #ffff00 60deg, #00ff00 120deg, #00ffff 180deg, #0000ff 240deg, #ff00ff 300deg, #ff0000 360deg)',
           }}
         />
       )}

@@ -28,6 +28,7 @@ import {
 } from 'react-native';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
+import { ChevronDown as ChevronDownIcon } from 'lucide-react-native';
 
 // ---------------------------------------------------------------------------
 // Variants
@@ -94,14 +95,16 @@ export interface SelectProps
 }
 
 // ---------------------------------------------------------------------------
-// Chevron Icon (inline SVG-free implementation)
+// Chevron Icon
 // ---------------------------------------------------------------------------
 
-function ChevronDown({ className }: { className?: string }) {
+function ChevronDown({ isSelected }: { isSelected?: boolean }) {
   return (
-    <Text className={cn('text-on-surface-secondary text-sm', className)}>
-      ∨
-    </Text>
+    <ChevronDownIcon
+      size={18}
+      color="#6B7280"
+      strokeWidth={2}
+    />
   );
 }
 
@@ -162,6 +165,7 @@ export function Select({
             size,
             disabled,
           }),
+          selectedOption && 'border-brand',
           triggerClassName
         )}
         onPress={handleOpen}
@@ -174,7 +178,7 @@ export function Select({
           className={cn(
             'flex-1',
             selectedOption
-              ? 'text-on-surface'
+              ? 'text-on-surface font-medium'
               : 'text-on-surface-secondary',
             size === 'sm' && 'text-sm',
             size === 'lg' && 'text-lg',
@@ -182,7 +186,7 @@ export function Select({
         >
           {selectedOption?.label ?? placeholder}
         </Text>
-        <ChevronDown />
+        <ChevronDown isSelected={!!selectedOption} />
       </Pressable>
 
       {/* Error / Helper */}

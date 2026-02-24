@@ -24,6 +24,8 @@ import {
 } from 'react-native';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
+import { useDesignSystem } from '../../state/designSystem';
+import { COLOR_VALUES } from '../../config/colorThemes';
 
 // ---------------------------------------------------------------------------
 // Variants
@@ -77,6 +79,14 @@ export function Switch({
   className,
   ...props
 }: SwitchProps) {
+  const { selectedTheme, customPrimaryColor, isDarkMode } = useDesignSystem();
+
+  // Get the current brand color from the store
+  const brandColor =
+    selectedTheme === 'custom' && customPrimaryColor
+      ? customPrimaryColor
+      : COLOR_VALUES[selectedTheme] || '#1abc9c';
+
   const handlePress = () => {
     if (!disabled && onValueChange) {
       onValueChange(!value);
@@ -101,8 +111,8 @@ export function Switch({
           onValueChange={onValueChange}
           disabled={disabled}
           trackColor={{
-            false: '#e5e7eb', // surface-secondary equivalent
-            true: '#3b82f6', // brand-500 equivalent (will use CSS var in future)
+            false: isDarkMode ? '#1e1e1e' : '#e5e7eb',
+            true: brandColor,
           }}
           thumbColor="#ffffff"
           {...props}

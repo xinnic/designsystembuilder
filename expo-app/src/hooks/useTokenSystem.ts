@@ -81,6 +81,7 @@ export function useTokenSystem() {
 
     // Semantic surface colors (light/dark mode aware)
     if (state.isDarkMode) {
+      root.style.setProperty('--color-canvas', 'oklch(0.12 0.005 250)');
       root.style.setProperty('--color-surface', 'oklch(0.15 0.005 250)');
       root.style.setProperty('--color-surface-secondary', 'oklch(0.20 0.008 250)');
       root.style.setProperty('--color-surface-tertiary', 'oklch(0.25 0.01 250)');
@@ -88,6 +89,7 @@ export function useTokenSystem() {
       root.style.setProperty('--color-on-surface-secondary', 'oklch(0.70 0.01 250)');
       root.style.setProperty('--color-border', 'oklch(0.30 0.01 250)');
     } else {
+      root.style.setProperty('--color-canvas', 'oklch(0.97 0.002 250)');
       root.style.setProperty('--color-surface', 'oklch(1.0 0 0)');
       root.style.setProperty('--color-surface-secondary', 'oklch(0.97 0.002 250)');
       root.style.setProperty('--color-surface-tertiary', 'oklch(0.94 0.004 250)');

@@ -22,7 +22,7 @@ export function SectionLabel({ title, description, className }: SectionLabelProp
   return (
     <View className={cn('mb-3', className)}>
       <Text
-        className="text-on-surface-secondary"
+        className="font-body text-on-surface-secondary"
         style={{
           fontSize: parseInt(tokens.caption.size),
           lineHeight: parseInt(tokens.caption.line),
@@ -34,7 +34,7 @@ export function SectionLabel({ title, description, className }: SectionLabelProp
       </Text>
       {description && (
         <Text
-          className="text-on-surface-secondary/70 mt-1"
+          className="font-body text-on-surface mt-1"
           style={{
             fontSize: parseInt(tokens.caption.size),
             lineHeight: parseInt(tokens.caption.line),
