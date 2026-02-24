@@ -72,6 +72,7 @@ export function FontPairSelector({
         value={selectedFont}
         onValueChange={onSelectFont}
         placeholder="Select font..."
+        triggerClassName="rounded-full"
       />
     </View>
   );

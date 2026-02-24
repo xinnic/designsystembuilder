@@ -61,7 +61,7 @@ export function PreviewPanel({ className, showFrame = true }: PreviewPanelProps)
               <Text className="text-on-surface-secondary text-xl">⌕</Text>
             </Pressable>
             <Pressable className="w-9 h-9 items-center justify-center rounded-full active:bg-surface-secondary">
-              <Text className="text-on-surface-secondary text-xl">○</Text>
+              <Text className="text-on-surface-secondary text-xl">🔔</Text>
             </Pressable>
           </View>
         }
@@ -139,108 +139,24 @@ export function PreviewPanel({ className, showFrame = true }: PreviewPanelProps)
           />
         </View>
 
-        {/* Settings Section */}
-        <View style={{ paddingHorizontal: tokens.space[1], paddingBottom: tokens.space[0] }}>
-          <Caption
-            className="font-semibold text-on-surface"
-            style={{ marginBottom: tokens.space[0] }}
-          >
-            Settings
-          </Caption>
-          <SettingsGroup
-            items={[
-              {
-                label: 'Notifications',
-                icon: <Text className="text-base">○</Text>,
-                type: 'toggle',
-                value: true,
-              },
-              {
-                label: 'Dark Mode',
-                icon: <Text className="text-base">☽</Text>,
-                type: 'toggle',
-                value: false,
-              },
-              {
-                label: 'Privacy',
-                icon: <Text className="text-base">⚿</Text>,
-                type: 'navigation',
-              },
-            ]}
-          />
+        {/* Missing Circular Actions */}
+        <View style={{ paddingTop: tokens.space[2] }}>
+          <View className="flex-row justify-around mb-[-24px]">
+            <View className="w-[84px] h-[84px] rounded-full border border-border items-center pt-4 bg-surface shadow-sm" style={{ borderWidth: 1 }}>
+              <Text className="text-2xl text-on-surface">〽</Text>
+            </View>
+            <View className="w-[84px] h-[84px] rounded-full border border-border items-center pt-4 bg-surface shadow-sm" style={{ borderWidth: 1 }}>
+              <Text className="text-2xl text-on-surface">♡</Text>
+            </View>
+            <View className="w-[84px] h-[84px] rounded-full border border-border items-center pt-4 bg-surface shadow-sm" style={{ borderWidth: 1 }}>
+              <Text className="text-2xl text-on-surface">◷</Text>
+            </View>
+          </View>
         </View>
 
-        {/* Suggested People */}
-        <View style={{ paddingBottom: tokens.space[0] }}>
-          <Caption
-            className="font-semibold text-on-surface"
-            style={{ marginBottom: tokens.space[0], paddingHorizontal: tokens.space[1] }}
-          >
-            Suggested People
-          </Caption>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingHorizontal: tokens.space[1],
-              gap: tokens.space[0],
-            }}
-          >
-            <ProfileCard
-              variant="default"
-              name="Alex Chen"
-              username="alexchen"
-              avatar="https://picsum.photos/seed/p1/100/100"
-              avatarSize="lg"
-              className="w-[160px]"
-            />
-            <ProfileCard
-              variant="default"
-              name="Maya Patel"
-              username="mayap"
-              avatar="https://picsum.photos/seed/p2/100/100"
-              avatarSize="lg"
-              className="w-[160px]"
-            />
-            <ProfileCard
-              variant="default"
-              name="Sam Rivera"
-              username="samr"
-              avatar="https://picsum.photos/seed/p3/100/100"
-              avatarSize="lg"
-              className="w-[160px]"
-            />
-          </ScrollView>
-        </View>
+        {/* Layout Spacer */}
+        <View style={{ height: 40 }} />
 
-        {/* Review Card */}
-        <View style={{ paddingHorizontal: tokens.space[1], paddingBottom: tokens.space[0] }}>
-          <ReviewCard
-            rating={4.5}
-            title="Amazing experience"
-            review="The design system makes it incredibly easy to maintain consistency across all our products. Highly recommend!"
-            author="Jordan Lee"
-            avatar="https://picsum.photos/seed/r1/100/100"
-            date="2 days ago"
-            verified
-            helpfulCount={12}
-          />
-        </View>
-
-        {/* Your Feed */}
-        <View style={{ paddingHorizontal: tokens.space[1], paddingBottom: tokens.space[0] }}>
-          <Caption
-            className="font-semibold text-on-surface"
-            style={{ marginBottom: tokens.space[0] }}
-          >
-            Your Feed
-          </Caption>
-          <UserCard
-            name="Sarah Miller"
-            role="Product Designer"
-            avatar="https://picsum.photos/seed/avatar2/100/100"
-          />
-        </View>
       </ScrollView>
 
       {/* Bottom Nav — 5 tabs */}
@@ -251,7 +167,7 @@ export function PreviewPanel({ className, showFrame = true }: PreviewPanelProps)
             { value: 'search', label: 'Search', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>⌕</Body> },
             { value: 'create', label: 'Create', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>+</Body> },
             { value: 'activity', label: 'Activity', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>♡</Body>, badge: 0 },
-            { value: 'profile', label: 'Profile', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>⚬</Body> },
+            { value: 'profile', label: 'Profile', icon: (a: boolean) => <Body color={a ? 'brand' : 'on-surface-secondary'}>👤</Body> },
           ]}
           value={activeNav}
           onValueChange={setActiveNav}
@@ -266,7 +182,7 @@ export function PreviewPanel({ className, showFrame = true }: PreviewPanelProps)
       <View className={cn('flex-1 items-center justify-center bg-canvas p-8', className)}>
         {/* Phone frame */}
         <View
-          className="w-[320px] h-[640px] rounded-[32px] border border-on-surface/10 overflow-hidden shadow-lg bg-surface"
+          className="w-[320px] h-[640px] rounded-[32px] border border-on-surface/5 overflow-hidden shadow-sm bg-surface"
           style={{ maxHeight: '90%' }}
         >
           {/* Status bar — simple text icons like old builder */}
@@ -275,11 +191,11 @@ export function PreviewPanel({ className, showFrame = true }: PreviewPanelProps)
             style={{ paddingHorizontal: tokens.space[2] }}
           >
             <Text className="text-xs font-semibold text-on-surface">9:41</Text>
-            <View className="flex-row items-center gap-1.5">
-              <Text className="text-[10px] text-on-surface">▂▄▆█</Text>
-              <Text className="text-[10px] text-on-surface">♥</Text>
-              <View className="w-5 h-2.5 border border-on-surface rounded-sm justify-center px-0.5">
-                <View className="w-2.5 h-1.5 bg-on-surface rounded-[1px]" />
+            <View className="flex-row items-center gap-1.5 opacity-60">
+              <Text className="text-[10px] text-on-surface tracking-tighter">||||</Text>
+              <Text className="text-[10px] text-on-surface">ᯤ</Text>
+              <View className="w-5 h-2.5 border border-on-surface rounded-[3px] justify-center px-0.5 flex-row items-center" style={{ borderWidth: 1 }}>
+                <View className="w-3 h-1 bg-on-surface rounded-[1px]" />
               </View>
             </View>
           </View>

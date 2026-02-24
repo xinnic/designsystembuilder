@@ -19,7 +19,7 @@ const colorSwatchVariants = cva(
   {
     variants: {
       selected: {
-        true: 'border-2 border-brand-500',
+        true: 'border-2 border-blue-500',
         false: 'border border-on-surface/10',
       },
     },
@@ -67,9 +67,9 @@ export function ColorSwatch({
         <View
           className="absolute inset-0"
           style={{
-            // @ts-ignore - web-only gradient
+            // @ts-ignore - web-only gradient (soft color mesh)
             background:
-              'conic-gradient(from 0deg, #e74c3c 0deg, #f39c12 45deg, #f1c40f 90deg, #2ecc71 135deg, #1abc9c 180deg, #3498db 225deg, #9b59b6 270deg, #e91e63 315deg, #e74c3c 360deg)',
+              'radial-gradient(circle at top left, #a18cd1, transparent 80%), radial-gradient(circle at bottom right, #fbc2eb, transparent 80%), radial-gradient(circle at bottom left, #84fab0, transparent 80%), radial-gradient(circle at top right, #8fd3f4, transparent 80%), #ffdfba',
           }}
         />
       )}

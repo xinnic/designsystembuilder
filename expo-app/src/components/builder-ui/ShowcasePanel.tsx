@@ -38,6 +38,7 @@ import { ProfileCard } from '../composed/ProfileCard';
 
 interface ShowcasePanelProps {
   className?: string;
+  onExportPress?: () => void;
 }
 
 function SectionHeader({ title, description, icon }: { title: string; description?: string; icon?: string }) {
@@ -773,18 +774,23 @@ function PatternsShowcase() {
 // MAIN PANEL
 // ─────────────────────────────────────────────────────────────────────────────
 
-export function ShowcasePanel({ className }: ShowcasePanelProps) {
+export function ShowcasePanel({ className, onExportPress }: ShowcasePanelProps) {
   const [activeTab, setActiveTab] = useState('atoms');
   const { renderVersion } = useDesignSystem();
 
   return (
     <View key={renderVersion} className={cn('flex-1 bg-surface', className)}>
+      <View className="px-4 py-2 border-b border-border flex-row justify-end items-center bg-surface">
+        <Button variant="outline" size="sm" onPress={onExportPress} className="gap-2 shrink-0">
+          <Text className="text-on-surface">⎘</Text> Generate Megaprompt
+        </Button>
+      </View>
       <View className="px-4 pt-4 pb-2 border-b border-border">
         <Tabs
           items={[
             { label: '⚛ Atoms', value: 'atoms' },
-            { label: '▦ Components', value: 'components' },
-            { label: '▦ Patterns', value: 'patterns' },
+            { label: '▤ Components', value: 'components' },
+            { label: '⊞ Patterns', value: 'patterns' },
           ]}
           value={activeTab}
           onValueChange={setActiveTab}

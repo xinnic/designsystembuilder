@@ -17,7 +17,7 @@ const optionCardVariants = cva(
   {
     variants: {
       selected: {
-        true: 'border-brand-500 bg-brand-500/10',
+        true: 'border-blue-500 bg-blue-500/10',
         false: 'border-border bg-surface active:bg-surface-secondary',
       },
     },
@@ -61,7 +61,7 @@ export function OptionCard({
       <Text
         className={cn(
           'text-center',
-          isSelected ? 'text-brand-500' : 'text-on-surface-secondary',
+          isSelected ? 'text-blue-500' : 'text-on-surface-secondary',
         )}
         style={{
           fontSize: parseInt(tokens.caption.size),

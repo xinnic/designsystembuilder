@@ -57,6 +57,8 @@ export interface ProfileCardProps extends VariantProps<typeof profileCardVariant
   name: string;
   /** Username or handle */
   username?: string;
+  /** Text status like 'Active now' */
+  statusText?: string;
   /** Bio text */
   bio?: string;
   /** Stats (followers, following, posts) */
@@ -82,6 +84,7 @@ export function ProfileCard({
   avatar,
   name,
   username,
+  statusText,
   bio,
   stats,
   actions,
@@ -115,12 +118,16 @@ export function ProfileCard({
             {name}
           </Text>
 
-          {/* Username */}
-          {username && (
+          {/* Username or Status Text */}
+          {statusText ? (
+            <Text className="text-xs font-semibold text-green-500">
+              {statusText}
+            </Text>
+          ) : username ? (
             <Text className="text-sm text-on-surface-secondary">
               @{username}
             </Text>
-          )}
+          ) : null}
 
           {/* Bio */}
           {bio && (

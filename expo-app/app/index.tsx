@@ -30,20 +30,14 @@ export default function BuilderScreen() {
 
   if (isWide) {
     return (
-      <SafeAreaView className="flex-1 bg-canvas" edges={['top']}>
-        {/* Header row with Export button (matching old builder) */}
-        <View className="px-4 py-3 flex-row justify-end items-center border-b border-border bg-surface">
-          <Button variant="outline" size="sm" onPress={() => setExportOpen(true)}>
-            Export
-          </Button>
-        </View>
-
-        {/* 3-panel layout — left 320px, middle 420px, right flex-1 */}
-        <View className="flex-1 flex-row">
-          <ControlsPanel className="w-[320px] border-r border-border" />
-          <PreviewPanel className="w-[420px]" showFrame />
-          <ShowcasePanel className="flex-1 border-l border-border" />
-        </View>
+      <SafeAreaView className="flex-1 bg-canvas flex-row" edges={['top']}>
+        {/* 3-panel layout — left 300px, middle flex-1, right flex-[1.2] or similar */}
+        <ControlsPanel className="w-[300px] border-r border-border" />
+        <PreviewPanel className="w-[400px]" showFrame />
+        <ShowcasePanel 
+          className="flex-1 border-l border-border bg-surface" 
+          onExportPress={() => setExportOpen(true)} 
+        />
 
         <ExportDialog open={exportOpen} onOpenChange={setExportOpen} />
       </SafeAreaView>

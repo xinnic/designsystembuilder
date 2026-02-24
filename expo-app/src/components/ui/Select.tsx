@@ -89,6 +89,8 @@ export interface SelectProps
   disabled?: boolean;
   /** Additional NativeWind classes */
   className?: string;
+  /** Additional NativeWind classes for the trigger */
+  triggerClassName?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -97,8 +99,8 @@ export interface SelectProps
 
 function ChevronDown({ className }: { className?: string }) {
   return (
-    <Text className={cn('text-on-surface-secondary text-xs', className)}>
-      ▼
+    <Text className={cn('text-on-surface-secondary text-sm', className)}>
+      ∨
     </Text>
   );
 }
@@ -119,6 +121,7 @@ export function Select({
   variant: variantProp,
   size,
   className,
+  triggerClassName,
 }: SelectProps) {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<View>(null);
@@ -159,6 +162,7 @@ export function Select({
             size,
             disabled,
           }),
+          triggerClassName
         )}
         onPress={handleOpen}
         disabled={disabled}

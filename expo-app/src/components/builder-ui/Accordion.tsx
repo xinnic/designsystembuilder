@@ -44,12 +44,12 @@ export function Accordion({
           </Text>
         </View>
         <Text
-          className="text-on-surface text-sm"
+          className="text-on-surface-secondary text-sm font-medium"
           style={{
             transform: [{ rotate: isOpen ? '180deg' : '0deg' }],
           }}
         >
-          ˅
+          ∨
         </Text>
       </Pressable>
 

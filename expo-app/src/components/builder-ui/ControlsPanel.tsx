@@ -188,7 +188,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
           isOpen={basicOptionsOpen}
           onToggle={() => setBasicOptionsOpen(!basicOptionsOpen)}
         >
-          <VStack gap="xl">
+          <VStack gap="lg" className="pt-2">
             {/* Primary Font */}
             <FontPairSelector
               mode="primary"
@@ -302,18 +302,18 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
         {/* ─── Advanced Styling ─── */}
         <Accordion
           title="Advanced Styling"
-          icon="⚙"
+          icon="✨"
           isOpen={advancedStylingOpen}
           onToggle={() => setAdvancedStylingOpen(!advancedStylingOpen)}
         >
-          <VStack gap="xl">
+          <VStack gap="lg" className="pt-2">
             {/* Corner Radius */}
             <View>
               <SectionLabel title="Corner Radius" />
               <HStack gap="sm">
                 <OptionCard
                   customContent={
-                    <View className="w-6 h-6 border-2 border-on-surface-secondary rounded-none" />
+                    <View className="w-5 h-5 border-[1.5px] border-on-surface-secondary rounded-none" />
                   }
                   label="None"
                   isSelected={cornerRadius === 'none'}
@@ -322,7 +322,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
                 />
                 <OptionCard
                   customContent={
-                    <View className="w-6 h-6 border-2 border-on-surface-secondary rounded-sm" />
+                    <View className="w-5 h-5 border-[1.5px] border-on-surface-secondary rounded-sm" />
                   }
                   label="Small"
                   isSelected={cornerRadius === 'small'}
@@ -331,7 +331,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
                 />
                 <OptionCard
                   customContent={
-                    <View className="w-6 h-6 border-2 border-on-surface-secondary rounded-lg" />
+                    <View className="w-5 h-5 border-[1.5px] border-on-surface-secondary rounded-lg" />
                   }
                   label="Medium"
                   isSelected={cornerRadius === 'medium'}
@@ -340,7 +340,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
                 />
                 <OptionCard
                   customContent={
-                    <View className="w-6 h-6 border-2 border-on-surface-secondary rounded-xl" />
+                    <View className="w-5 h-5 border-[1.5px] border-on-surface-secondary rounded-xl" />
                   }
                   label="Large"
                   isSelected={cornerRadius === 'large'}
