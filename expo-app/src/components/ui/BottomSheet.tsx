@@ -129,12 +129,12 @@ export function BottomSheet({
                 {header || (
                   <View className="gap-1">
                     {title && (
-                      <Text className="text-lg font-semibold text-on-surface">
+                      <Text className="font-body text-lg font-semibold text-on-surface">
                         {title}
                       </Text>
                     )}
                     {description && (
-                      <Text className="text-sm text-on-surface-secondary">
+                      <Text className="font-body text-sm text-on-surface-secondary">
                         {description}
                       </Text>
                     )}

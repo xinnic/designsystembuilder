@@ -111,7 +111,7 @@ export function ProfileCard({
           {/* Name */}
           <Text
             className={cn(
-              'font-bold text-on-surface',
+              'font-body font-bold text-on-surface',
               isCompact ? 'text-lg' : 'text-xl',
             )}
           >
@@ -120,11 +120,11 @@ export function ProfileCard({
 
           {/* Username or Status Text */}
           {statusText ? (
-            <Text className="text-xs font-semibold text-green-500">
+            <Text className="font-body text-xs font-semibold text-green-500">
               {statusText}
             </Text>
           ) : username ? (
-            <Text className="text-sm text-on-surface-secondary">
+            <Text className="font-body text-sm text-on-surface-secondary">
               @{username}
             </Text>
           ) : null}
@@ -133,7 +133,7 @@ export function ProfileCard({
           {bio && (
             <Text
               className={cn(
-                'text-sm text-on-surface-secondary',
+                'font-body text-sm text-on-surface-secondary',
                 !isCompact && 'text-center',
               )}
               numberOfLines={bioLines}
@@ -151,10 +151,10 @@ export function ProfileCard({
                     <Divider orientation="vertical" className="h-8" />
                   )}
                   <View className="items-center">
-                    <Text className="text-lg font-bold text-on-surface">
+                    <Text className="font-body text-lg font-bold text-on-surface">
                       {stat.value}
                     </Text>
-                    <Text className="text-xs text-on-surface-secondary">
+                    <Text className="font-body text-xs text-on-surface-secondary">
                       {stat.label}
                     </Text>
                   </View>

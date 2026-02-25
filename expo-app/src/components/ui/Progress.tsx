@@ -97,10 +97,10 @@ export function Progress({
       {(label || showPercentage) && (
         <View className="flex-row justify-between items-center">
           {label && (
-            <Text className="text-sm font-medium text-on-surface">{label}</Text>
+            <Text className="font-body text-sm font-medium text-on-surface">{label}</Text>
           )}
           {showPercentage && !indeterminate && (
-            <Text className="text-sm text-on-surface-secondary">
+            <Text className="font-body text-sm text-on-surface-secondary">
               {percentage}%
             </Text>
           )}
@@ -172,7 +172,7 @@ export function CircularProgress({
       accessibilityValue={{ min: 0, max: 100, now: clampedValue }}
     >
       {showPercentage && (
-        <Text className="text-sm font-semibold text-on-surface">
+        <Text className="font-body text-sm font-semibold text-on-surface">
           {percentage}%
         </Text>
       )}

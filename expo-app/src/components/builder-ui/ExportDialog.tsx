@@ -99,7 +99,7 @@ export function ExportDialog({ open, onOpenChange }: ExportDialogProps) {
           className="bg-on-surface/5 rounded-lg p-4"
         >
           <Text
-            className="text-xs text-on-surface"
+            className="font-body text-xs text-on-surface"
             style={{ fontFamily: Platform.OS === 'web' ? 'monospace' : 'Courier' }}
           >
             {FOLDER_TREE}

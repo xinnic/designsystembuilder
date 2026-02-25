@@ -118,18 +118,18 @@ export function Switch({
           {...props}
         />
 
-        {label && (
+        {label ? (
           <View className="flex-1">
-            <Text className="text-base text-on-surface font-medium">
+            <Text className="font-body text-base text-on-surface font-medium">
               {label}
             </Text>
           </View>
-        )}
+        ) : null}
       </Pressable>
 
-      {helperText && (
-        <Text className="text-xs text-on-surface-secondary">{helperText}</Text>
-      )}
+      {helperText ? (
+        <Text className="font-body text-xs text-on-surface-secondary">{helperText}</Text>
+      ) : null}
     </View>
   );
 }

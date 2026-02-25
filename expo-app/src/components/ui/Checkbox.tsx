@@ -92,7 +92,7 @@ export interface CheckboxProps
 
 function CheckIcon({ size }: { size: 'sm' | 'md' | 'lg' }) {
   const textSize = size === 'sm' ? 'text-xs' : size === 'md' ? 'text-sm' : 'text-base';
-  return <Text className={cn('text-white font-bold leading-none', textSize)}>✓</Text>;
+  return <Text className={cn('font-body text-white font-bold leading-none', textSize)}>✓</Text>;
 }
 
 function IndeterminateIcon({ size }: { size: 'sm' | 'md' | 'lg' }) {
@@ -157,13 +157,13 @@ export function Checkbox({
 
         {label && (
           <View className="flex-1 justify-center">
-            <Text className="text-base text-on-surface">{label}</Text>
+            <Text className="font-body text-base text-on-surface">{label}</Text>
           </View>
         )}
       </Pressable>
 
       {helperText && (
-        <Text className="text-xs text-on-surface-secondary ml-8">
+        <Text className="font-body text-xs text-on-surface-secondary ml-8">
           {helperText}
         </Text>
       )}

@@ -34,7 +34,7 @@ export function StylePresetSelector({
         <OptionCard
           key={preset.id}
           customContent={
-            <Text className="text-xl text-on-surface">{presetIcons[preset.id] || '●'}</Text>
+            <Text className="font-body text-xl text-on-surface">{presetIcons[preset.id] || '●'}</Text>
           }
           label={preset.name}
           isSelected={selectedPreset === preset.id}

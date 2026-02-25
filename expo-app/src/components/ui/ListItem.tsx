@@ -106,7 +106,7 @@ export function ListItem({
       <View className="flex-1 gap-0.5">
         <Text
           className={cn(
-            'text-base font-medium text-on-surface',
+            'font-body text-base font-medium text-on-surface',
             size === 'sm' && 'text-sm',
             size === 'lg' && 'text-lg',
           )}
@@ -117,7 +117,7 @@ export function ListItem({
         {subtitle && (
           <Text
             className={cn(
-              'text-sm text-on-surface-secondary',
+              'font-body text-sm text-on-surface-secondary',
               size === 'sm' && 'text-xs',
             )}
             numberOfLines={subtitleLines}

@@ -63,7 +63,7 @@ export function PreviewPanel({ className, showFrame = true }: PreviewPanelProps)
         leading={
           opts.menuLayout === 'hamburger' ? (
             <Pressable className="w-9 h-9 items-center justify-center rounded-full active:bg-surface-secondary">
-              <Text className="text-on-surface-secondary text-lg">☰</Text>
+              <Text className="font-body text-on-surface-secondary text-lg">☰</Text>
             </Pressable>
           ) : undefined
         }
@@ -103,8 +103,8 @@ export function PreviewPanel({ className, showFrame = true }: PreviewPanelProps)
             />
             {/* Text content */}
             <View style={{ padding: tokens.space[1], gap: tokens.space[0] }}>
-              <Text className="text-base font-bold text-on-surface">Featured Today</Text>
-              <Text className="text-sm text-on-surface-secondary">
+              <Text className="font-body text-base font-bold text-on-surface">Featured Today</Text>
+              <Text className="font-body text-sm text-on-surface-secondary">
                 Discover what's trending in your community
               </Text>
               <Pressable
@@ -115,7 +115,7 @@ export function PreviewPanel({ className, showFrame = true }: PreviewPanelProps)
                   marginTop: tokens.space[0] / 2,
                 }}
               >
-                <Text className="text-sm font-medium text-white">Explore Now</Text>
+                <Text className="font-body text-sm font-medium text-white">Explore Now</Text>
               </Pressable>
             </View>
           </View>
@@ -152,13 +152,13 @@ export function PreviewPanel({ className, showFrame = true }: PreviewPanelProps)
         <View style={{ paddingTop: tokens.space[2] }}>
           <View className="flex-row justify-around mb-[-24px]">
             <View className="w-[84px] h-[84px] rounded-full border border-border items-center pt-4 bg-surface shadow-sm" style={{ borderWidth: 1 }}>
-              <Text className="text-2xl text-on-surface">〽</Text>
+              <Text className="font-body text-2xl text-on-surface">〽</Text>
             </View>
             <View className="w-[84px] h-[84px] rounded-full border border-border items-center pt-4 bg-surface shadow-sm" style={{ borderWidth: 1 }}>
-              <Text className="text-2xl text-on-surface">♡</Text>
+              <Text className="font-body text-2xl text-on-surface">♡</Text>
             </View>
             <View className="w-[84px] h-[84px] rounded-full border border-border items-center pt-4 bg-surface shadow-sm" style={{ borderWidth: 1 }}>
-              <Text className="text-2xl text-on-surface">◷</Text>
+              <Text className="font-body text-2xl text-on-surface">◷</Text>
             </View>
           </View>
         </View>
@@ -188,10 +188,10 @@ export function PreviewPanel({ className, showFrame = true }: PreviewPanelProps)
 
   if (showFrame) {
     return (
-      <View className={cn('flex-1 items-center justify-center bg-surface p-8', className)}>
+      <View className={cn('flex-1 items-center justify-center bg-surface py-6 px-4', className)}>
         {/* Phone frame */}
         <View
-          className="w-[320px] h-[640px] rounded-[32px] overflow-hidden bg-surface"
+          className="w-[375px] h-[765px] rounded-[32px] overflow-hidden bg-surface"
           style={{
             maxHeight: '90%',
             borderWidth: 1.5,
@@ -207,7 +207,7 @@ export function PreviewPanel({ className, showFrame = true }: PreviewPanelProps)
           <View
             className="h-10 bg-surface flex-row items-center justify-between px-4"
           >
-            <Text className="text-xs font-semibold text-on-surface">9:41</Text>
+            <Text className="font-body text-xs font-semibold text-on-surface">9:41</Text>
             <View className="flex-row items-center gap-1.5">
               {/* Signal bars */}
               <View className="flex-row items-end gap-[1px]">

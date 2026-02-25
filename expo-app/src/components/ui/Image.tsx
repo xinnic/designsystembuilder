@@ -147,8 +147,8 @@ export function Image({
         <View className="absolute inset-0 items-center justify-center bg-surface-secondary">
           {errorFallback || (
             <View className="items-center gap-2">
-              <Text className="text-2xl text-on-surface-secondary">🖼️</Text>
-              <Text className="text-xs text-on-surface-secondary">
+              <Text className="font-body text-2xl text-on-surface-secondary">🖼️</Text>
+              <Text className="font-body text-xs text-on-surface-secondary">
                 Failed to load
               </Text>
             </View>

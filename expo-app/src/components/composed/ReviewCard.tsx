@@ -51,7 +51,7 @@ function StarRating({ rating, size = 'md' }: StarRatingProps) {
   return (
     <View className="flex-row gap-0.5">
       {stars.map((star, index) => (
-        <Text key={index} className={cn('text-yellow-500', sizeClass)}>
+        <Text key={index} className={cn('font-body text-yellow-500', sizeClass)}>
           {star}
         </Text>
       ))}
@@ -116,7 +116,7 @@ export function ReviewCard({
             {avatar && <Avatar src={avatar} initials={author} size="sm" />}
             <View className="flex-1">
               <View className="flex-row items-center gap-2">
-                <Text className="text-sm font-semibold text-on-surface">
+                <Text className="font-body text-sm font-semibold text-on-surface">
                   {author}
                 </Text>
                 {verified && (
@@ -124,12 +124,12 @@ export function ReviewCard({
                     variant="icon"
                     color="success"
                     size="sm"
-                    icon={<Text className="text-white text-xs">✓</Text>}
+                    icon={<Text className="font-body text-white text-xs">✓</Text>}
                   />
                 )}
               </View>
               {date && (
-                <Text className="text-xs text-on-surface-secondary">
+                <Text className="font-body text-xs text-on-surface-secondary">
                   {date}
                 </Text>
               )}
@@ -141,7 +141,7 @@ export function ReviewCard({
 
         {/* Title */}
         {title && (
-          <Text className="text-base font-semibold text-on-surface">
+          <Text className="font-body text-base font-semibold text-on-surface">
             {title}
           </Text>
         )}
@@ -149,14 +149,14 @@ export function ReviewCard({
         {/* Review text */}
         <View>
           <Text
-            className="text-sm text-on-surface-secondary"
+            className="font-body text-sm text-on-surface-secondary"
             numberOfLines={expanded ? undefined : reviewLines}
           >
             {review}
           </Text>
           {review.length > 200 && (
             <Pressable onPress={() => setExpanded(!expanded)}>
-              <Text className="text-sm text-brand-500 font-medium mt-1">
+              <Text className="font-body text-sm text-brand-500 font-medium mt-1">
                 {expanded ? 'Show less' : 'Read more'}
               </Text>
             </Pressable>
@@ -171,14 +171,14 @@ export function ReviewCard({
                 onPress={onHelpful}
                 className="flex-row items-center gap-1 px-3 py-1.5 rounded-full bg-surface-secondary active:bg-border"
               >
-                <Text className="text-sm">👍</Text>
-                <Text className="text-sm font-medium text-on-surface">
+                <Text className="font-body text-sm">👍</Text>
+                <Text className="font-body text-sm font-medium text-on-surface">
                   Helpful
                 </Text>
               </Pressable>
             )}
             {helpfulCount !== undefined && helpfulCount > 0 && (
-              <Text className="text-xs text-on-surface-secondary">
+              <Text className="font-body text-xs text-on-surface-secondary">
                 {helpfulCount} {helpfulCount === 1 ? 'person' : 'people'} found
                 this helpful
               </Text>

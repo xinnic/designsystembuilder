@@ -91,7 +91,7 @@ export function Card({
           )}
         >
           {typeof header === 'string' ? (
-            <Text className="text-lg font-semibold text-on-surface">
+            <Text className="font-body text-lg font-semibold text-on-surface">
               {header}
             </Text>
           ) : (

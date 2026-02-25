@@ -85,7 +85,7 @@ export function AppBar({
       <View className="flex-1">
         {typeof title === 'string' ? (
           <Text
-            className="text-lg font-semibold text-on-surface"
+            className="font-body text-lg font-semibold text-on-surface"
             numberOfLines={1}
           >
             {title}

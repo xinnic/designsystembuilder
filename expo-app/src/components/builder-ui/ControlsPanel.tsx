@@ -368,7 +368,7 @@ export function ControlsPanel({ className }: ControlsPanelProps) {
               <HStack gap="sm">
                 <OptionCard
                   customContent={
-                    <Text className="text-lg font-bold text-on-surface">Aa</Text>
+                    <Text className="font-body text-lg font-bold text-on-surface">Aa</Text>
                   }
                   label="Small"
                   isSelected={selectedScale === 'small'}

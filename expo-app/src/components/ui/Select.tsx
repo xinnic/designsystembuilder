@@ -152,9 +152,9 @@ export function Select({
   return (
     <View className={cn('gap-1.5', className)}>
       {/* Label */}
-      {label && (
-        <Text className="text-sm font-medium text-on-surface">{label}</Text>
-      )}
+      {label ? (
+        <Text className="font-body text-sm font-medium text-on-surface">{label}</Text>
+      ) : null}
 
       {/* Trigger */}
       <Pressable
@@ -176,7 +176,7 @@ export function Select({
       >
         <Text
           className={cn(
-            'flex-1',
+            'font-body flex-1',
             selectedOption
               ? 'text-on-surface font-medium'
               : 'text-on-surface-secondary',
@@ -191,9 +191,9 @@ export function Select({
 
       {/* Error / Helper */}
       {error ? (
-        <Text className="text-xs text-red-500">{error}</Text>
+        <Text className="font-body text-xs text-red-500">{error}</Text>
       ) : helperText ? (
-        <Text className="text-xs text-on-surface-secondary">{helperText}</Text>
+        <Text className="font-body text-xs text-on-surface-secondary">{helperText}</Text>
       ) : null}
 
       {/* Dropdown / Bottom Sheet */}
@@ -243,7 +243,7 @@ export function Select({
                   </View>
                   {/* Title */}
                   {label && (
-                    <Text className="text-base font-semibold text-on-surface px-4 pb-2">
+                    <Text className="font-body text-base font-semibold text-on-surface px-4 pb-2">
                       {label}
                     </Text>
                   )}
@@ -296,7 +296,7 @@ function OptionItem({
     >
       <Text
         className={cn(
-          'text-base',
+          'font-body text-base',
           selected ? 'text-brand-500 font-medium' : 'text-on-surface',
         )}
       >

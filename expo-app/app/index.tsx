@@ -32,22 +32,28 @@ export default function BuilderScreen() {
   if (isWide) {
     return (
       <SafeAreaView className="flex-1 bg-canvas flex-row" edges={['top']}>
-        {/* 3-panel layout — left 300px, middle flex-1, right flex-[1.2] or similar */}
-        <ControlsPanel className="w-[300px] border-r border-border" />
+        {/* 3-panel layout */}
+        <ControlsPanel className="w-[360px] border-r border-border shrink-0" />
 
         {/* Middle + Right panels with shared header */}
-        <View className="flex-1 flex-col">
+        <View className="flex-1 flex-col overflow-hidden">
           {/* Generate Megaprompt button spanning both middle and right */}
           <View className="px-4 py-2 border-b border-border flex-row justify-end items-center bg-surface">
-            <Button variant="outline" size="sm" onPress={() => setExportOpen(true)} className="gap-2 shrink-0">
-              <Text className="font-body text-on-surface">⎘</Text> Generate Megaprompt
+            <Button
+              variant="outline"
+              size="sm"
+              onPress={() => setExportOpen(true)}
+              className="gap-2 shrink-0"
+              icon={<Text className="font-body text-on-surface">⎘</Text>}
+            >
+              Generate Megaprompt
             </Button>
           </View>
 
           {/* Middle and Right panels row */}
           <View className="flex-1 flex-row">
-            <PreviewPanel className="w-[400px]" showFrame />
-            <ShowcasePanel className="flex-1 border-l border-border bg-surface" />
+            <PreviewPanel className="w-[420px] shrink-0" showFrame />
+            <ShowcasePanel className="flex-1 border-l border-border bg-surface overflow-hidden" />
           </View>
         </View>
 

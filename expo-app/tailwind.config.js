@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     './App.tsx',
     './app/**/*.{js,jsx,ts,tsx}',
@@ -52,8 +53,38 @@ module.exports = {
         },
       },
       fontFamily: {
-        body: ['var(--font-body)'],
-        display: ['var(--font-display)'],
+        // Define all fonts directly so NativeWind can compile them properly
+        satoshi: ['Satoshi', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        jakarta: ['Plus Jakarta Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        vietnam: ['Be Vietnam Pro', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        wix: ['Wix Madefor Text', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        figtree: ['Figtree', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        albert: ['Albert Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        epilogue: ['Epilogue', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        manrope: ['Manrope', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        public: ['Public Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        space: ['Space Grotesk', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        work: ['Work Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        'source-sans': ['Source Sans 3', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        nunito: ['Nunito Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        arimo: ['Arimo', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        hanken: ['Hanken Grotesk', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        rubik: ['Rubik', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        dm: ['DM Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        ibm: ['IBM Plex Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sora: ['Sora', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        newsreader: ['Newsreader', 'ui-serif', 'serif'],
+        noto: ['Noto Serif', 'ui-serif', 'serif'],
+        domine: ['Domine', 'ui-serif', 'serif'],
+        libre: ['Libre Caslon Text', 'ui-serif', 'serif'],
+        garamond: ['EB Garamond', 'ui-serif', 'serif'],
+        literata: ['Literata', 'ui-serif', 'serif'],
+        'source-serif': ['Source Serif 4', 'ui-serif', 'serif'],
+        montserrat: ['Montserrat', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+
+        // Default mappings
+        body: ['Satoshi', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['Satoshi', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         sm: 'var(--radius-sm)',

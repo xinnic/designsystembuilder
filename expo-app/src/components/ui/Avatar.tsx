@@ -42,7 +42,7 @@ const avatarVariants = cva(
   },
 );
 
-const avatarTextVariants = cva('text-white font-semibold', {
+const avatarTextVariants = cva('font-body text-white font-semibold', {
   variants: {
     size: {
       xs: 'text-xs',

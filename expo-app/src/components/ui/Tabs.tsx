@@ -119,7 +119,7 @@ const tabItemVariants = cva(
 // Tab text variants
 // ---------------------------------------------------------------------------
 
-const tabTextVariants = cva('font-medium', {
+const tabTextVariants = cva('font-body font-medium', {
   variants: {
     variant: {
       underline: '',

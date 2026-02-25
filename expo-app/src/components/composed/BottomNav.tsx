@@ -78,7 +78,7 @@ const bottomNavIconVariants = cva(
   },
 );
 
-const bottomNavLabelVariants = cva('text-[11px] font-medium', {
+const bottomNavLabelVariants = cva('font-body text-[11px] font-medium', {
   variants: {
     active: {
       true: 'text-brand-500',

@@ -52,7 +52,7 @@ const actionItemVariants = cva(
   },
 );
 
-const actionTextVariants = cva('text-base font-medium', {
+const actionTextVariants = cva('font-body text-base font-medium', {
   variants: {
     destructive: {
       true: 'text-red-500',
@@ -153,12 +153,12 @@ export function ActionSheet({
           {(title || description) && (
             <View className="px-5 pb-3 gap-1">
               {title && (
-                <Text className="text-base font-semibold text-on-surface text-center">
+                <Text className="font-body text-base font-semibold text-on-surface text-center">
                   {title}
                 </Text>
               )}
               {description && (
-                <Text className="text-sm text-on-surface-secondary text-center">
+                <Text className="font-body text-sm text-on-surface-secondary text-center">
                   {description}
                 </Text>
               )}
@@ -209,7 +209,7 @@ export function ActionSheet({
                 accessibilityRole="button"
                 accessibilityLabel={cancelLabel}
               >
-                <Text className="text-base font-semibold text-brand-500">
+                <Text className="font-body text-base font-semibold text-brand-500">
                   {cancelLabel}
                 </Text>
               </Pressable>

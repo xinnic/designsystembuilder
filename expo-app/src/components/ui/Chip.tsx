@@ -75,7 +75,7 @@ const chipVariants = cva(
   },
 );
 
-const chipTextVariants = cva('font-medium', {
+const chipTextVariants = cva('font-body font-medium', {
   variants: {
     variant: {
       filled: '',
@@ -159,7 +159,7 @@ function DeleteButton({ onPress, size }: { onPress: () => void; size: 'sm' | 'md
       accessibilityRole="button"
       accessibilityLabel="Delete"
     >
-      <Text className="text-xs leading-none">✕</Text>
+      <Text className="font-body text-xs leading-none">✕</Text>
     </Pressable>
   );
 }

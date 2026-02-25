@@ -9,6 +9,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  *,
+  body,
+  input,
+  textarea,
+  select,
+  button {
+    font-family: var(--font-body) !important;
+  }
+}
+
 :root {
   /* Brand colors — populated at runtime by useTokenSystem */
   --color-brand-50: oklch(0.97 0.01 250);
@@ -55,8 +66,8 @@
   --radius-xl: 16px;
 
   /* Fonts */
-  --font-body: 'System';
-  --font-display: 'System';
+  --font-body: Satoshi, ui-sans-serif, system-ui, sans-serif;
+  --font-display: Satoshi, ui-sans-serif, system-ui, sans-serif;
 }
 
 .dark {

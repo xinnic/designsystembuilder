@@ -65,7 +65,7 @@ function CloseButton({ onPress }: { onPress: () => void }) {
       accessibilityRole="button"
       accessibilityLabel="Close dialog"
     >
-      <Text className="text-on-surface-secondary text-lg leading-none">✕</Text>
+      <Text className="font-body text-on-surface-secondary text-lg leading-none">✕</Text>
     </Pressable>
   );
 }
@@ -143,12 +143,12 @@ export function Dialog({
               <View className="flex-row items-start justify-between px-5 pt-5 pb-2">
                 <View className="flex-1 pr-2">
                   {title && (
-                    <Text className="text-lg font-semibold text-on-surface">
+                    <Text className="font-body text-lg font-semibold text-on-surface">
                       {title}
                     </Text>
                   )}
                   {description && (
-                    <Text className="text-sm text-on-surface-secondary mt-1">
+                    <Text className="font-body text-sm text-on-surface-secondary mt-1">
                       {description}
                     </Text>
                   )}

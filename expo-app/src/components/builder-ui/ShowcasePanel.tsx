@@ -5,8 +5,8 @@
  * Phase 1E.2: Full parity with old Tamagui builder.
  */
 
-import React, { useState } from 'react';
-import { View, Text, ScrollView, Pressable } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, ScrollView, Pressable, Animated, Platform } from 'react-native';
 import { cn } from '@/lib/utils';
 import { useDesignSystem } from '../../state/designSystem';
 import { Tabs } from '../ui/Tabs';
@@ -62,6 +62,166 @@ function SectionHeader({ title, description, icon }: { title: string; descriptio
       )}
     </VStack>
   );
+}
+
+// Easing Curve Visualization Component
+function EasingCurveDemo({ easing, duration }: { easing: string; duration: number }) {
+  const animatedValue = useRef(new Animated.Value(0)).current;
+  const { isDarkMode, tokens } = useDesignSystem();
+
+  useEffect(() => {
+    const animate = () => {
+      animatedValue.setValue(0);
+      Animated.timing(animatedValue, {
+        toValue: 1,
+        duration: duration,
+        useNativeDriver: true,
+      }).start(() => {
+        setTimeout(animate, 500);
+      });
+    };
+    animate();
+  }, [duration, animatedValue]);
+
+  // Parse cubic-bezier values from easing string
+  const parseCubicBezier = (easingStr: string) => {
+    const match = easingStr.match(/cubic-bezier\(([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+)\)/);
+    if (match) {
+      return {
+        x1: parseFloat(match[1]),
+        y1: parseFloat(match[2]),
+        x2: parseFloat(match[3]),
+        y2: parseFloat(match[4]),
+      };
+    }
+    return { x1: 0.4, y1: 0, x2: 0.2, y2: 1 }; // default
+  };
+
+  const { x1, y1, x2, y2 } = parseCubicBezier(easing);
+
+  // SVG dimensions
+  const width = 200;
+  const height = 120;
+  const padding = 20;
+  const graphWidth = width - padding * 2;
+  const graphHeight = height - padding * 2;
+
+  // Scale control points to graph dimensions
+  const cp1x = padding + x1 * graphWidth;
+  const cp1y = padding + graphHeight - y1 * graphHeight;
+  const cp2x = padding + x2 * graphWidth;
+  const cp2y = padding + graphHeight - y2 * graphHeight;
+
+  // Start and end points
+  const startX = padding;
+  const startY = padding + graphHeight;
+  const endX = padding + graphWidth;
+  const endY = padding;
+
+  // Create SVG path for the cubic bezier curve
+  const curvePath = `M ${startX} ${startY} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${endX} ${endY}`;
+
+  // Animate dot position along the curve
+  const dotX = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [startX, endX],
+  });
+
+  // For Y position, we need to approximate the bezier curve
+  // Simple approximation: linear interpolation (actual bezier would be more complex)
+  const dotY = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [startY, endY],
+  });
+
+  const strokeColor = isDarkMode ? '#e1e1e1' : '#1a1a1a';
+  const gridColor = isDarkMode ? '#374151' : '#e5e7eb';
+
+  if (Platform.OS !== 'web') {
+    return (
+      <View className="h-[120px] bg-surface-secondary rounded items-center justify-center">
+        <Caption className="text-on-surface-secondary">Curve demo available on web</Caption>
+      </View>
+    );
+  }
+
+  return (
+    <View className="h-[120px] bg-surface-secondary rounded items-center justify-center">
+      <svg width={width} height={height} style={{ overflow: 'visible' }}>
+        {/* Grid lines */}
+        <line
+          x1={padding}
+          y1={padding + graphHeight}
+          x2={padding + graphWidth}
+          y2={padding + graphHeight}
+          stroke={gridColor}
+          strokeWidth="1"
+        />
+        <line
+          x1={padding}
+          y1={padding}
+          x2={padding}
+          y2={padding + graphHeight}
+          stroke={gridColor}
+          strokeWidth="1"
+        />
+
+        {/* Bezier curve */}
+        <path d={curvePath} stroke={strokeColor} strokeWidth="2" fill="none" />
+
+        {/* Control points (optional, for visualization) */}
+        <circle cx={cp1x} cy={cp1y} r="3" fill={gridColor} opacity="0.5" />
+        <circle cx={cp2x} cy={cp2y} r="3" fill={gridColor} opacity="0.5" />
+
+        {/* Start and end points */}
+        <circle cx={startX} cy={startY} r="3" fill={strokeColor} />
+        <circle cx={endX} cy={endY} r="3" fill={strokeColor} />
+      </svg>
+
+      {/* Animated dot */}
+      <Animated.View
+        style={{
+          position: 'absolute',
+          width: 8,
+          height: 8,
+          borderRadius: 4,
+          backgroundColor: `rgb(${tokens.brand})`,
+          transform: [
+            { translateX: Animated.subtract(dotX, width / 2) },
+            { translateY: Animated.subtract(dotY, height / 2) },
+          ],
+        }}
+      />
+    </View>
+  );
+}
+
+// Haptic feedback utility
+function triggerHaptic(type: 'light' | 'medium' | 'success' | 'error') {
+  if (Platform.OS === 'web') {
+    // Web Vibration API
+    if ('vibrate' in navigator) {
+      switch (type) {
+        case 'light':
+          navigator.vibrate(10);
+          break;
+        case 'medium':
+          navigator.vibrate(20);
+          break;
+        case 'success':
+          navigator.vibrate([10, 50, 10]);
+          break;
+        case 'error':
+          navigator.vibrate([20, 30, 20, 30, 20]);
+          break;
+      }
+    }
+  } else {
+    // React Native Haptics would go here
+    // import * as Haptics from 'expo-haptics';
+    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    console.log(`Haptic: ${type}`);
+  }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -281,7 +441,7 @@ function AtomShowcase() {
           title="Motion"
           description="How fast and smooth UI moves. All demos use your duration and easing tokens."
         />
-        <VStack gap="sm" className="bg-surface-secondary rounded-lg p-4">
+        <VStack gap="sm" className="bg-surface rounded-lg p-4">
           <HStack gap="md" className="flex-wrap">
             <VStack gap="xs" className="items-center">
               <View className="w-16 h-16 bg-brand-500 rounded-full items-center justify-center">
@@ -302,9 +462,21 @@ function AtomShowcase() {
               <Caption>{tokens.motion.slow}</Caption>
             </VStack>
           </HStack>
-          <Caption className="text-on-surface-secondary">
-            Easing: {tokens.motion.easeStandard}
-          </Caption>
+
+          {/* Easing Curve Visualization */}
+          <VStack gap="xs" className="mt-4">
+            <Caption className="font-medium">Easing Curve</Caption>
+            <Caption className="text-on-surface-secondary">
+              {tokens.motion.easeStandard}
+            </Caption>
+            <Caption className="text-on-surface-secondary text-xs">
+              Animation uses --motion-base ({tokens.motion.base})
+            </Caption>
+            <EasingCurveDemo
+              easing={tokens.motion.easeStandard}
+              duration={parseInt(tokens.motion.base)}
+            />
+          </VStack>
         </VStack>
       </View>
 
@@ -314,12 +486,53 @@ function AtomShowcase() {
           title="Haptics"
           description="Short tactile vibrations that reinforce interactions for touch devices."
         />
-        <VStack gap="md" className="bg-surface-secondary rounded-lg p-4">
+        <VStack gap="md" className="bg-surface rounded-lg p-4">
           <Switch
             label="Haptics Enabled"
             value={haptics.enabled}
             onValueChange={(val) => setHaptics({ enabled: val })}
           />
+
+          {/* Haptic Demo Buttons */}
+          <VStack gap="sm">
+            <Caption className="font-medium">Try Different Haptics</Caption>
+            <HStack gap="sm" className="flex-wrap">
+              <Button
+                variant="ghost"
+                size="sm"
+                onPress={() => haptics.enabled && triggerHaptic('light')}
+              >
+                <Text className="font-body text-on-surface text-xs">Play Light (Menu Tap)</Text>
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onPress={() => haptics.enabled && triggerHaptic('medium')}
+              >
+                <Text className="font-body text-on-surface text-xs">Play Medium (Primary Action)</Text>
+              </Button>
+            </HStack>
+            <HStack gap="sm" className="flex-wrap">
+              <Button
+                variant="ghost"
+                size="sm"
+                onPress={() => haptics.enabled && triggerHaptic('success')}
+              >
+                <Text className="font-body text-on-surface text-xs">Play Success</Text>
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onPress={() => haptics.enabled && triggerHaptic('error')}
+              >
+                <Text className="font-body text-on-surface text-xs">Play Error</Text>
+              </Button>
+            </HStack>
+            <Caption className="text-on-surface-secondary text-xs italic">
+              If unsupported (e.g., many desktop browsers), this becomes a no-op.
+            </Caption>
+          </VStack>
+
           <VStack gap="xs">
             <Caption className="font-medium">Platform</Caption>
             <Caption className="text-on-surface-secondary">{haptics.stack}</Caption>
@@ -500,28 +713,28 @@ function ComponentShowcase() {
         <SectionHeader title="List Items" description="Navigation and settings rows" />
         <List dividers>
           <ListItem
-            leading={<Text className="text-lg">📧</Text>}
+            leading={<Text className="font-body text-lg">📧</Text>}
             title="Email Notifications"
             subtitle="Receive email for new messages"
-            trailing={<Text className="text-on-surface-secondary">›</Text>}
+            trailing={<Text className="font-body text-on-surface-secondary">›</Text>}
           />
           <ListItem
-            leading={<Text className="text-lg">🔔</Text>}
+            leading={<Text className="font-body text-lg">🔔</Text>}
             title="Push Notifications"
             subtitle="Get notified on your device"
-            trailing={<Text className="text-on-surface-secondary">›</Text>}
+            trailing={<Text className="font-body text-on-surface-secondary">›</Text>}
           />
           <ListItem
-            leading={<Text className="text-lg">🌐</Text>}
+            leading={<Text className="font-body text-lg">🌐</Text>}
             title="Language"
             subtitle="English (US)"
-            trailing={<Text className="text-on-surface-secondary">›</Text>}
+            trailing={<Text className="font-body text-on-surface-secondary">›</Text>}
           />
           <ListItem
-            leading={<Text className="text-lg">🎨</Text>}
+            leading={<Text className="font-body text-lg">🎨</Text>}
             title="Appearance"
             subtitle="Light mode"
-            trailing={<Text className="text-on-surface-secondary">›</Text>}
+            trailing={<Text className="font-body text-on-surface-secondary">›</Text>}
           />
         </List>
       </View>
@@ -715,7 +928,7 @@ function PatternsShowcase() {
           {['Design', 'Code', 'Ship', 'Scale'].map((item) => (
             <Card key={item} variant="outlined" className="w-[48%]">
               <VStack gap="xs" className="items-center py-2">
-                <Text className="text-2xl">
+                <Text className="font-body text-2xl">
                   {item === 'Design' ? '🎨' : item === 'Code' ? '💻' : item === 'Ship' ? '🚀' : '📈'}
                 </Text>
                 <Body className="font-semibold">{item}</Body>

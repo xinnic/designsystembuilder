@@ -35,11 +35,11 @@ function CodeBlock({ title, code }: { title: string; code: string }) {
   return (
     <VStack gap="sm" className="mb-4">
       <HStack className="items-center justify-between">
-        <Text className="text-xs font-semibold text-on-surface-secondary uppercase tracking-wide">
+        <Text className="font-body text-xs font-semibold text-on-surface-secondary uppercase tracking-wide">
           {title}
         </Text>
         <Pressable onPress={handleCopy}>
-          <Text className="text-xs text-brand-500 font-medium">
+          <Text className="font-body text-xs text-brand-500 font-medium">
             {copied ? 'Copied!' : 'Copy'}
           </Text>
         </Pressable>
@@ -49,7 +49,7 @@ function CodeBlock({ title, code }: { title: string; code: string }) {
         className="bg-on-surface/5 rounded-lg p-3"
       >
         <Text
-          className="text-xs text-on-surface"
+          className="font-body text-xs text-on-surface"
           style={{ fontFamily: Platform.OS === 'web' ? 'monospace' : 'Courier' }}
         >
           {code}

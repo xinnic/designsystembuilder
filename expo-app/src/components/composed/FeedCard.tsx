@@ -115,7 +115,7 @@ export function FeedCard({
             {author.avatar && (
               <Avatar src={author.avatar} initials={author.name} size="sm" />
             )}
-            <Text className="text-sm font-medium text-on-surface">
+            <Text className="font-body text-sm font-medium text-on-surface">
               {author.name}
             </Text>
           </View>
@@ -124,7 +124,7 @@ export function FeedCard({
         {/* Title */}
         <Text
           className={cn(
-            'font-semibold text-on-surface',
+            'font-body font-semibold text-on-surface',
             isHero ? 'text-2xl' : 'text-lg',
           )}
           numberOfLines={2}
@@ -134,7 +134,7 @@ export function FeedCard({
 
         {/* Subtitle */}
         {subtitle && (
-          <Text className="text-sm text-on-surface-secondary" numberOfLines={1}>
+          <Text className="font-body text-sm text-on-surface-secondary" numberOfLines={1}>
             {subtitle}
           </Text>
         )}
@@ -142,7 +142,7 @@ export function FeedCard({
         {/* Description */}
         {description && !isHorizontal && (
           <Text
-            className="text-sm text-on-surface-secondary"
+            className="font-body text-sm text-on-surface-secondary"
             numberOfLines={descriptionLines}
           >
             {description}

@@ -96,7 +96,7 @@ export function UserCard({
       >
         <Text
           className={cn(
-            'font-semibold text-on-surface',
+            'font-body font-semibold text-on-surface',
             isVertical ? 'text-center text-lg' : 'text-base',
           )}
         >
@@ -105,7 +105,7 @@ export function UserCard({
         {role && (
           <Text
             className={cn(
-              'text-on-surface-secondary',
+              'font-body text-on-surface-secondary',
               isVertical ? 'text-center text-sm' : 'text-xs',
             )}
           >
@@ -115,7 +115,7 @@ export function UserCard({
         {description && (
           <Text
             className={cn(
-              'text-on-surface-secondary',
+              'font-body text-on-surface-secondary',
               isVertical ? 'text-center text-sm' : 'text-xs',
             )}
             numberOfLines={2}

@@ -81,7 +81,7 @@ const inputContainerVariants = cva(
   },
 );
 
-const inputTextVariants = cva('flex-1 text-on-surface', {
+const inputTextVariants = cva('font-body flex-1 text-on-surface', {
   variants: {
     size: {
       sm: 'text-sm py-1.5',
@@ -146,11 +146,11 @@ export function Input({
   return (
     <View className={cn('gap-1.5', className)}>
       {/* Label */}
-      {label && (
-        <Text className="text-sm font-medium text-on-surface">
+      {label ? (
+        <Text className="font-body text-sm font-medium text-on-surface">
           {label}
         </Text>
-      )}
+      ) : null}
 
       {/* Input Container */}
       <View
@@ -187,9 +187,9 @@ export function Input({
 
       {/* Error / Helper */}
       {error ? (
-        <Text className="text-xs text-red-500">{error}</Text>
+        <Text className="font-body text-xs text-red-500">{error}</Text>
       ) : helperText ? (
-        <Text className="text-xs text-on-surface-secondary">{helperText}</Text>
+        <Text className="font-body text-xs text-on-surface-secondary">{helperText}</Text>
       ) : null}
     </View>
   );

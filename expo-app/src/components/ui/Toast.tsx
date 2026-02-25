@@ -43,7 +43,7 @@ const toastVariants = cva(
   },
 );
 
-const toastTextVariants = cva('', {
+const toastTextVariants = cva('font-body', {
   variants: {
     variant: {
       default: 'text-on-surface',
@@ -221,10 +221,10 @@ export function ToastManager({ toasts, onDismiss }: ToastManagerProps) {
 // ---------------------------------------------------------------------------
 
 export const ToastIcons = {
-  success: <Text className="text-lg leading-none">✓</Text>,
-  warning: <Text className="text-lg leading-none">⚠</Text>,
-  error: <Text className="text-lg leading-none">✕</Text>,
-  info: <Text className="text-lg leading-none">ℹ</Text>,
+  success: <Text className="font-body text-lg leading-none">✓</Text>,
+  warning: <Text className="font-body text-lg leading-none">⚠</Text>,
+  error: <Text className="font-body text-lg leading-none">✕</Text>,
+  info: <Text className="font-body text-lg leading-none">ℹ</Text>,
 };
 
 // ---------------------------------------------------------------------------

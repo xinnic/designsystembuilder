@@ -93,7 +93,7 @@ export function StatsCard({
         <View className={cn(isHorizontal && 'flex-row items-baseline gap-2')}>
           <Text
             className={cn(
-              'font-bold text-on-surface',
+              'font-body font-bold text-on-surface',
               isCompact ? 'text-2xl' : 'text-3xl',
             )}
           >
@@ -101,7 +101,7 @@ export function StatsCard({
           </Text>
           <Text
             className={cn(
-              'text-on-surface-secondary',
+              'font-body text-on-surface-secondary',
               isCompact ? 'text-xs' : 'text-sm',
             )}
           >
@@ -114,7 +114,7 @@ export function StatsCard({
           <View className="flex-row items-center gap-1">
             <Text
               className={cn(
-                'text-xs font-semibold',
+                'font-body text-xs font-semibold',
                 trendDirection === 'up' && 'text-green-500',
                 trendDirection === 'down' && 'text-red-500',
                 !trendDirection && 'text-on-surface-secondary',
@@ -124,7 +124,7 @@ export function StatsCard({
               {trendDirection === 'down' && '↓ '}
               {trend}
             </Text>
-            <Text className="text-xs text-on-surface-secondary">
+            <Text className="font-body text-xs text-on-surface-secondary">
               vs last period
             </Text>
           </View>

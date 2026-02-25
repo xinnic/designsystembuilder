@@ -78,12 +78,12 @@ export function SettingsGroup({
       {(title || description) && (
         <View className="px-4 gap-1">
           {title && (
-            <Text className="text-xs font-semibold text-on-surface-secondary uppercase tracking-wide">
+            <Text className="font-body text-xs font-semibold text-on-surface-secondary uppercase tracking-wide">
               {title}
             </Text>
           )}
           {description && (
-            <Text className="text-sm text-on-surface-secondary">
+            <Text className="font-body text-sm text-on-surface-secondary">
               {description}
             </Text>
           )}

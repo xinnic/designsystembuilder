@@ -66,7 +66,7 @@ const badgeVariants = cva('items-center justify-center', {
   },
 });
 
-const badgeTextVariants = cva('font-bold text-white leading-none', {
+const badgeTextVariants = cva('font-body font-bold text-white leading-none', {
   variants: {
     size: {
       sm: 'text-xs',

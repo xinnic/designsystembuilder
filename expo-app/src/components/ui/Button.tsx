@@ -60,7 +60,7 @@ const buttonVariants = cva(
   },
 );
 
-const buttonTextVariants = cva('font-semibold text-center', {
+const buttonTextVariants = cva('font-body font-semibold text-center', {
   variants: {
     variant: {
       primary: 'text-white',

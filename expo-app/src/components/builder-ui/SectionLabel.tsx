@@ -32,7 +32,7 @@ export function SectionLabel({ title, description, className }: SectionLabelProp
       >
         {title}
       </Text>
-      {description && (
+      {description ? (
         <Text
           className="font-body text-on-surface mt-1"
           style={{
@@ -43,7 +43,7 @@ export function SectionLabel({ title, description, className }: SectionLabelProp
         >
           {description}
         </Text>
-      )}
+      ) : null}
     </View>
   );
 }
