@@ -23,7 +23,7 @@ I designed the flow, the token schema, and the megaprompt format, then directed 
 - **The prompt is the export format.** Most design system tools export code. Exported code rots the moment you touch it. A spec the agent regenerates from doesn't. That call shaped everything else.
 - **Two builds live in this repo.** `expo-app/` is the current version (Expo + NativeWind + Zustand, targeting React Native for web, iOS, and Android). `tamagui builder/` is the earlier Tamagui-based web version, archived in place because the token architecture docs still reference it and the test suites there document what parity meant.
 - **Rebuilt instead of patched.** The Tamagui version reached visual parity and then I moved the whole thing to Expo + NativeWind anyway (see the migration docs in `docs/`). Slower, but the token system came out cleaner the second time.
-- **It never shipped.** No public release. That lesson changed how I build: the next project wasn't an app at all, just the core logic packaged so real people could test it the same week.
+- **Still in progress.** No public release yet; I demo it at meetups and to startup founders to make the next iteration useful.
 
 ## Running it
 
