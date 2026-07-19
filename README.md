@@ -1,219 +1,48 @@
-# React Native Design System Builder with Tamagui
+# Design system builder
 
-**The ONLY comprehensive React Native design system generator for Web, iOS, and Android**
+Pick fonts, colors, and component styling; it generates an agent-readable design system prompt with tokens and components. Tokens in, agent-ready prompt out.
 
-Build production-ready, cross-platform design systems with a visual interface. Generate complete React Native code using Tamagui that works seamlessly across all platforms.
+I built this because design intent gets lost the moment you hand work to a coding agent. A design system that lives in Figma is invisible to the agent touching your files. So the builder turns your choices into a megaprompt: a spec an agent can actually read and build from. I describe intent, it touches the files.
 
-## 🚀 Features
+## How it works
 
-### Visual Design System Builder
-- **Live Preview**: See your design system in action with real React Native components
-- **Dual Font System**: Separate Primary (body) and Display (headings) font selections
-- **27+ Professional Fonts**: Curated collection including Plus Jakarta Sans, Inter, Satoshi, and more
-- **Color Theming**: 18 pre-built color themes with custom color support
-- **Typography Scales**: Small, Regular, and Large scale systems
-- **Dark Mode**: Instant dark/light theme switching
-- **Style Presets**: Modern, Classic, and Experimental design foundations
+1. Choose colors: pre-built themes or custom
+2. Pick typography: a primary font for body/UI, a display font for headings, and a scale
+3. Configure components: menu layout, card styles, input variants, logo
+4. Preview the result live in the phone mock
+5. Generate the megaprompt and paste it into your agent (I use Claude)
 
-### React Native Components with Tamagui
-- **Cross-Platform**: Single codebase for Web, iOS, and Android
-- **Native Performance**: Optimized for 60fps on all platforms
-- **Accessibility Built-in**: WCAG AA compliant with screen reader support
-- **Component Library**: Buttons, Cards, Inputs, Navigation, and more
-- **Animation System**: Spring-based animations with reduced-motion support
+The generated spec covers design tokens (color, typography, spacing, radius, shadows, animation), component definitions, and light/dark themes.
 
-### Megaprompt Generator
-Click "Generate Megaprompt" to create a comprehensive prompt that generates:
-- Complete Tamagui configuration
-- Design token system
-- Component library
-- Theme configuration
-- Platform-specific adjustments
-- Testing setup
-- Build configuration
+## Provenance (built vs directed)
 
-## 🎯 Why This Tool?
+I designed the flow, the token schema, and the megaprompt format, then directed the agent build and reworked what fell short. The commit history shows it honestly: the first stretch is Lovable's gpt-engineer bot (where I scaffolded v1), everything after is me directing Claude Code. I don't fully qualify as a full-stack engineer, but I have a very high bar for quality - I'll get the agent to build it and learn whatever it is on the job.
 
-This is the **only** React Native design system builder that:
-1. Provides visual design tools specifically for React Native
-2. Generates production-ready Tamagui code
-3. Ensures pixel-perfect consistency across Web, iOS, and Android
-4. Creates a complete design system, not just components
-5. Includes accessibility and performance optimizations
+## Decisions and trade-offs
 
-## 🛠️ Technology Stack
+- **The prompt is the export format.** Most design system tools export code. Exported code rots the moment you touch it. A spec the agent regenerates from doesn't. That call shaped everything else.
+- **Two builds live in this repo.** `expo-app/` is the current version (Expo + NativeWind + Zustand, targeting React Native for web, iOS, and Android). `tamagui builder/` is the earlier Tamagui-based web version, archived in place because the token architecture docs still reference it and the test suites there document what parity meant.
+- **Rebuilt instead of patched.** The Tamagui version reached visual parity and then I moved the whole thing to Expo + NativeWind anyway (see the migration docs in `docs/`). Slower, but the token system came out cleaner the second time.
+- **It never shipped.** No public release. That lesson changed how I build: the next project wasn't an app at all, just the core logic packaged so real people could test it the same week.
 
-- **React Native**: Cross-platform mobile framework
-- **Tamagui**: Universal UI system for React Native + Web
-- **TypeScript**: Type-safe development
-- **Vite**: Fast development server
-- **Zustand**: State management
-- **Lucide Icons**: Beautiful icon set
+## Running it
 
-## 📚 Documentation
-
-Complete documentation is available in the [`docs/`](./docs/) folder:
-
-### Quick Links
-- **[Product Strategy](./docs/strategy/product-plan.md)** - Vision and roadmap
-- **[Development Tasks](./docs/strategy/tasks.md)** - Current sprint priorities
-- **[Architecture Guide](./docs/architecture/architecture.md)** - Technical design
-- **[Token Implementation](./docs/architecture/TOKEN_IMPLEMENTATION.md)** - All design token values
-- **[Documentation Index](./docs/README.md)** - Complete documentation overview
-
-## 📦 Installation
+The current app is in `expo-app/`:
 
 ```bash
-# Clone the repository
-git clone https://github.com/togetherforcouples/designsystembuilder.git
+cd expo-app
+npm install
+npm start        # expo; press w for web, or open on a device
+```
 
-# Navigate to project directory
-cd designsystembuilder
+The archived Tamagui version still runs too:
 
-# Install dependencies
+```bash
+cd "tamagui builder"
 npm install --legacy-peer-deps
-
-# Start development server
 npm run dev
 ```
 
-## 🎨 How to Use
+## Docs
 
-1. **Choose Your Colors**: Select from 18 pre-built themes or create custom colors
-2. **Select Typography**:
-   - Pick a Primary Font for body text and UI elements
-   - Choose a Display Font for headings and emphasis
-   - Select a typography scale (Small, Regular, Large)
-3. **Configure Options**:
-   - Menu layout (Bottom Bar or Hamburger)
-   - Card styles
-   - Input variants
-   - Upload a logo
-4. **Preview Changes**: See real-time updates in the React Native preview
-5. **Generate Megaprompt**: Click to generate comprehensive code setup
-6. **Use with Claude**: Paste the megaprompt into Claude to generate your complete design system
-
-## 📱 Platform Support
-
-| Platform | Version | Status |
-|----------|---------|--------|
-| iOS | 13.0+ | ✅ Fully Supported |
-| Android | 5.0+ (API 21+) | ✅ Fully Supported |
-| Web | Modern Browsers | ✅ Fully Supported |
-| Windows | Via React Native Windows | 🔄 Coming Soon |
-| macOS | Via React Native macOS | 🔄 Coming Soon |
-
-## 🧩 Generated Components
-
-The megaprompt generates these production-ready components:
-
-### Core Components
-- Button (5 variants, 4 sizes)
-- Input & TextArea
-- Switch & Checkbox
-- Radio Group
-- Select Dropdown
-- Slider
-- Cards
-- Dialog/Modal
-- Bottom Sheet
-- Tabs
-
-### Navigation
-- Bottom Tab Bar
-- Stack Navigator
-- Drawer Navigation
-- Header Components
-
-### Design Tokens
-- Colors (Brand, Semantic, Neutral)
-- Typography (6 size scales)
-- Spacing (10-point system)
-- Border Radius (4 variants)
-- Shadows (3 elevation levels)
-- Animation (3 timing presets)
-
-## 🎭 Theme Support
-
-### Light/Dark Modes
-- Instant theme switching
-- System preference detection
-- Persistent theme selection
-- Custom theme creation
-
-### Density Modes
-- Comfortable (default)
-- Compact (reduced spacing)
-- Custom density tokens
-
-## ♿ Accessibility
-
-- **WCAG AA Compliant**: All color combinations meet contrast requirements
-- **Screen Readers**: Full VoiceOver (iOS) and TalkBack (Android) support
-- **Keyboard Navigation**: Complete keyboard support on web
-- **Focus Indicators**: Clear, tokenized focus states
-- **Touch Targets**: Minimum 44×44pt touch areas
-- **Reduced Motion**: Respects system animation preferences
-
-## 🚀 Performance
-
-- **Optimized Bundle Size**: Tree-shakeable components
-- **Lazy Loading**: Code splitting for web
-- **Native Performance**: 60fps animations
-- **Memory Efficient**: Proper list virtualization
-- **Fast Refresh**: Instant development updates
-
-## 🧪 Testing
-
-```bash
-# Run unit tests
-npm test
-
-# Run E2E tests
-npm run test:e2e
-
-# Run with coverage
-npm run test:coverage
-
-# Run accessibility tests
-npm run test:a11y
-```
-
-## 📈 Roadmap
-
-- [ ] Export to Figma/Sketch
-- [ ] Component playground
-- [ ] Design system documentation generator
-- [ ] Team collaboration features
-- [ ] Version control for design systems
-- [ ] Plugin system for custom components
-- [ ] Windows & macOS support
-- [ ] Design system analytics
-
-## 🤝 Contributing
-
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) for details.
-
-## 🙏 Credits
-
-Built with ❤️ by the community for the React Native ecosystem.
-
-Special thanks to:
-- [Tamagui](https://tamagui.dev) for the amazing universal UI system
-- [Nate Wienert](https://twitter.com/natebirdman) for creating Tamagui
-- All contributors and users who make this tool better
-
-## 🔗 Links
-
-- [Live Demo](https://designsystembuilder.lovable.dev)
-- [Documentation](https://docs.designsystembuilder.dev)
-- [GitHub Repository](https://github.com/togetherforcouples/designsystembuilder)
-- [Report Issues](https://github.com/togetherforcouples/designsystembuilder/issues)
-
----
-
-**Made for React Native developers who care about design consistency across platforms.**
+`docs/` has the real writeups: token system architecture, the Tamagui migration plan, color naming conventions, and the testing setup. Start with [docs/README.md](./docs/README.md).
