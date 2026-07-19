@@ -72,3 +72,14 @@ refs/
 
 # ShipStudio metadata
 .shipstudio/
+
+# Env (never commit keys)
+.env
+
+# Test artifacts
+coverage/
+playwright-report/
+test-results/
+
+# Windows artifact
+nul
