@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "cd 'tamagui builder' && npm install",
+  "buildCommand": "cd 'tamagui builder' && npm run build",
+  "outputDirectory": "tamagui builder/dist",
+  "rewrites": [
+    {
+      "source": "/((?!assets/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
