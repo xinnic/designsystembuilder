@@ -22,14 +22,18 @@ import { styled, Input as TamaguiInput, TextArea as TamaguiTextArea, GetProps } 
 export const Input = styled(TamaguiInput, {
   name: 'Input',
   fontFamily: '$body',
-  fontSize: '$2',
+  // Named type tokens only. Numeric ones ($1…$6) are ambiguous here — Tamagui
+  // resolves them against the `size` scale for inputs, which silently rendered
+  // the field at 8px.
+  fontSize: '$body',
+  lineHeight: '$body',
   color: '$textPrimary',
   backgroundColor: '$bgSecondary',
-  borderWidth: '$1',
+  borderWidth: 'var(--input-border-width, 1px)',
   borderColor: '$border',
-  borderRadius: '$2',
-  paddingHorizontal: '$3',
-  paddingVertical: '$2',
+  borderRadius: '$input',
+  paddingHorizontal: 'var(--space-4)',
+  paddingVertical: 'var(--space-3)',
   minHeight: 44, // Minimum tap target for accessibility
   outlineWidth: 0,
 
@@ -51,18 +55,18 @@ export const Input = styled(TamaguiInput, {
     variant: {
       filled: {
         backgroundColor: '$bgSecondary',
-        borderWidth: '$1',
+        borderWidth: 'var(--input-border-width, 1px)',
         borderColor: '$border',
       },
       outlined: {
         backgroundColor: 'transparent',
-        borderWidth: '$1',
+        borderWidth: 'var(--input-border-width, 1px)',
         borderColor: '$border',
       },
       underline: {
         backgroundColor: 'transparent',
         borderWidth: 0,
-        borderBottomWidth: '$1',
+        borderBottomWidth: 1,
         borderColor: '$border',
         borderRadius: 0,
         paddingHorizontal: 0,
@@ -71,19 +75,24 @@ export const Input = styled(TamaguiInput, {
 
     size: {
       small: {
-        fontSize: '$1',
-        paddingHorizontal: '$2',
-        paddingVertical: '$1',
+        fontSize: '$caption',
+        lineHeight: '$caption',
+        paddingHorizontal: 'var(--space-3)',
+        paddingVertical: 'var(--space-2)',
+        minHeight: 36,
       },
       medium: {
-        fontSize: '$2',
-        paddingHorizontal: '$3',
-        paddingVertical: '$2',
-      },
-      large: {
-        fontSize: '$3',
+        fontSize: '$body',
+        lineHeight: '$body',
         paddingHorizontal: '$4',
         paddingVertical: '$3',
+      },
+      large: {
+        fontSize: '$subhead',
+        lineHeight: '$subhead',
+        paddingHorizontal: 'var(--space-5)',
+        paddingVertical: 'var(--space-4)',
+        minHeight: 52,
       },
     },
 
@@ -127,14 +136,15 @@ export const Input = styled(TamaguiInput, {
 export const TextArea = styled(TamaguiTextArea, {
   name: 'TextArea',
   fontFamily: '$body',
-  fontSize: '$2',
+  fontSize: '$body',
+  lineHeight: '$body',
   color: '$textPrimary',
   backgroundColor: '$bgSecondary',
-  borderWidth: '$1',
+  borderWidth: 'var(--input-border-width, 1px)',
   borderColor: '$border',
-  borderRadius: '$2',
-  paddingHorizontal: '$3',
-  paddingVertical: '$2',
+  borderRadius: '$input',
+  paddingHorizontal: 'var(--space-4)',
+  paddingVertical: 'var(--space-3)',
   outlineWidth: 0,
   minHeight: 100,
 
@@ -156,12 +166,12 @@ export const TextArea = styled(TamaguiTextArea, {
     variant: {
       filled: {
         backgroundColor: '$bgSecondary',
-        borderWidth: '$1',
+        borderWidth: 'var(--input-border-width, 1px)',
         borderColor: '$border',
       },
       outlined: {
         backgroundColor: 'transparent',
-        borderWidth: '$1',
+        borderWidth: 'var(--input-border-width, 1px)',
         borderColor: '$border',
       },
     },

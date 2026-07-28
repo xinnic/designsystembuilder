@@ -75,7 +75,8 @@ export const TabsTrigger = styled(TamaguiTabs.Tab, {
   cursor: 'pointer',
   backgroundColor: 'transparent',
   color: '$textSecondary',
-  fontSize: '$3',
+  fontSize: '$body',
+  lineHeight: '$body',
   fontWeight: '500',
   transition: 'all 0.2s',
 
@@ -84,7 +85,7 @@ export const TabsTrigger = styled(TamaguiTabs.Tab, {
     color: '$textPrimary',
   },
 
-  focusStyle: {
+  focusVisibleStyle: {
     outlineWidth: 2,
     outlineColor: '$focus',
     outlineStyle: 'solid',
@@ -144,17 +145,20 @@ export const TabsTrigger = styled(TamaguiTabs.Tab, {
       small: {
         paddingHorizontal: '$2',
         paddingVertical: '$1',
-        fontSize: '$2',
+        fontSize: '$caption',
+        lineHeight: '$caption',
       },
       medium: {
         paddingHorizontal: '$4',
         paddingVertical: '$2',
-        fontSize: '$3',
+        fontSize: '$body',
+        lineHeight: '$body',
       },
       large: {
         paddingHorizontal: '$5',
         paddingVertical: '$3',
-        fontSize: '$4',
+        fontSize: '$subhead',
+        lineHeight: '$subhead',
       },
     },
   },

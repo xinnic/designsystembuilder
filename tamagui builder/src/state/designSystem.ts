@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { useEffect } from 'react';
-import { generateSecondaryColor } from '../utils/colorGeneration';
+import { ensureReadableOnWhite, generateSecondaryColor } from '../utils/colorGeneration';
 import { COLOR_VALUES } from '../config/colorThemes';
 import { getStylePreset, getStylePresetCSSVariables, type StylePresetId } from '../config/stylePresets';
 
@@ -182,8 +182,10 @@ export const useDesignSystem = create<DesignSystemState>((set) => ({
 
   // UI Settings defaults
   isDarkMode: false,
-  selectedTheme: 'custom',  // Select rainbow picker by default
-  customPrimaryColor: '#1abc9c',  // Turquoise/green - first color swatch
+  // Start on a named preset, not 'custom' — that leaves the colour-wheel chip
+  // showing the wheel until the user actually picks their own colour.
+  selectedTheme: 'turquoise',
+  customPrimaryColor: '#1abc9c',  // Seed value for the custom colour picker
   selectedAccentColor: 'turquoise',
   customAccentColor: '#1abc9c',
   isSecondaryManual: false, // Default to auto-generated
@@ -266,7 +268,7 @@ const typographyScales = {
 };
 
 // Font family map
-const fontFamilyMap: Record<string, string> = {
+export const fontFamilyMap: Record<string, string> = {
   // Existing fonts
   'font-jakarta': 'Plus Jakarta Sans, ui-sans-serif, system-ui',
   'font-vietnam': 'Be Vietnam Pro, ui-sans-serif, system-ui',
@@ -301,19 +303,39 @@ const fontFamilyMap: Record<string, string> = {
   'font-montserrat': 'Montserrat, ui-sans-serif, system-ui'
 };
 
-// Spacing scale definitions
+// Spacing scale definitions — a 0.75× / 1× / 1.25× density ramp over an 8pt grid.
+// The same ratios are applied to the Tamagui space tokens in `useTokenSystem`,
+// so the Spacing Ladder in the Atoms panel shows the values actually rendered.
 const spacingScales = {
-  compact: [4, 8, 12, 16, 20, 24, 32, 40],
+  compact: [6, 12, 18, 24, 30, 36, 48, 60],
   normal: [8, 16, 24, 32, 40, 48, 64, 80],
-  comfortable: [12, 24, 36, 48, 60, 72, 96, 120]
+  comfortable: [10, 20, 30, 40, 50, 60, 80, 100]
 };
 
-// Corner radius scale definitions
-const cornerRadiusScales = {
-  none: { sm: '0px', md: '0px', lg: '0px', full: '9999px' },
-  small: { sm: '4px', md: '6px', lg: '8px', full: '9999px' },
-  medium: { sm: '6px', md: '10px', lg: '16px', full: '9999px' },
-  large: { sm: '12px', md: '20px', lg: '28px', full: '9999px' }
+// Roundness multipliers applied over the active style preset's radius profile.
+// Must stay in sync with `roundnessMultipliers` in useTokenSystem.ts.
+const roundnessMultipliers: Record<CornerRadius, number> = {
+  none: 0,
+  small: 0.5,
+  medium: 1,
+  large: 2
+};
+
+/**
+ * Resolve the radius token set the way the CSS layer does: the preset supplies
+ * the shape profile, the Corner Radius control scales it. Pills stay pills.
+ */
+const resolveRadius = (presetId: string, cornerRadius: CornerRadius) => {
+  const preset = getStylePreset(presetId as StylePresetId) || getStylePreset('modern-flat');
+  const roundness = roundnessMultipliers[cornerRadius] ?? 1;
+  const scale = (value: number) => (value >= 9999 ? 9999 : Math.round(value * roundness));
+
+  return {
+    sm: `${scale(preset.tokens.radius.sm)}px`,
+    md: `${scale(preset.tokens.radius.md)}px`,
+    lg: `${scale(preset.tokens.radius.lg)}px`,
+    full: '9999px'
+  };
 };
 
 // Track the last update to prevent infinite loops
@@ -327,7 +349,8 @@ let lastUpdate = {
   primaryFont: 'font-jakarta',
   displayFont: 'font-jakarta',
   spacingMode: 'normal',
-  cornerRadius: 'medium' as CornerRadius
+  cornerRadius: 'medium' as CornerRadius,
+  stylePresetId: 'modern-flat'
 };
 
 // Subscribe to changes and auto-update tokens
@@ -343,7 +366,8 @@ useDesignSystem.subscribe((state) => {
     state.selectedPrimaryFont !== lastUpdate.primaryFont ||
     state.selectedDisplayFont !== lastUpdate.displayFont ||
     state.spacingMode !== lastUpdate.spacingMode ||
-    state.cornerRadius !== lastUpdate.cornerRadius;
+    state.cornerRadius !== lastUpdate.cornerRadius ||
+    state.stylePresetId !== lastUpdate.stylePresetId;
 
   if (!hasChanged) return;
 
@@ -358,15 +382,20 @@ useDesignSystem.subscribe((state) => {
     primaryFont: state.selectedPrimaryFont,
     displayFont: state.selectedDisplayFont,
     spacingMode: state.spacingMode,
-    cornerRadius: state.cornerRadius
+    cornerRadius: state.cornerRadius,
+    stylePresetId: state.stylePresetId
   };
 
   // Use centralized color configuration
   const colorMap = COLOR_VALUES;
 
-  const primaryColor = state.selectedTheme === 'custom' && state.customPrimaryColor
-    ? state.customPrimaryColor
-    : colorMap[state.selectedTheme] || '#1abc9c';
+  // Same deepening the CSS layer applies, so the Atoms panel documents the
+  // brand colour that actually gets painted rather than the raw swatch.
+  const primaryColor = ensureReadableOnWhite(
+    state.selectedTheme === 'custom' && state.customPrimaryColor
+      ? state.customPrimaryColor
+      : colorMap[state.selectedTheme] || '#1abc9c'
+  );
 
   const accentColor = state.selectedAccentColor === 'custom' && state.customAccentColor
     ? state.customAccentColor
@@ -382,8 +411,8 @@ useDesignSystem.subscribe((state) => {
   // Get current spacing scale
   const currentSpacing = spacingScales[state.spacingMode] || spacingScales.normal;
 
-  // Get current corner radius scale
-  const currentRadius = cornerRadiusScales[state.cornerRadius] || cornerRadiusScales.medium;
+  // Radius = active preset's shape profile × the Corner Radius multiplier
+  const currentRadius = resolveRadius(state.stylePresetId, state.cornerRadius);
 
   // Update tokens - using simple hex-based colors only
   state.setTokens({
@@ -419,9 +448,13 @@ setTimeout(() => {
   // Use centralized color configuration
   const colorMap = COLOR_VALUES;
 
-  const primaryColor = state.selectedTheme === 'custom' && state.customPrimaryColor
-    ? state.customPrimaryColor
-    : colorMap[state.selectedTheme] || '#1abc9c';
+  // Same deepening the CSS layer applies, so the Atoms panel documents the
+  // brand colour that actually gets painted rather than the raw swatch.
+  const primaryColor = ensureReadableOnWhite(
+    state.selectedTheme === 'custom' && state.customPrimaryColor
+      ? state.customPrimaryColor
+      : colorMap[state.selectedTheme] || '#1abc9c'
+  );
 
   const accentColor = state.selectedAccentColor === 'custom' && state.customAccentColor
     ? state.customAccentColor

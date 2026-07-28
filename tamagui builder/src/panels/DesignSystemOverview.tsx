@@ -11,6 +11,7 @@ import {
   Smartphone
 } from 'lucide-react';
 import { ShowcaseSection } from '../components/ShowcaseSection';
+import { PanelHeader } from '../components/builder-ui/PanelHeader';
 import { useDesignSystem } from '../state/designSystem';
 
 // Token demos
@@ -31,30 +32,15 @@ export default function DesignSystemOverview() {
     <ScrollView maxHeight="100vh">
       <YStack
         padding={BUILDER_LAYOUT.panelPadding}
-        backgroundColor="$background"
+        backgroundColor="transparent"
         minHeight="100%"
         paddingBottom="$10"
-        gap="$5"
+        gap="$6"
       >
-        {/* TOKENS HEADER */}
-        <YStack gap="$2">
-          <Heading
-            fontSize={tokens.h2.size}
-            lineHeight={tokens.h2.line}
-            fontWeight={tokens.h2.weight}
-            color="$color"
-          >
-            Design Tokens
-          </Heading>
-          <Text
-            fontSize={tokens.body.size}
-            lineHeight={tokens.body.line}
-            color="$color"
-            opacity={0.6}
-          >
-            Foundational design elements that define your system's visual language
-          </Text>
-        </YStack>
+        <PanelHeader
+          title="Design Tokens"
+          description="Foundational design elements that define your system's visual language"
+        />
 
         {/* Typography Scale */}
         <ShowcaseSection

@@ -4,7 +4,9 @@ import type { TechStack } from '../state/designSystem';
 import { Upload, Sparkles, ChevronDown } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { YStack, XStack, Text, Input, useTheme } from 'tamagui';
+import { YStack, XStack, Input, useTheme } from 'tamagui';
+import { Body, Caption } from '@/design-system/components/Text';
+import { Button } from '@/design-system/components/Button';
 
 export default function StylingControls() {
   const { opts, setOpts, tokens, setTokens } = useDesignSystem();
@@ -116,9 +118,9 @@ export default function StylingControls() {
           pressStyle={{ opacity: 0.7 }}
           cursor="pointer"
         >
-          <XStack space="$3" alignItems="center">
-            <Sparkles size={20} color={theme.color.val} />
-            <Text size="$3" fontWeight="500" color="$color">Logo</Text>
+          <XStack gap="$3" alignItems="center">
+            <Sparkles size={18} color={theme.color.val} />
+            <Body fontWeight="600" margin={0}>Logo</Body>
           </XStack>
           <ChevronDown
             size={16}
@@ -131,27 +133,18 @@ export default function StylingControls() {
         </XStack>
         
         {logoOpen && (
-          <YStack space="$3" padding="$3">
-            {/* Upload Logo Button */}
-            <XStack
-              position="relative"
-              alignItems="center"
-              justifyContent="center"
-              gap="$2"
-              padding="$3"
-              borderRadius="$3"
-              borderWidth={1}
-              borderColor="$borderColor"
-              backgroundColor="$background"
-              hoverStyle={{ backgroundColor: '$gray3' }}
-              cursor="pointer"
-            >
-              <Upload size={16} color={theme.color.val} />
-              <Text size="$3" color="$color">Upload Logo</Text>
+          <YStack gap="$3" paddingTop="$3">
+            {/* Upload Logo — a real Button with the file input laid over it */}
+            <XStack position="relative">
+              <Button variant="secondary" size="medium" fullWidth gap="$2">
+                <Upload size={16} />
+                <Caption color="$brand" fontWeight="600">Upload Logo</Caption>
+              </Button>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleLogoUpload}
+                aria-label="Upload logo"
                 style={{
                   position: 'absolute',
                   top: 0,
@@ -165,40 +158,38 @@ export default function StylingControls() {
             </XStack>
 
             {/* Generate Logo Section */}
-            <YStack space="$2">
+            <YStack gap="$2">
               <Input
-                placeholder="Describe your app..."
+                placeholder="Describe your app…"
                 value={logoDescription}
                 onChangeText={setLogoDescription}
-                size="$3"
-                borderWidth={1}
+                // Explicit height + body type: the old `size="$3"` left the
+                // field shorter than its own placeholder, clipping the text.
+                height={44}
+                fontSize="$body"
+                lineHeight="$body"
+                paddingHorizontal="$4"
+                borderWidth="var(--input-border-width, 1px)"
                 borderColor="$borderColor"
-                borderRadius="$3"
-                backgroundColor="$background"
+                borderRadius="$input"
+                backgroundColor="$bgSecondary"
                 color="$color"
                 placeholderTextColor="$gray10"
+                focusStyle={{ borderColor: '$brand' }}
               />
-              <XStack
-                alignItems="center"
-                justifyContent="center"
+              <Button
+                variant="primary"
+                size="medium"
+                fullWidth
                 gap="$2"
-                padding="$3"
-                borderRadius="$3"
-                borderWidth={1}
-                borderColor="$blue9"
-                backgroundColor="$blue2"
-                hoverStyle={{ backgroundColor: '$blue3' }}
-                pressStyle={{ opacity: 0.7 }}
                 onPress={handleGenerateLogo}
-                cursor="pointer"
-                opacity={isGenerating ? 0.5 : 1}
-                pointerEvents={isGenerating ? 'none' : 'auto'}
+                disabled={isGenerating}
               >
-                <Sparkles size={16} color={theme.blue9.val} />
-                <Text size="$3" color="$blue11" fontWeight="500">
-                  {isGenerating ? 'Generating...' : 'Generate Logo'}
-                </Text>
-              </XStack>
+                <Sparkles size={16} color="white" />
+                <Caption color="white" fontWeight="600">
+                  {isGenerating ? 'Generating…' : 'Generate Logo'}
+                </Caption>
+              </Button>
             </YStack>
 
             {/* Logo Preview */}

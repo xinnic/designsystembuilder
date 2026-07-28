@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Copy, Layers3, Palette, LayoutGrid, X } from 'lucide-react';
-import { XStack, YStack, Button as TamaguiButton, Text, TextArea, Dialog, Adapt, Sheet } from 'tamagui';
+import { XStack, YStack, TextArea, Dialog, Adapt, Sheet } from 'tamagui';
+import { Button } from '@/design-system/components/Button';
+import { Body, Caption } from '@/design-system/components/Text';
 import { Sidebar } from '@/components/Sidebar';
 import { PreviewPhoneTamagui } from '@/components/PreviewPhoneTamagui';
 import DesignSystemOverview from '@/components/DesignSystemOverview';
@@ -9,7 +11,8 @@ import PatternsShowcase from '@/panels/PatternsShowcase';
 
 import { useToast } from '@/hooks/use-toast';
 
-import { useDesignSystem } from '@/state/designSystem';
+import { useDesignSystem, fontFamilyMap } from '@/state/designSystem';
+import { deriveShadowColor } from '@/utils/colorGeneration';
 import { stylePresets } from '@/config/stylePresets';
 
 const fonts = [
@@ -34,6 +37,9 @@ const Index = () => {
     selectedPrimaryFont,
     selectedDisplayFont,
     stylePresetId: selectedStylePreset,
+    spacingMode,
+    cornerRadius,
+    haptics,
     tokens,
     opts
   } = designSystem;
@@ -79,6 +85,18 @@ const Index = () => {
     const activePreset = stylePresets.find(p => p.id === selectedStylePreset) || stylePresets[0];
     const presetTokens = activePreset.tokens;
 
+    // Every sidebar control has to reach the prompt — a setting the user can
+    // change that the megaprompt never mentions is a silently dropped decision.
+    const bodyFontFamily = fontFamilyMap[selectedPrimaryFont] || tokens.fontFamily;
+    const displayFontFamily = fontFamilyMap[selectedDisplayFont] || bodyFontFamily;
+
+    // Preset shadows can reference --shadow-color; the prompt has to ship a
+    // literal, since the target codebase has none of our CSS variables.
+    const [r, g, b] = tokens.brand.split(' ').map(Number);
+    const brandHex = '#' + [r, g, b].map((c) => (c || 0).toString(16).padStart(2, '0')).join('');
+    const shadowColor = deriveShadowColor(brandHex, isDarkMode);
+    const shadow = (value: string) => value.replace(/var\(--shadow-color[^)]*\)/g, shadowColor);
+
     // 2. Construct the Megaprompt XML
     const prompt = `<DesignSystemMegaprompt version="3.0" stack="React Native + Tamagui">
   
@@ -103,18 +121,31 @@ const Index = () => {
   </AccessibilityGuidelines>
 
   <ProjectSetup>
-    <Framework>React Native (Expo SDK 50+)</Framework>
+    <Framework>React Native (Expo SDK 54+)</Framework>
     <UIFramework>Tamagui (latest)</UIFramework>
     <Language>TypeScript</Language>
     <Icons>Lucide React Native</Icons>
   </ProjectSetup>
 
+  <Selections>
+    <!-- The choices made in the builder. Honour these, don't re-derive them. -->
+    <StylePreset id="${activePreset.id}" name="${activePreset.name}">${activePreset.description}</StylePreset>
+    <TypeScale>${selectedScale}</TypeScale>
+    <SpacingDensity>${spacingMode}</SpacingDensity>
+    <CornerRadius>${cornerRadius}</CornerRadius>
+    <ColorScheme>${isDarkMode ? 'dark' : 'light'}</ColorScheme>
+    <PrimaryNavigation>${opts.menuLayout === 'hamburger' ? 'Hamburger drawer (no bottom tab bar)' : 'Bottom tab bar'}</PrimaryNavigation>
+  </Selections>
+
   <DesignTokens>
     <!-- INSTRUCTION: Implement these tokens in 'tamagui.config.ts' -->
     
-    <Colors>
+    <Colors format="R G B (space separated, for rgb() with alpha)">
       <!-- Base Ranges -->
+      <!-- 'brand' is the picked primary, deepened where needed so white text on
+           a solid brand fill clears WCAG AA. Use it as-is. -->
       <Token name="brand" value="${tokens.brand}" />
+      <!-- 'brandWeak' is the secondary/accent colour from the builder -->
       <Token name="brandWeak" value="${tokens.brandWeak}" />
       <Token name="textPrimary" value="${tokens.textPrimary}" />
       <Token name="textSecondary" value="${tokens.textSecondary}" />
@@ -131,7 +162,8 @@ const Index = () => {
       <Token name="focus" value="${tokens.focus}" />
     </Colors>
 
-    <Typography family="${tokens.fontFamily}">
+    <Typography bodyFamily="${bodyFontFamily}" displayFamily="${displayFontFamily}">
+      <!-- Display/H1/H2/H3/Subhead use displayFamily; everything else uses bodyFamily -->
       <Scale>
         <Variant name="displayLg" size="${tokens.displayLg.size}" lineHeight="${tokens.displayLg.line}" weight="${tokens.displayLg.weight}" />
         <Variant name="h1" size="${tokens.h1.size}" lineHeight="${tokens.h1.line}" weight="${tokens.h1.weight}" />
@@ -151,17 +183,20 @@ const Index = () => {
     </Spacing>
 
     <Radii>
+      <!-- The style preset's shape profile, scaled by the Corner Radius choice -->
+      <Radius name="none" value="0px" />
       <Radius name="sm" value="${tokens.radius.sm}" />
       <Radius name="md" value="${tokens.radius.md}" />
       <Radius name="lg" value="${tokens.radius.lg}" />
+      <Radius name="xl" value="${tokens.radius.lg}" />
       <Radius name="full" value="${tokens.radius.full}" />
     </Radii>
 
     <Shadows preset="${activePreset.name}">
       <!-- ${activePreset.description} -->
-      <Shadow name="sm" value="${presetTokens.shadows.sm}" />
-      <Shadow name="md" value="${presetTokens.shadows.md}" />
-      <Shadow name="lg" value="${presetTokens.shadows.lg}" />
+      <Shadow name="sm" value="${shadow(presetTokens.shadows.sm)}" />
+      <Shadow name="md" value="${shadow(presetTokens.shadows.md)}" />
+      <Shadow name="lg" value="${shadow(presetTokens.shadows.lg)}" />
     </Shadows>
 
     <Animations>
@@ -203,7 +238,23 @@ const Index = () => {
       <Card>Background: $bgSecondary, Shadow: $${presetTokens.card.shadowKey}, Radius: $${presetTokens.card.radiusKey}</Card>
       <Dialog>Overlay: Scrim (opacity 50%), Surface: $bgSecondary, Shadow: $lg, Radius: $lg</Dialog>
     </Surfaces>
+
+    <Navigation layout="${opts.menuLayout}">
+      ${opts.menuLayout === 'hamburger'
+        ? `<Element name="AppBar">Leading hamburger button opens a left drawer. No bottom tab bar.</Element>
+      <Element name="Drawer">Slides from the left over a 40% scrim; active row tinted with $brand at 10% alpha.</Element>`
+        : `<Element name="TabBar">Fixed bottom bar, 5 items max, icon over label. Active item uses $brand.</Element>
+      <Element name="AppBar">Title plus trailing actions. No hamburger.</Element>`}
+    </Navigation>
   </ComponentRecipes>
+
+  <Haptics enabled="${haptics.enabled}" platform="${haptics.stack}">
+    <!-- Map these to the platform's own haptics API -->
+    <Feedback trigger="Menu / selection tap">${haptics.tapLight}</Feedback>
+    <Feedback trigger="Primary action">${haptics.tapMedium}</Feedback>
+    <Feedback trigger="Success">${haptics.notifySuccess}</Feedback>
+    <Feedback trigger="Error">${haptics.notifyError}</Feedback>
+  </Haptics>
 
   <Assertions>
     <Check>No hard-coded hex codes or pixels outside 'tamagui.config.ts'.</Check>
@@ -264,7 +315,17 @@ const Index = () => {
         >
           <Dialog modal open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <Dialog.Trigger asChild>
-              <TamaguiButton theme="active" icon={<Copy size={16} />} onPress={() => setIsDialogOpen(true)} size="$3">Generate Megaprompt</TamaguiButton>
+              {/* Builder chrome uses the same Button + type tokens as everything
+                  else it generates — no bespoke sizes. */}
+              <Button
+                variant="secondary"
+                size="small"
+                gap="$2"
+                onPress={() => setIsDialogOpen(true)}
+              >
+                <Copy size={15} color="rgb(var(--color-brand))" />
+                <Caption color="$brand" fontWeight="600">Generate Megaprompt</Caption>
+              </Button>
             </Dialog.Trigger>
             
             <Adapt when="sm" platform="touch">
@@ -314,27 +375,44 @@ const Index = () => {
                 <YStack gap="$4">
                   <TextArea
                     minHeight={400}
-                    fontFamily="$mono"
-                    fontSize="$3"
+                    fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+                    fontSize={13}
+                    lineHeight={20}
+                    // Explicit padding: Tamagui derives an input's padding from
+                    // its size token, which lands on the far end of the space
+                    // ramp now that those tokens are CSS variables.
+                    paddingHorizontal={16}
+                    paddingVertical={12}
+                    borderWidth={1}
+                    borderColor="$borderColor"
+                    borderRadius="$input"
+                    backgroundColor="$bgSecondary"
                     value={generatePrompt()}
                     readOnly
                   />
                   <XStack justifyContent="flex-end">
-                    <TamaguiButton onPress={copyToClipboard} size="$3" icon={<Copy size={16} />}>
-                      Copy to Clipboard
-                    </TamaguiButton>
+                    <Button variant="primary" size="medium" gap="$2" onPress={copyToClipboard}>
+                      <Copy size={16} />
+                      <Body color="white" fontWeight="600">Copy to Clipboard</Body>
+                    </Button>
                   </XStack>
                 </YStack>
-                
+
                 <Dialog.Close asChild>
-                  <TamaguiButton
+                  <Button
+                    variant="ghost"
+                    size="small"
                     position="absolute"
                     top="$3"
                     right="$3"
-                    size="$2"
-                    circular
-                    icon={<X size={16} />}
-                  />
+                    width={32}
+                    minHeight={32}
+                    padding={0}
+                    borderRadius="$full"
+                    aria-label="Close"
+                  >
+                    <X size={16} />
+                  </Button>
                 </Dialog.Close>
               </Dialog.Content>
             </Dialog.Portal>
@@ -365,39 +443,34 @@ const Index = () => {
               gap="$2"
               backgroundColor="$background"
             >
-              <TamaguiButton
-                theme={rightPanelView === 'atoms' ? 'active' : undefined}
-                chromeless={rightPanelView !== 'atoms'}
-                onPress={() => setRightPanelView('atoms')}
-                size="$3"
-              >
-                <XStack gap="$2" alignItems="center">
-                  <Palette size={12} />
-                  <Text size="$1">Atoms</Text>
-                </XStack>
-              </TamaguiButton>
-              <TamaguiButton
-                theme={rightPanelView === 'components' ? 'active' : undefined}
-                chromeless={rightPanelView !== 'components'}
-                onPress={() => setRightPanelView('components')}
-                size="$3"
-              >
-                <XStack gap="$2" alignItems="center">
-                  <Layers3 size={12} />
-                  <Text size="$1">Components</Text>
-                </XStack>
-              </TamaguiButton>
-              <TamaguiButton
-                theme={rightPanelView === 'patterns' ? 'active' : undefined}
-                chromeless={rightPanelView !== 'patterns'}
-                onPress={() => setRightPanelView('patterns')}
-                size="$3"
-              >
-                <XStack gap="$2" alignItems="center">
-                  <LayoutGrid size={12} />
-                  <Text size="$1">Patterns</Text>
-                </XStack>
-              </TamaguiButton>
+              {([
+                { id: 'atoms', label: 'Atoms', Icon: Palette },
+                { id: 'components', label: 'Components', Icon: Layers3 },
+                { id: 'patterns', label: 'Patterns', Icon: LayoutGrid },
+              ] as const).map(({ id, label, Icon }) => {
+                const isActive = rightPanelView === id;
+                return (
+                  <Button
+                    key={id}
+                    variant={isActive ? 'primary' : 'ghost'}
+                    size="small"
+                    gap="$2"
+                    onPress={() => setRightPanelView(id)}
+                    aria-pressed={isActive}
+                  >
+                    <Icon
+                      size={15}
+                      color={isActive ? 'white' : 'rgb(var(--color-text-secondary))'}
+                    />
+                    <Caption
+                      color={isActive ? 'white' : '$textSecondary'}
+                      fontWeight="600"
+                    >
+                      {label}
+                    </Caption>
+                  </Button>
+                );
+              })}
             </XStack>
 
             <YStack flex={1} overflowY="auto" padding="$6">

@@ -15,21 +15,22 @@ import {
   Circle,
   Square,
   Label as TamaguiLabel,
-  Text,
   Select,
   Adapt,
-  Sheet as TamaguiSheet,
-  Heading
+  Sheet as TamaguiSheet
 } from 'tamagui';
 import { useDesignSystem } from '../state/designSystem';
 import { ChevronDown, Check, ChevronUp } from 'lucide-react';
 import { ShowcaseSection } from '../components/ShowcaseSection';
+import { PanelHeader } from '../components/builder-ui/PanelHeader';
 
 // Import our design system components
 import {
   Button,
   Card,
   Input,
+  Text,
+  H2 as Heading,
   TextArea,
   Switch,
   Body,
@@ -63,20 +64,15 @@ export default function TamaguiShowcase() {
 
   return (
     <ScrollView
-      backgroundColor="$bgPrimary"
+      backgroundColor="transparent"
       flex={1}
       padding={BUILDER_LAYOUT.panelPadding}
     >
-      <YStack gap="$8" minHeight="100%" paddingBottom="$10">
-        {/* Components Section Header */}
-        <YStack gap="$2">
-          <Heading fontSize="$9" fontWeight="700" color="$color">
-            Components
-          </Heading>
-          <Text fontSize="$5" color="$color" opacity={0.6}>
-            Building blocks for your application UI
-          </Text>
-        </YStack>
+      <YStack gap="$6" minHeight="100%" paddingBottom="$10">
+        <PanelHeader
+          title="Components"
+          description="Building blocks for your application UI"
+        />
 
         {/* Buttons Section */}
         <ShowcaseSection title="Buttons" borderless={false}>
@@ -207,7 +203,7 @@ export default function TamaguiShowcase() {
 
                     <Select.Viewport minWidth={200}>
                       <Select.Group>
-                        <Select.Label>Fruits</Select.Label>
+                        <Select.Label paddingHorizontal={16} paddingVertical={8}>Fruits</Select.Label>
                         {[
                           { name: 'Apple', value: 'apple' },
                           { name: 'Pear', value: 'pear' },
@@ -218,7 +214,15 @@ export default function TamaguiShowcase() {
                           { name: 'Honeydew', value: 'honeydew' },
                           { name: 'Starfruit', value: 'starfruit' },
                         ].map((item, i) => (
-                          <Select.Item index={i} key={item.name} value={item.value} hoverStyle={{ backgroundColor: '$bgSecondary' }}>
+                          <Select.Item
+                            index={i}
+                            key={item.name}
+                            value={item.value}
+                            paddingHorizontal={16}
+                            paddingVertical={10}
+                            minHeight={40}
+                            hoverStyle={{ backgroundColor: '$bgSecondary' }}
+                          >
                             <Select.ItemText>{item.name}</Select.ItemText>
                             <Select.ItemIndicator marginLeft="auto">
                               <Check size={16} />
@@ -340,11 +344,11 @@ export default function TamaguiShowcase() {
 
         {/* Cards Section */}
         <ShowcaseSection title="Cards" borderless={true}>
-          <Text fontSize="$3" color="$color" opacity={0.6} marginBottom="$4">
+          <Text fontSize="$subhead" color="$color" opacity={0.6} marginBottom="$4">
              Different card variants for various contexts.
           </Text>
           <YStack gap="$3">
-            <Card variant="default" padding="large">
+            <Card variant="default" density="large">
               <YStack gap="$2">
                 <Heading size="$4">Default Card</Heading>
                 <Body color="$textSecondary">
@@ -353,7 +357,7 @@ export default function TamaguiShowcase() {
               </YStack>
             </Card>
 
-            <Card variant="elevated" padding="large">
+            <Card variant="elevated" density="large">
               <YStack gap="$2">
                 <Heading size="$4">Elevated Card</Heading>
                 <Body color="$textSecondary">
@@ -362,14 +366,14 @@ export default function TamaguiShowcase() {
               </YStack>
             </Card>
 
-            <Card variant="branded" padding="large">
+            <Card variant="branded" density="large">
               <YStack gap="$2">
                 <Heading size="$4">Branded Card</Heading>
                 <Body color="$textSecondary">This card uses brand color accent</Body>
               </YStack>
             </Card>
 
-            <Card variant="flat" padding="large">
+            <Card variant="flat" density="large">
               <YStack gap="$2">
                 <Heading size="$4">Flat Card</Heading>
                 <Body color="$textSecondary">
@@ -378,7 +382,7 @@ export default function TamaguiShowcase() {
               </YStack>
             </Card>
 
-            <Card variant="gradient" padding="large">
+            <Card variant="gradient" density="large">
               <YStack gap="$2">
                 <Heading size="$4">Gradient Card</Heading>
                 <Body color="$textSecondary">This card has brand-themed background</Body>
@@ -490,7 +494,7 @@ export default function TamaguiShowcase() {
 
         {/* ListItem Section */}
         <ShowcaseSection title="List Items" borderless={true}>
-            <YStack backgroundColor="$bgSecondary" borderRadius="$3" borderWidth={1} borderColor="$border">
+            <Card density="none">
               <ListItem
                 title="Profile Settings"
                 subTitle="Manage your account"
@@ -518,7 +522,7 @@ export default function TamaguiShowcase() {
                 icon={<Body>❓</Body>}
                 iconAfter={ChevronDown}
               />
-            </YStack>
+            </Card>
         </ShowcaseSection>
 
         {/* Tabs Section */}
@@ -730,10 +734,10 @@ export default function TamaguiShowcase() {
         </ShowcaseSection>
 
         {/* End Note */}
-        <Card variant="gradient" padding="large">
+        <Card variant="gradient" density="large">
           <YStack gap="$2" alignItems="center">
-            <Heading textAlign="center" color="white">Design System Complete</Heading>
-            <Body color="rgba(255,255,255,0.8)" textAlign="center">
+            <Heading textAlign="center" color="$textPrimary">Design System Complete</Heading>
+            <Body color="$textSecondary" textAlign="center">
               All components are built with Tamagui and use design tokens for consistency
             </Body>
           </YStack>

@@ -18,58 +18,65 @@ import { styled, YStack, GetProps } from 'tamagui';
 export const Card = styled(YStack, {
   name: 'Card',
   backgroundColor: '$bgSecondary',
-  borderRadius: '$2',
-  borderWidth: 1,
+  // Radius, border weight and elevation all come from the active style preset
+  // (scaled by the Corner Radius control) — never hard-coded here.
+  borderRadius: '$card',
+  borderWidth: 'var(--card-border-width, 1px)',
   borderColor: '$border',
   overflow: 'hidden',
 
   variants: {
     variant: {
+      // The preset's own card treatment — border weight and shadow together, so
+      // borderless presets (Soft & Dreamy) still read as a surface.
       default: {
         backgroundColor: '$bgSecondary',
-        borderWidth: 1,
+        borderWidth: 'var(--card-border-width, 1px)',
         borderColor: '$border',
+        boxShadow: 'var(--card-shadow, none)',
       },
       elevated: {
         backgroundColor: '$bgSecondary',
         borderWidth: 'var(--card-border-width, 0px)',
         borderColor: '$border',
-        shadowColor: '$shadowColor',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 2,
-        // Web override for semantic shadows
-        boxShadow: 'var(--card-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1))',
+        boxShadow: 'var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1))',
       },
       branded: {
         backgroundColor: '$bgSecondary',
-        borderWidth: 2,
+        borderWidth: 'var(--border-medium, 2px)',
         borderColor: '$brand',
       },
       flat: {
         backgroundColor: '$bgSecondary',
         borderWidth: 0,
+        boxShadow: 'none',
       },
+      // A tint of the brand rather than $brandWeak. That token is the user's
+      // accent colour and can be any lightness, so text on it had no
+      // predictable contrast; a low-alpha brand wash is always light enough for
+      // $textPrimary to sit on.
       gradient: {
-        backgroundColor: '$brandWeak',
-        borderWidth: 1,
-        borderColor: '$brand',
+        backgroundColor: 'rgb(var(--color-brand) / 0.10)',
+        borderWidth: 'var(--card-border-width, 1px)',
+        borderColor: 'rgb(var(--color-brand) / 0.35)',
       },
     },
 
-    padding: {
+    // Named `density`, not `padding`: `padding` is a real Tamagui style prop,
+    // so a variant of that name never runs — "medium" is read as a padding
+    // *value*, fails to resolve, and every card renders flush to its edges.
+    density: {
       none: {
         padding: 0,
       },
       small: {
-        padding: '$2',
+        padding: 'var(--space-3)',
       },
       medium: {
-        padding: '$3',
+        padding: 'var(--space-4)',
       },
       large: {
-        padding: '$4',
+        padding: 'var(--space-5)',
       },
     },
 
@@ -83,7 +90,7 @@ export const Card = styled(YStack, {
         pressStyle: {
           scale: 0.98,
         },
-        focusStyle: {
+        focusVisibleStyle: {
           outlineWidth: 2,
           outlineColor: '$focus',
           outlineStyle: 'solid',
@@ -101,7 +108,7 @@ export const Card = styled(YStack, {
 
   defaultVariants: {
     variant: 'default',
-    padding: 'medium',
+    density: 'medium',
   },
 });
 

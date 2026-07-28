@@ -127,7 +127,8 @@ export const DialogContent = styled(TamaguiDialog.Content, {
 // Styled title
 export const DialogTitle = styled(TamaguiDialog.Title, {
   name: 'DialogTitle',
-  fontSize: '$5',
+  fontSize: '$h2',
+  lineHeight: '$h2',
   fontWeight: '700',
   color: '$textPrimary',
   marginBottom: '$2',
@@ -136,7 +137,7 @@ export const DialogTitle = styled(TamaguiDialog.Title, {
 // Styled description
 export const DialogDescription = styled(TamaguiDialog.Description, {
   name: 'DialogDescription',
-  fontSize: '$3',
+  fontSize: '$body',
   color: '$textSecondary',
   marginBottom: '$4',
   lineHeight: 1.5,
@@ -164,7 +165,7 @@ export const DialogClose = styled(TamaguiDialog.Close, {
     scale: 0.9,
   },
 
-  focusStyle: {
+  focusVisibleStyle: {
     outlineWidth: 2,
     outlineColor: '$focus',
     outlineStyle: 'solid',
@@ -223,7 +224,7 @@ export const AlertDialog = ({
           </XStack>
 
           <DialogClose>
-            <X size={20} color="var(--color-text-secondary)" />
+            <X size={20} color="rgb(var(--color-text-secondary))" />
           </DialogClose>
         </DialogContent>
       </Dialog.Portal>
@@ -249,7 +250,7 @@ export const Modal = ({
           {children}
           {showCloseButton && (
             <DialogClose>
-              <X size={20} color="var(--color-text-secondary)" />
+              <X size={20} color="rgb(var(--color-text-secondary))" />
             </DialogClose>
           )}
         </DialogContent>

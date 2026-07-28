@@ -5,6 +5,100 @@
  * Supports complementary, analogous, triadic color schemes
  */
 
+import { clampChroma, converter, formatHex, wcagContrast } from 'culori';
+
+const toOklch = converter('oklch');
+
+/**
+ * Darken a brand color until white text sitting on it clears a WCAG contrast
+ * threshold.
+ *
+ * Several of the preset swatches (turquoise, emerald, sun-flower) are light
+ * enough that white labels on a solid fill land around 2:1 — legible-ish on a
+ * big screen, unreadable on a phone. Rather than reject those hues, we keep the
+ * hue and chroma and walk the lightness down until the fill is usable, so a
+ * bright pick still reads as "that color", just deep enough to build on.
+ *
+ * Colors that already pass are returned untouched.
+ */
+export function ensureReadableOnWhite(hex: string, minContrast = 4.5): string {
+  const base = toOklch(hex);
+  if (!base) return hex;
+
+  const chroma = base.c ?? 0;
+  const hue = base.h ?? 0;
+
+  // Step down in small increments so we stop at the first shade that passes
+  // rather than over-darkening.
+  for (let lightness = base.l ?? 0; lightness >= 0.3; lightness -= 0.02) {
+    const candidate = clampChroma(
+      { mode: 'oklch' as const, l: lightness, c: chroma, h: hue },
+      'oklch'
+    );
+    if ((wcagContrast(candidate, '#ffffff') ?? 0) >= minContrast) {
+      return formatHex(candidate) ?? hex;
+    }
+  }
+
+  // Very saturated hues (pure yellow) can never reach the target against white.
+  // Bottom out rather than looping to black.
+  const floor = clampChroma({ mode: 'oklch' as const, l: 0.3, c: chroma, h: hue }, 'oklch');
+  return formatHex(floor) ?? hex;
+}
+
+
+/**
+ * The shadow colour for hard-offset (Neo-Brutalism) elevation.
+ *
+ * The canonical neobrutalist shadow is pure #000 — that's what the reference
+ * libraries ship. Two problems with taking it literally here: against a light
+ * surface it reads as a harsh cut-out rather than a considered choice, and in
+ * dark mode a black shadow on a near-black canvas disappears entirely.
+ *
+ * So: keep the hard edge and the high contrast that define the style, but pull
+ * the colour from the user's own brand hue at near-black (or near-white in dark
+ * mode) lightness. It still reads black at a glance, it sits with whatever
+ * palette is selected, and it survives the theme flip.
+ */
+export function deriveShadowColor(brandHex: string, isDarkMode = false): string {
+  const base = toOklch(brandHex);
+  const hue = base?.h ?? 0;
+
+  // A mid-tone of the theme colour, not a near-black. Anything down around
+  // L 0.3 reads as plain black however much chroma is in it, and a heavy black
+  // border plus a heavy black shadow overwhelms the content it frames. Around
+  // L 0.6 the shadow is unmistakably *the brand colour* while still holding a
+  // crisp edge against a light surface.
+  const shadow = clampChroma(
+    {
+      mode: 'oklch' as const,
+      l: isDarkMode ? 0.72 : 0.6,
+      c: Math.max(Math.min((base?.c ?? 0) * 1.05, 0.15), 0.05),
+      h: hue,
+    },
+    'oklch'
+  );
+
+  return formatHex(shadow) ?? (isDarkMode ? '#ffffff' : '#000000');
+}
+
+/**
+ * How far a CSS box-shadow bleeds past its element, in points.
+ *
+ * Scroll containers have to reserve this much padding or the shadow is clipped
+ * at the overflow edge — visible on the category pills in every preset, worst
+ * with Neo-Brutalism's hard offsets and Soft & Dreamy's wide blur.
+ */
+export function shadowBleed(shadow: string): number {
+  if (!shadow || shadow === 'none') return 0;
+
+  const lengths = (shadow.match(/-?[\d.]+px/g) || []).map((v) => parseFloat(v));
+  if (lengths.length < 2) return 0;
+
+  const [offsetX = 0, offsetY = 0, blur = 0, spread = 0] = lengths;
+  return Math.max(Math.abs(offsetX), Math.abs(offsetY)) + blur + Math.max(spread, 0);
+}
+
 /**
  * Convert hex color to HSL
  */

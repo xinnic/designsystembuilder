@@ -22,12 +22,15 @@ import { styled, Button as TamaguiButton, GetProps } from 'tamagui';
 export const Button = styled(TamaguiButton, {
   name: 'Button',
   fontFamily: '$body',
+  fontSize: '$button',
+  lineHeight: '$button',
   fontWeight: '600',
   cursor: 'pointer',
   borderWidth: 0,
+  borderRadius: '$button',
   minHeight: 44, // Minimum tap target for accessibility
   userSelect: 'none', // Prevent text selection for better UX
-  letterSpacing: 0.02, // Improve button text readability
+  letterSpacing: '0.02em', // Improve button text readability
 
   // Accessibility
   focusable: true,
@@ -36,17 +39,23 @@ export const Button = styled(TamaguiButton, {
   backgroundColor: '$brand',
   color: 'white',
 
+  // Every hoverStyle below restates backgroundColor and color. Tamagui's Button
+  // falls back to the theme's `backgroundHover` (white) for anything a variant
+  // doesn't pin down, which turned hovered buttons into blank white pills.
   hoverStyle: {
+    backgroundColor: '$brand',
+    color: 'white',
     opacity: 0.9,
-    scale: 1.02,
   },
 
   pressStyle: {
+    backgroundColor: '$brand',
+    color: 'white',
     opacity: 0.85,
     scale: 0.98,
   },
 
-  focusStyle: {
+  focusVisibleStyle: {
     outlineWidth: 2,
     outlineColor: '$focus',
     outlineStyle: 'solid',
@@ -58,13 +67,23 @@ export const Button = styled(TamaguiButton, {
       primary: {
         backgroundColor: '$brand',
         color: 'white',
-        borderWidth: 'var(--button-border-width, 0px)',
-        borderColor: 'var(--border-color)',
+        // No border on a filled button — the preset's button border weight is
+        // meant for outline styles, and on a solid fill it reads as a grey halo.
+        borderWidth: 0,
         boxShadow: 'var(--button-shadow, none)',
         hoverStyle: {
-          opacity: 0.9,
+          backgroundColor: '$brand',
+          color: 'white',
+          opacity: 0.88,
+        },
+        pressStyle: {
+          backgroundColor: '$brand',
+          color: 'white',
+          opacity: 0.8,
         },
       },
+      // Tints use the brand at low alpha rather than $brandWeak — that token is
+      // the accent colour, a different hue, so it read as a colour change.
       secondary: {
         backgroundColor: 'transparent',
         borderWidth: 'var(--button-border-width, 1px)',
@@ -72,53 +91,79 @@ export const Button = styled(TamaguiButton, {
         color: '$brand',
         boxShadow: 'var(--button-shadow, none)',
         hoverStyle: {
-          backgroundColor: '$brandWeak',
+          backgroundColor: 'rgb(var(--color-brand) / 0.08)',
+          borderColor: '$brand',
+          color: '$brand',
+        },
+        pressStyle: {
+          backgroundColor: 'rgb(var(--color-brand) / 0.16)',
+          borderColor: '$brand',
+          color: '$brand',
         },
       },
       tertiary: {
         backgroundColor: 'transparent',
         color: '$brand',
         hoverStyle: {
-          backgroundColor: '$brandWeak',
+          backgroundColor: 'rgb(var(--color-brand) / 0.08)',
+          color: '$brand',
+        },
+        pressStyle: {
+          backgroundColor: 'rgb(var(--color-brand) / 0.16)',
+          color: '$brand',
         },
       },
       destructive: {
         backgroundColor: '$danger',
         color: 'white',
+        borderWidth: 0,
         hoverStyle: {
-          opacity: 0.9,
+          backgroundColor: '$danger',
+          color: 'white',
+          opacity: 0.88,
+        },
+        pressStyle: {
+          backgroundColor: '$danger',
+          color: 'white',
+          opacity: 0.8,
         },
       },
       ghost: {
         backgroundColor: 'transparent',
         color: '$textPrimary',
         hoverStyle: {
-          backgroundColor: '$bgSecondary',
+          backgroundColor: 'rgb(var(--color-text-primary) / 0.06)',
+          color: '$textPrimary',
+        },
+        pressStyle: {
+          backgroundColor: 'rgb(var(--color-text-primary) / 0.12)',
+          color: '$textPrimary',
         },
       },
     },
 
+    // Sizes shift the padding ramp and step the label down for dense controls;
+    // radius always comes from the preset so every button matches.
     size: {
       small: {
-        // Use Tamagui's size tokens for proper resolution
-        fontSize: '$2', // Smaller text
-        paddingHorizontal: '$2', // 16px (space token)
-        paddingVertical: 6,
-        borderRadius: '$1',
-        minHeight: 36,
+        fontSize: '$caption',
+        paddingHorizontal: 'var(--space-3)',
+        paddingVertical: 'var(--space-2)',
+        borderRadius: '$button',
+        minHeight: 34,
       },
       medium: {
-        fontSize: '$3', // Medium text
-        paddingHorizontal: '$3', // 24px (space token)
-        paddingVertical: 10,
-        borderRadius: '$2',
+        fontSize: '$button',
+        paddingHorizontal: 'var(--space-4)',
+        paddingVertical: 'var(--space-3)',
+        borderRadius: '$button',
         minHeight: 44, // Standard touch target
       },
       large: {
-        fontSize: '$4', // Larger text
-        paddingHorizontal: '$4', // 32px (space token)
-        paddingVertical: 14,
-        borderRadius: '$2',
+        fontSize: '$button',
+        paddingHorizontal: 'var(--space-6)',
+        paddingVertical: 'var(--space-4)',
+        borderRadius: '$button',
         minHeight: 52,
       },
     },

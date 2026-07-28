@@ -18,7 +18,7 @@ interface SettingsGroupProps {
 
 export const SettingsGroup = ({ items }: SettingsGroupProps) => {
   return (
-    <Card variant="elevated" padding="none">
+    <Card variant="default" density="none">
       <YStack>
         {items.map((item, index) => (
           <YStack key={index}>
@@ -26,7 +26,11 @@ export const SettingsGroup = ({ items }: SettingsGroupProps) => {
               title={item.title}
               subTitle={item.subTitle}
               icon={item.icon}
-              iconAfter={<ChevronRight size={16} color="var(--color-text-secondary)" />}
+              // The card already supplies the surface — rows sit on it, and the
+              // CSS variable holds a bare "R G B" triplet so it needs rgb().
+              backgroundColor="transparent"
+              borderRadius={0}
+              iconAfter={<ChevronRight size={16} color="rgb(var(--color-text-secondary))" />}
               onPress={item.onPress}
             />
             {index < items.length - 1 && <Separator borderColor="$border" />}

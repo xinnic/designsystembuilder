@@ -1,13 +1,19 @@
 .haptics-preview {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-5);
+}
+
+/* One shared left edge for every row in the section. */
+.haptics-preview > * {
+  margin-left: 0;
 }
 
 .haptics-controls {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  /* The toggle governs everything below it, so it gets room to breathe. */
+  gap: var(--space-6);
 }
 
 .haptics-toggle {
@@ -18,11 +24,11 @@
 .haptics-checkbox {
   display: flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--space-2);
   font-family: var(--font-family);
-  font-size: var(--font-body-size);
-  line-height: var(--font-body-line);
-  font-weight: var(--font-body-weight);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  font-weight: 500;
   color: rgb(var(--color-text-primary));
   cursor: pointer;
 }
@@ -30,95 +36,132 @@
 .haptics-checkbox input[type="checkbox"] {
   width: 16px;
   height: 16px;
+  margin: 0;
   accent-color: rgb(var(--color-brand));
+  cursor: pointer;
 }
 
-.haptics-stack {
+.haptics-field {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-2);
+  max-width: 320px;
 }
 
-.haptics-stack-label {
+/* Eyebrow-style label: the field below it is the thing with weight. */
+.haptics-field-label {
   font-family: var(--font-family);
-  font-size: var(--font-caption-size);
-  line-height: var(--font-caption-line);
+  font-size: var(--font-size-eyebrow);
+  line-height: var(--line-height-eyebrow);
   font-weight: 600;
-  color: rgb(var(--color-text-primary));
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgb(var(--color-text-secondary));
 }
 
-.haptics-stack-select {
-  padding: var(--space-2);
-  border: var(--cardBorder) solid rgb(var(--color-border) / var(--cardBorderAlpha));
-  border-radius: var(--radius-md);
+/* Native selects render no affordance once appearance is reset, so the caret
+   is drawn here and the box is given the same chrome as a text input. */
+.haptics-select {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.haptics-select select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 var(--space-8) 0 var(--space-4);
+  border: var(--input-border-width, 1px) solid rgb(var(--color-border));
+  border-radius: var(--input-radius, var(--radius-md));
   background: rgb(var(--color-bg-secondary));
   font-family: var(--font-family);
-  font-size: var(--font-body-size);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
   color: rgb(var(--color-text-primary));
+  cursor: pointer;
+  transition: border-color var(--motion-fast, 150ms) var(--ease-standard, ease);
+}
+
+.haptics-select select:hover {
+  border-color: rgb(var(--color-brand));
+}
+
+.haptics-select select:focus-visible {
+  outline: 2px solid rgb(var(--color-focus));
+  outline-offset: 1px;
+  border-color: rgb(var(--color-brand));
+}
+
+.haptics-select::after {
+  content: "";
+  position: absolute;
+  right: var(--space-4);
+  width: 9px;
+  height: 9px;
+  border-right: 1.5px solid rgb(var(--color-text-secondary));
+  border-bottom: 1.5px solid rgb(var(--color-text-secondary));
+  transform: translateY(-25%) rotate(45deg);
+  pointer-events: none;
 }
 
 .haptics-test-buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: var(--space-2);
 }
 
 .haptics-test-button {
+  min-height: 40px;
   padding: var(--space-2) var(--space-3);
-  border: 1px solid rgb(var(--color-border) / 0.2);
-  border-radius: var(--radius-md);
+  border: 1px solid rgb(var(--color-border));
+  border-radius: var(--button-radius, var(--radius-md));
   background: rgb(var(--color-bg-secondary));
   font-family: var(--font-family);
-  font-size: var(--font-caption-size);
-  line-height: var(--font-caption-line);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
   font-weight: 500;
   color: rgb(var(--color-text-primary));
   cursor: pointer;
-  transition: all var(--motion-fast) var(--ease-standard);
+  transition: all var(--motion-fast, 150ms) var(--ease-standard, ease);
 }
 
 .haptics-test-button:hover:not(:disabled) {
-  background: rgb(var(--color-brand) / 0.05);
-  border-color: rgb(var(--color-brand) / 0.3);
+  background: rgb(var(--color-brand) / 0.06);
+  border-color: rgb(var(--color-brand) / 0.4);
 }
 
 .haptics-test-button:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
 .haptics-test-button.haptics-light:hover:not(:disabled) {
-  background: rgb(var(--color-info) / 0.05);
-  border-color: rgb(var(--color-info) / 0.3);
+  background: rgb(var(--color-info) / 0.06);
+  border-color: rgb(var(--color-info) / 0.4);
 }
 
 .haptics-test-button.haptics-medium:hover:not(:disabled) {
-  background: rgb(var(--color-brand) / 0.05);
-  border-color: rgb(var(--color-brand) / 0.3);
+  background: rgb(var(--color-brand) / 0.06);
+  border-color: rgb(var(--color-brand) / 0.4);
 }
 
 .haptics-test-button.haptics-success:hover:not(:disabled) {
-  background: rgb(var(--color-success) / 0.05);
-  border-color: rgb(var(--color-success) / 0.3);
+  background: rgb(var(--color-success) / 0.06);
+  border-color: rgb(var(--color-success) / 0.4);
 }
 
 .haptics-test-button.haptics-error:hover:not(:disabled) {
-  background: rgb(var(--color-danger) / 0.05);
-  border-color: rgb(var(--color-danger) / 0.3);
+  background: rgb(var(--color-danger) / 0.06);
+  border-color: rgb(var(--color-danger) / 0.4);
 }
 
+/* A footnote, not a panel — the bordered box competed with the controls. */
 .haptics-note {
-  padding: var(--space-2);
-  background: rgb(var(--color-bg-secondary));
-  border-radius: var(--radius-md);
-  border: 1px solid rgb(var(--color-border) / 0.1);
-}
-
-.haptics-note p {
   margin: 0;
   font-family: var(--font-family);
-  font-size: var(--font-caption-size);
-  line-height: var(--font-caption-line);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
   color: rgb(var(--color-text-secondary));
-  font-style: italic;
 }

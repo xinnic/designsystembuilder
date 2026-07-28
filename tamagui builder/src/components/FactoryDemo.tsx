@@ -35,7 +35,7 @@ const CodeBlock = styled(YStack, {
 
 const CodeText = styled(Text, {
   fontFamily: '$mono', // Assuming mono font is available, or fallback
-  fontSize: '$1',
+  fontSize: '$caption',
   color: '$color',
 });
 
@@ -71,28 +71,28 @@ export function FactoryDemo() {
 
         {/* Statistics */}
         <XStack gap="$4" flexWrap="wrap">
-          <Card flex={1} minWidth={200} variant="elevated" padding="large">
+          <Card flex={1} minWidth={200} variant="elevated" density="large">
             <YStack items="center" gap="$1">
               <H1 color="$info">{stats.sizeCount}</H1>
               <Paragraph color="$colorHover">Size Variants</Paragraph>
             </YStack>
           </Card>
           
-          <Card flex={1} minWidth={200} variant="elevated" padding="large">
+          <Card flex={1} minWidth={200} variant="elevated" density="large">
             <YStack items="center" gap="$1">
               <H1 color="$success">{stats.colorCount}</H1>
               <Paragraph color="$colorHover">Color Variants</Paragraph>
             </YStack>
           </Card>
           
-          <Card flex={1} minWidth={200} variant="elevated" padding="large">
+          <Card flex={1} minWidth={200} variant="elevated" density="large">
             <YStack items="center" gap="$1">
               <H1 color="$brand">{stats.stateCount}</H1>
               <Paragraph color="$colorHover">Interactive States</Paragraph>
             </YStack>
           </Card>
           
-          <Card flex={1} minWidth={200} variant="elevated" padding="large">
+          <Card flex={1} minWidth={200} variant="elevated" density="large">
             <YStack items="center" gap="$1">
               <H1 color="$warning">{stats.totalCombinations}</H1>
               <Paragraph color="$colorHover">Total Combinations</Paragraph>
@@ -104,7 +104,7 @@ export function FactoryDemo() {
         <XStack gap="$6" flexWrap="wrap">
           {/* Manual Approach */}
           <YStack flex={1} minWidth={350} gap="$4">
-            <H2 color="$danger" fontSize="$6">❌ Manual Approach (140 lines)</H2>
+            <H2 color="$danger" fontSize="$display">❌ Manual Approach (140 lines)</H2>
             <CodeBlock maxHeight={400} overflow="scroll">
               <CodeText>
 {`// Button.tsx - Manual variant definitions
@@ -140,19 +140,19 @@ variants: {
   },
   size: {
     small: {
-      fontSize: '$2',
+      fontSize: '$body',
       paddingHorizontal: '$3',
       paddingVertical: '$2',
       borderRadius: '$1'
     },
     medium: {
-      fontSize: '$3',
+      fontSize: '$subhead',
       paddingHorizontal: '$4',
       paddingVertical: '$3',
       borderRadius: '$2'
     },
     large: {
-      fontSize: '$4',
+      fontSize: '$h2',
       paddingHorizontal: '$5',
       paddingVertical: '$4',
       borderRadius: '$2'
@@ -173,7 +173,7 @@ variants: {
 
           {/* Factory Approach */}
           <YStack flex={1} minWidth={350} gap="$4">
-            <H2 color="$success" fontSize="$6">✅ Factory Approach (4 lines)</H2>
+            <H2 color="$success" fontSize="$display">✅ Factory Approach (4 lines)</H2>
             <CodeBlock borderColor="$success" borderWidth={1} backgroundColor="$bgSecondary">
               <CodeText>
 {`// ButtonNew.tsx - Factory-generated variants
@@ -298,7 +298,7 @@ const generatedVariants = generateComponentVariants({
         </YStack>
 
         {/* Benefits Summary */}
-        <Card variant="gradient" padding="large">
+        <Card variant="gradient" density="large">
             <YStack gap="$4">
             <H2>🎯 Benefits of Token Factories</H2>
             <XStack gap="$6" flexWrap="wrap">
@@ -346,11 +346,11 @@ const generatedVariants = generateComponentVariants({
         </Card>
 
         {/* Implementation Time Comparison */}
-        <Card variant="default" backgroundColor="$bgSecondary" padding="large">
+        <Card variant="default" backgroundColor="$bgSecondary" density="large">
           <YStack gap="$3">
             <H3>⏱️ Implementation Time Comparison</H3>
             <XStack gap="$4" flexWrap="wrap">
-              <Card flex={1} minWidth={300} variant="default" backgroundColor="$background" padding="medium">
+              <Card flex={1} minWidth={300} variant="default" backgroundColor="$background" density="medium">
                 <H3 color="$danger">Manual Approach</H3>
                 <YStack gap="$1" marginTop="$2">
                   <Paragraph size="$2" color="$colorHover">• Define 5 color variants: 30 min</Paragraph>
@@ -363,7 +363,7 @@ const generatedVariants = generateComponentVariants({
                 </YStack>
               </Card>
               
-              <Card flex={1} minWidth={300} variant="default" backgroundColor="$background" padding="medium">
+              <Card flex={1} minWidth={300} variant="default" backgroundColor="$background" density="medium">
                 <H3 color="$success">Factory Approach</H3>
                 <YStack gap="$1" marginTop="$2">
                   <Paragraph size="$2" color="$colorHover">• Call factory function: 1 min</Paragraph>

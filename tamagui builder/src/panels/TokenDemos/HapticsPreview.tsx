@@ -29,19 +29,23 @@ export default function HapticsPreview() {
           </label>
         </div>
 
-        <div className="haptics-stack">
-          <label className="haptics-stack-label">Platform/Stack</label>
-          <select
-            value={haptics.stack}
-            onChange={(e) => setHaptics({ stack: e.target.value as TechStack })}
-            className="haptics-stack-select"
-          >
-            {stackOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+        <div className="haptics-field">
+          <label className="haptics-field-label" htmlFor="haptics-stack">
+            Platform / Stack
+          </label>
+          <div className="haptics-select">
+            <select
+              id="haptics-stack"
+              value={haptics.stack}
+              onChange={(e) => setHaptics({ stack: e.target.value as TechStack })}
+            >
+              {stackOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 
@@ -76,9 +80,9 @@ export default function HapticsPreview() {
         </button>
       </div>
 
-      <div className="haptics-note">
-        <p>If unsupported (e.g., many desktop browsers), this becomes a no-op.</p>
-      </div>
+      <p className="haptics-note">
+        If unsupported (e.g., many desktop browsers), this becomes a no-op.
+      </p>
     </div>
   );
 }

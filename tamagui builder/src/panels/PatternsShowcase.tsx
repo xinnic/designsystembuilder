@@ -1,5 +1,5 @@
 import React from 'react';
-import { YStack, XStack, Heading, Text, ScrollView } from 'tamagui';
+import { YStack, XStack, ScrollView } from 'tamagui';
 import {
     Layout,
     Navigation,
@@ -15,7 +15,9 @@ import {
     Settings
 } from 'lucide-react';
 import { ShowcaseSection } from '../components/ShowcaseSection';
-import { Button, Input } from '../design-system/components';
+import { PanelHeader } from '../components/builder-ui/PanelHeader';
+import { BUILDER_LAYOUT } from '../config/builderLayout';
+import { Button, Input, Text, H2 as Heading } from '../design-system/components';
 
 /**
  * Patterns Showcase - Displays composed UI patterns that combine multiple components
@@ -23,17 +25,12 @@ import { Button, Input } from '../design-system/components';
  */
 export default function PatternsShowcase() {
     return (
-        <ScrollView maxHeight="100vh">
-            <YStack padding="$6" gap="$8" minHeight="100%" paddingBottom="$10">
-                {/* Intro */}
-                <YStack gap="$2">
-                    <Heading fontSize="$9" fontWeight="700" color="$color">
-                        Patterns
-                    </Heading>
-                    <Text fontSize="$5" color="$color" opacity={0.6}>
-                        Composed layouts that combine multiple components for common use cases
-                    </Text>
-                </YStack>
+        <ScrollView maxHeight="100vh" backgroundColor="transparent">
+            <YStack padding={BUILDER_LAYOUT.panelPadding} gap="$6" minHeight="100%" paddingBottom="$10">
+                <PanelHeader
+                    title="Patterns"
+                    description="Composed layouts that combine multiple components for common use cases"
+                />
 
                 {/* App Header Pattern */}
                 <ShowcaseSection
@@ -60,11 +57,11 @@ export default function PatternsShowcase() {
                                     alignItems="center"
                                     justifyContent="center"
                                 >
-                                    <Text fontSize="$3" fontWeight="600" color="white">
+                                    <Text fontSize="$subhead" fontWeight="600" color="white">
                                         L
                                     </Text>
                                 </YStack>
-                                <Text fontWeight="600" fontSize="$5" color="$color">
+                                <Text fontWeight="600" fontSize="$h3" lineHeight="$h3" color="$color">
                                     App Name
                                 </Text>
                             </XStack>
@@ -118,26 +115,26 @@ export default function PatternsShowcase() {
                             borderColor="$borderColor"
                         >
                             <YStack alignItems="center" gap="$1" padding="$2" opacity={1}>
-                                <Home size={20} color="var(--color-brand)" />
-                                <Text fontSize="$1" color="$brand">
+                                <Home size={20} color="rgb(var(--color-brand))" />
+                                <Text fontSize="$caption" color="$brand">
                                     Home
                                 </Text>
                             </YStack>
                             <YStack alignItems="center" gap="$1" padding="$2" opacity={0.5}>
                                 <Heart size={20} color="currentColor" />
-                                <Text fontSize="$1" color="$color">
+                                <Text fontSize="$caption" color="$color">
                                     Favorites
                                 </Text>
                             </YStack>
                             <YStack alignItems="center" gap="$1" padding="$2" opacity={0.5}>
                                 <MessageCircle size={20} color="currentColor" />
-                                <Text fontSize="$1" color="$color">
+                                <Text fontSize="$caption" color="$color">
                                     Messages
                                 </Text>
                             </YStack>
                             <YStack alignItems="center" gap="$1" padding="$2" opacity={0.5}>
                                 <Settings size={20} color="currentColor" />
-                                <Text fontSize="$1" color="$color">
+                                <Text fontSize="$caption" color="$color">
                                     Settings
                                 </Text>
                             </YStack>
@@ -160,7 +157,7 @@ export default function PatternsShowcase() {
                             borderColor="$borderColor"
                         >
                             <YStack gap="$2">
-                                <Text fontWeight="500" fontSize="$3" color="$color">
+                                <Text fontWeight="500" fontSize="$subhead" color="$color">
                                     Email Address
                                 </Text>
                                 <Input
@@ -168,12 +165,12 @@ export default function PatternsShowcase() {
                                     placeholder="you@example.com"
                                     fullWidth
                                 />
-                                <Text fontSize="$2" color="$color" opacity={0.7}>
+                                <Text fontSize="$body" color="$color" opacity={0.7}>
                                     We'll never share your email.
                                 </Text>
                             </YStack>
                             <YStack gap="$2">
-                                <Text fontWeight="500" fontSize="$3" color="$color">
+                                <Text fontWeight="500" fontSize="$subhead" color="$color">
                                     Password
                                 </Text>
                                 <Input
@@ -214,10 +211,10 @@ export default function PatternsShowcase() {
                                         backgroundColor="$background"
                                     />
                                     <YStack padding="$3" gap="$1">
-                                        <Text fontSize="$3" fontWeight="600" color="$color">
+                                        <Text fontSize="$subhead" fontWeight="600" color="$color">
                                             Card Title {i}
                                         </Text>
-                                        <Text fontSize="$2" color="$color" opacity={0.7}>
+                                        <Text fontSize="$body" color="$color" opacity={0.7}>
                                             Brief description of this card's content.
                                         </Text>
                                     </YStack>
@@ -257,10 +254,10 @@ export default function PatternsShowcase() {
                                     borderRadius="$10"
                                 />
                                 <YStack gap="$1">
-                                    <Text fontWeight="600" fontSize="$3" color="$color">
+                                    <Text fontWeight="600" fontSize="$subhead" color="$color">
                                         John Doe
                                     </Text>
-                                    <Text fontSize="$2" color="$color" opacity={0.7}>
+                                    <Text fontSize="$body" color="$color" opacity={0.7}>
                                         john@example.com
                                     </Text>
                                 </YStack>
@@ -269,7 +266,7 @@ export default function PatternsShowcase() {
                             {/* Menu Items */}
                             <YStack gap="$1">
                                 <Text
-                                    fontSize="$1"
+                                    fontSize="$caption"
                                     fontWeight="500"
                                     color="$color"
                                     opacity={0.7}
@@ -290,7 +287,7 @@ export default function PatternsShowcase() {
                                     cursor="pointer"
                                 >
                                     <Home size={18} color="currentColor" />
-                                    <Text fontSize="$3" color="$color">
+                                    <Text fontSize="$subhead" color="$color">
                                         Home
                                     </Text>
                                 </XStack>
@@ -304,7 +301,7 @@ export default function PatternsShowcase() {
                                     hoverStyle={{ backgroundColor: '$background' }}
                                 >
                                     <Heart size={18} color="currentColor" />
-                                    <Text fontSize="$3" color="$color">
+                                    <Text fontSize="$subhead" color="$color">
                                         Favorites
                                     </Text>
                                 </XStack>
@@ -318,7 +315,7 @@ export default function PatternsShowcase() {
                                     hoverStyle={{ backgroundColor: '$background' }}
                                 >
                                     <MessageCircle size={18} color="currentColor" />
-                                    <Text fontSize="$3" color="$color">
+                                    <Text fontSize="$subhead" color="$color">
                                         Messages
                                     </Text>
                                 </XStack>
@@ -326,7 +323,7 @@ export default function PatternsShowcase() {
 
                             <YStack gap="$1">
                                 <Text
-                                    fontSize="$1"
+                                    fontSize="$caption"
                                     fontWeight="500"
                                     color="$color"
                                     opacity={0.7}
@@ -347,7 +344,7 @@ export default function PatternsShowcase() {
                                     hoverStyle={{ backgroundColor: '$background' }}
                                 >
                                     <User size={18} color="currentColor" />
-                                    <Text fontSize="$3" color="$color">
+                                    <Text fontSize="$subhead" color="$color">
                                         Profile
                                     </Text>
                                 </XStack>
@@ -361,7 +358,7 @@ export default function PatternsShowcase() {
                                     hoverStyle={{ backgroundColor: '$background' }}
                                 >
                                     <Settings size={18} color="currentColor" />
-                                    <Text fontSize="$3" color="$color">
+                                    <Text fontSize="$subhead" color="$color">
                                         Settings
                                     </Text>
                                 </XStack>

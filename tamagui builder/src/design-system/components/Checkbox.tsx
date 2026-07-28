@@ -33,7 +33,7 @@ export const Checkbox = styled(TamaguiCheckbox, {
     borderColor: '$brand',
   },
 
-  focusStyle: {
+  focusVisibleStyle: {
     outlineWidth: 2,
     outlineColor: '$focus',
     outlineStyle: 'solid',

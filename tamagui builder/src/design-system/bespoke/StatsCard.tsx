@@ -23,20 +23,23 @@ export const StatsCard = ({ icon, value, label }: StatsCardProps) => {
     <YStack
       alignItems="center"
       justifyContent="center"
-      gap="$2"
-      padding="$4"
-      backgroundColor="$bgSecondary" // Changed to bgSecondary to clearly stand out
-      borderRadius="$4"
-      borderWidth={1}
+      gap="$1"
+      paddingVertical="$4"
+      paddingHorizontal="$3"
+      backgroundColor="$bgSecondary"
+      // Card shape comes from the preset — never a pill, which is what "$4"
+      // (the full-radius token) used to give it.
+      borderRadius="$card"
+      borderWidth="var(--card-border-width, 1px)"
       borderColor="$border"
+      boxShadow="var(--card-shadow, none)"
       hoverStyle={{
-        backgroundColor: '$bgPrimary',
         borderColor: '$brand',
       }}
       flex={1}
     >
-      {icon && <YStack paddingBottom="$2">{icon}</YStack>}
-      <H2 size="$6" margin={0} color="$textPrimary">
+      {icon && <YStack opacity={0.55} marginBottom="$1">{icon}</YStack>}
+      <H2 margin={0} color="$textPrimary">
         {value}
       </H2>
       <Caption color="$textSecondary" fontWeight="600">{label}</Caption>

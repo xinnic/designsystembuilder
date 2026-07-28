@@ -48,12 +48,18 @@ export const ShowcaseSection = ({
         )}
       </YStack>
 
+      {/* Content always sits on its own surface, one step lighter than the
+          panel, so each section reads as a distinct block. `borderless` is kept
+          for callers but no longer removes the container — sections that opted
+          out were the ones floating on the page with no boundary. */}
       <YStack
-        // improved container visuals
-        padding={borderless ? 0 : "$5"}
-        backgroundColor={borderless ? 'transparent' : "$bgSecondary"}
-        borderRadius={borderless ? 0 : "$3"}
-        borderWidth={0}
+        padding="$5"
+        backgroundColor="$bgSecondary"
+        borderRadius="$card"
+        borderWidth="var(--card-border-width, 1px)"
+        borderColor="$border"
+        // No shadow: this is a grouping frame, and the cards it contains carry
+        // the preset's elevation. Stacking one inside the other read as noise.
       >
         {children}
       </YStack>

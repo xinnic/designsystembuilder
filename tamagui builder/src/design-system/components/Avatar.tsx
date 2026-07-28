@@ -1,3 +1,4 @@
+import React from 'react';
 import { styled, Avatar as TamaguiAvatar, GetProps } from 'tamagui';
 
 /**
@@ -15,35 +16,40 @@ import { styled, Avatar as TamaguiAvatar, GetProps } from 'tamagui';
  *   <Avatar.Fallback>JD</Avatar.Fallback>
  * </Avatar>
  */
-export const Avatar = styled(TamaguiAvatar, {
+const StyledAvatar = styled(TamaguiAvatar, {
     name: 'Avatar',
     circular: true,
-
-    variants: {
-        size: {
-            small: {
-                width: 32,
-                height: 32,
-            },
-            medium: {
-                width: 40,
-                height: 40,
-            },
-            large: {
-                width: 56,
-                height: 56,
-            },
-            xlarge: {
-                width: 80,
-                height: 80,
-            },
-        },
-    },
-
-    defaultVariants: {
-        size: 'medium',
-    },
 });
+
+/** Semantic avatar sizes, in points. */
+export const AVATAR_SIZES = {
+    small: 32,
+    medium: 40,
+    large: 56,
+    xlarge: 80,
+} as const;
+
+export type AvatarSize = keyof typeof AVATAR_SIZES;
+
+type StyledAvatarProps = Omit<React.ComponentProps<typeof StyledAvatar>, 'size' | 'children'>;
+
+/**
+ * Semantic sizes are resolved to points here rather than through a `size`
+ * variant: Tamagui's own Avatar already owns `size` and expects a size *token*,
+ * so a variant of the same name loses and every avatar collapses to $true (16pt).
+ */
+export const Avatar = ({
+    size = 'medium',
+    children,
+    ...props
+}: StyledAvatarProps & { size?: AvatarSize | number; children?: React.ReactNode }) => (
+    <StyledAvatar
+        size={typeof size === 'number' ? size : AVATAR_SIZES[size] ?? AVATAR_SIZES.medium}
+        {...(props as any)}
+    >
+        {children}
+    </StyledAvatar>
+);
 
 /**
  * Avatar Image - The actual image inside the avatar
@@ -66,6 +72,6 @@ export const AvatarFallback = styled(TamaguiAvatar.Fallback, {
     justifyContent: 'center',
 });
 
-export type AvatarProps = GetProps<typeof Avatar>;
+export type AvatarProps = React.ComponentProps<typeof Avatar>;
 export type AvatarImageProps = GetProps<typeof AvatarImage>;
 export type AvatarFallbackProps = GetProps<typeof AvatarFallback>;

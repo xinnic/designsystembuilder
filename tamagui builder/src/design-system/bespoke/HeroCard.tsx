@@ -32,7 +32,7 @@ export const HeroCard = ({
   return (
     <Card 
       variant="elevated" 
-      padding="none"
+      density="none"
       backgroundColor="$background"
       overflow="hidden"
     >

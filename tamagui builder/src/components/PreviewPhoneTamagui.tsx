@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { YStack, XStack, ScrollView, Circle, Image } from 'tamagui';
 import { useDesignSystem } from '../state/designSystem';
 import {
@@ -19,6 +19,7 @@ import {
   Activity,
   Shield,
   HelpCircle,
+  X,
 } from 'lucide-react';
 
 // Import our design system components
@@ -42,17 +43,41 @@ import {
   ProfileCard,
 } from '../design-system/bespoke';
 
+// Icons render with `currentColor` unless told otherwise. The CSS variables
+// hold bare "R G B" triplets, so they always need the rgb() wrapper.
+const ICON_MUTED = 'rgb(var(--color-text-secondary))';
+
+const NAV_ITEMS = [
+  { id: 'home', label: 'Home', icon: Home },
+  { id: 'search', label: 'Search', icon: Search },
+  { id: 'add', label: 'Create', icon: PlusCircle },
+  { id: 'activity', label: 'Activity', icon: Heart },
+  { id: 'profile', label: 'Profile', icon: User },
+] as const;
+
 const PreviewPhoneTamaguiComponent = () => {
   const { isDarkMode, selectedPrimaryFont, opts, tokens } = useDesignSystem();
+
+  const isHamburger = opts.menuLayout === 'hamburger';
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [activeNavId, setActiveNavId] = useState<string>('home');
+
+  // Switching the layout control away from hamburger should never strand an
+  // open drawer over the preview.
+  React.useEffect(() => {
+    if (!isHamburger) setDrawerOpen(false);
+  }, [isHamburger]);
 
   return (
     <YStack 
       height="100%" 
       alignItems="center" 
       justifyContent="flex-start" 
-      padding="$8" 
-      minHeight={600} 
-      backgroundColor={isDarkMode ? '$gray1' : '$gray2'} // approximating bg-gray-900 / 100
+      padding="$8"
+      minHeight={600}
+      // Matches the surrounding panels — the frame's border and shadow are what
+      // separate the device from the canvas, not a grey backdrop.
+      backgroundColor="$background"
     >
       <YStack
         className={selectedPrimaryFont}
@@ -60,11 +85,16 @@ const PreviewPhoneTamaguiComponent = () => {
         width={320}
         height={640}
         overflow="hidden"
+        position="relative"
         style={{
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+          // The device chrome follows the style preset: bold-border presets
+          // (Neo-Brutalism) get a heavy outline and the preset's hard shadow,
+          // everything else keeps a 1px frame and a soft brand-tinted shadow.
+          boxShadow: 'var(--frame-shadow, 0 25px 50px -12px rgba(0, 0, 0, 0.22))',
           borderRadius: 32,
-          borderWidth: 1,
-          borderColor: `rgb(${tokens.border})`,
+          borderWidth: 'var(--frame-border-width, 1px)',
+          borderColor: 'rgb(var(--color-border))',
+          borderStyle: 'solid',
         }}
       >
         {/* Status Bar */}
@@ -87,9 +117,15 @@ const PreviewPhoneTamaguiComponent = () => {
 
         {/* Content */}
         <ScrollView flex={1} backgroundColor="$bgPrimary">
-          <YStack space="$5" paddingBottom={80}>
-            {/* App Bar */}
-            <AppBar title="Discover" logo={opts.logo} />
+          <YStack space="$5" paddingBottom={isHamburger ? 24 : 80}>
+            {/* App Bar — the Menu Layout control decides whether it carries the
+                hamburger; in bottom-bar mode navigation lives at the bottom. */}
+            <AppBar
+              title="Discover"
+              logo={opts.logo}
+              showMenu={isHamburger}
+              onMenuPress={() => setDrawerOpen(true)}
+            />
 
             {/* Categories Chips */}
             <YStack paddingBottom="$1">
@@ -120,37 +156,50 @@ const PreviewPhoneTamaguiComponent = () => {
               <StatsCard
                 value="124"
                 label="Posts"
-                icon={<Activity size={16} color="var(--color)" />}
+                icon={<Activity size={16} color={ICON_MUTED} />}
               />
               <StatsCard
                 value="2.3k"
                 label="Likes"
-                icon={<Heart size={16} color="var(--color)" />}
+                icon={<Heart size={16} color={ICON_MUTED} />}
               />
               <StatsCard
                 value="3.5h"
                 label="Time"
-                icon={<Clock size={16} color="var(--color)" />}
+                icon={<Clock size={16} color={ICON_MUTED} />}
               />
             </XStack>
 
             {/* Settings & Preferences (Screenshot 3) */}
             <YStack paddingHorizontal="$4" space="$3">
-              <H2 size="$5" margin={0}>Settings</H2>
+              <H3 margin={0}>Settings</H3>
               <SettingsGroup
                 items={[
-                  { title: 'Location Services', subTitle: 'While using app', icon: <MapPin size={20} color="var(--color)" /> },
-                  { title: 'Notifications', subTitle: 'Push, Email', icon: <Bell size={20} color="var(--color)" /> },
-                  { title: 'Preferences', subTitle: 'Customize experience', icon: <Settings size={20} color="var(--color)" /> },
+                  { title: 'Location Services', subTitle: 'While using app', icon: <MapPin size={20} color={ICON_MUTED} /> },
+                  { title: 'Notifications', subTitle: 'Push, Email', icon: <Bell size={20} color={ICON_MUTED} /> },
+                  { title: 'Preferences', subTitle: 'Customize experience', icon: <Settings size={20} color={ICON_MUTED} /> },
                 ]}
               />
             </YStack>
 
             {/* Suggested People (Screenshot 3) */}
-            <YStack paddingHorizontal="$4" space="$3">
-              <H2 size="$5" margin={0}>Suggested People</H2>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} marginHorizontal="$-4" paddingHorizontal="$4">
-                <XStack space="$3">
+            <YStack space="$3">
+              <H3 margin={0} paddingHorizontal="$4">Suggested People</H3>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                // Same padding-plus-negative-margin trick as the category
+                // pills: room for the shadow, no change to the row's height.
+                style={{
+                  marginTop: 'calc(-1 * var(--shadow-bleed, 4px))',
+                  marginBottom: 'calc(-1 * var(--shadow-bleed, 4px))',
+                }}
+                contentContainerStyle={{
+                  paddingTop: 'var(--shadow-bleed, 4px)',
+                  paddingBottom: 'var(--shadow-bleed, 4px)',
+                }}
+              >
+                <XStack space="$3" paddingHorizontal="$4" paddingRight="calc(16px + var(--shadow-bleed, 4px))">
                   <ProfileCard
                     name="Sarah J."
                     status="Active now"
@@ -175,7 +224,7 @@ const PreviewPhoneTamaguiComponent = () => {
 
             {/* Reviews (Screenshot 4) */}
             <YStack paddingHorizontal="$4" space="$3">
-               <H2 size="$5" margin={0}>Reviews</H2>
+               <H3 margin={0}>Reviews</H3>
                <ReviewCard
                  title="Great Experience"
                  rating={5}
@@ -188,7 +237,7 @@ const PreviewPhoneTamaguiComponent = () => {
 
             {/* Feed Section (Screenshot 1) */}
             <YStack paddingHorizontal="$4" space="$3">
-              <H2 size="$5" margin={0}>Your Feed</H2>
+              <H3 margin={0}>Your Feed</H3>
               <UserCard
                 name="Alex Morgan"
                 handle="@alexm"
@@ -203,17 +252,102 @@ const PreviewPhoneTamaguiComponent = () => {
           </YStack>
         </ScrollView>
 
-        {/* Bottom Navigation */}
-        <BottomNav
-          items={[
-            { id: 'home', label: 'Home', icon: <Home size={20} /> },
-            { id: 'search', label: 'Search', icon: <Search size={20} /> },
-            { id: 'add', label: 'Create', icon: <PlusCircle size={20} /> },
-            { id: 'activity', label: 'Activity', icon: <Heart size={20} /> },
-            { id: 'profile', label: 'Profile', icon: <User size={20} /> },
-          ]}
-          activeId="home"
-        />
+        {/* Bottom Navigation — only in bottom-bar mode */}
+        {!isHamburger && (
+          <BottomNav
+            items={NAV_ITEMS.map(({ id, label, icon: Icon }) => ({
+              id,
+              label,
+              icon: <Icon size={20} />,
+            }))}
+            activeId={activeNavId}
+            onItemPress={setActiveNavId}
+          />
+        )}
+
+        {/* Drawer — the hamburger's actual destination */}
+        {isHamburger && drawerOpen && (
+          <>
+            <YStack
+              position="absolute"
+              top={0}
+              left={0}
+              right={0}
+              bottom={0}
+              backgroundColor="rgba(0,0,0,0.4)"
+              onPress={() => setDrawerOpen(false)}
+              cursor="pointer"
+              zIndex={10}
+            />
+            <YStack
+              position="absolute"
+              top={0}
+              left={0}
+              bottom={0}
+              width={252}
+              backgroundColor="$bgSecondary"
+              borderRightWidth={1}
+              borderRightColor="$border"
+              zIndex={11}
+              paddingTop="$5"
+              style={{ boxShadow: 'var(--shadow-lg)' }}
+            >
+              <XStack
+                alignItems="center"
+                justifyContent="space-between"
+                paddingHorizontal="$4"
+                paddingBottom="$4"
+              >
+                <H3 margin={0}>Menu</H3>
+                <Button
+                  variant="ghost"
+                  size="small"
+                  padding="$2"
+                  onPress={() => setDrawerOpen(false)}
+                  aria-label="Close menu"
+                >
+                  <X size={18} />
+                </Button>
+              </XStack>
+
+              <YStack>
+                {NAV_ITEMS.map(({ id, label, icon: Icon }) => {
+                  const isActive = id === activeNavId;
+                  return (
+                    <XStack
+                      key={id}
+                      alignItems="center"
+                      gap="$3"
+                      paddingHorizontal="$4"
+                      paddingVertical="$3"
+                      cursor="pointer"
+                      // A tint of the brand, not the accent colour itself —
+                      // the row has to stay a surface, not become a button.
+                      backgroundColor={isActive ? 'rgb(var(--color-brand) / 0.10)' : 'transparent'}
+                      hoverStyle={{ backgroundColor: 'rgb(var(--color-brand) / 0.06)' }}
+                      onPress={() => {
+                        setActiveNavId(id);
+                        setDrawerOpen(false);
+                      }}
+                    >
+                      <Icon
+                        size={18}
+                        color={isActive ? 'rgb(var(--color-brand))' : ICON_MUTED}
+                      />
+                      <Body
+                        margin={0}
+                        color={isActive ? '$brand' : '$textPrimary'}
+                        fontWeight={isActive ? '600' : '400'}
+                      >
+                        {label}
+                      </Body>
+                    </XStack>
+                  );
+                })}
+              </YStack>
+            </YStack>
+          </>
+        )}
       </YStack>
     </YStack>
   );

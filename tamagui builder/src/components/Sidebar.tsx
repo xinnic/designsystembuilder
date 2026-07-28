@@ -157,18 +157,14 @@ export function Sidebar({ }: SidebarProps) {
     if (preset) {
       const { tokens: tokens } = preset;
 
-      // Update tokens through the store
+      // Update tokens through the store.
+      // Radius is intentionally NOT set here — the store subscriber derives it
+      // from (preset × cornerRadius) so the Corner Radius control isn't clobbered.
       setTokens({
         shadow: {
           '1': tokens.shadows.sm,
           '2': tokens.shadows.md,
           '3': tokens.shadows.lg
-        },
-        radius: {
-          sm: `${tokens.radius.sm}px`,
-          md: `${tokens.radius.md}px`,
-          lg: `${tokens.radius.lg}px`,
-          full: `${tokens.radius.full}px`
         },
         motion: {
           fast: `${tokens.animations.quick}ms`,
@@ -211,12 +207,6 @@ export function Sidebar({ }: SidebarProps) {
             '2': tokens.shadows.md,
             '3': tokens.shadows.lg
           },
-          radius: {
-            sm: `${tokens.radius.sm}px`,
-            md: `${tokens.radius.md}px`,
-            lg: `${tokens.radius.lg}px`,
-            full: `${tokens.radius.full}px`
-          },
           motion: {
             fast: `${tokens.animations.quick}ms`,
             base: `${tokens.animations.normal}ms`,
@@ -248,7 +238,7 @@ export function Sidebar({ }: SidebarProps) {
 
   return (
     <YStack
-      width="$16"
+      width={300}
       height="100vh"
       borderRightWidth={borderWidthMap[opts.cardBorderWeight]}
       borderRightColor="$borderColor"
@@ -326,7 +316,15 @@ export function Sidebar({ }: SidebarProps) {
                   <Select.Viewport minWidth={200}>
                     <Select.Group>
                       {primaryFonts.map((font, i) => (
-                        <Select.Item index={i} key={font.class} value={font.class} hoverStyle={{ backgroundColor: '$gray4' }}>
+                        <Select.Item
+                          index={i}
+                          key={font.class}
+                          value={font.class}
+                          paddingHorizontal={16}
+                          paddingVertical={10}
+                          minHeight={40}
+                          hoverStyle={{ backgroundColor: '$gray4' }}
+                        >
                           <Select.ItemText>{font.name}</Select.ItemText>
                           <Select.ItemIndicator marginLeft="auto">
                             <Check size={16} />
@@ -357,6 +355,7 @@ export function Sidebar({ }: SidebarProps) {
                         isSelected={selectedTheme === 'custom'}
                         onPress={() => handlePrimaryColorChange('custom', customPrimaryColor || DEFAULT_PRIMARY)}
                         isCustom
+                        customColor={customPrimaryColor || DEFAULT_PRIMARY}
                       >
                         <input
                           type="color"
@@ -488,9 +487,11 @@ export function Sidebar({ }: SidebarProps) {
             <YStack>
               <BuilderSectionLabel title="Corner Radius" />
               <XStack gap="$2" width="100%">
+                {/* Fixed radii on purpose — the preview has to keep showing the
+                    option it selects, not the value currently in force. */}
                 <BuilderOptionCard
                   customContent={
-                    <YStack width="$5" height="$5" borderWidth={2} borderColor="$gray11" borderRadius={0} />
+                    <YStack width={20} height={20} borderWidth={2} borderColor="$gray11" borderRadius={0} />
                   }
                   label="None"
                   isSelected={cornerRadius === 'none'}
@@ -499,7 +500,7 @@ export function Sidebar({ }: SidebarProps) {
                 />
                 <BuilderOptionCard
                   customContent={
-                    <YStack width="$5" height="$5" borderWidth={2} borderColor="$gray11" borderRadius="$2" />
+                    <YStack width={20} height={20} borderWidth={2} borderColor="$gray11" borderRadius={3} />
                   }
                   label="Small"
                   isSelected={cornerRadius === 'small'}
@@ -508,7 +509,7 @@ export function Sidebar({ }: SidebarProps) {
                 />
                 <BuilderOptionCard
                   customContent={
-                    <YStack width="$5" height="$5" borderWidth={2} borderColor="$gray11" borderRadius="$4" />
+                    <YStack width={20} height={20} borderWidth={2} borderColor="$gray11" borderRadius={6} />
                   }
                   label="Medium"
                   isSelected={cornerRadius === 'medium'}
@@ -517,7 +518,7 @@ export function Sidebar({ }: SidebarProps) {
                 />
                 <BuilderOptionCard
                   customContent={
-                    <YStack width="$5" height="$5" borderWidth={2} borderColor="$gray11" borderRadius="$8" />
+                    <YStack width={20} height={20} borderWidth={2} borderColor="$gray11" borderRadius={10} />
                   }
                   label="Large"
                   isSelected={cornerRadius === 'large'}
@@ -568,7 +569,15 @@ export function Sidebar({ }: SidebarProps) {
                   <Select.Viewport minWidth={200}>
                     <Select.Group>
                       {displayFonts.map((font, i) => (
-                        <Select.Item index={i} key={font.class} value={font.class} hoverStyle={{ backgroundColor: '$gray4' }}>
+                        <Select.Item
+                          index={i}
+                          key={font.class}
+                          value={font.class}
+                          paddingHorizontal={16}
+                          paddingVertical={10}
+                          minHeight={40}
+                          hoverStyle={{ backgroundColor: '$gray4' }}
+                        >
                           <Select.ItemText>{font.name}</Select.ItemText>
                           <Select.ItemIndicator marginLeft="auto">
                             <Check size={16} />
@@ -599,6 +608,7 @@ export function Sidebar({ }: SidebarProps) {
                         isSelected={selectedAccentColor === 'custom'}
                         onPress={() => handleSecondaryColorChange('custom', customAccentColor || DEFAULT_ACCENT)}
                         isCustom
+                        customColor={customAccentColor || DEFAULT_ACCENT}
                       >
                          <input
                           type="color"
@@ -640,9 +650,11 @@ export function Sidebar({ }: SidebarProps) {
             <YStack>
               <BuilderSectionLabel title="Type Scale" />
               <XStack gap="$2" width="100%">
+                {/* Fixed sizes on purpose: these previews illustrate the three
+                    choices, so they must not resize with the scale they set. */}
                 <BuilderOptionCard
                   customContent={
-                    <Text fontSize="$5" fontWeight="700" color="$color">Aa</Text>
+                    <Text fontSize={18} lineHeight={24} fontWeight="700" color="$color">Aa</Text>
                   }
                   label="Small"
                   isSelected={selectedScale === 'small'}
@@ -651,7 +663,7 @@ export function Sidebar({ }: SidebarProps) {
                 />
                 <BuilderOptionCard
                   customContent={
-                    <Text fontSize="$6" fontWeight="700" color="$color">Aa</Text>
+                    <Text fontSize={24} lineHeight={30} fontWeight="700" color="$color">Aa</Text>
                   }
                   label="Regular"
                   isSelected={selectedScale === 'regular'}
@@ -660,7 +672,7 @@ export function Sidebar({ }: SidebarProps) {
                 />
                 <BuilderOptionCard
                   customContent={
-                    <Text fontSize="$7" fontWeight="700" color="$color">Aa</Text>
+                    <Text fontSize={30} lineHeight={36} fontWeight="700" color="$color">Aa</Text>
                   }
                   label="Large"
                   isSelected={selectedScale === 'large'}
@@ -681,17 +693,23 @@ export function Sidebar({ }: SidebarProps) {
       </YStack>
 
       {/* Settings Button */}
-        <YStack marginTop="auto" paddingTop="$6">
-          <TamaguiButton
-            chromeless
-            width="100%"
-            justifyContent="flex-start"
-            icon={<Settings size={16} />}
-            paddingHorizontal="$3"
-            paddingVertical="$2"
+        <YStack marginTop="auto" paddingTop="$4">
+          {/* Matches BuilderAccordion's header exactly — same padding, icon
+              size, gap and type — so it reads as a peer of the sections above. */}
+          <XStack
+            paddingVertical="$3"
+            paddingHorizontal="$2"
+            alignItems="center"
+            gap="$3"
+            cursor="pointer"
+            hoverStyle={{ opacity: 0.7 }}
+            pressStyle={{ opacity: 0.5 }}
           >
-            Settings
-          </TamaguiButton>
+            <Settings size={18} color={theme.color?.val || '#000'} />
+            <Text size="$4" fontWeight="600" color="$color">
+              Settings
+            </Text>
+          </XStack>
         </YStack>
       </ScrollView>
     </YStack>

@@ -6,6 +6,8 @@
  * Uses OKLCH color space for perceptual uniformity and wide gamut support.
  */
 
+import { converter } from 'culori';
+
 /**
  * OKLCH Color type
  * L: Lightness (0-1, where 0 is black and 1 is white)
@@ -74,45 +76,31 @@ export function generateColorScale(
   return scale;
 }
 
+const toOKLCH = converter('oklch');
+
 /**
- * Convert hex color to OKLCH
- * This is a simplified conversion - in production you'd use a library like culori
+ * Convert a hex color to OKLCH.
+ *
+ * This used to approximate the conversion with luma for lightness, RGB
+ * Euclidean distance for chroma and HSV angle for hue. None of those are OKLCH:
+ * the hue landed in the wrong place and the chroma came out far too high, so
+ * every generated scale drifted toward an over-saturated green and a neutral
+ * grey like #95a5a6 came back as teal. culori is already a dependency, so use
+ * the real transform.
  */
 export function hexToOKLCH(hex: string): OKLCHColor {
-  // Handle null/undefined
-  if (!hex) {
-    hex = '#3498db'; // Default to a nice blue
+  const parsed = toOKLCH(hex || '#3498db');
+
+  if (!parsed) {
+    return { l: 0.6, c: 0.12, h: 250 };
   }
 
-  // Remove # if present
-  hex = hex.replace('#', '');
-
-  // Convert to RGB
-  const r = parseInt(hex.substr(0, 2), 16) / 255;
-  const g = parseInt(hex.substr(2, 2), 16) / 255;
-  const b = parseInt(hex.substr(4, 2), 16) / 255;
-
-  // Simplified RGB to OKLCH conversion
-  // This is approximate - use a proper color library for production
-  const lightness = (0.299 * r + 0.587 * g + 0.114 * b) * 0.8;
-  const chroma = Math.sqrt(
-    Math.pow(r - lightness, 2) +
-    Math.pow(g - lightness, 2) +
-    Math.pow(b - lightness, 2)
-  ) * 0.5;
-
-  // Calculate hue from RGB (simplified)
-  let hue = 0;
-  if (r >= g && r >= b) {
-    hue = ((g - b) / (r - Math.min(g, b))) * 60;
-  } else if (g >= r && g >= b) {
-    hue = (2 + (b - r) / (g - Math.min(r, b))) * 60;
-  } else {
-    hue = (4 + (r - g) / (b - Math.min(r, g))) * 60;
-  }
-  hue = (hue + 360) % 360;
-
-  return { l: lightness, c: chroma, h: hue };
+  return {
+    l: parsed.l ?? 0,
+    c: parsed.c ?? 0,
+    // culori leaves hue undefined for achromatic colors — 0 keeps them neutral
+    h: parsed.h ?? 0,
+  };
 }
 
 /**

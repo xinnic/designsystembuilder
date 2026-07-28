@@ -44,7 +44,7 @@ export const SelectTrigger = styled(TamaguiSelect.Trigger, {
     backgroundColor: '$bgSecondary',
   },
 
-  focusStyle: {
+  focusVisibleStyle: {
     borderColor: '$focus',
     outlineWidth: 2,
     outlineColor: '$focus',
@@ -75,19 +75,22 @@ export const SelectTrigger = styled(TamaguiSelect.Trigger, {
         paddingHorizontal: '$2',
         paddingVertical: '$1',
         minHeight: 36,
-        fontSize: '$2',
+        fontSize: '$caption',
+        lineHeight: '$caption',
       },
       medium: {
         paddingHorizontal: '$3',
         paddingVertical: '$2',
         minHeight: 44,
-        fontSize: '$3',
+        fontSize: '$body',
+        lineHeight: '$body',
       },
       large: {
         paddingHorizontal: '$4',
         paddingVertical: '$3',
         minHeight: 52,
-        fontSize: '$4',
+        fontSize: '$subhead',
+        lineHeight: '$subhead',
       },
     },
   },
@@ -101,7 +104,7 @@ export const SelectTrigger = styled(TamaguiSelect.Trigger, {
 export const SelectValue = styled(TamaguiSelect.Value, {
   name: 'SelectValue',
   color: '$textPrimary',
-  fontSize: '$3',
+  fontSize: '$body',
 });
 
 // Styled content container
@@ -139,7 +142,7 @@ export const SelectItem = styled(TamaguiSelect.Item, {
     backgroundColor: '$bgSecondary',
   },
 
-  focusStyle: {
+  focusVisibleStyle: {
     backgroundColor: '$bgSecondary',
   },
 
@@ -152,7 +155,7 @@ export const SelectItem = styled(TamaguiSelect.Item, {
 export const SelectItemText = styled(TamaguiSelect.ItemText, {
   name: 'SelectItemText',
   color: '$textPrimary',
-  fontSize: '$3',
+  fontSize: '$body',
 });
 
 // Styled item indicator

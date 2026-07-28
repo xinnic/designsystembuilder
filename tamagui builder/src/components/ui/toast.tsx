@@ -18,6 +18,7 @@ const StyledViewport = styled(ToastPrimitives.Viewport, {
   maxWidth: 420,
   maxHeight: '100vh',
   pointerEvents: 'none',
+  margin: 0,
 })
 
 const ToastViewport = React.forwardRef<
@@ -26,6 +27,10 @@ const ToastViewport = React.forwardRef<
 >((props, ref) => (
   <StyledViewport
     ref={ref}
+    // Radix renders the viewport as an <ol>; without this the browser paints a
+    // list marker next to every toast. `listStyle` isn't a Tamagui style prop,
+    // so it has to go through the raw style object.
+    style={{ listStyle: 'none' }}
     {...props}
   />
 ))
@@ -160,10 +165,10 @@ const ToastClose = React.forwardRef<
 ToastClose.displayName = ToastPrimitives.Close.displayName
 
 const StyledTitle = styled(ToastPrimitives.Title, {
-  fontSize: '$3',
+  fontSize: '$subhead',
   fontWeight: '600',
   color: '$color',
-  lineHeight: '$3',
+  lineHeight: '$subhead',
 })
 
 const ToastTitle = React.forwardRef<
@@ -178,10 +183,10 @@ const ToastTitle = React.forwardRef<
 ToastTitle.displayName = ToastPrimitives.Title.displayName
 
 const StyledDescription = styled(ToastPrimitives.Description, {
-  fontSize: '$2',
+  fontSize: '$body',
   opacity: 0.9,
   color: '$colorHover',
-  lineHeight: '$2',
+  lineHeight: '$body',
 })
 
 const ToastDescription = React.forwardRef<

@@ -32,6 +32,16 @@ export const createDynamicConfig = () => {
       danger: 'rgb(var(--color-danger))',
     },
 
+    // Space stays NUMERIC.
+    //
+    // Tamagui's built-in components (Switch, Checkbox, RadioGroup, Slider,
+    // ToggleGroup, Tabs, Select, Input) derive their own dimensions by indexing
+    // and shifting along this scale. Given CSS-variable strings it can't do that
+    // arithmetic, and they silently collapse — a Switch rendered 24×14, a radio
+    // dot 6×6, a Select row picked up 256px of padding.
+    //
+    // The Spacing Scale control is applied instead through the `--space-N`
+    // variables that our own components bind to (see useTokenSystem).
     space: {
       1: 4,
       2: 8,
@@ -52,33 +62,49 @@ export const createDynamicConfig = () => {
       true: 8,
     },
 
+    // A COMPONENT-size ramp, not a spacing ramp. Tamagui's built-in controls
+    // (Switch, Checkbox, RadioGroup, Tabs, Select) take their height from this
+    // scale, and `$true` is what an unsized control falls back to. It used to
+    // be 16pt, which is why every switch, checkbox and radio rendered at a
+    // fraction of a tap target.
     size: {
-      1: 4,
-      2: 8,
-      3: 12,
-      4: 16,
-      5: 20,
-      6: 24,
-      7: 32,
-      8: 40,
-      9: 48,
-      10: 56,
-      11: 64,
-      12: 80,
-      13: 96,
-      14: 128,
-      15: 256,
-      16: 320,
-      true: 16,
+      1: 20,
+      2: 28,
+      3: 36,
+      4: 44,
+      5: 52,
+      6: 64,
+      7: 74,
+      8: 84,
+      9: 94,
+      10: 104,
+      11: 124,
+      12: 144,
+      13: 164,
+      14: 184,
+      15: 204,
+      16: 224,
+      true: 44,
     },
 
+    // Radius is the style preset's shape profile scaled by the Corner Radius
+    // control. Component-level aliases ($card / $button / $input) let a preset
+    // give cards and buttons different roundness from one another.
     radius: {
-      0: 0,
-      1: 4,
-      2: 8,
-      3: 12,
-      4: 9999,
-      true: 8,
+      0: 'var(--radius-none)',
+      1: 'var(--radius-sm)',
+      2: 'var(--radius-md)',
+      3: 'var(--radius-lg)',
+      4: 'var(--radius-xl)',
+      5: 'var(--radius-full)',
+      8: 'var(--radius-xl)',
+      10: 'var(--radius-full)',
+      true: 'var(--radius-md)',
+      full: 'var(--radius-full)',
+      round: 'var(--radius-full)',
+      card: 'var(--card-radius)',
+      button: 'var(--button-radius)',
+      input: 'var(--input-radius)',
     },
 
     zIndex: {
@@ -101,10 +127,10 @@ export const createDynamicConfig = () => {
 
     shadow: {
       none: 'none',
-      sm: '0 1px 3px 0 rgb(0 0 0 / 0.1)',
-      md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-      lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-      true: '0 1px 3px 0 rgb(0 0 0 / 0.1)',
+      sm: 'var(--shadow-sm)',
+      md: 'var(--shadow-md)',
+      lg: 'var(--shadow-lg)',
+      true: 'var(--shadow-sm)',
     },
   });
 
@@ -115,77 +141,95 @@ export const createDynamicConfig = () => {
     fast: 'ease-in-out 150ms',
   });
 
-  // Static font definitions - dynamic theming happens through CSS
+  // Type tokens resolve through CSS variables written by `useTokenSystem` from
+  // the Type Scale control, so changing the scale moves every surface at once.
+  // Numeric keys ($1…$6) are kept for back-compat and alias the named steps.
+  const fontSizes = {
+    1: 'var(--font-size-caption)',
+    2: 'var(--font-size-body)',
+    3: 'var(--font-size-subhead)',
+    4: 'var(--font-size-h2)',
+    5: 'var(--font-size-h1)',
+    6: 'var(--font-size-display)',
+    display: 'var(--font-size-display)',
+    h1: 'var(--font-size-h1)',
+    h2: 'var(--font-size-h2)',
+    h3: 'var(--font-size-h3)',
+    subhead: 'var(--font-size-subhead)',
+    body: 'var(--font-size-body)',
+    caption: 'var(--font-size-caption)',
+    button: 'var(--font-size-button)',
+    eyebrow: 'var(--font-size-eyebrow)',
+    true: 'var(--font-size-body)',
+  };
+
+  const fontLineHeights = {
+    1: 'var(--line-height-caption)',
+    2: 'var(--line-height-body)',
+    3: 'var(--line-height-subhead)',
+    4: 'var(--line-height-h2)',
+    5: 'var(--line-height-h1)',
+    6: 'var(--line-height-display)',
+    display: 'var(--line-height-display)',
+    h1: 'var(--line-height-h1)',
+    h2: 'var(--line-height-h2)',
+    h3: 'var(--line-height-h3)',
+    subhead: 'var(--line-height-subhead)',
+    body: 'var(--line-height-body)',
+    caption: 'var(--line-height-caption)',
+    button: 'var(--line-height-button)',
+    eyebrow: 'var(--line-height-eyebrow)',
+    true: 'var(--line-height-body)',
+  };
+
+  const fontWeights = {
+    4: '400',
+    5: '500',
+    6: '600',
+    7: '700',
+    display: 'var(--font-weight-display)',
+    h1: 'var(--font-weight-h1)',
+    h2: 'var(--font-weight-h2)',
+    h3: 'var(--font-weight-h3)',
+    subhead: 'var(--font-weight-subhead)',
+    body: 'var(--font-weight-body)',
+    caption: 'var(--font-weight-caption)',
+    button: 'var(--font-weight-button)',
+    eyebrow: 'var(--font-weight-eyebrow)',
+    true: '400',
+  };
+
+  const fontLetterSpacing = {
+    4: 0,
+    5: 0,
+    6: 0,
+    7: 0,
+    display: '-0.02em',
+    h1: '-0.015em',
+    h2: '-0.01em',
+    h3: '-0.005em',
+    subhead: 0,
+    body: 0,
+    caption: 0,
+    button: '0.02em',
+    eyebrow: '0.05em',
+    true: 0,
+  };
+
   const bodyFont = createFont({
     family: 'var(--font-family), "Plus Jakarta Sans", ui-sans-serif, system-ui',
-    size: {
-      1: 14,
-      2: 16,
-      3: 18,
-      4: 22,
-      5: 28,
-      6: 48,
-      true: 16,
-    },
-    lineHeight: {
-      1: 20,
-      2: 24,
-      3: 26,
-      4: 30,
-      5: 38,
-      6: 56,
-      true: 24,
-    },
-    weight: {
-      4: '400',
-      5: '500',
-      6: '600',
-      7: '700',
-      true: '400',
-    },
-    letterSpacing: {
-      4: 0,
-      5: 0,
-      6: 0,
-      7: 0,
-      true: 0,
-    },
+    size: fontSizes,
+    lineHeight: fontLineHeights,
+    weight: { ...fontWeights, true: '400' },
+    letterSpacing: fontLetterSpacing,
   });
 
   const headingFont = createFont({
     family: 'var(--font-display), "Plus Jakarta Sans", ui-sans-serif, system-ui',
-    size: {
-      1: 14,
-      2: 16,
-      3: 18,
-      4: 22,
-      5: 28,
-      6: 48,
-      true: 28,
-    },
-    lineHeight: {
-      1: 20,
-      2: 24,
-      3: 26,
-      4: 30,
-      5: 38,
-      6: 56,
-      true: 38,
-    },
-    weight: {
-      4: '400',
-      5: '500',
-      6: '600',
-      7: '700',
-      true: '700',
-    },
-    letterSpacing: {
-      4: 0,
-      5: 0,
-      6: 0,
-      7: 0,
-      true: 0,
-    },
+    size: fontSizes,
+    lineHeight: fontLineHeights,
+    weight: { ...fontWeights, true: '700' },
+    letterSpacing: fontLetterSpacing,
   });
 
   const monoFont = createFont({
@@ -405,3 +449,14 @@ export const getThemeNameFromPreset = (presetId: StylePresetId): string => {
 
   return themeMap[presetId];
 };
+/**
+ * Register the config with Tamagui's type system.
+ *
+ * Without this augmentation every token (`$brand`, `$4`, `$h2`) types as
+ * `never`, which is why style props across the app don't type-check.
+ */
+export type AppConfig = typeof config;
+
+declare module 'tamagui' {
+  interface TamaguiCustomConfig extends AppConfig {}
+}

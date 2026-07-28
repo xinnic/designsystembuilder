@@ -103,8 +103,8 @@ export const Label = styled(BaseText, {
  */
 export const Link = styled(BaseText, {
   name: 'Link',
-  fontSize: '$2',
-  lineHeight: '$2',
+  fontSize: '$body',
+  lineHeight: '$body',
   fontWeight: '400',
   color: '$brand',
   cursor: 'pointer',
@@ -119,7 +119,7 @@ export const Link = styled(BaseText, {
     opacity: 0.8,
   },
 
-  focusStyle: {
+  focusVisibleStyle: {
     outlineWidth: 2,
     outlineColor: '$focus',
     outlineStyle: 'solid',

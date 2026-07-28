@@ -5,9 +5,9 @@
  * Bridges the gap between Zustand store and Tamagui's theme system.
  */
 
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useDesignSystem } from '../state/designSystem';
-import { getStylePreset, getStylePresetCSSVariables, type StylePresetId } from '../config/stylePresets';
+import { getStylePreset, type StylePresetId } from '../config/stylePresets';
 import { getThemeNameFromPreset } from '../tamagui.config';
 
 export interface PresetThemeReturn {
@@ -28,7 +28,7 @@ export interface PresetThemeReturn {
  * Hook to manage Tamagui theme switching based on style presets
  */
 export function usePresetTheme(): PresetThemeReturn {
-  const { stylePresetId, setStylePreset, isDarkMode } = useDesignSystem();
+  const { stylePresetId, setStylePreset } = useDesignSystem();
 
   // Get the current preset data
   const preset = useMemo(() => {
@@ -40,18 +40,10 @@ export function usePresetTheme(): PresetThemeReturn {
     return getThemeNameFromPreset(stylePresetId as StylePresetId);
   }, [stylePresetId]);
 
-  // Update CSS variables when preset or dark mode changes
-  useEffect(() => {
-    if (!preset) return;
-
-    const root = document.documentElement;
-    const cssVariables = getStylePresetCSSVariables(preset, isDarkMode);
-
-    // Apply all CSS variables to the document
-    Object.entries(cssVariables).forEach(([key, value]) => {
-      root.style.setProperty(key, value);
-    });
-  }, [preset, isDarkMode]);
+  // NOTE: CSS variables are written exclusively by `useTokenSystem`, which
+  // composes the preset with the Corner Radius / Spacing / Type Scale controls.
+  // Writing them here too would race with that hook and make the winner depend
+  // on effect order.
 
   return {
     currentThemeName,

@@ -58,8 +58,10 @@ export const BottomNav = ({ items, activeId, onItemPress }: BottomNavProps) => {
               </YStack>
               <Caption
                 color={isActive ? '$brand' : '$textSecondary'}
-                fontSize="$1"
-                fontWeight={isActive ? '600' : '400'}
+                fontSize="$eyebrow"
+                lineHeight="$eyebrow"
+                letterSpacing={0}
+                fontWeight={isActive ? '600' : '500'}
               >
                 {item.label}
               </Caption>

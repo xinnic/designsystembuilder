@@ -290,18 +290,21 @@ const minimalistTokens: StylePresetTokens = {
 // Neo-Brutalism (Gumroad/CRED Aesthetic)
 const neoBrutalismTokens: StylePresetTokens = {
     radius: {
-        none: 0,    // Sharp edges common
-        sm: 0,      // Often completely sharp
-        md: 4,      // Slightly blunt when used
-        lg: 8,      // Occasional roundness
-        xl: 12,     // For specific elements
+        none: 0,
+        sm: 4,      // Blunted rather than razor sharp
+        md: 8,      // Buttons, inputs
+        lg: 12,     // Cards
+        xl: 16,     // Sheets
         full: 9999
     },
     shadows: {
         none: 'none',
-        sm: '2px 2px 0px #000000',  // NO BLUR - critical!
-        md: '4px 4px 0px #000000',
-        lg: '6px 6px 0px #000000'
+        // NO BLUR - critical to the style. The colour is resolved at runtime
+        // from the brand hue (see deriveShadowColor) rather than pure #000,
+        // which reads harsh in light mode and vanishes in dark mode.
+        sm: '2px 2px 0px var(--shadow-color, #000000)',
+        md: '3px 3px 0px var(--shadow-color, #000000)',
+        lg: '4px 4px 0px var(--shadow-color, #000000)'
     },
     borderWidths: {
         none: 0,
@@ -341,7 +344,7 @@ const neoBrutalismTokens: StylePresetTokens = {
     },
     card: {
         padding: 20,
-        radiusKey: 'none',
+        radiusKey: 'lg',
         borderWidthKey: 'thin',
         shadowKey: 'md'
     },

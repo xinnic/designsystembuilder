@@ -6,7 +6,7 @@
  */
 
 import { useEffect, useMemo } from 'react';
-import { converter, formatRgb } from 'culori';
+import { clampChroma, converter, formatRgb } from 'culori';
 import {
   tokens,
   generateBrandPalette,
@@ -16,6 +16,8 @@ import {
   type Theme
 } from '../design-system/tokens';
 import { useDesignSystem, type CornerRadius, type BorderWeight } from '../state/designSystem';
+import { getStylePreset, type StylePresetId } from '../config/stylePresets';
+import { deriveShadowColor, ensureReadableOnWhite, shadowBleed } from '../utils/colorGeneration';
 
 /**
  * Convert OKLCH string to RGB for CSS variables
@@ -47,20 +49,21 @@ function oklchToRGBValues(oklch: string): string {
   }
 
   try {
-    // Use culori to convert OKLCH to RGB
+    // Reduce chroma until the colour fits in sRGB before converting. Without
+    // this, wide-gamut OKLCH values produce channels outside 0–1, which used to
+    // emit CSS like `rgb(-97 113 50)` — invalid, so the whole declaration was
+    // dropped and the element fell back to whatever it inherited.
     const toRgb = converter('rgb');
-    const rgb = toRgb(oklch);
+    const rgb = toRgb(clampChroma(oklch, 'oklch'));
 
     if (!rgb) {
       return '128 128 128';
     }
 
-    // Convert to 0-255 range and format as space-separated values
-    const r = Math.round((rgb.r || 0) * 255);
-    const g = Math.round((rgb.g || 0) * 255);
-    const b = Math.round((rgb.b || 0) * 255);
+    const channel = (value: number | undefined) =>
+      Math.round(Math.max(0, Math.min(1, value ?? 0)) * 255);
 
-    return `${r} ${g} ${b}`;
+    return `${channel(rgb.r)} ${channel(rgb.g)} ${channel(rgb.b)}`;
   } catch (error) {
     console.error('Error converting OKLCH to RGB:', oklch, error);
     return '128 128 128';
@@ -98,20 +101,26 @@ export function useTokenSystem(theme: Theme = 'light') {
     selectedPrimaryFont,
     selectedDisplayFont,
     cornerRadius,
+    spacingMode,
+    stylePresetId,
+    tokens: storeTokens,
     opts
   } = useDesignSystem();
 
-  // Compute primary color from theme selection
-  const primaryColor = selectedTheme === 'custom'
+  // Compute primary color from theme selection.
+  // Deepened where needed so white labels on a solid brand fill stay readable —
+  // several presets (turquoise, emerald, sun-flower) are otherwise too light.
+  const pickedColor = selectedTheme === 'custom'
     ? customPrimaryColor || '#3498db'
     : colorThemes[selectedTheme] || '#3498db';
+  const primaryColor = ensureReadableOnWhite(pickedColor);
 
   // Convert corner radius to roundness multiplier
   const roundnessMultipliers: Record<CornerRadius, number> = {
     none: 0,
     small: 0.5,
     medium: 1,
-    large: 1.5
+    large: 2
   };
   const roundness = roundnessMultipliers[cornerRadius] || 1;
 
@@ -378,7 +387,158 @@ export function useTokenSystem(theme: Theme = 'light') {
       root.style.setProperty('--text-secondary', '215.4 16.3% 46.9%', 'important');
     }
 
-  }, [theme, primaryColor, selectedPrimaryFont, selectedDisplayFont, roundness, inputBorderWidth, cardBorderWidth, brandPalette]);
+    // ──────────────────────────────────────────────────────────────────────
+    // Design system layer — single source of truth.
+    //
+    // Written last so it wins over the primitive defaults above. Three
+    // sidebar controls compose here:
+    //   1. Style Preset  → shape language (shadow, border weight, radius profile)
+    //   2. Corner Radius → roundness multiplier applied over the preset profile
+    //   3. Spacing/Type Scale → density, straight from the store tokens
+    //
+    // Tamagui resolves its space/radius/font tokens from these variables, so
+    // the sidebar, the phone mock and the showcase panels all move together.
+    // ──────────────────────────────────────────────────────────────────────
+    const preset = getStylePreset(stylePresetId as StylePresetId) || getStylePreset('modern-flat');
+    const presetTokens = preset.tokens;
+
+    // Radii — preset profile scaled by the Corner Radius control.
+    // Pills (`full`) stay pills; they're a shape decision, not a roundness one.
+    const scaleRadius = (value: number) => (value >= 9999 ? 9999 : Math.round(value * roundness));
+    const radii = {
+      none: 0,
+      sm: scaleRadius(presetTokens.radius.sm),
+      md: scaleRadius(presetTokens.radius.md),
+      lg: scaleRadius(presetTokens.radius.lg),
+      xl: scaleRadius(presetTokens.radius.xl),
+      full: 9999,
+    };
+    Object.entries(radii).forEach(([key, value]) => {
+      root.style.setProperty(`--radius-${key}`, `${value}px`);
+    });
+
+    // Component radii — what Card / Button / Input actually bind to
+    root.style.setProperty('--card-radius', `${scaleRadius(presetTokens.radius[presetTokens.card.radiusKey])}px`);
+    root.style.setProperty('--button-radius', `${scaleRadius(presetTokens.radius[presetTokens.button.radiusKey])}px`);
+    root.style.setProperty('--input-radius', `${scaleRadius(presetTokens.radius[presetTokens.input.radiusKey])}px`);
+
+    // Elevation + border weight come straight from the preset.
+    // `--shadow-color` has to be written before the shadows that reference it.
+    const shadowColorHex = deriveShadowColor(primaryColor, theme === 'dark');
+    root.style.setProperty('--shadow-color', shadowColorHex);
+
+    // A preset that asks for 2px+ borders is going for the neo-brutalist look,
+    // where the border and the hard shadow are the same colour. Leaving the
+    // border on the default light grey made it read as a stray outline sitting
+    // next to a heavy shadow.
+    const usesBoldBorders = presetTokens.borderWidths.thin >= 2;
+    if (usesBoldBorders) {
+      root.style.setProperty('--color-border', oklchToRGBValues(shadowColorHex));
+    }
+
+    // The device frame in the preview follows the same logic: a bold-border
+    // preset gets a heavy outline and the preset's own hard shadow, so the
+    // phone doesn't sit in a soft drop shadow while everything inside it is
+    // hard-edged. Everything else keeps the neutral 1px device chrome.
+    root.style.setProperty(
+      '--frame-border-width',
+      usesBoldBorders ? `${presetTokens.borderWidths.thick}px` : '1px'
+    );
+    root.style.setProperty(
+      '--frame-shadow',
+      usesBoldBorders
+        ? presetTokens.shadows.lg
+        : '0 25px 50px -12px rgb(var(--color-brand) / 0.22)'
+    );
+
+    // Scroll containers reserve this much padding so hard offsets and wide
+    // blurs aren't clipped at the overflow edge.
+    const bleed = Math.min(
+      20,
+      Math.max(
+        4,
+        Math.ceil(
+          Math.max(
+            shadowBleed(presetTokens.shadows[presetTokens.card.shadowKey]),
+            shadowBleed(presetTokens.shadows[presetTokens.button.shadowKey])
+          )
+        )
+      )
+    );
+    root.style.setProperty('--shadow-bleed', `${bleed}px`);
+
+    root.style.setProperty('--shadow-none', presetTokens.shadows.none);
+    root.style.setProperty('--shadow-sm', presetTokens.shadows.sm);
+    root.style.setProperty('--shadow-md', presetTokens.shadows.md);
+    root.style.setProperty('--shadow-lg', presetTokens.shadows.lg);
+    root.style.setProperty('--shadow-1', presetTokens.shadows.sm);
+    root.style.setProperty('--shadow-2', presetTokens.shadows.md);
+    root.style.setProperty('--shadow-3', presetTokens.shadows.lg);
+
+    root.style.setProperty('--border-none', '0px');
+    root.style.setProperty('--border-thin', `${presetTokens.borderWidths.thin}px`);
+    root.style.setProperty('--border-medium', `${presetTokens.borderWidths.medium}px`);
+    root.style.setProperty('--border-thick', `${presetTokens.borderWidths.thick}px`);
+    root.style.setProperty('--border-focus', `${presetTokens.borderWidths.focus}px`);
+
+    root.style.setProperty('--card-shadow', presetTokens.shadows[presetTokens.card.shadowKey]);
+    root.style.setProperty('--card-border-width', `${presetTokens.borderWidths[presetTokens.card.borderWidthKey]}px`);
+    root.style.setProperty('--button-shadow', presetTokens.shadows[presetTokens.button.shadowKey]);
+    root.style.setProperty('--button-border-width', `${presetTokens.borderWidths[presetTokens.button.borderWidthKey]}px`);
+    root.style.setProperty('--input-border-width', `${presetTokens.borderWidths[presetTokens.input.borderWidthKey]}px`);
+
+    const presetBorderColor = theme === 'dark'
+      ? presetTokens.colors.borderColorDark
+      : presetTokens.colors.borderColor;
+    root.style.setProperty('--border-color', presetBorderColor || `rgb(${storeTokens.border})`);
+
+    // Spacing — Tamagui's $1..$16 ramp, scaled by the density mode
+    const densityMultiplier = ({ compact: 0.75, normal: 1, comfortable: 1.25 } as const)[spacingMode] ?? 1;
+    const baseSpace = [4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64, 80, 96, 128, 256, 320];
+    baseSpace.forEach((value, index) => {
+      root.style.setProperty(`--space-${index + 1}`, `${Math.round(value * densityMultiplier)}px`);
+    });
+    root.style.setProperty('--space-half', `${Math.round(4 * densityMultiplier)}px`);
+    root.style.setProperty('--space-true', `${Math.round(8 * densityMultiplier)}px`);
+
+    // Type scale — drives every $display / $h1 / $body / … font token
+    const typeScale = {
+      display: storeTokens.displayLg,
+      h1: storeTokens.h1,
+      h2: storeTokens.h2,
+      h3: storeTokens.h3,
+      subhead: storeTokens.subhead,
+      body: storeTokens.body,
+      caption: storeTokens.caption,
+      button: storeTokens.button,
+      eyebrow: storeTokens.eyebrow,
+    };
+    Object.entries(typeScale).forEach(([key, value]) => {
+      root.style.setProperty(`--font-size-${key}`, value.size);
+      root.style.setProperty(`--line-height-${key}`, value.line);
+      root.style.setProperty(`--font-weight-${key}`, String(value.weight));
+
+      // `--font-<style>-size` aliases. The plain-CSS token demos under
+      // panels/TokenDemos read these; they were only ever declared in
+      // styles/tokens.css under `:root.dsb-theme`, and that class is applied to
+      // <body>, so the rule never matched and the demos rendered unstyled.
+      root.style.setProperty(`--font-${key}-size`, value.size);
+      root.style.setProperty(`--font-${key}-line`, value.line);
+      root.style.setProperty(`--font-${key}-weight`, String(value.weight));
+    });
+  }, [
+    theme,
+    primaryColor,
+    selectedPrimaryFont,
+    selectedDisplayFont,
+    roundness,
+    inputBorderWidth,
+    cardBorderWidth,
+    brandPalette,
+    spacingMode,
+    stylePresetId,
+    storeTokens,
+  ]);
 
   return {
     tokens,
