@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Copy, Layers3, Palette, LayoutGrid, X } from 'lucide-react';
-import { XStack, YStack, TextArea, Dialog, Adapt, Sheet } from 'tamagui';
+import React, { useEffect, useState } from 'react';
+import { Copy, Layers3, Palette, LayoutGrid, Smartphone, SlidersHorizontal, X } from 'lucide-react';
+import { XStack, YStack, ScrollView, TextArea, Dialog, Adapt, Sheet, useMedia } from 'tamagui';
 import { Button } from '@/design-system/components/Button';
 import { Body, Caption } from '@/design-system/components/Text';
 import { Sidebar } from '@/components/Sidebar';
@@ -24,6 +24,22 @@ const fonts = [
   { name: 'Satoshi', class: 'font-satoshi' },
 ];
 
+type PanelView = 'atoms' | 'components' | 'patterns';
+type CompactView = 'preview' | PanelView;
+
+const PANEL_TABS = [
+  { id: 'atoms', label: 'Atoms', Icon: Palette },
+  { id: 'components', label: 'Components', Icon: Layers3 },
+  { id: 'patterns', label: 'Patterns', Icon: LayoutGrid },
+] as const;
+
+// The phone earns its own tab below the three-pane breakpoint, where there is
+// no room to show the device and a showcase panel side by side.
+const COMPACT_TABS = [
+  { id: 'preview', label: 'Preview', Icon: Smartphone },
+  ...PANEL_TABS,
+] as const;
+
 const Index = () => {
   const designSystem = useDesignSystem();
 
@@ -46,7 +62,21 @@ const Index = () => {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
-  const [rightPanelView, setRightPanelView] = useState<'atoms' | 'components' | 'patterns'>('atoms');
+  const [rightPanelView, setRightPanelView] = useState<PanelView>('atoms');
+
+  // Below `md` the sidebar (300) + phone (420) + a usable showcase column no
+  // longer fit, so the three panes collapse into one column with the controls
+  // behind a drawer.
+  const media = useMedia();
+  const isCompact = media.md;
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [compactView, setCompactView] = useState<CompactView>('preview');
+
+  // Growing back to the wide layout has to close the drawer, otherwise the
+  // sheet stays parked over a sidebar that is already on screen.
+  useEffect(() => {
+    if (!isCompact) setIsSidebarOpen(false);
+  }, [isCompact]);
 
   // Map border weight to pixel values - Builder UI dogfoods its own design system
   const borderWidthMap = {
@@ -290,29 +320,13 @@ const Index = () => {
     }
   };
 
-  return (
-    <XStack
-      height="100vh"
-      width="100vw"
-      overflow="hidden"
-      backgroundColor="$background"
-      data-preset={selectedStylePreset}
-    >
-      {/* Left Sidebar */}
-      <XStack minWidth={280} flexShrink={0}>
-        <Sidebar />
-      </XStack>
+  const renderPanel = (view: PanelView) => {
+    if (view === 'atoms') return <DesignSystemOverview />;
+    if (view === 'components') return <TamaguiShowcase />;
+    return <PatternsShowcase />;
+  };
 
-      {/* Main Content Area */}
-      <YStack flex={1} height="100%">
-        {/* Header */}
-        <XStack
-          padding="$4"
-          justifyContent="flex-end"
-          borderBottomWidth={borderWidthMap[opts.cardBorderWeight]}
-          borderBottomColor="$borderColor"
-          backgroundColor="$background"
-        >
+  const megapromptDialog = (
           <Dialog modal open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <Dialog.Trigger asChild>
               {/* Builder chrome uses the same Button + type tokens as everything
@@ -321,19 +335,40 @@ const Index = () => {
                 variant="secondary"
                 size="small"
                 gap="$2"
+                flexShrink={0}
                 onPress={() => setIsDialogOpen(true)}
               >
                 <Copy size={15} color="rgb(var(--color-brand))" />
-                <Caption color="$brand" fontWeight="600">Generate Megaprompt</Caption>
+                {/* The full label is what overflowed a phone-width header. */}
+                <Caption color="$brand" fontWeight="600" numberOfLines={1}>
+                  {isCompact ? 'Generate' : 'Generate Megaprompt'}
+                </Caption>
               </Button>
             </Dialog.Trigger>
-            
+
             <Adapt when="sm" platform="touch">
-              <Sheet animation="medium" zIndex={200000} modal dismissOnSnapToBottom>
-                <Sheet.Frame padding="$4" gap="$5">
-                  <Adapt.Contents />
+              {/* Without a snap point the sheet sizes to its content, so the
+                  400pt textarea pushed the copy button off the bottom edge. */}
+              <Sheet
+                animation="medium"
+                zIndex={200000}
+                modal
+                dismissOnSnapToBottom
+                snapPointsMode="percent"
+                snapPoints={[92]}
+              >
+                <Sheet.Frame padding="$4" gap="$4">
+                  <Sheet.ScrollView>
+                    <Adapt.Contents />
+                  </Sheet.ScrollView>
                 </Sheet.Frame>
-                <Sheet.Overlay animation="lazy" enterStyle={{ opacity: 0 }} exitStyle={{ opacity: 0 }} />
+                <Sheet.Overlay
+                  animation="lazy"
+                  backgroundColor="black"
+                  opacity={0.5}
+                  enterStyle={{ opacity: 0 }}
+                  exitStyle={{ opacity: 0 }}
+                />
               </Sheet>
             </Adapt>
 
@@ -368,13 +403,28 @@ const Index = () => {
                 maxHeight="80vh"
                 backgroundColor="$background"
               >
-                <Dialog.Title>React Native Design System Megaprompt</Dialog.Title>
-                <Dialog.Description>
+                {/* Type tokens are explicit here: the description's inherited
+                    line height collapses to ~1px, so a wrapped second line
+                    lands back on top of the title at narrow widths. */}
+                <Dialog.Title
+                  fontSize="$h2"
+                  lineHeight="$h2"
+                  fontWeight="700"
+                  paddingRight="$8"
+                >
+                  React Native Design System Megaprompt
+                </Dialog.Title>
+                <Dialog.Description
+                  fontSize="$body"
+                  lineHeight="$body"
+                  color="$textSecondary"
+                >
                   Generate a complete React Native design system with Tamagui for cross-platform apps
                 </Dialog.Description>
                 <YStack gap="$4">
                   <TextArea
-                    minHeight={400}
+                    minHeight={220}
+                    $gtSm={{ minHeight: 400 }}
                     fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
                     fontSize={13}
                     lineHeight={20}
@@ -417,71 +467,203 @@ const Index = () => {
               </Dialog.Content>
             </Dialog.Portal>
           </Dialog>
+  );
+
+  const tabButton = (
+    id: string,
+    label: string,
+    Icon: typeof Palette,
+    isActive: boolean,
+    onPress: () => void,
+  ) => (
+    <Button
+      key={id}
+      variant={isActive ? 'primary' : 'ghost'}
+      size="small"
+      gap="$2"
+      flexShrink={0}
+      onPress={onPress}
+      aria-pressed={isActive}
+    >
+      <Icon size={15} color={isActive ? 'white' : 'rgb(var(--color-text-secondary))'} />
+      <Caption color={isActive ? 'white' : '$textSecondary'} fontWeight="600" numberOfLines={1}>
+        {label}
+      </Caption>
+    </Button>
+  );
+
+  return (
+    <XStack
+      flexDirection={isCompact ? 'column' : 'row'}
+      height="100vh"
+      width="100%"
+      maxWidth="100%"
+      overflow="hidden"
+      backgroundColor="$background"
+      data-preset={selectedStylePreset}
+    >
+      {/* Left Sidebar — a drawer once the three panes stop fitting */}
+      {!isCompact && (
+        <XStack minWidth={280} flexShrink={0}>
+          <Sidebar height="100%" />
+        </XStack>
+      )}
+
+      {/* Main Content Area */}
+      <YStack flex={1} minWidth={0} minHeight={0} height={isCompact ? undefined : '100%'}>
+        {/* Header */}
+        <XStack
+          padding="$3"
+          $gtMd={{ padding: '$4' }}
+          alignItems="center"
+          justifyContent={isCompact ? 'space-between' : 'flex-end'}
+          gap="$2"
+          flexShrink={0}
+          borderBottomWidth={borderWidthMap[opts.cardBorderWeight]}
+          borderBottomColor="$borderColor"
+          backgroundColor="$background"
+        >
+          {isCompact && (
+            <XStack alignItems="center" gap="$2" flexShrink={1} minWidth={0}>
+              <Button
+                variant="ghost"
+                size="small"
+                gap="$2"
+                flexShrink={0}
+                onPress={() => setIsSidebarOpen(true)}
+                aria-label="Open design controls"
+              >
+                <SlidersHorizontal size={16} color="rgb(var(--color-text-primary))" />
+                <Caption color="$textPrimary" fontWeight="600">Customize</Caption>
+              </Button>
+            </XStack>
+          )}
+
+          {megapromptDialog}
         </XStack>
 
-        {/* Preview Panels */}
-        <XStack flex={1} minWidth={0} overflow="hidden">
-          {/* Mobile App Preview */}
-          <XStack
-            width={420}
-            flexShrink={0}
-            borderRightWidth={borderWidthMap[opts.cardBorderWeight]}
-            borderRightColor="$borderColor"
-            alignItems="center"
-            justifyContent="center"
-            backgroundColor="$background"
-          >
-            <PreviewPhoneTamagui key={selectedStylePreset} />
-          </XStack>
-
-          {/* Right Panel - Tailwind Components or Design Tokens */}
-          <YStack flex={1} backgroundColor="$background">
-            <XStack
-              padding="$3"
+        {isCompact ? (
+          /* Single column: one pane at a time, chosen from the tab strip */
+          <YStack flex={1} minHeight={0} backgroundColor="$background">
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              flexGrow={0}
+              flexShrink={0}
               borderBottomWidth={borderWidthMap[opts.cardBorderWeight]}
               borderBottomColor="$borderColor"
-              gap="$2"
               backgroundColor="$background"
             >
-              {([
-                { id: 'atoms', label: 'Atoms', Icon: Palette },
-                { id: 'components', label: 'Components', Icon: Layers3 },
-                { id: 'patterns', label: 'Patterns', Icon: LayoutGrid },
-              ] as const).map(({ id, label, Icon }) => {
-                const isActive = rightPanelView === id;
-                return (
-                  <Button
-                    key={id}
-                    variant={isActive ? 'primary' : 'ghost'}
-                    size="small"
-                    gap="$2"
-                    onPress={() => setRightPanelView(id)}
-                    aria-pressed={isActive}
-                  >
-                    <Icon
-                      size={15}
-                      color={isActive ? 'white' : 'rgb(var(--color-text-secondary))'}
-                    />
-                    <Caption
-                      color={isActive ? 'white' : '$textSecondary'}
-                      fontWeight="600"
-                    >
-                      {label}
-                    </Caption>
-                  </Button>
-                );
-              })}
-            </XStack>
+              <XStack padding="$3" gap="$2">
+                {COMPACT_TABS.map(({ id, label, Icon }) =>
+                  tabButton(id, label, Icon, compactView === id, () => {
+                    setCompactView(id);
+                    if (id !== 'preview') setRightPanelView(id);
+                  }),
+                )}
+              </XStack>
+            </ScrollView>
 
-            <YStack flex={1} overflowY="auto" padding="$6">
-              {rightPanelView === 'atoms' && <DesignSystemOverview />}
-              {rightPanelView === 'components' && <TamaguiShowcase />}
-              {rightPanelView === 'patterns' && <PatternsShowcase />}
+            <YStack flex={1} minHeight={0} overflowY="auto">
+              {compactView === 'preview' ? (
+                <YStack alignItems="center" justifyContent="flex-start">
+                  <PreviewPhoneTamagui key={selectedStylePreset} />
+                </YStack>
+              ) : (
+                <YStack padding="$4">{renderPanel(compactView)}</YStack>
+              )}
             </YStack>
           </YStack>
-        </XStack>
+        ) : (
+          /* Preview Panels */
+          <XStack flex={1} minWidth={0} minHeight={0} overflow="hidden">
+            {/* Mobile App Preview */}
+            <XStack
+              width={420}
+              flexShrink={0}
+              borderRightWidth={borderWidthMap[opts.cardBorderWeight]}
+              borderRightColor="$borderColor"
+              alignItems="center"
+              justifyContent="center"
+              backgroundColor="$background"
+            >
+              <PreviewPhoneTamagui key={selectedStylePreset} />
+            </XStack>
 
+            {/* Right Panel - Tailwind Components or Design Tokens */}
+            <YStack flex={1} minWidth={0} backgroundColor="$background">
+              <XStack
+                padding="$3"
+                borderBottomWidth={borderWidthMap[opts.cardBorderWeight]}
+                borderBottomColor="$borderColor"
+                gap="$2"
+                backgroundColor="$background"
+              >
+                {PANEL_TABS.map(({ id, label, Icon }) =>
+                  tabButton(id, label, Icon, rightPanelView === id, () => setRightPanelView(id)),
+                )}
+              </XStack>
+
+              <YStack flex={1} minHeight={0} overflowY="auto" padding="$6">
+                {renderPanel(rightPanelView)}
+              </YStack>
+            </YStack>
+          </XStack>
+        )}
       </YStack>
+
+      {/* Controls drawer for the compact layout */}
+      <Sheet
+        modal
+        open={isCompact && isSidebarOpen}
+        onOpenChange={setIsSidebarOpen}
+        snapPointsMode="percent"
+        snapPoints={[92]}
+        dismissOnSnapToBottom
+        animation="medium"
+        zIndex={200000}
+      >
+        <Sheet.Overlay
+          animation="lazy"
+          backgroundColor="black"
+          opacity={0.4}
+          enterStyle={{ opacity: 0 }}
+          exitStyle={{ opacity: 0 }}
+        />
+        <Sheet.Handle />
+        <Sheet.Frame
+          backgroundColor="$background"
+          borderTopLeftRadius="$card"
+          borderTopRightRadius="$card"
+        >
+          <XStack
+            paddingHorizontal="$4"
+            paddingTop="$3"
+            paddingBottom="$2"
+            alignItems="center"
+            justifyContent="space-between"
+            gap="$2"
+          >
+            <Body fontWeight="700" numberOfLines={1}>Design System Builder</Body>
+            <Button
+              variant="ghost"
+              size="small"
+              padding={0}
+              width={32}
+              minHeight={32}
+              borderRadius="$full"
+              onPress={() => setIsSidebarOpen(false)}
+              aria-label="Close design controls"
+            >
+              <X size={16} color="rgb(var(--color-text-primary))" />
+            </Button>
+          </XStack>
+
+          <YStack flex={1} minHeight={0}>
+            <Sidebar width="100%" height="100%" bordered={false} showHeading={false} />
+          </YStack>
+        </Sheet.Frame>
+      </Sheet>
     </XStack>
   );
 };

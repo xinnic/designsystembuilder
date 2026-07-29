@@ -1,12 +1,13 @@
 import React from 'react';
 import { ChevronDown, Check, Settings, Layers, Sliders, Navigation, Menu, Minimize, Maximize, RectangleHorizontal, PanelBottom, GalleryVerticalEnd, MoveDiagonal, LayoutTemplate } from 'lucide-react';
-import { YStack, XStack, ScrollView, Text, Heading, Separator, Button as TamaguiButton, Switch as TamaguiSwitch, Select, Adapt, Sheet, useTheme } from 'tamagui';
+import { YStack, XStack, ScrollView, Text, Heading, Separator, Button as TamaguiButton, Select, Adapt, Sheet, useTheme } from 'tamagui';
 import StylingControls from '../left/StylingControls';
 import { BUILDER_LAYOUT } from '../config/builderLayout';
 import { BuilderAccordion } from './builder-ui/BuilderAccordion';
 import { BuilderColorSwatch } from './builder-ui/BuilderColorSwatch';
 import { BuilderSectionLabel } from './builder-ui/BuilderSectionLabel';
 import { BuilderOptionCard } from './builder-ui/BuilderOptionCard';
+import { BuilderSwitch } from './builder-ui/BuilderSwitch';
 import { useDesignSystem } from '../state/designSystem';
 import { generateSecondaryColor } from '../utils/colorGeneration';
 import {
@@ -20,7 +21,15 @@ import { stylePresets, getStylePreset, type StylePresetId } from '../config/styl
 import { useToast } from '@/hooks/use-toast';
 import { usePresetTheme } from '../hooks/usePresetTheme';
 
-interface SidebarProps { }
+interface SidebarProps {
+  /** Fills the drawer when the sidebar is presented as a sheet on small screens. */
+  width?: number | string;
+  height?: number | string;
+  /** The right-hand rule only makes sense next to the canvas, not inside a drawer. */
+  bordered?: boolean;
+  /** The mobile top bar already names the app, so the drawer drops the masthead. */
+  showHeading?: boolean;
+}
 
 // Primary fonts (Sans-serif only - for body text)
 const primaryFonts = [
@@ -77,7 +86,12 @@ const displayFonts = [
   { name: 'Source Serif 4', class: 'font-source-serif' },
 ];
 
-export function Sidebar({ }: SidebarProps) {
+export function Sidebar({
+  width = 300,
+  height = '100%',
+  bordered = true,
+  showHeading = true,
+}: SidebarProps) {
   const {
     selectedPrimaryFont,
     setPrimaryFont,
@@ -238,30 +252,33 @@ export function Sidebar({ }: SidebarProps) {
 
   return (
     <YStack
-      width={300}
-      height="100vh"
-      borderRightWidth={borderWidthMap[opts.cardBorderWeight]}
+      width={width}
+      maxWidth="100%"
+      height={height}
+      borderRightWidth={bordered ? borderWidthMap[opts.cardBorderWeight] : 0}
       borderRightColor="$borderColor"
       backgroundColor="$background"
     >
       <ScrollView padding={BUILDER_LAYOUT.panelPadding}>
-        <YStack marginBottom="$6">
-          <Heading
-            fontSize={tokens.h1.size}
-            lineHeight={tokens.h1.line}
-            fontWeight={tokens.h1.weight}
-            marginBottom="$2"
-          >
-            Design System Builder
-          </Heading>
-          <Text
-            fontSize={tokens.body.size}
-            lineHeight={tokens.body.line}
-            color="$gray11"
-          >
-            Customize your design system and generate AI-ready prompts
-          </Text>
-        </YStack>
+        {showHeading && (
+          <YStack marginBottom="$6">
+            <Heading
+              fontSize={tokens.h1.size}
+              lineHeight={tokens.h1.line}
+              fontWeight={tokens.h1.weight}
+              marginBottom="$2"
+            >
+              Design System Builder
+            </Heading>
+            <Text
+              fontSize={tokens.body.size}
+              lineHeight={tokens.body.line}
+              color="$gray11"
+            >
+              Customize your design system and generate AI-ready prompts
+            </Text>
+          </YStack>
+        )}
 
       <YStack space="$4">
         {/* Basic Options Section - For Design Beginners */}
@@ -394,14 +411,12 @@ export function Sidebar({ }: SidebarProps) {
             </YStack>
 
             {/* Dark Mode Toggle */}
-            <XStack alignItems="center" justifyContent="space-between" width="100%">
-              <Text size="$3" fontWeight="500" color="$color">
-                Dark Mode
-              </Text>
-              <TamaguiSwitch checked={isDarkMode} onCheckedChange={setDarkMode} size="$4">
-                <TamaguiSwitch.Thumb animation="quick" />
-              </TamaguiSwitch>
-            </XStack>
+            <BuilderSwitch
+              label="Dark Mode"
+              description="Preview the system on a dark surface"
+              checked={isDarkMode}
+              onCheckedChange={setDarkMode}
+            />
 
             {/* Style Preset */}
             <YStack>

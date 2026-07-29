@@ -69,11 +69,15 @@ const PreviewPhoneTamaguiComponent = () => {
   }, [isHamburger]);
 
   return (
-    <YStack 
-      height="100%" 
-      alignItems="center" 
-      justifyContent="flex-start" 
-      padding="$8"
+    <YStack
+      height="100%"
+      width="100%"
+      alignItems="center"
+      justifyContent="flex-start"
+      // The 320pt device plus $8 on both sides is wider than a phone viewport,
+      // which pushed the whole canvas into a horizontal scroll.
+      padding="$4"
+      $gtMd={{ padding: '$8' }}
       minHeight={600}
       // Matches the surrounding panels — the frame's border and shadow are what
       // separate the device from the canvas, not a grey backdrop.
