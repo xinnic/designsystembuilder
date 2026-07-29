@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Copy, Layers3, Palette, LayoutGrid, Smartphone, SlidersHorizontal, X } from 'lucide-react';
-import { XStack, YStack, ScrollView, TextArea, Dialog, Adapt, Sheet, useMedia } from 'tamagui';
+import { XStack, YStack, ScrollView, TextArea, Dialog, Adapt, Sheet, useMedia, isTouchable } from 'tamagui';
 import { Button } from '@/design-system/components/Button';
 import { Body, Caption } from '@/design-system/components/Text';
 import { Sidebar } from '@/components/Sidebar';
@@ -69,6 +69,11 @@ const Index = () => {
   // behind a drawer.
   const media = useMedia();
   const isCompact = media.md;
+  // Mirrors <Adapt when="sm" platform="touch"> below: on a real touch device
+  // narrower than the "sm" breakpoint, the megaprompt dialog becomes a sheet
+  // with its own header close button, so the dialog's own absolute-positioned
+  // Close must sit this out instead of doubling up inside the sheet content.
+  const isMegapromptSheet = media.sm && isTouchable;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [compactView, setCompactView] = useState<CompactView>('preview');
 
@@ -348,7 +353,17 @@ const Index = () => {
 
             <Adapt when="sm" platform="touch">
               {/* Without a snap point the sheet sizes to its content, so the
-                  400pt textarea pushed the copy button off the bottom edge. */}
+                  400pt textarea pushed the copy button off the bottom edge.
+                  Adapt.Contents teleports Dialog.Content's children wholesale
+                  into this sheet, absolute-positioned Close included — and
+                  that Close doesn't reliably self-hide once adapted, so it
+                  ends up misplaced and clipped inside the scrolling body. The
+                  `isMegapromptSheet` check above the dialog JSX (mirroring
+                  this exact when="sm" platform="touch" condition) omits that
+                  Close from the tree in this mode; this header supplies the
+                  one true close button instead, outside the scrolling body so
+                  it can't scroll out of reach or get clipped by the sheet's
+                  overflow:hidden frame. */}
               <Sheet
                 animation="medium"
                 zIndex={200000}
@@ -357,8 +372,22 @@ const Index = () => {
                 snapPointsMode="percent"
                 snapPoints={[92]}
               >
-                <Sheet.Frame padding="$4" gap="$4">
-                  <Sheet.ScrollView>
+                <Sheet.Frame gap="$4">
+                  <XStack paddingHorizontal="$4" paddingTop="$4" justifyContent="flex-end">
+                    <Button
+                      variant="ghost"
+                      size="small"
+                      width={44}
+                      minHeight={44}
+                      padding={0}
+                      borderRadius="$full"
+                      onPress={() => setIsDialogOpen(false)}
+                      aria-label="Close"
+                    >
+                      <X size={18} />
+                    </Button>
+                  </XStack>
+                  <Sheet.ScrollView padding="$4" paddingTop={0}>
                     <Adapt.Contents />
                   </Sheet.ScrollView>
                 </Sheet.Frame>
@@ -448,22 +477,24 @@ const Index = () => {
                   </XStack>
                 </YStack>
 
-                <Dialog.Close asChild>
-                  <Button
-                    variant="ghost"
-                    size="small"
-                    position="absolute"
-                    top="$3"
-                    right="$3"
-                    width={32}
-                    minHeight={32}
-                    padding={0}
-                    borderRadius="$full"
-                    aria-label="Close"
-                  >
-                    <X size={16} />
-                  </Button>
-                </Dialog.Close>
+                {!isMegapromptSheet && (
+                  <Dialog.Close asChild>
+                    <Button
+                      variant="ghost"
+                      size="small"
+                      position="absolute"
+                      top="$3"
+                      right="$3"
+                      width={44}
+                      minHeight={44}
+                      padding={0}
+                      borderRadius="$full"
+                      aria-label="Close"
+                    >
+                      <X size={16} />
+                    </Button>
+                  </Dialog.Close>
+                )}
               </Dialog.Content>
             </Dialog.Portal>
           </Dialog>

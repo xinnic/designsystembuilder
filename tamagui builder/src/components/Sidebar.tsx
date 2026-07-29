@@ -413,7 +413,6 @@ export function Sidebar({
             {/* Dark Mode Toggle */}
             <BuilderSwitch
               label="Dark Mode"
-              description="Preview the system on a dark surface"
               checked={isDarkMode}
               onCheckedChange={setDarkMode}
             />
